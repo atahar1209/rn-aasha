@@ -1,4 +1,4 @@
-package com.globalmultisolution.upi;
+package com.uniquerecharge.upi;
 
 import androidx.annotation.NonNull;
 

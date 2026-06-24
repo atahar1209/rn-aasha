@@ -1,4 +1,4 @@
-package com.globalmultisolution.ContactPicker;
+package com.uniquerecharge.ContactPicker;
 
 import android.app.Activity;
 import android.content.Intent;

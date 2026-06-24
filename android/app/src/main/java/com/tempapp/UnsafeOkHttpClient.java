@@ -1,4 +1,4 @@
-package com.globalmultisolution;
+package com.uniquerecharge;
 
 import okhttp3.OkHttpClient;
 import javax.net.ssl.*;

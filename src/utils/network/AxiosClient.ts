@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { reset, setAuthToken, setRefreshToken, setUserId } from '../../reduxUtils/store/userInfoSlice';
-import { APP_URLS } from './urls';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {
+  reset,
+  setAuthToken,
+  setRefreshToken,
+  setUserId,
+} from '../../reduxUtils/store/userInfoSlice';
+import {APP_URLS} from './urls';
 
-const HEAVY_ENDPOINTS = [
-  'CashpickupSubmit',
-  'CashDeposit',
-  'Submit',
-  'hkhk2'
-];
-const HEAVY_TIMEOUT = 300000;  // 5 minutes
+const HEAVY_ENDPOINTS = ['CashpickupSubmit', 'CashDeposit', 'Submit', 'hkhk2'];
+const HEAVY_TIMEOUT = 300000; // 5 minutes
 const DEFAULT_TIMEOUT = 120000; // 2 minutes
 
 const getTimeoutForUrl = (url: string): number => {
@@ -20,19 +20,20 @@ const getTimeoutForUrl = (url: string): number => {
 };
 
 const useAxiosHook = () => {
-
-  const { authToken = '', refreshToken, IsDealer } = useSelector(
-    (state: RootState) => state.userInfo,
-  );
+  const {
+    authToken = '',
+    refreshToken,
+    IsDealer,
+  } = useSelector((state: RootState) => state.userInfo);
   const dispatch = useDispatch();
   const isRefreshing = useRef(false);
-useEffect(()=>{
-  console.log(authToken)
-},[])
+  useEffect(() => {
+    console.log(authToken);
+  }, []);
   const axiosInstance = useMemo(
     () =>
       axios.create({
-        baseURL: 'http://native.ssvcms.in/',
+        baseURL: 'http://native.uniquerechargesrs.in//',
         timeout: DEFAULT_TIMEOUT,
       }),
     [],
@@ -40,9 +41,9 @@ useEffect(()=>{
 
   // ---------- API functions ----------
   const get = useCallback(
-    async ({ url }: { url: string }) => {
+    async ({url}: {url: string}) => {
       const response = await axiosInstance.get(url);
-      console.warn(response, 'getdata')
+      console.warn(response, 'getdata');
       return response.data;
     },
     [axiosInstance],
@@ -64,7 +65,7 @@ useEffect(()=>{
           ...config,
           timeout,
         });
-        console.log(response, 'postdata')
+        console.log(response, 'postdata');
         return response.data;
       } catch (e) {
         throw e;
@@ -74,7 +75,7 @@ useEffect(()=>{
   );
 
   const put = useCallback(
-    async ({ url, data }: { url: string; data: any }) => {
+    async ({url, data}: {url: string; data: any}) => {
       const response = await axiosInstance.put(url, data);
       return response.data;
     },
@@ -140,8 +141,13 @@ useEffect(()=>{
     const resId = axiosInstance.interceptors.response.use(
       response => {
         // 🔥 CASE 1: Agar Status 200 hai par body mein "Authorization has been denied" hai
-        if (response?.data?.Message === "Authorization has been denied for this request.") {
-          console.warn("⚠️ Auth Denied Message found in Success Response! Logging out...");
+        if (
+          response?.data?.Message ===
+          'Authorization has been denied for this request.'
+        ) {
+          console.warn(
+            '⚠️ Auth Denied Message found in Success Response! Logging out...',
+          );
           dispatch(reset());
           return Promise.reject(response.data);
         }
@@ -151,10 +157,14 @@ useEffect(()=>{
         console.warn('Interceptor Error:', error);
 
         const errorMessage = error.response?.data?.Message;
-        
+
         // 🔥 CASE 2: Agar error body mein explicitly yeh Message mil jaye
-        if (errorMessage === "Authorization has been denied for this request.") {
-          console.warn("⚠️ Auth Denied Message found in Error Response! Logging out...");
+        if (
+          errorMessage === 'Authorization has been denied for this request.'
+        ) {
+          console.warn(
+            '⚠️ Auth Denied Message found in Error Response! Logging out...',
+          );
           dispatch(reset());
           return Promise.reject(error.response?.data || error);
         }
@@ -169,7 +179,7 @@ useEffect(()=>{
             error.config.headers.Authorization = `Bearer ${response?.access_token}`;
             return axiosInstance(error.config);
           } else {
-            console.warn("⚠️ Refresh token failed. Logging out...");
+            console.warn('⚠️ Refresh token failed. Logging out...');
             dispatch(reset());
             return Promise.reject(error);
           }
@@ -186,7 +196,7 @@ useEffect(()=>{
     };
   }, [authToken, IsDealer, onRefreshToken, dispatch]);
 
-  return { get, post, put };
+  return {get, post, put};
 };
 
 export default useAxiosHook;

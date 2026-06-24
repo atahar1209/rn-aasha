@@ -1,4 +1,4 @@
-package com.globalmultisolution
+package com.uniquerecharge
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -14,11 +14,11 @@ import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.react.modules.network.OkHttpClientProvider
 import com.facebook.react.modules.network.ReactCookieJarContainer
 
-import com.globalmultisolution.AepsPackage
-import com.globalmultisolution.upi.UpiPackage
-import com.globalmultisolution.location.LocationPackage
-import com.globalmultisolution.security.SecurityPackage
-import com.globalmultisolution.ContactPicker.ContactPickerPackage
+import com.uniquerecharge.AepsPackage
+import com.uniquerecharge.upi.UpiPackage
+import com.uniquerecharge.location.LocationPackage
+import com.uniquerecharge.security.SecurityPackage
+import com.uniquerecharge.ContactPicker.ContactPickerPackage
 import com.otahotupdate.OtaHotUpdate
 
 class MainApplication : Application(), ReactApplication {

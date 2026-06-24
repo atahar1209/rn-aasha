@@ -1,4 +1,4 @@
-package com.globalmultisolution.security;
+package com.uniquerecharge.security;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
