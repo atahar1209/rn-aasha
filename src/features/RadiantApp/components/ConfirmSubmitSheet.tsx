@@ -1,17 +1,10 @@
 // components/ConfirmSubmitSheet.tsx
 
 import React from 'react';
-import {
-  Modal,
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Animated,
-} from 'react-native';
+import {Modal, View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { wScale, hScale } from '../../../utils/styles/dimensions';
-
+import {wScale, hScale} from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
 interface ConfirmSubmitSheetProps {
   visible: boolean;
   onClose: () => void;
@@ -35,17 +28,11 @@ const ConfirmSubmitSheet: React.FC<ConfirmSubmitSheetProps> = ({
       visible={visible}
       transparent
       animationType="slide"
-      onRequestClose={onClose}
-    >
+      onRequestClose={onClose}>
       {/* ── Backdrop ── */}
-      <TouchableOpacity
-        style={s.backdrop}
-        activeOpacity={1}
-        onPress={onClose}
-      >
+      <TouchableOpacity style={s.backdrop} activeOpacity={1} onPress={onClose}>
         {/* ── Sheet — inner TouchableOpacity stops backdrop press ── */}
         <TouchableOpacity activeOpacity={1} style={s.sheet}>
-
           {/* Drag handle */}
           <View style={s.handle} />
 
@@ -59,8 +46,10 @@ const ConfirmSubmitSheet: React.FC<ConfirmSubmitSheetProps> = ({
               />
             </View>
             <View>
-              <Text style={s.title}>Confirm submission</Text>
-              <Text style={s.subtitle}>Please review before proceeding</Text>
+              <Text style={s.title}>{translate('Confirm submission')}</Text>
+              <Text style={s.subtitle}>
+                {translate('Please review before proceeding')}
+              </Text>
             </View>
           </View>
 
@@ -69,19 +58,20 @@ const ConfirmSubmitSheet: React.FC<ConfirmSubmitSheetProps> = ({
           {/* Body */}
           <View style={s.body}>
             <Text style={s.desc}>
-              Make sure all details are correct. Once submitted, changes may not be possible.
+              {translate(
+                'Make sure all details are correct. Once submitted, changes may not be possible.',
+              )}
             </Text>
 
             {/* Checklist */}
             <View style={s.checklist}>
-              {CHECKLIST.map((item) => (
+              {CHECKLIST.map(item => (
                 <View key={item} style={s.checkRow}>
                   <MaterialCommunityIcons
                     name="check-circle"
                     size={16}
                     color="#16A34A"
-                            style={s.checkIcon}        // ← marginRight add hua
-
+                    style={s.checkIcon} // ← marginRight add hua
                   />
                   <Text style={s.checkText}>{item}</Text>
                 </View>
@@ -94,22 +84,25 @@ const ConfirmSubmitSheet: React.FC<ConfirmSubmitSheetProps> = ({
             <TouchableOpacity
               style={s.primaryBtn}
               onPress={onProceed}
-              activeOpacity={0.85}
-            >
-              <Text style={s.primaryBtnText}>Yes, proceed</Text>
-              <MaterialCommunityIcons name="arrow-right" size={18} color="#fff"       style={s.primaryBtnIcon} 
-/>
+              activeOpacity={0.85}>
+              <Text style={s.primaryBtnText}>{translate('Yes, proceed')}</Text>
+              <MaterialCommunityIcons
+                name="arrow-right"
+                size={18}
+                color="#fff"
+                style={s.primaryBtnIcon}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
               style={s.secondaryBtn}
               onPress={onClose}
-              activeOpacity={0.8}
-            >
-              <Text style={s.secondaryBtnText}>Review again</Text>
+              activeOpacity={0.8}>
+              <Text style={s.secondaryBtnText}>
+                {translate('Review again')}
+              </Text>
             </TouchableOpacity>
           </View>
-
         </TouchableOpacity>
       </TouchableOpacity>
     </Modal>
@@ -152,7 +145,7 @@ const s = StyleSheet.create({
     backgroundColor: '#EFF6FF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: wScale(10),   // ← gap replace
+    marginRight: wScale(10), // ← gap replace
   },
   title: {
     fontSize: wScale(15),
@@ -185,15 +178,15 @@ const s = StyleSheet.create({
   checkRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: hScale(10),   // ← gap replace
+    marginBottom: hScale(10), // ← gap replace
   },
   checkRowLast: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 0,            // ← last row ka extra space nahi
+    marginBottom: 0, // ← last row ka extra space nahi
   },
   checkIcon: {
-    marginRight: wScale(10),    // ← gap replace
+    marginRight: wScale(10), // ← gap replace
   },
   checkText: {
     fontSize: wScale(13),
@@ -209,10 +202,10 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: hScale(10),   // ← gap replace
+    marginBottom: hScale(10), // ← gap replace
   },
   primaryBtnIcon: {
-    marginLeft: wScale(8),      // ← gap replace
+    marginLeft: wScale(8), // ← gap replace
   },
   primaryBtnText: {
     color: '#fff',

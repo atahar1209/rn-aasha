@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable curly */
+import React, {useEffect, useState} from 'react';
 import {
   Modal,
   TouchableWithoutFeedback,
@@ -10,24 +11,24 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import Success from '../../drawer/svgimgcomponents/Success';
 import CloseCameraSvg from '../../drawer/svgimgcomponents/CloseCameraSvg';
 import RefreshSvg from '../../drawer/svgimgcomponents/RefreshSvg';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 // ❌ REMOVE: import ImageViewer from 'react-native-image-zoom-viewer';
 
 interface ImagePreviewModalProps {
   visible: boolean;
   reUploadBtn: boolean;
-  imageUri: string; 
+  imageUri: string;
   onClose: () => void;
   saveClose: () => void;
   reUpload: () => void;
 }
-
 
 const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
   visible,
@@ -37,7 +38,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
   saveClose,
   reUploadBtn = true,
 }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const secondaryColorWithOpacity = `${colorConfig.secondaryColor}40`;
 
   // ✅ Yeh add karo
@@ -61,8 +62,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
                 padding: wScale(2),
                 borderRadius: 10,
                 overflow: 'hidden',
-              }}
-            >
+              }}>
               {/* Top bar — same rahega */}
               <View style={styles.closeButton}>
                 {reUploadBtn && (
@@ -72,11 +72,12 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
                 )}
                 {reUploadBtn && (
                   <TouchableOpacity
-                    style={[styles.reUploadButton, { backgroundColor: '#000' }]}
-                    onPress={reUpload}
-                  >
+                    style={[styles.reUploadButton, {backgroundColor: '#000'}]}
+                    onPress={reUpload}>
                     <RefreshSvg size={'20'} />
-                    <Text style={styles.closeButtonText}>Image Re-Upload</Text>
+                    <Text style={styles.closeButtonText}>
+                      {translate('Image Re-Upload')}
+                    </Text>
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity onPress={onClose}>
@@ -85,34 +86,37 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
               </View>
 
               {/* ✅ Image + Loading ek saath */}
-              <View style={{ flex: 1 }}>
+              <View style={{flex: 1}}>
                 <ScrollView
                   contentContainerStyle={styles.imageWrapper}
                   maximumZoomScale={4}
                   minimumZoomScale={1}
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
-                  centerContent={true}
-                >
+                  centerContent={true}>
                   {imageUri ? (
                     <Image
-  source={{ 
-    uri: imageUri,
-    // ❌ cache: 'reload' hata diya
-  }}
-  style={styles.image}
-  resizeMode="contain"
-  onLoadStart={() => setImgLoading(true)}
-  onLoadEnd={() => setImgLoading(false)}
-  onError={(e) => {                                    // ✅ yeh add karo
-    console.log('❌ Image load error:', e.nativeEvent.error);
-    setImgLoading(false);
-  }}
-/>
+                      source={{
+                        uri: imageUri,
+                        // ❌ cache: 'reload' hata diya
+                      }}
+                      style={styles.image}
+                      resizeMode="contain"
+                      onLoadStart={() => setImgLoading(true)}
+                      onLoadEnd={() => setImgLoading(false)}
+                      onError={e => {
+                        // ✅ yeh add karo
+                        console.log(
+                          '❌ Image load error:',
+                          e.nativeEvent.error,
+                        );
+                        setImgLoading(false);
+                      }}
+                    />
                   ) : (
                     <View style={styles.noImage}>
-                      <Text style={{ color: '#9CA3AF', fontSize: wScale(14) }}>
-                        No image available
+                      <Text style={{color: '#9CA3AF', fontSize: wScale(14)}}>
+                        {translate('No image available')}
                       </Text>
                     </View>
                   )}
@@ -122,11 +126,12 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
                 {imgLoading && (
                   <View style={styles.loadingOverlay}>
                     <ActivityIndicator size="large" color="#fff" />
-                    <Text style={styles.loadingText}>Loading image...</Text>
+                    <Text style={styles.loadingText}>
+                      {translate('Loading image')}...
+                    </Text>
                   </View>
                 )}
               </View>
-
             </View>
           </View>
         </View>
@@ -183,11 +188,11 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   noImage: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-loadingOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingOverlay: {
     ...StyleSheet.absoluteFillObject, // image ke upar pura cover karega
     backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',

@@ -1,11 +1,11 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React from "react";
-import { View, Text } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
+import {translate} from '../../../utils/languageUtils/I18n';
+import React from 'react';
+import {View, Text} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
 
-const DayEarnsvg = ({ size = wScale(40) }) => {
-    const searchicon = `
+const DayEarnsvg = ({size = wScale(40)}) => {
+  const searchicon = `
 
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
@@ -54,13 +54,12 @@ const DayEarnsvg = ({ size = wScale(40) }) => {
 
 
 
-`
-    return (
-        <View>
-            <SvgXml xml={searchicon} width={size} height={size} />
-        </View>
-    );
+`;
+  return (
+    <View>
+      <SvgXml xml={searchicon} width={size} height={size} />
+    </View>
+  );
 };
-
 
 export default DayEarnsvg;

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable dot-notation */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  TextInput,
   View,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -8,20 +8,19 @@ import {
   TouchableOpacity,
   ToastAndroid,
   Alert,
-  
 } from 'react-native';
-import { colors } from '../../utils/styles/theme';
-import { SCREEN_HEIGHT, hScale, wScale } from '../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { APP_URLS } from '../../utils/network/urls';
+import {colors} from '../../utils/styles/theme';
+import {SCREEN_HEIGHT, hScale, wScale} from '../../utils/styles/dimensions';
+import {FlashList} from '@shopify/flash-list';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { BottomSheet, Card } from '@rneui/base';
-import { translate } from '../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
-import { useNavigation } from '@react-navigation/native';
+import {BottomSheet, Card} from '@rneui/base';
+import {translate} from '../../utils/languageUtils/I18n';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
+import {useNavigation} from '@react-navigation/native';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import ShowLoader from '../../components/ShowLoder';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
@@ -30,13 +29,11 @@ import DynamicButton from '../drawer/button/DynamicButton';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
 import OperatorBottomSheet from '../../components/OperatorBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
-import { read } from 'react-native-fs';
 import RecentText from '../../components/RecentText';
-import { useLocationHook } from '../../hooks/useLocationHook';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useLocationHook} from '../../hooks/useLocationHook';
 
 const HousingTaxScreen = () => {
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [textInput1, setTextInput1] = useState('');
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [textInput3, setTextInput3] = useState('');
@@ -90,7 +87,7 @@ const HousingTaxScreen = () => {
   const [showLoader, setShowLoader] = useState(false);
 
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
   const [agencyCode, setAgencyCode] = useState('');
@@ -109,24 +106,21 @@ const HousingTaxScreen = () => {
 
   useEffect(() => {
     recenttransactions();
-
   }, []);
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
+      const response = await get({url: url});
       console.log('-*************************************', response);
 
       setHistorylist(response);
       setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqId(response[0]['Request_ID']);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -217,15 +211,12 @@ const HousingTaxScreen = () => {
     setKey3('');
     setKeyType3('default');
   };
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId ,Loc_Data} = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
-
-
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
   const onRechargePress = useCallback(async () => {
-
     setShowLoader(true);
 
     const mobileNetwork = await getNetworkCarrier();
@@ -235,7 +226,8 @@ const HousingTaxScreen = () => {
       consumerNo,
       optcode,
       amount,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data['latitude'],
+      Loc_Data['longitude'],
 
       'city',
       'address',
@@ -273,13 +265,13 @@ const HousingTaxScreen = () => {
       const res = await post({
         url: url,
       });
-      console.log(res,'************************');
+      console.log(res, '************************');
       console.log(status);
-      if(res.status ==='False'){
-        alert(res.message);
+      if (res.status === 'False') {
+        Alert.alert(res.message);
         setShowLoader(false);
 
-        return
+        return;
       }
       status = res.Response;
       Message = res.Message;
@@ -287,38 +279,42 @@ const HousingTaxScreen = () => {
     } catch (error) {
       setShowLoader(false);
 
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     setconsumerNo('');
-    setselectedOpt('Select Your Operator');
+    setselectedOpt(translate('Select Your Operator'));
     setAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
 
     navigation.navigate('Rechargedetails', {
-      mobileNumber: consumerNo ?? '',  // Default to empty string if null or undefined
-      Amount: amount ?? 0,             // Default to 0 if null or undefined
-      operator: selectedOpt ?? 'N/A',  // Default to 'N/A' if null or undefined
-      status: status ?? 'Unknown',    // Default to 'Unknown' if null or undefined
-      reqId: reqId ?? '',             // Default to empty string if null or undefined
-      reqTime: reqTime ?? new Date().toISOString(),  // Default to current time if null or undefined
-      Message: Message ?? 'No message available'  // Default to 'No message available' if null or undefined
+      mobileNumber: consumerNo ?? '', // Default to empty string if null or undefined
+      Amount: amount ?? 0, // Default to 0 if null or undefined
+      operator: selectedOpt ?? 'N/A', // Default to 'N/A' if null or undefined
+      status: status ?? 'Unknown', // Default to 'Unknown' if null or undefined
+      reqId: reqId ?? '', // Default to empty string if null or undefined
+      reqTime: reqTime ?? new Date().toISOString(), // Default to current time if null or undefined
+      Message: Message ?? translate('No message available'), // Default to 'No message available' if null or undefined
     });
-    
-
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
+    getMobileIp,
+    userId,
     consumerNo,
     optcode,
+    amount,
+    Loc_Data,
+    agencyCode,
+    agencyCode2,
+    navigation,
+    selectedOpt,
+    reqId,
+    reqTime,
     post,
-    userId,
+    recenttransactions,
   ]);
 
   async function HousingOpt(opttype) {
@@ -336,11 +332,11 @@ const HousingTaxScreen = () => {
 
   const showBottomSheetList = () => {
     return (
-      <View style={{ marginVertical: wScale(8), marginHorizontal: wScale(24) }}>
+      <View style={{marginVertical: wScale(8), marginHorizontal: wScale(24)}}>
         <FlashList
-          style={{ marginBottom: wScale(50), marginHorizontal: wScale(24) }}
+          style={{marginBottom: wScale(50), marginHorizontal: wScale(24)}}
           data={insuranceOptList}
-          renderItem={({ item }) => {
+          renderItem={({item}) => {
             return (
               <View
                 style={{
@@ -356,7 +352,7 @@ const HousingTaxScreen = () => {
                     ViewbillInfoStatus(item['OPtCode']);
                     console.log(item['OPtCode']);
                   }}>
-                  <Text style={{ color: '#ff4670', fontSize: 18 }}>
+                  <Text style={{color: '#ff4670', fontSize: 18}}>
                     {item['Operatorname']}
                   </Text>
                 </TouchableWithoutFeedback>
@@ -372,34 +368,35 @@ const HousingTaxScreen = () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer`,
+          Authorization: 'Bearer',
         },
       };
 
       const url = `${APP_URLS.rechargeViewBill}billnumber=${CustomerID}&Operator=${optcode}&billunit=${agencyCode}&ProcessingCycle=''&acno=''&lt=''&ViewBill=Y`;
-      const res = await get({ url: url });
+      const res = await get({url: url});
       if (res['RESULT'] === 0) {
-        const addinfo = res['ADDINFO']
+        const addinfo = res['ADDINFO'];
         const billinfoo = addinfo['BillInfo'];
-        setDueDate(billinfoo["billDueDate"]);
-        setAmount(billinfoo["billAmount"]);
-        setCustomerName(billinfoo["customerName"]);
-        setCustBal(billinfoo["balance"]);
-        setAmount(billinfoo["billAmount"]);
+        setDueDate(billinfoo['billDueDate']);
+        setAmount(billinfoo['billAmount']);
+        setCustomerName(billinfoo['customerName']);
+        setCustBal(billinfoo['balance']);
+        setAmount(billinfoo['billAmount']);
         //setstatus(res["customerStatus"])
       } else {
-        Alert.alert(res['ADDINFO'], res['Message'], [{ text: 'OK', onPress: () => { } }]);
+        Alert.alert(res['ADDINFO'], res['Message'], [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
       }
 
-
       // console.log(":", res);
-    } catch (error) { }
+    } catch (error) {}
   }
   async function ViewbillInfoStatus(optcode) {
     console.log(optcode);
     try {
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
-      const res = await post({ url: url });
+      const res = await post({url: url});
 
       console.log(':', url);
       const billSts = res['RESULT'];
@@ -409,25 +406,29 @@ const HousingTaxScreen = () => {
         setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const validateFields = () => {
-    if (paramname == 'Consumer Number') {
+    if (paramname === 'Consumer Number') {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (selectedOpt === 'Select Your Operator') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount' || parseFloat(amount) <= 0) {
+    } else if (
+      !amount ||
+      amount === 'Enter Amount' ||
+      parseFloat(amount) <= 0
+    ) {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -440,14 +441,16 @@ const HousingTaxScreen = () => {
       <AppBarSecond title={'Housing Tex Screen'} />
 
       <View style={styles.container}>
-
-        {showLoader && (
-          <ShowLoader />
-        )}
+        {showLoader && <ShowLoader />}
         <TouchableOpacity onPress={() => setIsOperatorList(true)}>
-          <FlotingInput label={selectedOpt} editable={false} />
+          <FlotingInput
+            label={selectedOpt}
+            editable={false}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.righticon2]}>
-
             <OnelineDropdownSvg />
           </View>
           {/* <TextInput
@@ -460,51 +463,54 @@ const HousingTaxScreen = () => {
         </TouchableOpacity>
 
         {accntvisivility && (
-
           <View>
-            <FlotingInput label={accnumhint} onChangeTextCallback={(text) => setAgencyCode(text)}
-              value={agencyCode} 
+            <FlotingInput
+              label={accnumhint}
+              onChangeTextCallback={text => setAgencyCode(text)}
+              value={agencyCode}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <TouchableOpacity>
-              <Text style={{}}></Text>
+              <Text style={{}} />
             </TouchableOpacity>
           </View>
-
         )}
 
         {accntvisivility2 && (
-          <View >
-
-            <FlotingInput label={agencyCode2} onChangeTextCallback={(text) => setAgencyCode2(text)}
-              value={agencyCode2} 
-
+          <View>
+            <FlotingInput
+              label={agencyCode2}
+              onChangeTextCallback={text => setAgencyCode2(text)}
+              value={agencyCode2}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <View style={[styles.righticon2]}>
               <TouchableOpacity>
-
-                <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
+                <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
               </TouchableOpacity>
-
             </View>
-
           </View>
-
         )}
 
-<View>
-          <FlotingInput label={paramname} value={consumerNo} 
-            
+        <View>
+          <FlotingInput
+            label={paramname}
+            value={consumerNo}
             onChangeTextCallback={text => {
               setconsumerNo(text);
               // setconsumerNo(text.replace(/\D/g, ""));
               if (text.length >= 5) {
-                setIsinfo(true)
+                setIsinfo(true);
               } else {
-                setIsinfo(false)
+                setIsinfo(false);
               }
             }}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
-          <View style={[styles.righticon2,]}>
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
@@ -517,56 +523,61 @@ const HousingTaxScreen = () => {
                 onPress={() => {
                   billInfo();
                   setBottomSheetVisible(true);
-                }}              >
-
-                <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
-
+                }}>
+                <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
               </TouchableOpacity>
             )}
           </View>
         </View>
-       
 
-        <FlotingInput label={'Enter Amount'}
-             maxLength={5}
-              value={amount} onChangeTextCallback={text => setAmount(text)}
-          keyboardType="number-pad" />
+        <FlotingInput
+          label={translate('Enter Amount')}
+          maxLength={5}
+          value={amount}
+          onChangeTextCallback={text => setAmount(text)}
+          keyboardType="number-pad"
+          inputstyle={undefined}
+          labelinputstyle={undefined}
+        />
 
+        <DynamicButton
+          title={'Next'}
+          onPress={() => {
+            validateFields();
+          }}
+        />
 
-
-        <DynamicButton title={'Next'} onPress={() => {
-          validateFields();
-        }} />
-
-        <View >
-
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
             onBackdropPress={() => setIsrecent(false)}
-
           />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
-           <RecentText/>
+            <RecentText />
           </TouchableOpacity>
         </View>
-
 
         <OperatorBottomSheet
           isModalVisible={isOperatorList}
           operatorData={insuranceOptList}
           //// stateData={stateList}
-          selectedOperator={() => { selectedOpt; setIsOperatorList(false) }}
+          selectedOperator={() => {
+            selectedOpt;
+            setIsOperatorList(false);
+          }}
           setModalVisible={setIsOperatorList}
           selectOperator={selectOperator}
           setOperatorcode={setOptCode}
           showState={false}
-          handleItemPress={(item)=>{handleItemPress(item)}}
-
+          handleItemPress={item => {
+            handleItemPress(item);
+          }}
         />
 
         <Rechargeconfirm
@@ -575,33 +586,40 @@ const HousingTaxScreen = () => {
           onBackdropPress={() => setBottomSheetVisible(false)}
           status={Status}
           details={[
-            { label: 'User Name', value2: CustomerName === '' ? 'N/A' : CustomerName },
-            { label: 'Customer ID', value: consumerNo },
-            { label: 'Due Date', value2: dueDate === '' ? 'N/A' : dueDate },
-            { label: 'Operator Name', value2: selectedOpt },
-            { label: 'Customer Status', value2: Status === '' ? 'N/A' : Status },
+            {
+              label: translate('User Name'),
+              value2: CustomerName === '' ? 'N/A' : CustomerName,
+            },
+            {label: translate('Customer ID'), value: consumerNo},
+            {
+              label: translate('Due Date'),
+              value2: dueDate === '' ? 'N/A' : dueDate,
+            },
+            {label: translate('Operator Name'), value2: selectedOpt},
+            {
+              label: translate('Customer Status'),
+              value2: Status === '' ? 'N/A' : Status,
+            },
           ]}
-          lastlabel={'Transaction Amount'}
+          lastlabel={translate('Transaction Amount')}
           lastvalue={amount}
           onRechargedetails={() => {
             if (amount === '0' || amount === '') {
               ToastAndroid.showWithGravity(
-                `Please Enter Amount`,
+                translate('Please Enter Amount'),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
             } else {
               onRechargePress();
-              setBottomSheetVisible(false);   
+              setBottomSheetVisible(false);
               setProceedSheetVisible(true);
             }
-          }
-          }
+          }}
         />
 
-   
-
-        <BottomSheet animationType="none"  
+        <BottomSheet
+          animationType="none"
           // isVisible={isOperatorList}
           onBackdropPress={() => {
             setIsOperatorList(false);
@@ -611,19 +629,26 @@ const HousingTaxScreen = () => {
               height: SCREEN_HEIGHT / 1.5,
               flex: 1,
               marginBottom: wScale(40),
-            }}></View>
+            }}
+          />
           {showBottomSheetList()}
         </BottomSheet>
 
-        <BottomSheet animationType="none"  
+        <BottomSheet
+          animationType="none"
           // isVisible={bottomSheetVisible}
           onBackdropPress={() => setBottomSheetVisible(false)}>
-          <View style={{ bottom: hScale(10) }}>
+          <View style={{bottom: hScale(10)}}>
             <Card>
-              <Text> Operator: {selectedOpt}</Text>
+              <Text>
+                {' '}
+                {translate('Operator')}: {selectedOpt}
+              </Text>
             </Card>
             <Card>
-              <Text>Due Date: {dueDate}</Text>
+              <Text>
+                {translate('Due Date')}: {dueDate}
+              </Text>
             </Card>
             <Card>
               <Text>
@@ -636,7 +661,9 @@ const HousingTaxScreen = () => {
               </Text>
             </Card>
             <Card>
-              <Text>Recharge Amount: {amount}</Text>
+              <Text>
+                {translate('Recharge Amount')}: {amount}
+              </Text>
             </Card>
             <TouchableOpacity
               onPress={() => {
@@ -649,7 +676,6 @@ const HousingTaxScreen = () => {
           </View>
         </BottomSheet>
       </View>
-
     </View>
   );
 };
@@ -657,21 +683,21 @@ const HousingTaxScreen = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: wScale(30),
-    flex: 1
+    flex: 1,
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -684,18 +710,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',
     textAlign: 'right',
     paddingVertical: hScale(10),
   },
-
 
   DetailButton: {
     alignContent: 'center',

@@ -1,4 +1,4 @@
-package com.mobykwik.upi;
+package com.digitalindiapay.upi;
 
 import androidx.annotation.NonNull;
 

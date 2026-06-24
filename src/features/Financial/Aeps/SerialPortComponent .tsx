@@ -1,13 +1,15 @@
-import { ScrollView, Alert, Button } from "react-native";
-import { useLayoutEffect, useState } from "react";
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import {ScrollView, Button} from 'react-native';
+import {useLayoutEffect, useState} from 'react';
+import React from 'react';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 const SerialPortComponent = () => {
-  const [usbSerial, setUsbSerial] = useState(null)
+  const [usbSerial, setUsbSerial] = useState(null);
   useLayoutEffect(() => {
-   // initSerialPort();
+    // initSerialPort();
     sendData('0x01');
-  },[])
+  }, [sendData]);
 
   // async function initSerialPort() {
   //   try {
@@ -19,9 +21,9 @@ const SerialPortComponent = () => {
   //               Alert.alert('USB permission denied');
 
   //       const usbSerialport = await UsbSerialManager.open(devices[0].deviceId, { baudRate: 9600, parity: Parity.None, dataBits: 8, stopBits: 1 });
-        
+
   //       console.log(usbSerialport);
-        
+
   //     ///  setUsbSerial(usbSerialport);
   //     } else {
   //       Alert.alert('USB permission denied');
@@ -35,18 +37,18 @@ const SerialPortComponent = () => {
     console.log(usbSerial);
     if (usbSerial) {
       try {
-        await usbSerial.send(data)
-      } catch(e) {
-        console.error(e)
+        await usbSerial.send(data);
+      } catch (e) {
+        console.error(e);
       }
     }
   }
   return (
     <ScrollView>
-      <Button onPress={() => sendData('0x01')} title="ON"/>
-      <Button onPress={() => sendData('0x02')} title="OFF"/>
+      <Button onPress={() => sendData('0x01')} title={translate('ON')} />
+      <Button onPress={() => sendData('0x02')} title={translate('OFF')} />
     </ScrollView>
-  )
-}
+  );
+};
 
-export default SerialPortComponent
+export default SerialPortComponent;

@@ -1,41 +1,37 @@
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable dot-notation */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  TextInput,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
   Text,
   TouchableOpacity,
   ToastAndroid,
   Alert,
-  
 } from 'react-native';
-import { colors } from '../../utils/styles/theme';
-import { SCREEN_HEIGHT, hScale, wScale } from '../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { APP_URLS } from '../../utils/network/urls';
+import {SCREEN_HEIGHT, hScale, wScale} from '../../utils/styles/dimensions';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { BottomSheet, Card } from '@rneui/base';
-import { translate } from '../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
+import {translate} from '../../utils/languageUtils/I18n';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import DynamicButton from '../drawer/button/DynamicButton';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
 import OperatorBottomSheet from '../../components/OperatorBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import ShowLoader from '../../components/ShowLoder';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
 import RecentText from '../../components/RecentText';
-import { useLocationHook } from '../../hooks/useLocationHook';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {useLocationHook} from '../../hooks/useLocationHook';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const HospitalScreen = () => {
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [textInput1, setTextInput1] = useState('');
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [textInput3, setTextInput3] = useState('');
@@ -88,14 +84,14 @@ const HospitalScreen = () => {
 
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
-  const [agencyCode, setAgencyCode] = useState('')
-  const [agencyCode2, setAgencyCode2] = useState('')
+  const [agencyCode, setAgencyCode] = useState('');
+  const [agencyCode2, setAgencyCode2] = useState('');
   useEffect(() => {
     HospitalOpt('Hospital and Pathology');
-  }, []);
+  }, [HospitalOpt]);
 
   const selectOperator = selectedOperator => {
     console.log('Selected Operator:', selectedOperator);
@@ -106,24 +102,21 @@ const HospitalScreen = () => {
 
   useEffect(() => {
     recenttransactions();
-
   }, []);
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
+      const response = await get({url: url});
       console.log('-*************************************', response);
 
       setHistorylist(response);
       setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqId(response[0]['Request_ID']);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -131,8 +124,6 @@ const HospitalScreen = () => {
   const day = ('0' + currentDate.getDate()).slice(-2);
 
   const formattedDate = `${year}-${month}-${day}`;
-
-
 
   const handleItemPress = item => {
     setAccntvisivility(false);
@@ -213,10 +204,10 @@ const HospitalScreen = () => {
     setKey3('');
     setKeyType3('default');
   };
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId ,Loc_Data} = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
   const onRechargePress = useCallback(async () => {
     setShowLoader(true);
@@ -228,7 +219,8 @@ const HospitalScreen = () => {
       consumerNo,
       optcode,
       amount,
-          Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data['latitude'],
+      Loc_Data['longitude'],
 
       'city',
       'address',
@@ -287,11 +279,11 @@ const HospitalScreen = () => {
         url: url,
       });
 
-      if(res.status ==='False'){
+      if (res.status === 'False') {
         alert(res.message);
         setShowLoader(false);
 
-        return
+        return;
       }
       console.log(res);
       console.log(status);
@@ -300,38 +292,42 @@ const HospitalScreen = () => {
       Message = res.Message;
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = 'Recharge failed, please try again';
     }
 
     setconsumerNo('');
     setselectedOpt('Select Your Operator');
     setAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
 
     navigation.navigate('Rechargedetails', {
-      mobileNumber: consumerNo ?? '',  // Default to empty string if null or undefined
-      Amount: amount ?? 0,             // Default to 0 if null or undefined
-      operator: selectedOpt ?? 'N/A',  // Default to 'N/A' if null or undefined
-      status: status ?? 'Unknown',    // Default to 'Unknown' if null or undefined
-      reqId: reqId ?? '',             // Default to empty string if null or undefined
-      reqTime: reqTime ?? new Date().toISOString(),  // Default to current time if null or undefined
-      Message: Message ?? 'No message available'  // Default to 'No message available' if null or undefined
+      mobileNumber: consumerNo ?? '', // Default to empty string if null or undefined
+      Amount: amount ?? 0, // Default to 0 if null or undefined
+      operator: selectedOpt ?? 'N/A', // Default to 'N/A' if null or undefined
+      status: status ?? 'Unknown', // Default to 'Unknown' if null or undefined
+      reqId: reqId ?? '', // Default to empty string if null or undefined
+      reqTime: reqTime ?? new Date().toISOString(), // Default to current time if null or undefined
+      Message: Message ?? 'No message available', // Default to 'No message available' if null or undefined
     });
-    
-
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
+    getMobileIp,
+    userId,
     consumerNo,
     optcode,
+    amount,
+    Loc_Data,
+    agencyCode,
+    agencyCode2,
+    navigation,
+    selectedOpt,
+    reqId,
+    reqTime,
     post,
-    userId,
+    recenttransactions,
   ]);
   async function HospitalOpt(opttype) {
     try {
@@ -350,33 +346,35 @@ const HospitalScreen = () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer`,
+          Authorization: 'Bearer',
         },
       };
 
       const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=${agencyCode}&ProcessingCycle=''&acno=''&lt=''&ViewBill=Y`;
 
-      const res = await get({ url: url });
+      const res = await get({url: url});
       if (res['RESULT'] === 0) {
-        const addinfo = res['ADDINFO']
+        const addinfo = res['ADDINFO'];
         const billinfoo = addinfo['BillInfo'];
-        setDueDate(billinfoo["billDueDate"]);
-        setAmount(billinfoo["billAmount"]);
-        setCustomerName(billinfoo["customerName"]);
-        setCustBal(billinfoo["balance"]);
-        setAmount(billinfoo["billAmount"]);
+        setDueDate(billinfoo['billDueDate']);
+        setAmount(billinfoo['billAmount']);
+        setCustomerName(billinfoo['customerName']);
+        setCustBal(billinfoo['balance']);
+        setAmount(billinfoo['billAmount']);
         //setstatus(res["customerStatus"])
       } else {
-        Alert.alert(res['ADDINFO'], res['Message'], [{ text: 'OK', onPress: () => { } }]);
+        Alert.alert(res['ADDINFO'], res['Message'], [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
       }
 
       // console.log(":", res);
-    } catch (error) { }
+    } catch (error) {}
   }
   async function ViewbillInfoStatus(optcode) {
     try {
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
-      const res = await post({ url: url });
+      const res = await post({url: url});
 
       console.log(':', res);
       const billSts = res['RESULT'];
@@ -386,209 +384,229 @@ const HospitalScreen = () => {
         setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const validateFields = () => {
-    if (paramname === 'Consumer ID' || paramname.length === 0 || (accnumhint === 'Registered Mobile Number' && accnumhint === 'UHID')) {
+    if (
+      paramname === 'Consumer ID' ||
+      paramname.length === 0 ||
+      (accnumhint === 'Registered Mobile Number' && accnumhint === 'UHID')
+    ) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}`,
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM
-      );
-    } else if (selectedOpt === 'Select Your Operator') {
-      ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        `${translate('Please Enter')} ${paramname}`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount' || parseFloat(amount) <= 0) {
+    } else if (selectedOpt === 'Select Your Operator') {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Select an Operator'),
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
+    } else if (
+      !amount ||
+      amount === 'Enter Amount' ||
+      parseFloat(amount) <= 0
+    ) {
+      ToastAndroid.showWithGravity(
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (paramname === 'UHID') {
-
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}`,
+        `${translate('Please Enter')} ${paramname}`,
         ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM
+        ToastAndroid.BOTTOM,
       );
     } else {
       setBottomSheetVisible(true);
     }
   };
-return (
-  <View style={styles.main}>
-    <AppBarSecond title={'Hospital Screen'} />
+  return (
+    <View style={styles.main}>
+      <AppBarSecond title={'Hospital Screen'} />
 
-    <KeyboardAwareScrollView
-      keyboardShouldPersistTaps={'handled'}
-      enableOnAndroid={true}
-      extraScrollHeight={100}
-      style={{ flex: 1 }}
-      contentContainerStyle={{ flexGrow: 1 }}
-    >
-      <View style={styles.container}>
-        {showLoader && <ShowLoader />}
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps={'handled'}
+        enableOnAndroid={true}
+        extraScrollHeight={100}
+        style={{flex: 1}}
+        contentContainerStyle={{flexGrow: 1}}>
+        <View style={styles.container}>
+          {showLoader && <ShowLoader />}
 
-        {/* Operator Selection */}
-        <TouchableOpacity onPress={() => setIsOperatorList(true)}>
-          <FlotingInput label={selectedOpt} editable={false} />
-          <View style={[styles.righticon2]}>
-            <OnelineDropdownSvg />
-          </View>
-        </TouchableOpacity>
-
-        {/* Dynamic Fields based on Visibility */}
-        {accntvisivility && (
-          <View>
-            <FlotingInput 
-              label={accnumhint} 
-              onChangeTextCallback={(text) => setAgencyCode(text)}
-              value={agencyCode} 
-            />
-          </View>
-        )}
-
-        {accntvisivility2 && (
-          <View>
-            <FlotingInput 
-              label={accnumhint2} 
-              onChangeTextCallback={(text) => setAccnumhint2(text)}
-              value={accnumhint2} 
+          {/* Operator Selection */}
+          <TouchableOpacity onPress={() => setIsOperatorList(true)}>
+            <FlotingInput
+              label={selectedOpt}
+              editable={false}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
+              onChangeTextCallback={undefined}
             />
             <View style={[styles.righticon2]}>
-              <TouchableOpacity>
-                <Text style={[styles.infobtntex]}>{translate("Info")}</Text>
-              </TouchableOpacity>
+              <OnelineDropdownSvg />
+            </View>
+          </TouchableOpacity>
+
+          {/* Dynamic Fields based on Visibility */}
+          {accntvisivility && (
+            <View>
+              <FlotingInput
+                label={accnumhint}
+                onChangeTextCallback={text => setAgencyCode(text)}
+                value={agencyCode}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+              />
+            </View>
+          )}
+
+          {accntvisivility2 && (
+            <View>
+              <FlotingInput
+                label={accnumhint2}
+                onChangeTextCallback={text => setAccnumhint2(text)}
+                value={accnumhint2}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+              />
+              <View style={[styles.righticon2]}>
+                <TouchableOpacity>
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
+          {/* Consumer Number Input with Info Button Logic */}
+          <View style={{position: 'relative'}}>
+            <FlotingInput
+              label={paramname}
+              value={consumerNo}
+              onChangeTextCallback={text => {
+                const cleanedText = text.replace(/\D/g, '');
+                setconsumerNo(cleanedText);
+                setIsinfo(cleanedText.length >= 5);
+              }}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
+            />
+            <View style={[styles.righticon2]}>
+              {isInfo && (
+                <TouchableOpacity
+                  style={styles.infobtn}
+                  onPress={() => {
+                    billInfo();
+                    setBottomSheetVisible(true);
+                  }}>
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
-        )}
 
-        {/* Consumer Number Input with Info Button Logic */}
-        <View style={{ position: 'relative' }}>
-          <FlotingInput 
-            label={paramname} 
-            value={consumerNo} 
-            onChangeTextCallback={text => {
-              const cleanedText = text.replace(/\D/g, "");
-              setconsumerNo(cleanedText);
-              setIsinfo(cleanedText.length >= 5);
+          {/* Amount Section */}
+          <FlotingInput
+            label={translate('Enter Amount')}
+            maxLength={5}
+            value={amount}
+            onChangeTextCallback={text => setAmount(text)}
+            keyboardType="number-pad"
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+          />
+
+          {/* Primary Action Button */}
+          <DynamicButton
+            title={'Next'}
+            onPress={() => {
+              validateFields();
             }}
           />
-          <View style={[styles.righticon2]}>
-            {isInfo && (
-              <TouchableOpacity
-                style={styles.infobtn}
-                onPress={() => {
-                  billInfo();
-                  setBottomSheetVisible(true);
-                }}
-              >
-                <Text style={[styles.infobtntex]}>{translate("Info")}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+
+          {/* Recent History Access */}
+          <TouchableOpacity
+            onPress={() => setIsrecent(true)}
+            style={styles.recentviewbtn}>
+            <RecentText />
+          </TouchableOpacity>
         </View>
+      </KeyboardAwareScrollView>
 
-        {/* Amount Section */}
-        <FlotingInput 
-          label={'Enter Amount'}
-          maxLength={5}
-          value={amount} 
-          onChangeTextCallback={text => setAmount(text)}
-          keyboardType="number-pad" 
-        />
+      {/* Overlays & Modals (Outside ScrollView for better UI performance) */}
+      <RecentHistory
+        isModalVisible={isrecent}
+        setModalVisible={setIsrecent}
+        historylistdata={historylist}
+        onBackdropPress={() => setIsrecent(false)}
+      />
 
-        {/* Primary Action Button */}
-        <DynamicButton 
-          title={'Next'} 
-          onPress={() => { validateFields(); }} 
-        />
+      <OperatorBottomSheet
+        isModalVisible={isOperatorList}
+        operatorData={insuranceOptList}
+        selectedOperator={() => {
+          setIsOperatorList(false);
+        }}
+        setModalVisible={setIsOperatorList}
+        selectOperator={selectOperator}
+        setOperatorcode={setOptCode}
+        showState={false}
+        handleItemPress={item => handleItemPress(item)}
+      />
 
-        {/* Recent History Access */}
-        <TouchableOpacity 
-          onPress={() => setIsrecent(true)}
-          style={styles.recentviewbtn}
-        >
-          <RecentText />
-        </TouchableOpacity>
-
-      </View>
-    </KeyboardAwareScrollView>
-
-    {/* Overlays & Modals (Outside ScrollView for better UI performance) */}
-    <RecentHistory
-      isModalVisible={isrecent}
-      setModalVisible={setIsrecent}
-      historylistdata={historylist}
-      onBackdropPress={() => setIsrecent(false)}
-    />
-
-    <OperatorBottomSheet
-      isModalVisible={isOperatorList}
-      operatorData={insuranceOptList}
-      selectedOperator={() => { setIsOperatorList(false); }}
-      setModalVisible={setIsOperatorList}
-      selectOperator={selectOperator}
-      setOperatorcode={setOptCode}
-      showState={false}
-      handleItemPress={(item) => handleItemPress(item)}
-    />
-
-    <Rechargeconfirm
-      Lottieimg={require('../../utils/lottieIcons/health-report.json')}
-      isModalVisible={bottomSheetVisible}
-      onBackdropPress={() => setBottomSheetVisible(false)}
-      status={Status}
-      details={[
-        { label: 'User Name', value2: CustomerName },
-        { label: 'Customer ID', value: consumerNo },
-        { label: 'Due Date', value2: dueDate },
-        { label: 'Operator Name', value2: selectedOpt },
-        { label: 'Customer Status', value2: Status },
-      ]}
-      lastlabel={'Transaction Amount'}
-      lastvalue={amount}
-      onRechargedetails={() => {
-        if (!amount || amount === '0') {
-          ToastAndroid.showWithGravity(
-            `Please Enter Amount`,
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM,
-          );
-        } else {
-          onRechargePress();
-          setBottomSheetVisible(false);
-          setProceedSheetVisible(true);
-        }
-      }}
-    />
-  </View>
-);
+      <Rechargeconfirm
+        Lottieimg={require('../../utils/lottieIcons/health-report.json')}
+        isModalVisible={bottomSheetVisible}
+        onBackdropPress={() => setBottomSheetVisible(false)}
+        status={Status}
+        details={[
+          {label: translate('User Name'), value2: CustomerName},
+          {label: translate('Customer ID'), value: consumerNo},
+          {label: translate('Due Date'), value2: dueDate},
+          {label: translate('Operator Name'), value2: selectedOpt},
+          {label: translate('Customer Status'), value2: Status},
+        ]}
+        lastlabel={translate('Transaction Amount')}
+        lastvalue={amount}
+        onRechargedetails={() => {
+          if (!amount || amount === '0') {
+            ToastAndroid.showWithGravity(
+              translate('Please Enter Amount'),
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM,
+            );
+          } else {
+            onRechargePress();
+            setBottomSheetVisible(false);
+            setProceedSheetVisible(true);
+          }
+        }}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-
   main: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: wScale(30),
-    flex: 1
+    flex: 1,
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -601,17 +619,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',
     textAlign: 'right',
     paddingVertical: hScale(10),
-  }, 
+  },
 });
 
 export default HospitalScreen;

@@ -1,27 +1,21 @@
-
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable react/self-closing-comp */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  TextInput,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
   Text,
   TouchableOpacity,
   ToastAndroid,
   Alert,
-  
 } from 'react-native';
-import { colors } from '../../utils/styles/theme';
-import { SCREEN_HEIGHT, hScale, wScale } from '../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { APP_URLS } from '../../utils/network/urls';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { BottomSheet, Card } from '@rneui/base';
-import { translate } from '../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { encrypt } from '../../utils/encryptionUtils';
-import { RootState } from '../../reduxUtils/store';
+import {translate} from '../../utils/languageUtils/I18n';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {encrypt} from '../../utils/encryptionUtils';
+import {RootState} from '../../reduxUtils/store';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import ShowLoader from '../../components/ShowLoder';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
@@ -30,13 +24,12 @@ import DynamicButton from '../drawer/button/DynamicButton';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
 import OperatorBottomSheet from '../../components/OperatorBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
-import { useNavigation } from '@react-navigation/native';
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import {useNavigation} from '@react-navigation/native';
 import RecentText from '../../components/RecentText';
-import { useLocationHook } from '../../hooks/useLocationHook';
+import {useLocationHook} from '../../hooks/useLocationHook';
 
 const LandlineScreen = () => {
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [textInput1, setTextInput1] = useState('');
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [textInput3, setTextInput3] = useState('');
@@ -89,7 +82,7 @@ const LandlineScreen = () => {
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
   const [agencyCode, setAgencyCode] = useState('');
@@ -108,24 +101,21 @@ const LandlineScreen = () => {
 
   useEffect(() => {
     recenttransactions();
-
   }, []);
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
+      const response = await get({url: url});
       console.log('-*************************************', response);
 
       setHistorylist(response);
-      setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqTime(response[0].Reqesttime);
+      setReqId(response[0].Request_ID);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -134,7 +124,7 @@ const LandlineScreen = () => {
 
   const formattedDate = `${year}-${month}-${day}`;
   const handleItemPress = item => {
-    console.log(item,'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+    console.log(item, '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
     setAccntvisivility(false);
     setAccntvisivility2(false);
 
@@ -145,43 +135,43 @@ const LandlineScreen = () => {
     //  setParamName('Customer ID');
     setValues('');
     setRegx('');
-    console.log(item['OPtCode']);
+    console.log(item.OPtCode);
     setVisibility(false);
     if (!item.customerparams || item.customerparams.length === 0) {
       //clearState();
     } else {
       const custparam = item.customerparams;
 
-      setDataType(custparam[0]['dataType']);
-      setMaxLength(custparam[0]['maxLength']);
-      setMinLength(custparam[0]['minLength']);
-      setVisibility(custparam[0]['visibility']);
-      setOptional(custparam[0]['optional']);
-      setParamName(custparam[0]['paramName']);
-      setRegx(custparam[0]['regex']);
-      setValues(custparam[0]['values']);
+      setDataType(custparam[0].dataType);
+      setMaxLength(custparam[0].maxLength);
+      setMinLength(custparam[0].minLength);
+      setVisibility(custparam[0].visibility);
+      setOptional(custparam[0].optional);
+      setParamName(custparam[0].paramName);
+      setRegx(custparam[0].regex);
+      setValues(custparam[0].values);
 
       if (custparam.length === 2) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setKey2(custparam[1]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setKey2(custparam[1].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
         //  setAccntvisivility2(true);
       } else if (custparam.length === 3) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setAccnumhint2(custparam[2]['paramName']);
-        setAccmaxlength2(custparam[2]['maxLength']);
-        setKey2(custparam[1]['dataType']);
-        setKey3(custparam[2]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setAccnumhint2(custparam[2].paramName);
+        setAccmaxlength2(custparam[2].maxLength);
+        setKey2(custparam[1].dataType);
+        setKey3(custparam[2].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setKeyType3(
-          custparam[2]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[2].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
 
@@ -217,14 +207,12 @@ const LandlineScreen = () => {
     setKey3('');
     setKeyType3('default');
   };
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId,Loc_Data } = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
   const onRechargePress = useCallback(async () => {
-
-    ;
     setShowLoader(true);
 
     const mobileNetwork = await getNetworkCarrier();
@@ -234,7 +222,8 @@ const LandlineScreen = () => {
       consumerNo,
       optcode,
       amount,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data.latitude,
+      Loc_Data.longitude,
 
       'city',
       'address',
@@ -274,25 +263,25 @@ const LandlineScreen = () => {
       });
       console.log(res);
       console.log(status);
-      if(res.status ==='False'){
-        alert(res.message);
+      if (res.status === 'False') {
+        Alert.alert(res.message);
         setShowLoader(false);
 
-        return
+        return;
       }
       status = res.Response;
       Message = res.Message;
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     setconsumerNo('');
-    setselectedOpt('Select Your Operator');
+    setselectedOpt(translate('Select Your Operator'));
     setAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '',
@@ -301,20 +290,25 @@ const LandlineScreen = () => {
       status: status ?? 'Unknown',
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
-      Message: Message ?? 'No message available'
+      Message: Message ?? translate('No message available'),
     });
-    
-
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
+    getMobileIp,
+    userId,
     consumerNo,
     optcode,
+    amount,
+    Loc_Data.latitude,
+    Loc_Data.longitude,
+    accnumhint,
+    accnumhint2,
+    navigation,
+    selectedOpt,
+    reqId,
+    reqTime,
     post,
-    userId,
+    recenttransactions,
   ]);
   async function CreditCardOpt(opttype) {
     try {
@@ -323,77 +317,80 @@ const LandlineScreen = () => {
         url: url,
       });
       console.log(res);
-      setInsuranceOptList(res['myprop2Items']);
+      setInsuranceOptList(res.myprop2Items);
     } catch (error) {
       console.error(error);
     }
   }
 
-
   async function billInfo() {
     try {
-
-
       const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=''&ProcessingCycle=''&acno=&lt=''&ViewBill=Y`;
-      const res = await get({ url: url });
+      const res = await get({url: url});
       console.log(url);
-      if (res['RESULT'] === 0) {
-        const addinfo = res['ADDINFO']
-        const billinfoo = addinfo['BillInfo'];
-        setDueDate(billinfoo["billDueDate"]);
-        setAmount(billinfoo["billAmount"]);
-        setCustomerName(billinfoo["customerName"]);
-        setCustBal(billinfoo["balance"]);
-        setAmount(billinfoo["billAmount"]);
+      if (res.RESULT === 0) {
+        const addinfo = res.ADDINFO;
+        const billinfoo = addinfo.BillInfo;
+        setDueDate(billinfoo.billDueDate);
+        setAmount(billinfoo.billAmount);
+        setCustomerName(billinfoo.customerName);
+        setCustBal(billinfoo.balance);
+        setAmount(billinfoo.billAmount);
         //setstatus(res["customerStatus"])
       } else {
-        Alert.alert(res['ADDINFO'], res['Message'], [{ text: 'OK', onPress: () => { } }]);
+        Alert.alert(res.ADDINFO, res.Message, [
+          {text: 'OK', onPress: () => {}},
+        ]);
       }
 
-      console.log(":", res);
-    } catch (error) { }
+      console.log(':', res);
+    } catch (error) {}
   }
   async function ViewbillInfoStatus() {
     console.log(optcode);
     try {
       const config = {
         headers: {
-          Authorization: `Bearer`,
+          Authorization: 'Bearer',
         },
       };
       const data = {
         Operatorcode: optcode,
       };
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
-      const res = await post({ url: url, data, config: config });
+      const res = await post({url: url, data, config: config});
 
       console.log(':', url);
-      const billSts = res['RESULT'];
+      const billSts = res.RESULT;
       if (billSts === 'Y') {
         setIsinfo(true);
       } else {
         setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const validateFields = () => {
     if (!paramname) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (selectedOpt === 'Select Your Operator') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount' || parseFloat(amount) <= 0) {
+    } else if (
+      !amount ||
+      amount === 'Enter Amount' ||
+      parseFloat(amount) <= 0
+    ) {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -406,26 +403,30 @@ const LandlineScreen = () => {
       <AppBarSecond title={'Landline Screen'} />
 
       <View style={styles.container}>
-
-        {showLoader && (
-          <ShowLoader />
-        )}
+        {showLoader && <ShowLoader />}
 
         <TouchableOpacity onPress={() => setIsOperatorList(true)}>
-          <FlotingInput label={selectedOpt} editable={false} />
+          <FlotingInput
+            label={selectedOpt}
+            editable={false}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.righticon2]}>
-
             <OnelineDropdownSvg />
           </View>
         </TouchableOpacity>
 
-
-
         {accntvisivility && (
           <View>
-            <FlotingInput label={accnumhint} onChangeTextCallback={(text) => setAgencyCode(text)}
-              value={agencyCode} 
- />
+            <FlotingInput
+              label={accnumhint}
+              onChangeTextCallback={text => setAgencyCode(text)}
+              value={agencyCode}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
+            />
             <TouchableOpacity>
               <Text style={{}}></Text>
             </TouchableOpacity>
@@ -433,35 +434,37 @@ const LandlineScreen = () => {
         )}
 
         {accntvisivility2 && (
-          <View >
-
-            <FlotingInput label={accnumhint2} onChangeTextCallback={(text) => setAgencyCode(text)}
-              value={agencyCode2} 
-
+          <View>
+            <FlotingInput
+              label={accnumhint2}
+              onChangeTextCallback={text => setAgencyCode(text)}
+              value={agencyCode2}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <View style={[styles.righticon2]}>
               <TouchableOpacity>
-
-                <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
+                <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
               </TouchableOpacity>
-
             </View>
-
           </View>
         )}
         <View>
-          <FlotingInput label={paramname} value={consumerNo} 
-            
+          <FlotingInput
+            label={paramname}
+            value={consumerNo}
             onChangeTextCallback={text => {
               setconsumerNo(text);
               if (text.length >= 5) {
-                setIsinfo(true)
+                setIsinfo(true);
               } else {
-                setIsinfo(false)
+                setIsinfo(false);
               }
             }}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
-          <View style={[styles.righticon2,]}>
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
@@ -474,57 +477,71 @@ const LandlineScreen = () => {
                 onPress={() => {
                   billInfo();
                   setBottomSheetVisible(true);
-                }}              >
-
-                <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
-
+                }}>
+                <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
               </TouchableOpacity>
             )}
           </View>
         </View>
-        <FlotingInput label={'Enter Amount'}
-             maxLength={5}
-              value={amount} onChangeTextCallback={text => setAmount(text)}
-          keyboardType="number-pad" />
+        <FlotingInput
+          label={translate('Enter Amount')}
+          maxLength={5}
+          value={amount}
+          onChangeTextCallback={text => setAmount(text)}
+          keyboardType="number-pad"
+          inputstyle={undefined}
+          labelinputstyle={undefined}
+        />
 
+        <DynamicButton
+          title={'Next'}
+          onPress={() => {
+            validateFields();
+          }}
+        />
 
-
-        <DynamicButton title={'Next'} onPress={() => {
-          validateFields();
-        }} />
-
-        <View >
-
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
             onBackdropPress={() => setIsrecent(false)}
           />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
-           <RecentText/>
+            <RecentText />
           </TouchableOpacity>
         </View>
 
-
         <OperatorBottomSheet
-  isModalVisible={isOperatorList}
-  operatorData={insuranceOptList}
-  // stateData={stateList} // Uncomment this if you need it later
-  selectedOperator={selectedOpt}
-  setModalVisible={setIsOperatorList}
-  selectOperator={selectOperator}
-  setOperatorcode={setOptCode}
-  showState={false}
-  handleItemPress={(item) => {
-    handleItemPress(item)
-    console.log(item, "tjhhttttttttttttttttttt");
-    setIsOperatorList(false);  
-  }}
-/>
+          isModalVisible={isOperatorList}
+          operatorData={insuranceOptList}
+          // stateData={stateList} // Uncomment this if you need it later
+          selectedOperator={selectedOpt}
+          setModalVisible={setIsOperatorList}
+          selectOperator={selectOperator}
+          setOperatorcode={setOptCode}
+          showState={false}
+          handleItemPress={item => {
+            handleItemPress(item);
+            console.log(item, 'tjhhttttttttttttttttttt');
+            setIsOperatorList(false);
+          }}
+          stateData={[]}
+          setCircle={function (circle: string): void {
+            throw new Error('Function not implemented.');
+          }}
+          setState={function (state: string): void {
+            throw new Error('Function not implemented.');
+          }}
+          selectOperatorImage={function (path: string): void {
+            throw new Error('Function not implemented.');
+          }}
+          path={''}
+        />
 
         <Rechargeconfirm
           Lottieimg={require('../../utils/lottieIcons/Landline.json')}
@@ -532,20 +549,19 @@ const LandlineScreen = () => {
           onBackdropPress={() => setBottomSheetVisible(false)}
           status={Status}
           details={[
-            { label: 'User Name', value2: CustomerName },
-            { label: 'Customer ID', value: consumerNo },
-            { label: 'Due Date', value2: dueDate },
-            { label: 'Operator Name', value2: selectedOpt },
-            { label: 'Customer Status', value2: Status },
+            {label: translate('User Name'), value2: CustomerName},
+            {label: translate('Customer ID'), value: consumerNo},
+            {label: translate('Due Date'), value2: dueDate},
+            {label: translate('Operator Name'), value2: selectedOpt},
+            {label: translate('Customer Status'), value2: Status},
             // { label: 'BillAmount', value2: billAmount },
-
           ]}
-          lastlabel={'Transaction Amount'}
+          lastlabel={translate('Transaction Amount')}
           lastvalue={amount}
           onRechargedetails={() => {
             if (amount === '0' || amount === '') {
               ToastAndroid.showWithGravity(
-                `Please Enter Amount`,
+                translate('Please Enter Amount'),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
@@ -554,33 +570,31 @@ const LandlineScreen = () => {
               setBottomSheetVisible(false);
               setProceedSheetVisible(true);
             }
-          }
-          }
+          }}
         />
       </View>
     </View>
-
   );
 };
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: wScale(30),
-    flex: 1
+    flex: 1,
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -593,19 +607,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',
     textAlign: 'right',
     paddingVertical: hScale(10),
   },
-
-
 });
 
 export default LandlineScreen;

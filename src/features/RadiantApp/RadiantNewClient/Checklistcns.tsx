@@ -1,62 +1,58 @@
-import { translate } from "../../../utils/languageUtils/I18n";
+/* eslint-disable react/no-unstable-nested-components */
+import {translate} from '../../../utils/languageUtils/I18n';
 import React from 'react';
-import { Image, Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
-import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
+import {Linking, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {FlashList} from '@shopify/flash-list';
 import DynamicButton from '../../drawer/button/DynamicButton';
-import { useNavigation } from '@react-navigation/native';
-import CheckSvg from '../../drawer/svgimgcomponents/CheckSvg';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import BackSvg from '../../drawer/svgimgcomponents/BackSvg';
-import { Button } from 'react-native-paper';
-import { getAssetSource } from "../../../utils/network/NetWorkImages";
-import { APP_URLS } from "../../../utils/network/urls";
-import FastImage from "react-native-fast-image";
+import {Button} from 'react-native-paper';
+import {getAssetSource} from '../../../utils/network/NetWorkImages';
+import {APP_URLS} from '../../../utils/network/urls';
+import FastImage from 'react-native-fast-image';
 
 const Checklistcms = () => {
-  const { colorConfig, userId } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, userId} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const color1 = `${colorConfig.secondaryColor}100`;
   const navigation = useNavigation<any>();
 
   const requirementtext = [
-    'Employee Application Form',
-    'Background Verification Form',
-    'Pre-Employment verification Form',
-    'Reference Check & Finger Impression Form',
-    'key_codeofco_23',
-    'Induction Training Form',
-
+    translate('Employee Application Form'),
+    translate('Background Verification Form'),
+    translate('Pre-Employment verification Form'),
+    translate('Reference Check & Finger Impression Form'),
+    translate('key_codeofco_23'),
+    translate('Induction Training Form'),
   ];
 
   const Inductionform = [
-    'Police Verification (Mandatory)',
-    'key_copyofba_25',
-    'Educational Document',
-    'Pan Card (Mandatory)',
-    'Aadhaar card (Mandatory)',
-    'key_voterside_109',
-    'key_asproofo_17',
-    'CIBIL/CREDIT SCORE',
-    'key_signature_91',
-    'Yourself, bank security cheque',
+    translate('Police Verification (Mandatory)'),
+    translate('key_copyofba_25'),
+    translate('Educational Document'),
+    translate('Pan Card (Mandatory)'),
+    translate('Aadhaar card (Mandatory)'),
+    translate('key_voterside_109'),
+    translate('key_asproofo_17'),
+    translate('CIBIL/CREDIT SCORE'),
+    translate('key_signature_91'),
+    translate('Yourself, bank security cheque'),
   ];
 
   const handleWebsiteLink = () => {
-
     Linking.openURL('https://www.radiantcashservices.com/');
   };
 
-
   const handleGoBack = () => {
-    navigation.goBack()
+    navigation.goBack();
   };
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}) => (
     <View style={styles.paragraphContainer}>
-      <Text style={styles.number}>
-        {`${index + 1}`}
-      </Text>
+      <Text style={styles.number}>{`${index + 1}`}</Text>
       {/* <View style={[styles.number, { backgroundColor: colorConfig.secondaryColor }]}>
 
         <CheckSvg size={15} />
@@ -65,11 +61,9 @@ const Checklistcms = () => {
       <Text style={styles.paragraph}>{item}</Text>
     </View>
   );
-  const renderItem2 = ({ item, index }) => (
+  const renderItem2 = ({item, index}) => (
     <View style={styles.paragraphContainer}>
-      <Text style={styles.number}>
-        {`${index + 1}`}
-      </Text>
+      <Text style={styles.number}>{`${index + 1}`}</Text>
       {/* <View style={[styles.number, { backgroundColor: colorConfig.secondaryColor }]}>
 
         <CheckSvg size={15} />
@@ -80,53 +74,70 @@ const Checklistcms = () => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={[styles.topcontainer,]}>
-        <FastImage 
-        
-                source={getAssetSource(`${APP_URLS.cms_logo}`)}
+    <View style={{flex: 1}}>
+      <View style={[styles.topcontainer]}>
+        <FastImage
+          source={getAssetSource(`${APP_URLS.cms_logo}`)}
           style={styles.imgstyle}
-          resizeMode="contain" />
+          resizeMode="contain"
+        />
         <View style={styles.column}>
-          <Text style={styles.title}>{translate("Radiant")}</Text>
-          <Text style={styles.title2}>{translate("Cash_Management_Services")}</Text>
+          <Text style={styles.title}>{translate('Radiant')}</Text>
+          <Text style={styles.title2}>
+            {translate('Cash_Management_Services')}
+          </Text>
         </View>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.header}>{translate("Checklist_for_onboarding_RCE")}</Text>
+        <Text style={styles.header}>
+          {translate('Checklist_for_onboarding_RCE')}
+        </Text>
         <FlashList
           data={requirementtext}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-
         />
-        <Text style={[styles.header, { marginTop: hScale(10) }]}>{translate("Copy_of_Certificates_Documents")}</Text>
+        <Text style={[styles.header, {marginTop: hScale(10)}]}>
+          {translate('Copy_of_Certificates_Documents')}
+        </Text>
         <FlashList
           data={Inductionform}
           renderItem={renderItem2}
           keyExtractor={(item, index) => index.toString()}
-          ListFooterComponent={<View style={styles.footer}>
-            <DynamicButton
-              title={'Next'}
-              onPress={() => { navigation.navigate('Availabilitybusiness'); }}
-            />
-          </View>}
+          ListFooterComponent={
+            <View style={styles.footer}>
+              <DynamicButton
+                title={'Next'}
+                onPress={() => {
+                  navigation.navigate('Availabilitybusiness');
+                }}
+              />
+            </View>
+          }
         />
 
         <View style={styles.linksContainer}>
           <Button
             mode="text"
             onPress={handleGoBack}
-            icon={() => <BackSvg size={15} color={colorConfig.primaryColor} />}
-          >
-            <Text style={[styles.goBackText, { color: colorConfig.primaryColor, }]}>{'Go Back'}</Text>
+            icon={() => <BackSvg size={15} color={colorConfig.primaryColor} />}>
+            <Text
+              style={[styles.goBackText, {color: colorConfig.primaryColor}]}>
+              {translate('Go Back')}
+            </Text>
           </Button>
 
-          <Button
-            mode="text"
-            onPress={handleWebsiteLink}
-          >
-            <Text style={[styles.websiteLinkText, { color: colorConfig.secondaryColor, textDecorationColor: colorConfig.secondaryColor }]}>{translate("Company_Website_Link")}</Text>
+          <Button mode="text" onPress={handleWebsiteLink}>
+            <Text
+              style={[
+                styles.websiteLinkText,
+                {
+                  color: colorConfig.secondaryColor,
+                  textDecorationColor: colorConfig.secondaryColor,
+                },
+              ]}>
+              {translate('Company_Website_Link')}
+            </Text>
           </Button>
         </View>
       </ScrollView>
@@ -157,7 +168,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     marginTop: hScale(1),
     alignItems: 'center',
-    fontSize: wScale(12)
+    fontSize: wScale(12),
   },
   paragraph: {
     marginBottom: 0,
@@ -174,7 +185,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#322254',
     textTransform: 'uppercase',
-    marginBottom: hScale(4)
+    marginBottom: hScale(4),
   },
   topcontainer: {
     flexDirection: 'row',
@@ -185,7 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: wScale(4),
     backgroundColor: '#ffe066',
-    borderColor: '#fccb0a'
+    borderColor: '#fccb0a',
   },
   imgstyle: {
     width: wScale(90),
@@ -196,7 +207,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     paddingLeft: wScale(5),
-
   },
   title: {
     fontSize: wScale(55),
@@ -228,7 +238,6 @@ const styles = StyleSheet.create({
     fontSize: wScale(16),
     textDecorationLine: 'underline',
   },
-
 });
 
 export default Checklistcms;

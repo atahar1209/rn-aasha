@@ -1,4 +1,4 @@
-import { translate } from "../../utils/languageUtils/I18n";
+import {translate} from '../../utils/languageUtils/I18n';
 // import React, { useState, useRef, useEffect } from 'react';
 // import {
 //   View,
@@ -249,16 +249,6 @@ import { translate } from "../../utils/languageUtils/I18n";
 //   },
 // });
 
-
-
-
-
-
-
-
-
-
-
 // import React, { useState, useRef, useEffect } from 'react';
 // import {
 //   View,
@@ -411,7 +401,7 @@ import { translate } from "../../utils/languageUtils/I18n";
 //   },
 // });
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -422,7 +412,7 @@ import {
   Keyboard,
   StatusBar,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import RechargeScreen from './RechargeScreen';
 
@@ -433,7 +423,7 @@ const RechargePinRoute = () => {
 
   const navigation = useNavigation();
   const route = useRoute(); // ✅ must
-  const { onPinSet } = route.params || {}; // get callback
+  const {onPinSet} = route.params || {}; // get callback
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -442,14 +432,14 @@ const RechargePinRoute = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleChange = (val) => {
+  const handleChange = val => {
     const onlyNums = val.replace(/[^0-9]/g, '');
     setPin(onlyNums);
   };
 
   const savePin = () => {
     if (!pin) {
-      Alert.alert('Invalid PIN', 'Please enter your PIN');
+      Alert.alert(translate('Invalid PIN'), translate('Please enter your PIN'));
       return;
     }
 
@@ -459,16 +449,15 @@ const RechargePinRoute = () => {
     if (typeof onPinSet === 'function') {
       onPinSet(pin);
     }
-navigation.navigate("RechargeScreen");
+    navigation.navigate('RechargeScreen');
     navigation.goBack();
-  
   };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <Text style={styles.title}>{translate("Enter_Transaction_PIN")}</Text>
-      <Text style={styles.subTitle}>{translate("Your_PIN_is_secure")}</Text>
+      <Text style={styles.title}>{translate('Enter_Transaction_PIN')}</Text>
+      <Text style={styles.subTitle}>{translate('Your_PIN_is_secure')}</Text>
 
       <View style={styles.inputWrapper}>
         <TextInput
@@ -477,15 +466,14 @@ navigation.navigate("RechargeScreen");
           onChangeText={handleChange}
           keyboardType="number-pad"
           secureTextEntry={!showPin}
-          placeholder="Enter PIN"
+          placeholder={translate('Enter PIN')}
           placeholderTextColor="#8FA3BF"
           style={styles.input}
-          autoComplete='off'
+          autoComplete="off"
         />
         <TouchableOpacity
           onPress={() => setShowPin(!showPin)}
-          style={styles.eyeBtn}
-        >
+          style={styles.eyeBtn}>
           <Icon
             name={showPin ? 'eye-off-outline' : 'eye-outline'}
             size={22}
@@ -496,9 +484,8 @@ navigation.navigate("RechargeScreen");
 
       <TouchableOpacity
         style={[styles.button, !pin && styles.disabledBtn]}
-        onPress={savePin}
-      >
-        <Text style={styles.btnText}>{translate("Confirm PIN")}</Text>
+        onPress={savePin}>
+        <Text style={styles.btnText}>{translate('Confirm PIN')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -514,8 +501,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
   },
-  title: { fontSize: 26, fontWeight: '700', color: '#E5F0FF', marginBottom: 10 },
-  subTitle: { fontSize: 14, color: '#8FA3BF', marginBottom: 40 },
+  title: {fontSize: 26, fontWeight: '700', color: '#E5F0FF', marginBottom: 10},
+  subTitle: {fontSize: 14, color: '#8FA3BF', marginBottom: 40},
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -527,8 +514,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 30,
   },
-  input: { flex: 1, height: 55, color: '#E5F0FF', fontSize: 18 },
-  eyeBtn: { marginLeft: 10 },
+  input: {flex: 1, height: 55, color: '#E5F0FF', fontSize: 18},
+  eyeBtn: {marginLeft: 10},
   button: {
     width: '80%',
     paddingVertical: 15,
@@ -536,11 +523,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     shadowColor: '#4DA3FF',
-    shadowOffset: { width: 0, height: 6 },
+    shadowOffset: {width: 0, height: 6},
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 5,
   },
-  disabledBtn: { backgroundColor: '#1F3B5F' },
-  btnText: { color: '#061427', fontSize: 16, fontWeight: '700' },
+  disabledBtn: {backgroundColor: '#1F3B5F'},
+  btnText: {color: '#061427', fontSize: 16, fontWeight: '700'},
 });

@@ -1,30 +1,89 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Alert, ToastAndroid, Modal } from 'react-native';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { APP_URLS } from '../../../utils/network/urls';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ToastAndroid,
+} from 'react-native';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import {APP_URLS} from '../../../utils/network/urls';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import ShowLoader from '../../../components/ShowLoder';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { check, PERMISSIONS, RESULTS, openSettings, request } from 'react-native-permissions';
-import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
+import {
+  check,
+  PERMISSIONS,
+  RESULTS,
+  openSettings,
+  request,
+} from 'react-native-permissions';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
+import {translate} from '../../../utils/languageUtils/I18n';
 
-const DealerDocsRetailer = ({ route }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
-  const { get, post } = useAxiosHook()
-  const { item } = route.params;
+const DealerDocsRetailer = ({route}) => {
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
+  const {get, post} = useAxiosHook();
+  const {item} = route.params;
   const [documentImages, setDocumentImages] = useState('');
   const [documentPaths, setDocumentPaths] = useState([
-    { id: '5', title: 'Aadhar Card Front', key: 'aadharcardPath', path: item.aadharcardPath, base64: null },
+    {
+      id: '5',
+      title: translate('Aadhar Card Front'),
+      key: 'aadharcardPath',
+      path: item.aadharcardPath,
+      base64: null,
+    },
 
-    { id: '4', title: 'Aadhar Card Back', key: 'aadharcardBacksidePath', path: item.aadharcardBacksidePath, base64: null },
-    { id: '7', title: 'Registration Certificate', key: 'chkRegistractioncertificatepath', path: item.chkRegistractioncertificatepath, base64: null },
-    { id: '8', title: 'Shop Selfie', key: 'chkShopwithSalfie', path: item.ShopwithSalfie, base64: null },
-    { id: '11', title: 'Pan Card', key: 'chkpanpath', path: item.pancardPath, base64: null },
-    { id: '14', title: 'Service Agreement', key: 'serviceagreementpath', path: item.serviceagreementpath, base64: null },
-    { id: '15', title: 'Video KYC', key: 'videokycpath', path: item.videokycpath, base64: null },
+    {
+      id: '4',
+      title: translate('Aadhar Card Back'),
+      key: 'aadharcardBacksidePath',
+      path: item.aadharcardBacksidePath,
+      base64: null,
+    },
+    {
+      id: '7',
+      title: translate('Registration Certificate'),
+      key: 'chkRegistractioncertificatepath',
+      path: item.chkRegistractioncertificatepath,
+      base64: null,
+    },
+    {
+      id: '8',
+      title: translate('Shop Selfie'),
+      key: 'chkShopwithSalfie',
+      path: item.ShopwithSalfie,
+      base64: null,
+    },
+    {
+      id: '11',
+      title: translate('Pan Card'),
+      key: 'chkpanpath',
+      path: item.pancardPath,
+      base64: null,
+    },
+    {
+      id: '14',
+      title: translate('Service Agreement'),
+      key: 'serviceagreementpath',
+      path: item.serviceagreementpath,
+      base64: null,
+    },
+    {
+      id: '15',
+      title: translate('Video KYC'),
+      key: 'videokycpath',
+      path: item.videokycpath,
+      base64: null,
+    },
   ]);
 
   // const documentPaths = [
@@ -38,107 +97,103 @@ const DealerDocsRetailer = ({ route }) => {
   //   { id: '15', title: 'Video KYC', key: 'videokycpath', path: item.videokycpath },
   // ];
   useEffect(() => {
-
-
     console.log('Updated documentPaths:', item);
-  }, [documentPaths]);
-
+  }, [documentPaths, item]);
 
   const navigation = useNavigation();
 
-const handleImageSelect = useCallback(
-  async (side) => {
-    if (side === 'Aadhar Card Back' || side === 'Aadhar Card Front') {
-      navigation.navigate('AadharCardUpload', { id: item.UserID });
-      return;
-    }
-
-    if (side === 'Video KYC') {
-      const CNTNT = {
-        hindi: `मैं ${item.Name} फर्म का नाम ${item.firmName}...`,
-        Eng: `I, ${item.Name}, representing the firm ${item.firmName}...`,
-      };
-      navigation.navigate('VideoKYC', { CNTNT });
-      return;
-    }
-
-    // ✅ Options
-    const options = {
-      selectionLimit: 1,
-      mediaType: 'photo',
-      includeBase64: true,
-    };
-
-    const cameraOptions = {
-      ...options,
-      cameraType: 'back',
-      saveToPhotos: false,  // ✅ Add kiya
-    };
-
-    const handleResponse = (response) => {
-      if (response.didCancel) {
-        Alert.alert('Image selection cancelled.');
-      } else if (response.errorCode) {
-        Alert.alert('ImagePicker Error: ', response.errorMessage);
-      } else {
-        setIsLoading(true);
-        const base64Image = response.assets?.[0]?.base64;
-        if (base64Image) {
-          uploadDoCx(side, base64Image);
-          setDocumentPaths((prev) =>
-            prev.map((doc) =>
-              doc.title === side
-                ? { ...doc, base64: `data:image/jpeg;base64,${base64Image}` }
-                : doc
-            )
-          );
-        } else {
-          Alert.alert('Base64 image data not available');
-        }
-      }
-    };
-
-    // ✅ Camera permission check
-    const checkAndLaunchCamera = async () => {
-      const status = await check(PERMISSIONS.ANDROID.CAMERA);
-
-      if (status === RESULTS.BLOCKED) {
-        Dialog.show({
-          type: ALERT_TYPE.WARNING,
-          title: 'Permission Required',
-          textBody: 'Please allow camera access from settings',
-          button: 'Open Settings',
-          onPressButton: () => {
-            Dialog.hide();
-            openSettings().catch(() => {});
-          },
-        });
+  const handleImageSelect = useCallback(
+    async side => {
+      if (side === 'Aadhar Card Back' || side === 'Aadhar Card Front') {
+        navigation.navigate('AadharCardUpload', {id: item.UserID});
         return;
       }
 
-      if (status !== RESULTS.GRANTED) {
-        const result = await request(PERMISSIONS.ANDROID.CAMERA);
-        if (result !== RESULTS.GRANTED) return;
+      if (side === 'Video KYC') {
+        const CNTNT = {
+          hindi: `मैं ${item.Name} फर्म का नाम ${item.firmName}...`,
+          Eng: `I, ${item.Name}, representing the firm ${item.firmName}...`,
+        };
+        navigation.navigate('VideoKYC', {CNTNT});
+        return;
       }
 
-      launchCamera(cameraOptions, handleResponse);
-    };
+      // ✅ Options
+      const options = {
+        selectionLimit: 1,
+        mediaType: 'photo',
+        includeBase64: true,
+      };
 
-    Alert.alert(
-      'Select Image',
-      'key_choosean_21',
-      [
-        { text: 'Cancel', onPress: () => {} },
-        { text: 'Camera', onPress: checkAndLaunchCamera },           // ✅
-        { text: 'Gallery', onPress: () => launchImageLibrary(options, handleResponse) },
-      ]
-    );
-  },
-  [item, navigation, setIsLoading, setDocumentPaths, uploadDoCx]
-);
+      const cameraOptions = {
+        ...options,
+        cameraType: 'back',
+        saveToPhotos: false, // ✅ Add kiya
+      };
 
+      const handleResponse = response => {
+        if (response.didCancel) {
+          Alert.alert(translate('Image selection cancelled.'));
+        } else if (response.errorCode) {
+          Alert.alert(translate('ImagePicker Error'), response.errorMessage);
+        } else {
+          setIsLoading(true);
+          const base64Image = response.assets?.[0]?.base64;
+          if (base64Image) {
+            uploadDoCx(side, base64Image);
+            setDocumentPaths(prev =>
+              prev.map(doc =>
+                doc.title === side
+                  ? {...doc, base64: `data:image/jpeg;base64,${base64Image}`}
+                  : doc,
+              ),
+            );
+          } else {
+            Alert.alert(translate('Base64 image data not available'));
+          }
+        }
+      };
 
-  
+      // ✅ Camera permission check
+      const checkAndLaunchCamera = async () => {
+        const status = await check(PERMISSIONS.ANDROID.CAMERA);
+
+        if (status === RESULTS.BLOCKED) {
+          Dialog.show({
+            type: ALERT_TYPE.WARNING,
+            title: translate('Permission Required'),
+            textBody: translate('Please allow camera access from settings'),
+            button: translate('Open Settings'),
+            onPressButton: () => {
+              Dialog.hide();
+              openSettings().catch(() => {});
+            },
+          });
+          return;
+        }
+
+        if (status !== RESULTS.GRANTED) {
+          const result = await request(PERMISSIONS.ANDROID.CAMERA);
+          if (result !== RESULTS.GRANTED) {
+            return;
+          }
+        }
+
+        launchCamera(cameraOptions, handleResponse);
+      };
+
+      Alert.alert('Select Image', 'key_choosean_21', [
+        {text: translate('Cancel'), onPress: () => {}},
+        {text: translate('Camera'), onPress: checkAndLaunchCamera}, // ✅
+        {
+          text: translate('Gallery'),
+          onPress: () => launchImageLibrary(options, handleResponse),
+        },
+      ]);
+    },
+    [item, navigation, setIsLoading, setDocumentPaths, uploadDoCx],
+  );
+
   // const uploadDoCx = async (typ, bs64) => {
   //   console.log(typ)
 
@@ -148,7 +203,6 @@ const handleImageSelect = useCallback(
   //     const body = JSON.stringify(data);
   //     console.log(body, 'BODY****', typ)
   //     const endpoint = `api/user/UploadDocumentsImage`
-
 
   //     const url = `http://${APP_URLS.baseWebUrl}${endpoint}`;
   //     console.log(url)
@@ -177,7 +231,6 @@ const handleImageSelect = useCallback(
   //   }
   // };
   const [isLoading, setIsLoading] = useState(false);
-
 
   const uploadDoCx = useCallback(
     async (type, base64Image) => {
@@ -213,13 +266,13 @@ const handleImageSelect = useCallback(
           responseData = responseText;
         }
 
-        console.log(`[Upload Response]:`, responseData);
+        console.log('[Upload Response]:', responseData);
 
         if (response.ok) {
           const successMessage =
             typeof responseData === 'string'
               ? responseData
-              : responseData || 'Upload successful';
+              : responseData || translate('Upload successful');
 
           ToastAndroid.show(successMessage, ToastAndroid.SHORT);
         } else {
@@ -227,61 +280,63 @@ const handleImageSelect = useCallback(
             typeof responseData === 'string'
               ? responseData
               : responseData?.error ||
-              `Upload failed with status ${response.status}`;
+                `Upload failed with status ${response.status}`;
 
           throw new Error(errorMessage);
         }
       } catch (error) {
         console.error('[Upload Error]:', error);
-        Alert.alert('Upload Error', `Failed to upload ${type}: ${error.message}`);
+        Alert.alert(
+          translate('Upload Error'),
+          `${translate('Failed to upload')} ${type}: ${error.message}`,
+        );
       } finally {
         setIsLoading(false);
       }
     },
-    [setIsLoading, handleItemClick, APP_URLS.baseWebUrl]
+    [setIsLoading, handleItemClick],
   );
-
 
   const handleItemClick = (type, base64Img) => {
     console.log(type, base64Img.length);
 
     const baseData = {
-      "txtretailerid": item.UserID,
-      'currentrole': "Retailer"
+      txtretailerid: item.UserID,
+      currentrole: 'Retailer',
     };
 
     switch (type) {
-      case 'Aadhar Card':
+      case translate('Aadhar Card'):
         return {
           ...baseData,
-          "AadharcardFront": base64Img,
-          "AadharcardBack": base64Img,
+          AadharcardFront: base64Img,
+          AadharcardBack: base64Img,
         };
-      case 'Pan Card':
+      case translate('Pan Card'):
         return {
           ...baseData,
-          "PancardFront": base64Img,
+          PancardFront: base64Img,
         };
-      case 'Registration Certificate':
+      case translate('Registration Certificate'):
         return {
           ...baseData,
-          "Registrationcertificatepath": base64Img,
+          Registrationcertificatepath: base64Img,
         };
-      case 'Shop Selfie':
+      case translate('Shop Selfie'):
         return {
           ...baseData,
-          "ShopeWithSelfie": base64Img,
+          ShopeWithSelfie: base64Img,
         };
-      case 'Service Agreement':
+      case translate('Service Agreement'):
         return {
           ...baseData,
-          "Serviceaggreementpath": base64Img,
+          Serviceaggreementpath: base64Img,
         };
-      case 'Profile image':
-      case 'Registratidon Certificate':
+      case translate('Profile image'):
+      case translate('Registratidon Certificate'):
         return {
           ...baseData,
-          "ProfileImagess": base64Img,
+          ProfileImagess: base64Img,
         };
       default:
         return null;
@@ -290,9 +345,9 @@ const handleImageSelect = useCallback(
 
   const handleResponse = (response, key) => {
     if (response.didCancel) {
-      Alert.alert('Image selection cancelled.');
+      Alert.alert(translate('Image selection cancelled.'));
     } else if (response.error) {
-      Alert.alert('ImagePicker Error: ', response.error);
+      Alert.alert(translate('ImagePicker Error'), response.error);
     } else {
       // setDocumentImages((prev) => ({
       //   ...prev,
@@ -302,16 +357,17 @@ const handleImageSelect = useCallback(
   };
   const [modalVisible, setModalVisible] = useState(false);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     const imagePath = item.path;
 
-
     return (
-      <TouchableOpacity style={styles.itemContainer} onPress={() => {
-        setModalVisible(true)
+      <TouchableOpacity
+        style={styles.itemContainer}
+        onPress={() => {
+          setModalVisible(true);
 
-        handleImageSelect(item.title)
-      }}>
+          handleImageSelect(item.title);
+        }}>
         {imagePath || item.base64 ? (
           <Image
             source={{
@@ -323,36 +379,33 @@ const handleImageSelect = useCallback(
           />
         ) : (
           <View style={styles.uploadContainer}>
-            <Text style={styles.uploadText}>Upload {item.title}</Text>
+            <Text style={styles.uploadText}>
+              {translate('Upload')} {translate(item.title)}
+            </Text>
           </View>
         )}
-        <Text style={styles.itemText}>{item.title}</Text>
+        <Text style={styles.itemText}>{translate(item.title)}</Text>
       </TouchableOpacity>
     );
   };
 
-
-
-
   return (
-    <View style={{ backgroundColor: 'green', flex: 1 }}>
+    <View style={{backgroundColor: 'green', flex: 1}}>
       <View style={styles.container}>
         <AppBarSecond title={'Upload Retailer Docs'} />
         <Text style={styles.uploadText}>{item.firmName.toUpperCase()}</Text>
         <FlatList
           data={documentPaths}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           numColumns={2}
           columnWrapperStyle={styles.row}
         />
       </View>
-
       {isLoading && <ShowLoader />}
     </View>
   );
 };
-
 export default DealerDocsRetailer;
 
 const styles = StyleSheet.create({

@@ -3,6 +3,7 @@ import {View, StyleSheet, Animated} from 'react-native';
 import {Card, Text} from 'react-native-paper';
 import {hScale, wScale} from '../utils/styles/dimensions';
 import CloseAadharSvg from '../features/drawer/svgimgcomponents/CloseAadharSvg';
+import {translate} from '../utils/languageUtils/I18n';
 
 const NotFoundScreen = ({
   description,
@@ -51,8 +52,8 @@ const NotFoundScreen = ({
           </View>
           <View style={styles.cutout} />
         </View>
-        <Text style={styles.title}>{title2}</Text>
-        <Text style={styles.desc}>{description}</Text>
+        <Text style={styles.title}>{translate(title2)}</Text>
+        <Text style={styles.desc}>{translate(description)}</Text>
       </Card>
     </View>
   );

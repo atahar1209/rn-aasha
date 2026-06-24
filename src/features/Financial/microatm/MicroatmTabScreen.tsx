@@ -1,27 +1,33 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  StyleSheet, View, Text, Alert, ToastAndroid,
-  TouchableOpacity, ScrollView, ActivityIndicator,
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  ToastAndroid,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import { RootState } from '../../../reduxUtils/store';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { colors } from '../../../utils/styles/theme';
+import {RootState} from '../../../reduxUtils/store';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {colors} from '../../../utils/styles/theme';
 import FlotingInput from '../../drawer/securityPages/FlotingInput';
-import { translate } from '../../../utils/languageUtils/I18n';
+import {translate} from '../../../utils/languageUtils/I18n';
 import useAxiosHook from '../../../utils/network/AxiosClient';
 import uuid from 'react-native-uuid';
-import { APP_URLS } from '../../../utils/network/urls';
-import { startTransaction } from 'react-native-instantpay-mpos';
-import { useSelector } from 'react-redux';
+import {APP_URLS} from '../../../utils/network/urls';
+import {startTransaction} from 'react-native-instantpay-mpos';
+import {useSelector} from 'react-redux';
 import MicroAtmsvg from '../../drawer/svgimgcomponents/MicroAtmsvg';
 import BalancEnqurisvg from '../../drawer/svgimgcomponents/BalancEnqurisvg';
 import Upisvg from '../../drawer/svgimgcomponents/Upisvg';
 import PurchaseSvg from '../../drawer/svgimgcomponents/PurchaseSvg';
-import { decryptData, encrypt } from '../../../utils/encryptionUtils';
-import { useDeviceInfoHook } from '../../../utils/hooks/useDeviceInfoHook';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
+import {decryptData, encrypt} from '../../../utils/encryptionUtils';
+import {useDeviceInfoHook} from '../../../utils/hooks/useDeviceInfoHook';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
 import ShowLoader from '../../../components/ShowLoder';
-import { onReceiveNotification2 } from '../../../utils/NotificationService';
+import {onReceiveNotification2} from '../../../utils/NotificationService';
 import LinearGradient from 'react-native-linear-gradient';
 
 // ─────────────────────────────────────────────────
@@ -34,23 +40,28 @@ const enum TRANSACTION_TYPE {
 
 type TabKey = 'PURCHASE' | 'MICROATM' | 'BALANCE_ENQUIRY' | 'UPI';
 
-const TABS: { key: TabKey; label: string }[] = [
-  { key: 'PURCHASE',        label: 'Purchase'   },
-  { key: 'MICROATM',        label: 'Micro ATM'  },
-  { key: 'BALANCE_ENQUIRY', label: 'Balance Enq'},
-  { key: 'UPI',             label: 'UPI'        },
+const TABS: {key: TabKey; label: string}[] = [
+  {key: 'PURCHASE', label: translate('Purchase')},
+  {key: 'MICROATM', label: translate('Micro ATM')},
+  {key: 'BALANCE_ENQUIRY', label: translate('Balance Enq')},
+  {key: 'UPI', label: translate('UPI')},
 ];
 
 // ─────────────────────────────────────────────────
 // Tab Icon
 // ─────────────────────────────────────────────────
-const TabIcon = ({ tabKey, size = 26 }: { tabKey: TabKey; size?: number }) => {
+const TabIcon = ({tabKey, size = 26}: {tabKey: TabKey; size?: number}) => {
   switch (tabKey) {
-    case 'PURCHASE':        return <PurchaseSvg />;
-    case 'MICROATM':        return <MicroAtmsvg />;
-    case 'BALANCE_ENQUIRY': return <BalancEnqurisvg />;
-    case 'UPI':             return <Upisvg size={size} />;
-    default:                return null;
+    case 'PURCHASE':
+      return <PurchaseSvg />;
+    case 'MICROATM':
+      return <MicroAtmsvg />;
+    case 'BALANCE_ENQUIRY':
+      return <BalancEnqurisvg />;
+    case 'UPI':
+      return <Upisvg size={size} />;
+    default:
+      return null;
   }
 };
 
@@ -76,15 +87,13 @@ const TabSelector = ({
           key={tab.key}
           style={[styles.tabItem, isActive && styles.tabItemActive]}
           onPress={() => onSelect(tab.key)}
-          activeOpacity={0.8}
-        >
+          activeOpacity={0.8}>
           {isActive ? (
             <LinearGradient
               colors={[primaryColor, secondaryColor]}
               style={styles.tabGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            >
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}>
               <TabIcon tabKey={tab.key} size={22} />
               <Text style={[styles.tabLabelActive]}>{tab.label}</Text>
             </LinearGradient>
@@ -103,7 +112,7 @@ const TabSelector = ({
 // ─────────────────────────────────────────────────
 // Info Card
 // ─────────────────────────────────────────────────
-const InfoCard = ({ lines }: { lines: string[] }) => (
+const InfoCard = ({lines}: {lines: string[]}) => (
   <View style={styles.infoCard}>
     {lines.map((line, i) => (
       <View key={i} style={styles.infoRow}>
@@ -118,25 +127,29 @@ const InfoCard = ({ lines }: { lines: string[] }) => (
 // Main Screen
 // ─────────────────────────────────────────────────
 const MicroatmTabScreen = () => {
-  const { colorConfig, userId, Loc_Data } = useSelector((state: RootState) => state.userInfo);
-  const { primaryColor, secondaryColor, primaryButtonColor, labelColor } = colorConfig;
+  const {colorConfig, userId, Loc_Data} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
+  const {primaryColor, secondaryColor, primaryButtonColor, labelColor} =
+    colorConfig;
   const navigation = useNavigation<any>();
 
-  const { post, get } = useAxiosHook();
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } = useDeviceInfoHook();
+  const {post, get} = useAxiosHook();
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
+    useDeviceInfoHook();
 
-  const [activeTab, setActiveTab]           = useState<TabKey>('PURCHASE');
-  const [amount, setAmount]                 = useState('');
-  const [isLoading, setIsLoading]           = useState(false);
-  const [isTxnLoading, setIsTxnLoading]     = useState(false);
-  const [profileData, setProfileData]       = useState<any>({});
-  const [loginId, setLoginId]               = useState('');
-  const [password, setPassword]             = useState('');
-  const [isNewLogin, setIsNewLogin]         = useState(false);
+  const [activeTab, setActiveTab] = useState<TabKey>('PURCHASE');
+  const [amount, setAmount] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isTxnLoading, setIsTxnLoading] = useState(false);
+  const [profileData, setProfileData] = useState<any>({});
+  const [loginId, setLoginId] = useState('');
+  const [password, setPassword] = useState('');
+  const [isNewLogin, setIsNewLogin] = useState(false);
   const [isChangePassword, setIsChangePassword] = useState(false);
-  const [uniqueId, setUniqueId]             = useState('');
+  const [uniqueId, setUniqueId] = useState('');
 
-  const { latitude, longitude } = Loc_Data;
+  const {latitude, longitude} = Loc_Data;
 
   // ── Tab change: reset amount ──────────────────
   const handleTabSelect = (key: TabKey) => {
@@ -148,33 +161,34 @@ const MicroatmTabScreen = () => {
   const getData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const result2 = await post({ url: 'MICROATM/api/data/MerchantCreateToSubmit' });
-      const res     = await get({ url: APP_URLS.getProfile });
+      const result2 = await post({
+        url: 'MICROATM/api/data/MerchantCreateToSubmit',
+      });
+      const res = await get({url: APP_URLS.getProfile});
 
       if (res.data) {
         const decrypted = decryptData(res.value1, res.value2, res.data);
         setProfileData(JSON.parse(decrypted));
       }
-
       ToastAndroid.show(result2.msg, ToastAndroid.SHORT);
 
       const status = result2.status;
       if (status === true || status === 'Success') {
-        const creds = await post({ url: APP_URLS.getCredoCredentials });
+        const creds = await post({url: APP_URLS.getCredoCredentials});
         setIsNewLogin(creds.IsNewLogin);
         setLoginId(creds.LoginId);
         setPassword(creds.Password);
       } else if (status === 'StatusCheck') {
         navigation.replace('MAtmStatusCheck');
       } else if (status === 'Device') {
-        navigation.replace('RegisterVM30', { deviceSerial: result2.devicesr });
+        navigation.replace('RegisterVM30', {deviceSerial: result2.devicesr});
       } else if (status === 'REGISTER') {
         activeMicroATM();
       } else if (['BOTHNOTDONE', 'NOTOK', 'ALLNOTDONE'].includes(status)) {
-        navigation.navigate('ServicepurchaseScreen', { typename: 'VM30' });
+        navigation.navigate('ServicepurchaseScreen', {typename: 'VM30'});
       } else {
-        Alert.alert('Message', result2.msg, [
-          { text: 'Go Back', onPress: () => navigation.goBack() },
+        Alert.alert(translate('Message'), result2.msg, [
+          {text: translate('Go Back'), onPress: () => navigation.goBack()},
         ]);
       }
     } catch (error) {
@@ -184,78 +198,108 @@ const MicroatmTabScreen = () => {
     }
   }, [navigation]);
 
-  useEffect(() => { getData(); }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
   // ── Activate Micro ATM ────────────────────────
   const activeMicroATM = async () => {
     try {
-      const res = await post({ url: 'MICROATM/api/data/ActiveMicroATM' });
+      const res = await post({url: 'MICROATM/api/data/ActiveMicroATM'});
       if (res.status === true || res.status === 'Success') {
         navigation.navigate('MAtmStatusCheck');
       } else {
-        Alert.alert('Alert', res.msg, [{ text: 'OK', onPress: () => navigation.goBack() }]);
+        Alert.alert(translate('Alert'), res.msg, [
+          {text: translate('OK'), onPress: () => navigation.goBack()},
+        ]);
       }
     } catch (_) {}
   };
 
   // ── Build Credo options ───────────────────────
-  const getOptions = useCallback((id: string) => {
-    const pass = isChangePassword ? 'VwiCredo@123' : (isNewLogin ? password : 'VwiCredo@123');
-    const base = {
-      debugMode: 'true',
-      loginId,
-      customerRefNo: id,
-      loginPassword: pass,
-      production: true,
-      mobile: profileData.Mobile,
-      optional1: id,
-    };
+  const getOptions = useCallback(
+    (id: string) => {
+      const pass = isChangePassword
+        ? 'VwiCredo@123'
+        : isNewLogin
+        ? password
+        : 'VwiCredo@123';
+      const base = {
+        debugMode: 'true',
+        loginId,
+        customerRefNo: id,
+        loginPassword: pass,
+        production: true,
+        mobile: profileData.Mobile,
+        optional1: id,
+      };
 
-    switch (activeTab) {
-      case 'BALANCE_ENQUIRY':
-        return { ...base, amount: 0,      transactionType: TRANSACTION_TYPE.BALANCE_ENQUIRY };
-      case 'PURCHASE':
-        return { ...base, amount,         transactionType: TRANSACTION_TYPE.PURCHASE };
-      case 'MICROATM':
-        return { ...base, amount,         transactionType: TRANSACTION_TYPE.MICROATM };
-      case 'UPI':
-        return { ...base, amount,         transactionType: TRANSACTION_TYPE.UPI };
-    }
-  }, [activeTab, amount, isChangePassword, isNewLogin, password, loginId, profileData]);
+      switch (activeTab) {
+        case 'BALANCE_ENQUIRY':
+          return {
+            ...base,
+            amount: 0,
+            transactionType: TRANSACTION_TYPE.BALANCE_ENQUIRY,
+          };
+        case 'PURCHASE':
+          return {...base, amount, transactionType: TRANSACTION_TYPE.PURCHASE};
+        case 'MICROATM':
+          return {...base, amount, transactionType: TRANSACTION_TYPE.MICROATM};
+        case 'UPI':
+          return {...base, amount, transactionType: TRANSACTION_TYPE.UPI};
+      }
+    },
+    [
+      activeTab,
+      amount,
+      isChangePassword,
+      isNewLogin,
+      password,
+      loginId,
+      profileData,
+    ],
+  );
 
   // ── Start Credo transaction ───────────────────
-  const startCredoTransaction = useCallback(async (id: string) => {
-    try {
-      const res = await startTransaction(JSON.stringify(getOptions(id)));
-      const failed =
-        res?.message === 'Login Failed!' ||
-        res?.message === 'Request Change Password by User' ||
-        res?.status  === 'FAILED';
+  const startCredoTransaction = useCallback(
+    async (id: string) => {
+      try {
+        const res = await startTransaction(JSON.stringify(getOptions(id)));
+        const failed =
+          res?.message === translate('Login Failed!') ||
+          res?.message === translate('Request Change Password by User') ||
+          res?.status === translate('FAILED');
 
-      if (failed) {
-        Alert.alert('Transaction Result',
-          `${res.message || ''} (Status: ${res.status || ''})`,
-          [{ text: 'OK' }],
-          { cancelable: false }
-        );
-        onReceiveNotification2({
-          notification: { title: activeTab, body: res?.message || '' },
-        });
-      }
+        if (failed) {
+          Alert.alert(
+            translate('Transaction Result'),
+            `${res.message || ''} (Status: ${res.status || ''})`,
+            [{text: translate('OK')}],
+            {cancelable: false},
+          );
+          onReceiveNotification2({
+            notification: {title: activeTab, body: res?.message || ''},
+          });
+        }
 
-      if (res?.message === 'Request Change Password by User' && res?.status === 'SUCCESS') {
-        setIsChangePassword(true);
-        await startCredoTransaction(id + '1');
+        if (
+          res?.message === translate('Request Change Password by User') &&
+          res?.status === translate('SUCCESS')
+        ) {
+          setIsChangePassword(true);
+          await startCredoTransaction(id + '1');
+        }
+      } catch (error) {
+        console.error('startCredoTransaction error:', error);
       }
-    } catch (error) {
-      console.error('startCredoTransaction error:', error);
-    }
-  }, [getOptions, activeTab]);
+    },
+    [getOptions, activeTab],
+  );
 
   // ── API call + start credo ────────────────────
   const transaction = useCallback(async () => {
     if (activeTab !== 'BALANCE_ENQUIRY' && !amount) {
-      ToastAndroid.show('Please enter amount', ToastAndroid.SHORT);
+      ToastAndroid.show(translate('Please enter amount'), ToastAndroid.SHORT);
       return;
     }
 
@@ -265,29 +309,41 @@ const MicroatmTabScreen = () => {
 
     try {
       const mobileNetwork = await getNetworkCarrier();
-      const ipp            = await getMobileIp();
-      const Model          = await getMobileDeviceId();
+      const ipp = await getMobileIp();
+      const Model = await getMobileDeviceId();
 
       if (activeTab === 'BALANCE_ENQUIRY') {
         await startCredoTransaction(id);
         return;
       }
 
-      const txnType = activeTab === 'PURCHASE' ? 'cash'
-                    : activeTab === 'UPI'      ? 'UPI'
-                    :                            'microatm';
+      const txnType =
+        activeTab === 'PURCHASE'
+          ? translate('cash')
+          : activeTab === 'UPI'
+          ? translate('UPI')
+          : translate('microatm');
 
       const encryption = await encrypt([
-        id, ipp, txnType, Model,
-        latitude, longitude, Model,
-        'city', 'postcode', mobileNetwork, 'address', amount,
+        id,
+        ipp,
+        txnType,
+        Model,
+        latitude,
+        longitude,
+        Model,
+        'city',
+        'postcode',
+        mobileNetwork,
+        'address',
+        amount,
       ]);
 
       const enc = encryption.encryptedData;
-      const e   = (i: number) => encodeURIComponent(enc[i]);
+      const e = (i: number) => encodeURIComponent(enc[i]);
 
       const url =
-        `MICROATM/api/data/Apitransitions` +
+        'MICROATM/api/data/Apitransitions' +
         `?Transtionid=${e(0)}&Amount=${parseFloat(amount).toFixed(1)}` +
         `&IPaddressss=${e(1)}&Type=${e(2)}&Devicetoken=${e(3)}` +
         `&Latitude=${e(4)}&Longitude=${e(5)}&ModelNo=${e(6)}` +
@@ -296,19 +352,29 @@ const MicroatmTabScreen = () => {
         `&value1=${encodeURIComponent(encryption.keyEncode)}` +
         `&value2=${encodeURIComponent(encryption.ivEncode)}`;
 
-      const res = await post({ url });
+      const res = await post({url});
 
       if (res.Status === 'Success') {
         await startCredoTransaction(id);
       } else {
-        Alert.alert('Alert', res.Message, [{ text: 'OK' }]);
+        Alert.alert(translate('Alert'), res.Message, [{text: translate('OK')}]);
       }
     } catch (error) {
       console.error('transaction error:', error);
     } finally {
       setIsTxnLoading(false);
     }
-  }, [activeTab, amount, post, latitude, longitude, startCredoTransaction]);
+  }, [
+    activeTab,
+    amount,
+    getNetworkCarrier,
+    getMobileIp,
+    getMobileDeviceId,
+    latitude,
+    longitude,
+    post,
+    startCredoTransaction,
+  ]);
 
   // ── Tab content ───────────────────────────────
   const renderContent = () => {
@@ -321,6 +387,8 @@ const MicroatmTabScreen = () => {
               onChangeTextCallback={setAmount}
               value={amount}
               keyboardType="number-pad"
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <InfoCard lines={[translate('1 CASH'), translate('2 CASH')]} />
           </>
@@ -333,14 +401,14 @@ const MicroatmTabScreen = () => {
               onChangeTextCallback={setAmount}
               value={amount}
               keyboardType="number-pad"
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <InfoCard lines={[translate('mratm'), translate('2 CASH')]} />
           </>
         );
       case 'BALANCE_ENQUIRY':
-        return (
-          <InfoCard lines={[translate('1 CASH')]} />
-        );
+        return <InfoCard lines={[translate('1 CASH')]} />;
       case 'UPI':
         return (
           <>
@@ -349,6 +417,8 @@ const MicroatmTabScreen = () => {
               onChangeTextCallback={setAmount}
               value={amount}
               keyboardType="number-pad"
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <InfoCard lines={[translate('1 CASH')]} />
           </>
@@ -365,17 +435,17 @@ const MicroatmTabScreen = () => {
       <ScrollView
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         {/* ── Page title ── */}
         <LinearGradient
           colors={[primaryColor, secondaryColor]}
           style={styles.headerBanner}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        >
-          <Text style={styles.bannerTitle}>Micro ATM</Text>
-          <Text style={styles.bannerSub}>Select transaction type below</Text>
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}>
+          <Text style={styles.bannerTitle}>{translate('Micro ATM')}</Text>
+          <Text style={styles.bannerSub}>
+            {translate('Select transaction type below')}
+          </Text>
         </LinearGradient>
 
         {/* ── Tab Selector ── */}
@@ -392,9 +462,15 @@ const MicroatmTabScreen = () => {
         <View style={styles.formCard}>
           {/* Active tab badge */}
           <View style={styles.activeBadgeRow}>
-            <View style={[styles.activeBadge, { backgroundColor: `${primaryColor}18` }]}>
+            <View
+              style={[
+                styles.activeBadge,
+                {backgroundColor: `${primaryColor}18`},
+              ]}>
               <TabIcon tabKey={activeTab} size={16} />
-              <Text style={[styles.activeBadgeText, { color: primaryColor }]}>{tabLabel}</Text>
+              <Text style={[styles.activeBadgeText, {color: primaryColor}]}>
+                {tabLabel}
+              </Text>
             </View>
           </View>
 
@@ -406,22 +482,23 @@ const MicroatmTabScreen = () => {
           activeOpacity={0.85}
           onPress={transaction}
           disabled={isTxnLoading}
-          style={styles.btnWrapper}
-        >
+          style={styles.btnWrapper}>
           <LinearGradient
-            colors={isTxnLoading ? ['#aaa', '#bbb'] : [primaryColor, secondaryColor]}
-            style={styles.gradientBtn}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            {isTxnLoading
-              ? <ActivityIndicator size="small" color="#fff" />
-              : <Text style={styles.btnText}>{tabLabel}</Text>
+            colors={
+              isTxnLoading ? ['#aaa', '#bbb'] : [primaryColor, secondaryColor]
             }
+            style={styles.gradientBtn}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}>
+            {isTxnLoading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.btnText}>{tabLabel}</Text>
+            )}
           </LinearGradient>
         </TouchableOpacity>
 
-        <View style={{ height: hScale(30) }} />
+        <View style={{height: hScale(30)}} />
       </ScrollView>
     </View>
   );
@@ -465,7 +542,7 @@ const styles = StyleSheet.create({
     paddingVertical: hScale(12),
     paddingHorizontal: wScale(10),
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 4,
@@ -517,7 +594,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wScale(16),
     paddingVertical: hScale(16),
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.06,
     shadowRadius: 8,
     elevation: 3,

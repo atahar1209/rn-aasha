@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
+import React from 'react';
+import {View, Text} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
 
-const Upipaymentoptionssvg = ({ size = wScale(40) }) => {
-    const svgname = `
+const Upipaymentoptionssvg = ({size = wScale(40)}) => {
+  const svgname = `
 
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
@@ -303,13 +303,12 @@ OC0xNVQxMzoxNjoxMiswMDowMGJedRYAAAAASUVORK5CYII=" />
 </svg>
 
 
-`
-    return (
-        <View>
-            <SvgXml xml={svgname} width={size} height={size} />
-        </View>
-    );
+`;
+  return (
+    <View>
+      <SvgXml xml={svgname} width={size} height={size} />
+    </View>
+  );
 };
-
 
 export default Upipaymentoptionssvg;

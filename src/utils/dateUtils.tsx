@@ -1,7 +1,16 @@
 export const MONTHS = [
-  "January", "February", "March", "April",
-  "May", "June", "July", "August",
-  "September", "October", "November", "December",
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 export interface MonthYearItem {
@@ -15,7 +24,7 @@ export interface MonthYearItem {
  */
 export const getReverseMonthsWithYear = (
   currentMonth: number,
-  currentYear: number
+  currentYear: number,
 ): MonthYearItem[] => {
   const result: MonthYearItem[] = [];
 

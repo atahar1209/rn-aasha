@@ -1,18 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { APP_URLS } from '../../../utils/network/urls';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { useFocusEffect } from '@react-navigation/native';
-import { decryptData } from '../../../utils/encryptionUtils';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
+import {useFocusEffect} from '@react-navigation/native';
+import {decryptData} from '../../../utils/encryptionUtils';
+import {translate} from '../../../utils/languageUtils/I18n';
 
-export default function WalletCard({ payIsShow = true }) {
-  const { get, post } = useAxiosHook();
-  const { colorConfig, IsDealer } = useSelector((state: RootState) => state.userInfo);
+export default function WalletCard({payIsShow = true}) {
+  const {get, post} = useAxiosHook();
+  const {colorConfig, IsDealer} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
 
   const [totalPickupAmount, setTotalPickupAmount] = useState(0);
   const [forApproval, setForApproval] = useState('');
@@ -24,7 +27,6 @@ export default function WalletCard({ payIsShow = true }) {
     posremain: 0,
   });
 
-
   const [selectedAmount, setSelectedAmount] = useState(0);
 
   const fetchData = async () => {
@@ -33,7 +35,7 @@ export default function WalletCard({ payIsShow = true }) {
       await fetchPickupReport();
       await fetchRemainBalance();
     } catch (error) {
-      console.error("❌ Error fetching wallet or payment data:", error);
+      console.error('❌ Error fetching wallet or payment data:', error);
     }
   };
 
@@ -44,11 +46,12 @@ export default function WalletCard({ payIsShow = true }) {
       url: IsDealer ? dealerBalurl : APP_URLS.balanceInfo,
     });
 
-    console.log("📦 Wallet response:", response);
+    console.log('📦 Wallet response:', response);
 
     if (response?.data) {
       if (IsDealer) {
-        const { kkkk, vvvv, adminfarmname, posremain, remainbal, frmanems } = response.data;
+        const {kkkk, vvvv, adminfarmname, posremain, remainbal, frmanems} =
+          response.data;
 
         const decryptedData = {
           adminfarmname: decryptData(kkkk, vvvv, adminfarmname),
@@ -57,14 +60,16 @@ export default function WalletCard({ payIsShow = true }) {
           frmanems: decryptData(kkkk, vvvv, frmanems),
         };
 
-        console.log("🔐 Dealer Wallet Data:", decryptedData);
+        console.log('🔐 Dealer Wallet Data:', decryptedData);
 
         setWalletData({
           remainbal: decryptedData.remainbal1 || 0,
           posremain: decryptedData.posremain1 || 0,
         });
       } else {
-        const data = Array.isArray(response.data) ? response.data[0] : response.data;
+        const data = Array.isArray(response.data)
+          ? response.data[0]
+          : response.data;
 
         setWalletData({
           remainbal: data?.remainbal || 0,
@@ -75,15 +80,15 @@ export default function WalletCard({ payIsShow = true }) {
   };
 
   const fetchPickupReport = async () => {
-    const res = await post({ url: APP_URLS.CashpickupInprocessReport });
+    const res = await post({url: APP_URLS.CashpickupInprocessReport});
 
-    console.log("📊 Pickup report response:", res);
+    console.log('📊 Pickup report response:', res);
 
     if (Array.isArray(res?.Content) && res.Content.length > 0) {
       let totalPickup = 0;
       let totalPaid = 0;
 
-      res.Content.forEach((item) => {
+      res.Content.forEach(item => {
         totalPickup += Number(item.pickup_amount) || 0;
         totalPaid += Number(item.Amountpaid) || 0;
       });
@@ -102,38 +107,36 @@ export default function WalletCard({ payIsShow = true }) {
 
   // 🔹 Fetch pending approval amount
   const fetchRemainBalance = async () => {
-    const res2 = await post({ url: APP_URLS.CashpickupRemainBal });
+    const res2 = await post({url: APP_URLS.CashpickupRemainBal});
 
-    console.log("🧾 Remain balance response:", res2);
+    console.log('🧾 Remain balance response:', res2);
 
     const remain = res2?.Content?.ADDINFO?.remain;
 
     if (remain !== undefined && remain !== null) {
-      console.log("✅ Pending Approval Amount:", remain);
+      console.log('✅ Pending Approval Amount:', remain);
       setForApproval(remain);
-      setSelectedAmount(remain)
+      setSelectedAmount(remain);
     } else {
-      console.log("⚠️ No pending approval amount found.");
+      console.log('⚠️ No pending approval amount found.');
       setForApproval('');
     }
   };
 
-
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [])
+    }, []),
   );
 
-
   const colors = ['#f7405f', 'black', colorConfig.labelColor];
-  const [colorIndex, setColorIndex] = useState(0)
+  const [colorIndex, setColorIndex] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
       setColorIndex(prev => (prev + 1) % colors.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, [])
+  }, []);
 
   const navigation = useNavigation();
 
@@ -144,60 +147,64 @@ export default function WalletCard({ payIsShow = true }) {
         {
           backgroundColor: `${colorConfig.secondaryColor}33`,
         },
-      ]}
-    >
-
+      ]}>
       <View style={styles.absoluteBox}>
-        <View style={[styles.walletBox,
-        { backgroundColor: `${colorConfig.secondaryColor}80` }
-        ]}>
+        <View
+          style={[
+            styles.walletBox,
+            {backgroundColor: `${colorConfig.secondaryColor}80`},
+          ]}>
           <View style={styles.walletRow}>
             <View>
-              <Text style={styles.label}>Main Wallet</Text>
+              <Text style={styles.label}>{translate('Main Wallet')}</Text>
               <Text style={styles.amount}>{walletData.remainbal}</Text>
             </View>
             <View>
-              <Text style={styles.label}>Pos Wallet</Text>
-              <Text style={[styles.amount, { textAlign: 'right' }]}>{walletData.posremain}</Text>
+              <Text style={styles.label}>{translate('Pos Wallet')}</Text>
+              <Text style={[styles.amount, {textAlign: 'right'}]}>
+                {walletData.posremain}
+              </Text>
             </View>
           </View>
 
           <LinearGradient
             colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.paymentBox}
-          >
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            style={styles.paymentBox}>
             <View style={styles.dueBox}>
-              <Text style={styles.dueLabel}>Current Due Payment</Text>
+              <Text style={styles.dueLabel}>
+                {translate('Current Due Payment')}
+              </Text>
 
               <Text style={styles.dueAmount}>₹ {forApproval}</Text>
             </View>
 
-            {payIsShow && <TouchableOpacity
-              style={styles.earnButton}
-              onPress={() => {
-                navigation.navigate('Totalpayreport', {
-                  selectedAmount,
-                  requestid,
-                  PaymentMode: 'GroupPay',
-                  ceId,
-                });
-              }}
-              disabled={forApproval <= 0} // Disable button if no due payment
-            >
-              <Text style={styles.buttonText}>Pay Now</Text>
-            </TouchableOpacity>}
+            {payIsShow && (
+              <TouchableOpacity
+                style={styles.earnButton}
+                onPress={() => {
+                  navigation.navigate('Totalpayreport', {
+                    selectedAmount,
+                    requestid,
+                    PaymentMode: 'GroupPay',
+                    ceId,
+                  });
+                }}
+                disabled={forApproval <= 0} // Disable button if no due payment
+              >
+                <Text style={styles.buttonText}>{translate('Pay Now')}</Text>
+              </TouchableOpacity>
+            )}
           </LinearGradient>
           {forApproval > 0 && (
-            <Text style={[styles.NoteText, { color: colors[colorIndex] }]}>
-              Note:- Amount Deposited, Pending for Approval
-              <Text style={{ fontWeight: 'bold', color: colors[colorIndex] }}>
+            <Text style={[styles.NoteText, {color: colors[colorIndex]}]}>
+              {translate('Note:- Amount Deposited, Pending for Approval')}
+              <Text style={{fontWeight: 'bold', color: colors[colorIndex]}}>
                 ₹ {forApproval}.0
               </Text>
             </Text>
           )}
-
         </View>
       </View>
     </View>
@@ -209,7 +216,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: hScale(10),
     width: '100%',
-    backgroundColor: 'green'
+    backgroundColor: 'green',
   },
 
   absoluteBox: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,28 +8,29 @@ import {
   ScrollView,
   Dimensions,
   StatusBar,
-} from "react-native";
-import Share from "react-native-share";
-import { useNavigation } from "@react-navigation/native";
-import { APP_URLS } from "../../utils/network/urls";
-import useAxiosHook from "../../utils/network/AxiosClient";
-import { useSelector } from "react-redux";
-import { RootState } from "../../reduxUtils/store";
-import { translate } from "../../utils/languageUtils/I18n";
+} from 'react-native';
+import Share from 'react-native-share';
+import {useNavigation} from '@react-navigation/native';
+import {APP_URLS} from '../../utils/network/urls';
+import useAxiosHook from '../../utils/network/AxiosClient';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {translate} from '../../utils/languageUtils/I18n';
 
-const { width } = Dimensions.get("window");
+const {width} = Dimensions.get('window');
 
 const ReferAndEran = () => {
-  const { get } = useAxiosHook();
+  const {get} = useAxiosHook();
   const navigation = useNavigation();
-  const [refcode, setRefcode] = useState("------");
+  const [refcode, setRefcode] = useState('------');
 
-  const { colorConfig, fcmToken, deviceInfo } = useSelector(
-    (state: RootState) => state.userInfo
+  const {colorConfig, fcmToken, deviceInfo} = useSelector(
+    (state: RootState) => state.userInfo,
   );
 
   // Dynamic values from Redux (deviceInfo contains the location & device details)
-  const { latitude, longitude, address, city, postalCode, brand, modelNumber } = deviceInfo;
+  const {latitude, longitude, address, city, postalCode, brand, modelNumber} =
+    deviceInfo;
 
   const appLink = `https://play.google.com/store/apps/details?id=${APP_URLS.appPackage}`;
   const webLink = `https://www.${APP_URLS.baseWebUrl}/Home/Index1`;
@@ -41,12 +42,12 @@ const ReferAndEran = () => {
           url: `Common/api/data/authenticate?Devicetoken=${fcmToken}&Imeino=1234567890&Latitude=${latitude}&Longitude=${longitude}&ModelNo=${modelNumber}&IPAddress=${deviceInfo.ipAddress}&Address=${address}&City=${city}&PostalCode=${postalCode}&InternetTYPE=4G&brandname=${brand}`,
         });
 
-        console.log(response)
+        console.log(response);
         if (response?.message?.SELFREFFERALCODE) {
           setRefcode(response.message.SELFREFFERALCODE);
         }
       } catch (error) {
-        console.log("Error fetching referral code", error);
+        console.log('Error fetching referral code', error);
       }
     };
     fetchReferral();
@@ -54,26 +55,32 @@ const ReferAndEran = () => {
 
   const onShare = async (link: string) => {
     const shareOptions = {
-      message: `${translate("Refer.Share message")}\nReferral Code: ${refcode}\nLink: ${link}`,
-      subject: "App Referral",
+      message: `${translate('Refer.Share message')}\n ${translate(
+        ' Referral Code',
+      )}: ${refcode}\n  ${translate('Link')}: ${link}`,
+      subject: translate('App Referral'),
     };
     try {
       await Share.open(shareOptions);
     } catch (error) {
-      console.log("Share failed", error);
+      console.log('Share failed', error);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#0a74da" />
-      
+
       {/* Header Section */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backBtn}>
           <Text style={styles.backText}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{translate("Refer.Refer & Earn")}</Text>
+        <Text style={styles.headerTitle}>
+          {translate('Refer.Refer & Earn')}
+        </Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -81,54 +88,65 @@ const ReferAndEran = () => {
         <View style={styles.illustrationCard}>
           <View style={styles.circleBg} />
           <Text style={styles.giftEmoji}>🎁</Text>
-          <Text style={styles.promoTitle}>{translate("Refer.Invite Friends")}</Text>
+          <Text style={styles.promoTitle}>
+            {translate('Refer.Invite Friends')}
+          </Text>
           <Text style={styles.promoDesc}>
-            {translate("Refer.Share with friends and get exciting rewards on every signup")}
+            {translate(
+              'Refer.Share with friends and get exciting rewards on every signup',
+            )}
           </Text>
         </View>
 
         {/* Referral Code Box */}
         <View style={styles.codeCard}>
-          <Text style={styles.codeLabel}>{translate("Refer.Your Referral Code")}</Text>
+          <Text style={styles.codeLabel}>
+            {translate('Refer.Your Referral Code')}
+          </Text>
           <View style={styles.dashedBox}>
             <Text style={styles.refCodeText}>{refcode}</Text>
           </View>
-          <TouchableOpacity 
-            style={styles.copyButton} 
-            onPress={() => onShare(`My Referral Code is: ${refcode}`)}
-          >
-            <Text style={styles.copyButtonText}>{translate("Refer.Copy Code")}</Text>
+          <TouchableOpacity
+            style={styles.copyButton}
+            onPress={() =>
+              onShare(`${translate('My Referral Code is')}: ${refcode}`)
+            }>
+            <Text style={styles.copyButtonText}>
+              {translate('Refer.Copy Code')}
+            </Text>
           </TouchableOpacity>
         </View>
 
         {/* Share Links Section */}
         <View style={styles.shareContainer}>
-          <Text style={styles.sectionTitle}>{translate("Refer.Share App Via")}</Text>
-          
+          <Text style={styles.sectionTitle}>
+            {translate('Refer.Share App Via')}
+          </Text>
+
           <View style={styles.grid}>
-            <ShareOption 
-              title="Play Store" 
-              subtitle="Android Link" 
-              icon="🤖" 
-              onPress={() => onShare(appLink)} 
+            <ShareOption
+              title={translate('Play Store')}
+              subtitle={translate('Android Link')}
+              icon="🤖"
+              onPress={() => onShare(appLink)}
             />
-            <ShareOption 
-              title="Web Portal" 
-              subtitle="Website Link" 
-              icon="🌐" 
-              onPress={() => onShare(webLink)} 
+            <ShareOption
+              title={translate('Web Portal')}
+              subtitle={translate('Website Link')}
+              icon="🌐"
+              onPress={() => onShare(webLink)}
             />
-            <ShareOption 
-              title="App Store" 
-              subtitle="iOS Link" 
-              icon="🍎" 
-              onPress={() => onShare(webLink)} 
+            <ShareOption
+              title={translate('App Store')}
+              subtitle={translate('iOS Link')}
+              icon="🍎"
+              onPress={() => onShare(webLink)}
             />
-            <ShareOption 
-              title="More" 
-              subtitle="Direct Share" 
-              icon="🔗" 
-              onPress={() => onShare(appLink)} 
+            <ShareOption
+              title={translate('More')}
+              subtitle={translate('Direct Share')}
+              icon="🔗"
+              onPress={() => onShare(appLink)}
             />
           </View>
         </View>
@@ -137,7 +155,7 @@ const ReferAndEran = () => {
   );
 };
 
-const ShareOption = ({ title, subtitle, icon, onPress }: any) => (
+const ShareOption = ({title, subtitle, icon, onPress}: any) => (
   <TouchableOpacity style={styles.gridItem} onPress={onPress}>
     <Text style={styles.gridIcon}>{icon}</Text>
     <Text style={styles.gridTitle}>{title}</Text>
@@ -148,42 +166,42 @@ const ShareOption = ({ title, subtitle, icon, onPress }: any) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: '#F8FAFC',
   },
   header: {
-    backgroundColor: "#0a74da",
+    backgroundColor: '#0a74da',
     paddingVertical: 20,
     paddingHorizontal: 20,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   backBtn: {
     marginRight: 15,
   },
   backText: {
     fontSize: 24,
-    color: "#fff",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
   },
   headerTitle: {
     fontSize: 20,
-    color: "#fff",
-    fontWeight: "700",
+    color: '#fff',
+    fontWeight: '700',
   },
   illustrationCard: {
-    backgroundColor: "#0a74da",
+    backgroundColor: '#0a74da',
     padding: 30,
-    alignItems: "center",
+    alignItems: 'center',
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   circleBg: {
-    position: "absolute",
+    position: 'absolute',
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: "rgba(255,255,255,0.1)",
+    backgroundColor: 'rgba(255,255,255,0.1)',
     top: -50,
     right: -50,
   },
@@ -193,55 +211,55 @@ const styles = StyleSheet.create({
   },
   promoTitle: {
     fontSize: 22,
-    color: "#fff",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
   },
   promoDesc: {
     fontSize: 14,
-    color: "rgba(255,255,255,0.8)",
-    textAlign: "center",
+    color: 'rgba(255,255,255,0.8)',
+    textAlign: 'center',
     marginTop: 8,
     lineHeight: 20,
   },
   codeCard: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     marginHorizontal: 20,
     marginTop: -30,
     borderRadius: 20,
     padding: 20,
-    alignItems: "center",
+    alignItems: 'center',
     elevation: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 5 },
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 5},
     shadowOpacity: 0.1,
     shadowRadius: 10,
   },
   codeLabel: {
     fontSize: 14,
-    color: "#64748B",
+    color: '#64748B',
     marginBottom: 12,
   },
   dashedBox: {
     borderWidth: 2,
-    borderColor: "#E2E8F0",
-    borderStyle: "dashed",
+    borderColor: '#E2E8F0',
+    borderStyle: 'dashed',
     paddingVertical: 10,
     paddingHorizontal: 40,
     borderRadius: 12,
-    backgroundColor: "#F1F5F9",
+    backgroundColor: '#F1F5F9',
   },
   refCodeText: {
     fontSize: 26,
-    fontWeight: "bold",
-    color: "#0a74da",
+    fontWeight: 'bold',
+    color: '#0a74da',
     letterSpacing: 2,
   },
   copyButton: {
     marginTop: 15,
   },
   copyButtonText: {
-    color: "#0a74da",
-    fontWeight: "600",
+    color: '#0a74da',
+    fontWeight: '600',
     fontSize: 14,
   },
   shareContainer: {
@@ -250,24 +268,24 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#1E293B",
+    fontWeight: '700',
+    color: '#1E293B',
     marginBottom: 15,
   },
   grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   gridItem: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     width: (width - 60) / 2,
     padding: 20,
     borderRadius: 15,
     marginBottom: 20,
-    alignItems: "center",
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: "#F1F5F9",
+    borderColor: '#F1F5F9',
   },
   gridIcon: {
     fontSize: 30,
@@ -275,12 +293,12 @@ const styles = StyleSheet.create({
   },
   gridTitle: {
     fontSize: 15,
-    fontWeight: "bold",
-    color: "#334155",
+    fontWeight: 'bold',
+    color: '#334155',
   },
   gridSub: {
     fontSize: 11,
-    color: "#94A3B8",
+    color: '#94A3B8',
     marginTop: 2,
   },
 });

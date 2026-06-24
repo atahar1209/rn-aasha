@@ -1,24 +1,47 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image, ToastAndroid,  Animated, BackHandler, Alert, Keyboard } from 'react-native';
+/* eslint-disable react/no-unstable-nested-components */
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  ToastAndroid,
+  Animated,
+  BackHandler,
+  Alert,
+  Keyboard,
+} from 'react-native';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
 import CmsFinalOtopSvg from '../../drawer/svgimgcomponents/CmsFinalOtopSvg';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import BorderLine from '../../../components/BorderLine';
-import { APP_URLS } from '../../../utils/network/urls';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useFocusEffect } from '@react-navigation/native';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { useDispatch } from 'react-redux';
-import { setCmsVerify } from '../../../reduxUtils/store/userInfoSlice';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
+import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {translate} from '../../../utils/languageUtils/I18n';
 
-const CmsFinalOtpVerification = ({ route }) => {
-  const { rctype, rcPrePayAnomut } = useSelector((state: RootState,) => state.userInfo);
+const CmsFinalOtpVerification = ({route}) => {
+  const {rctype, rcPrePayAnomut} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
 
-  const { denomData, transid, slipDate, Mobile, item, item2, selectedModes, transactionCount } = route.params;
+  const {
+    denomData,
+    transid,
+    slipDate,
+    Mobile,
+    item,
+    item2,
+    selectedModes,
+    transactionCount,
+  } = route.params;
   console.log(item2, selectedModes, '9-9-9----0');
 
   const navigation = useNavigation();
@@ -49,41 +72,38 @@ const CmsFinalOtpVerification = ({ route }) => {
   const fatchData = async () => {
     try {
       const url = `${APP_URLS.CashPickupRemainBalVerify}?Amount=${rcPrePayAnomut}`;
-      console.log("API URL 👉", url);
+      console.log('API URL 👉', url);
 
-      const response = await post({ url });
-      console.log("API RESPONSE 👉", response);
+      const response = await post({url});
+      console.log('API RESPONSE 👉', response);
 
       setAdminiStatus(response);
 
       return response; // ✅ सबसे ज़रूरी
     } catch (error) {
-      console.log("API ERROR ❌", error);
+      console.log('API ERROR ❌', error);
     }
   };
 
-
-
   const handleOtpPress = async () => {
-
     // ✅ Case 1: PrePay
     if (rctype === 'PrePay') {
-
       const apiRes = await fatchData(); // ✅ API result lo
 
       // ✅ API ने दोनों false दिए → सीधे इस page पर भेजो
       if (apiRes?.apiremainstatus === false && apiRes?.sts === false) {
         navigation.navigate('CmsPrePayFinalVfy');
-              return;
-
+        return;
       }
-
 
       // ✅ अगर API OK है → नीचे का पूरा flow चलाओ
     }
 
     // ✅ Case 2: Transaction count mismatch → Unverified
-    if (transactionCount !== denomData.length && transactionCount !== undefined) {
+    if (
+      transactionCount !== denomData.length &&
+      transactionCount !== undefined
+    ) {
       await AsyncStorage.setItem('pickup_status', 'unverified');
 
       navigation.navigate('PicUpScreen', {
@@ -91,7 +111,7 @@ const CmsFinalOtpVerification = ({ route }) => {
         CodeId: transid,
         Mobile: Mobile,
         item2,
-        selectedModes
+        selectedModes,
       });
       return;
     }
@@ -110,11 +130,9 @@ const CmsFinalOtpVerification = ({ route }) => {
       CodeId: transid,
       Mobile: Mobile,
       item2,
-      selectedModes
+      selectedModes,
     });
   };
-
-
 
   const handleOtpChange = (value, index) => {
     if (/^\d$/.test(value)) {
@@ -126,8 +144,7 @@ const CmsFinalOtpVerification = ({ route }) => {
         inputsRef.current[index + 1].focus();
       }
 
-
-      if (newOtp.every((digit) => digit !== '')) {
+      if (newOtp.every(digit => digit !== '')) {
         Keyboard.dismiss();
       }
     } else if (value === '') {
@@ -140,11 +157,13 @@ const CmsFinalOtpVerification = ({ route }) => {
   const totalReceipts = denomData.length;
   const [remainingReceipts, setRemainingReceipts] = useState(totalReceipts);
 
-  const { colorConfig, Loc_Data } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, Loc_Data} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
 
-  const handleKeyPress = ({ nativeEvent }, index) => {
+  const handleKeyPress = ({nativeEvent}, index) => {
     if (nativeEvent.key === 'Backspace') {
-      console.log(nativeEvent.key)
+      console.log(nativeEvent.key);
       if (otp[index] === '') {
         if (index > 0) {
           const newOtp = [...otp];
@@ -155,24 +174,24 @@ const CmsFinalOtpVerification = ({ route }) => {
       }
     }
   };
-  const { post, get } = useAxiosHook();
-  const dispatch = useDispatch()
-  console.log()
+  const {post, get} = useAxiosHook();
+  const dispatch = useDispatch();
+  console.log();
   const handleSendOtp = async () => {
     if (!isChecked) {
-
       ToastAndroid.show(
-        'Please confirm that the details are correct by checking the box.',
-        ToastAndroid.SHORT
+        translate(
+          'Please confirm that the details are correct by checking the box.',
+        ),
+        ToastAndroid.SHORT,
       );
       return;
     }
 
     if (!Mobile || !transid) {
-
       ToastAndroid.show(
-        'Please enter both Mobile number and Transaction ID.',
-        ToastAndroid.SHORT
+        translate('Please enter both Mobile number and Transaction ID.'),
+        ToastAndroid.SHORT,
       );
       return;
     }
@@ -180,23 +199,29 @@ const CmsFinalOtpVerification = ({ route }) => {
     setIsLoad(true);
     try {
       const url = `${APP_URLS.TranstionSendotp}transid=${transid}&Mobile=${Mobile}&Email=${item2.Email}&sendfrom=${selectedModes}`;
-      const res = await post({ url });
-      console.log(`${APP_URLS.TranstionSendotp}transid=${transid}&Mobile=${Mobile}&Email=${item2.Email}&sendfrom=${selectedModes}`);
+      const res = await post({url});
+      console.log(
+        `${APP_URLS.TranstionSendotp}transid=${transid}&Mobile=${Mobile}&Email=${item2.Email}&sendfrom=${selectedModes}`,
+      );
 
-      console.log(res)
+      console.log(res);
       if (res.Content?.ADDINFO?.status === 'OTP SEND') {
         ToastAndroid.show(
-          '📩 OTP Sent Successfully',
-          ToastAndroid.SHORT
+          translate('OTP Sent Successfully'),
+          ToastAndroid.SHORT,
         );
-        setOtpis(false)
+        setOtpis(false);
         setShowOtpModal(true);
       } else {
-        alert(`⚠ Failed to send OTP. Status: ${res.Content?.ADDINFO?.status}`);
+        Alert.alert(
+          `${translate('⚠ Failed to send OTP. Status')}: ${
+            res.Content?.ADDINFO?.status
+          }`,
+        );
       }
     } catch (error) {
       console.error('Send OTP Error:', error);
-      alert('❌ Error sending OTP.');
+      Alert.alert(translate('Error sending OTP.'));
     } finally {
       setIsLoad(false);
     }
@@ -205,9 +230,12 @@ const CmsFinalOtpVerification = ({ route }) => {
   const handleVerifyOtp = async () => {
     const codeString = otp.join('');
 
-    console.log(codeString)
+    console.log(codeString);
     if (codeString.length !== 6) {
-      ToastAndroid.show('Please enter 6-digit OTP', ToastAndroid.BOTTOM);
+      ToastAndroid.show(
+        translate('Please enter 6-digit OTP'),
+        ToastAndroid.BOTTOM,
+      );
       return;
     }
 
@@ -215,50 +243,66 @@ const CmsFinalOtpVerification = ({ route }) => {
     try {
       const url = `${APP_URLS.TranstionVerifyotp}transid=${transid}&OTP=${codeString}`;
 
-      console.log(url)
-      const res = await post({ url });
+      console.log(url);
+      const res = await post({url});
 
       if (res.Content?.ADDINFO?.status === 'DONE') {
-
         // ✅ अब केवल एक ही OTP verify होगा
-        ToastAndroid.show('✅ OTP Verified Successfully.', ToastAndroid.BOTTOM);
+        ToastAndroid.show(
+          translate('OTP Verified Successfully.'),
+          ToastAndroid.BOTTOM,
+        );
 
         // सारे receipts को verified मान लो
         await AsyncStorage.setItem('pickup_status', 'verified');
         setShowOtpModal(false);
 
-        navigation.navigate('PicUpScreen', { item, CodeId: transid, Mobile: Mobile, selectedModes, item2 });
-
+        navigation.navigate('PicUpScreen', {
+          item,
+          CodeId: transid,
+          Mobile: Mobile,
+          selectedModes,
+          item2,
+        });
       } else {
-        alert(`⚠ OTP verification failed. Status: ${res.Content?.ADDINFO?.status}`);
+        Alert.alert(
+          `${translate('⚠ OTP verification failed. Status')}: ${
+            res.Content?.ADDINFO?.status
+          }`,
+        );
       }
     } catch (error) {
       console.error('Verify OTP Error:', error);
-      alert('❌ Error verifying OTP.');
+      Alert.alert(translate('Error verifying OTP.'));
     } finally {
       setIsLoad(false);
     }
   };
 
+  console.log(transactionCount, 'TTTTTTTTTTTTTTTTTTTTTT');
 
-  console.log(transactionCount, 'TTTTTTTTTTTTTTTTTTTTTT')
-
-
-  const DenomTable = ({ denomData, currentReceiptIndex, totalReceipts, remainingReceipts, setCurrentReceiptIndex, colorConfig }) => {
+  const DenomTable = ({
+    denomData,
+    currentReceiptIndex,
+    totalReceipts,
+    remainingReceipts,
+    setCurrentReceiptIndex,
+    colorConfig,
+  }) => {
     // अगर nested नहीं है तो wrap कर दो
     const dataToShow = Array.isArray(denomData[0]) ? denomData : [denomData];
-    console.log(currentReceiptIndex)
+    console.log(currentReceiptIndex);
     // Animation state
     const translateX = useRef(new Animated.Value(0)).current;
 
-    const handlePageChange = (direction) => {
+    const handlePageChange = direction => {
       Animated.timing(translateX, {
-        toValue: direction === "next" ? -300 : 300, // slide left/right
+        toValue: direction === 'next' ? -300 : 300, // slide left/right
         duration: 250,
         useNativeDriver: true,
       }).start(() => {
         setCurrentReceiptIndex(prev =>
-          direction === "next" ? prev + 1 : prev - 1
+          direction === 'next' ? prev + 1 : prev - 1,
         );
         translateX.setValue(0); // reset after animation
       });
@@ -267,21 +311,23 @@ const CmsFinalOtpVerification = ({ route }) => {
       const backAction = () => {
         if (item.OtpDay === '' && transactionCount === denomData.length) {
           Alert.alert(
-            'Exit',
-            'Are you sure you want to exit? You haven’t completed all the necessary steps, and exiting now will result in losing your progress.',
+            translate('Exit'),
+            translate(
+              'Are you sure you want to exit? You haven’t completed all the necessary steps, and exiting now will result in losing your progress.',
+            ),
             [
               {
-                text: 'Cancel',
+                text: translate('Cancel'),
                 onPress: () => null,
                 style: 'cancel',
               },
               {
-                text: 'Go To Home',
+                text: translate('Go To Home'),
                 onPress: () => {
-                  navigation.navigate('DashboardScreen')
+                  navigation.navigate('DashboardScreen');
                 },
               },
-            ]
+            ],
           );
           return true;
         } else {
@@ -292,27 +338,30 @@ const CmsFinalOtpVerification = ({ route }) => {
 
       const backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
-        backAction
+        backAction,
       );
 
       return () => backHandler.remove(); // Cleanup on component unmount
-    }, [item.OtpDay, transactionCount, denomData.length, navigation]);
-
+    }, [denomData.length]);
 
     return (
       <View>
-        <View style={[styles.table, { borderColor: colorConfig.secondaryColor }]}>
-          <View style={[styles.tableRow, { backgroundColor: '#eee' }]}>
-            <Text style={[styles.tableCell, styles.headerCell]}>Denom</Text>
-            <Text style={[styles.tableCell, styles.headerCell]}>No. of Notes</Text>
-            <Text style={[styles.tableCell, styles.headerCell]}>Amount</Text>
+        <View style={[styles.table, {borderColor: colorConfig.secondaryColor}]}>
+          <View style={[styles.tableRow, {backgroundColor: '#eee'}]}>
+            <Text style={[styles.tableCell, styles.headerCell]}>
+              {translate('Denom')}
+            </Text>
+            <Text style={[styles.tableCell, styles.headerCell]}>
+              {translate('No. of Notes')}
+            </Text>
+            <Text style={[styles.tableCell, styles.headerCell]}>
+              {translate('Amount')}
+            </Text>
           </View>
 
-          <Animated.View style={{ transform: [{ translateX }] }}>
-
-
+          <Animated.View style={{transform: [{translateX}]}}>
             {dataToShow[currentReceiptIndex]
-              .filter(item => transid ? true : item.denom !== "Online") // 👈 filter applied
+              .filter(item => (transid ? true : item.denom !== 'Online')) // 👈 filter applied
               .map((item, index) => (
                 <View
                   key={index}
@@ -320,12 +369,11 @@ const CmsFinalOtpVerification = ({ route }) => {
                     styles.tableRow,
                     {
                       backgroundColor:
-                        item.denom === "Total"
+                        item.denom === 'Total'
                           ? `${colorConfig.secondaryColor}33`
-                          : "#fff",
+                          : '#fff',
                     },
-                  ]}
-                >
+                  ]}>
                   {/* Denom Column */}
                   <Text style={[styles.tableCell]}>{item.denom}</Text>
 
@@ -336,40 +384,47 @@ const CmsFinalOtpVerification = ({ route }) => {
                   <Text style={[styles.tableCell]}>{item.amount}</Text>
                 </View>
               ))}
-
-
-
           </Animated.View>
         </View>
 
         {remainingReceipts > 1 && (
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 10,
+            }}>
             <TouchableOpacity
               disabled={currentReceiptIndex === 0}
-              onPress={() => handlePageChange("prev")}
+              onPress={() => handlePageChange('prev')}
               style={{
                 padding: 10,
-                backgroundColor: currentReceiptIndex === 0 ? '#ccc' : colorConfig.secondaryColor,
-                borderRadius: 5
-              }}
-            >
-              <Text style={{ color: '#fff', fontWeight: 'bold' }}>{'<'}</Text>
+                backgroundColor:
+                  currentReceiptIndex === 0
+                    ? '#ccc'
+                    : colorConfig.secondaryColor,
+                borderRadius: 5,
+              }}>
+              <Text style={{color: '#fff', fontWeight: 'bold'}}>{'<'}</Text>
             </TouchableOpacity>
 
-            <Text style={{ alignSelf: 'center', fontSize: 16 }}>
-              Receipt {currentReceiptIndex + 1} of {totalReceipts}
+            <Text style={{alignSelf: 'center', fontSize: 16}}>
+              {translate('Receipt')} {currentReceiptIndex + 1} of{' '}
+              {totalReceipts}
             </Text>
 
             <TouchableOpacity
               disabled={currentReceiptIndex === totalReceipts - 1}
-              onPress={() => handlePageChange("next")}
+              onPress={() => handlePageChange('next')}
               style={{
                 padding: 10,
-                backgroundColor: currentReceiptIndex === totalReceipts - 1 ? '#ccc' : colorConfig.secondaryColor,
-                borderRadius: 5
-              }}
-            >
-              <Text style={{ color: '#fff', fontWeight: 'bold' }}>{'>'}</Text>
+                backgroundColor:
+                  currentReceiptIndex === totalReceipts - 1
+                    ? '#ccc'
+                    : colorConfig.secondaryColor,
+                borderRadius: 5,
+              }}>
+              <Text style={{color: '#fff', fontWeight: 'bold'}}>{'>'}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -381,33 +436,32 @@ const CmsFinalOtpVerification = ({ route }) => {
     );
   };
 
-  const [otpis, setOtpis] = useState(true)
-
-
-
-
+  const [otpis, setOtpis] = useState(true);
 
   return (
     <View style={styles.main}>
-      <AppBarSecond title={'RCMS CUSTOMER INFO'}
+      <AppBarSecond
+        title={'RCMS CUSTOMER INFO'}
         onPressBack={() => {
           if (item.OtpDay === '' && transactionCount === denomData.length) {
             Alert.alert(
-              'Exit',
-              'Are you sure you want to exit? You haven’t completed all the necessary steps, and exiting now will result in losing your progress.',
+              translate('Exit'),
+              translate(
+                'Are you sure you want to exit? You have not completed all the necessary steps, and exiting now will result in losing your progress.',
+              ),
               [
                 {
-                  text: 'Cancel',
+                  text: translate('Cancel'),
                   onPress: () => null,
                   style: 'cancel',
                 },
                 {
-                  text: 'Go To Home',
+                  text: translate('Go To Home'),
                   onPress: () => {
-                    navigation.navigate('DashboardScreen')
+                    navigation.navigate('DashboardScreen');
                   },
                 },
-              ]
+              ],
             );
             return true;
           } else {
@@ -416,28 +470,38 @@ const CmsFinalOtpVerification = ({ route }) => {
           }
         }}
       />
-      <ScrollView >
-
-
-
+      <ScrollView>
         <View style={styles.container}>
           <View style={styles.iconContainer}>
             <CmsFinalOtopSvg />
           </View>
 
-          <Text style={styles.title}>Verification Required</Text>
-
-
+          <Text style={styles.title}>{translate('Verification Required')}</Text>
 
           <Text style={styles.description}>
-            Please match the number of <Text style={styles.highlight}>Notes</Text> and the
-            <Text style={styles.highlight}> total amount</Text>. If everything is okay, complete the transaction by entering the OTP.
-            <Text style={styles.success}>The OTP has been sent to the store contact person</Text> with the details of the total amount.
+            {translate('Please match the number of')}{' '}
+            <Text style={styles.highlight}>{translate('Notes')}</Text>{' '}
+            {translate('and the')}
+            <Text style={styles.highlight}>
+              {' '}
+              {translate('total amount')}
+            </Text>.{' '}
+            {translate(
+              'If everything is okay, complete the transaction by entering the OTP.',
+            )}
+            <Text style={styles.success}>
+              {translate('The OTP has been sent to the store contact person')}
+            </Text>{' '}
+            {translate('with the details of the total amount.')}
           </Text>
 
           <View style={styles.infoRow}>
-            <Text style={styles.dateText}>ReQ No. {transid}</Text>
-            <Text style={styles.dateText}>Pickup Time: {slipDate}</Text>
+            <Text style={styles.dateText}>
+              {translate('ReQ No.')} {transid}
+            </Text>
+            <Text style={styles.dateText}>
+              {translate('Pickup Time')}: {slipDate}
+            </Text>
           </View>
           {/* <View style={{ padding: 10, backgroundColor: '#eee', alignItems: 'center' }}>
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
@@ -453,20 +517,29 @@ const CmsFinalOtpVerification = ({ route }) => {
             setCurrentReceiptIndex={setCurrentReceiptIndex}
             colorConfig={colorConfig}
           />
-          {(item.OtpDay === '' && transactionCount == denomData.length) && <View style={styles.checkboxRow}>
-            <TouchableOpacity onPress={() => {
-              setIsChecked(!isChecked)
-            }}>
-              <MaterialIcons
-                name={isChecked ? 'check-box' : 'check-box-outline-blank'}
-                size={24}
-                color={isChecked ? 'green' : '#000'}
-              />
-            </TouchableOpacity>
-            <Text style={[styles.checkboxText, { color: isChecked ? 'black' : 'red' }]}>
-              Yes, I have checked all the details and also got it verified from store contact person that the information is completely correct and I will take further action.
-            </Text>
-          </View>}
+          {item.OtpDay === '' && transactionCount == denomData.length && (
+            <View style={styles.checkboxRow}>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsChecked(!isChecked);
+                }}>
+                <MaterialIcons
+                  name={isChecked ? 'check-box' : 'check-box-outline-blank'}
+                  size={24}
+                  color={isChecked ? 'green' : '#000'}
+                />
+              </TouchableOpacity>
+              <Text
+                style={[
+                  styles.checkboxText,
+                  {color: isChecked ? 'black' : 'red'},
+                ]}>
+                {translate(
+                  ' Yes, I have checked all the details and also got it verified from store contact person that the information is completely correct and I will take further action.',
+                )}
+              </Text>
+            </View>
+          )}
           {/* {(otpis) &&
             <TouchableOpacity style={styles.sendOtpBtn} onPress={async () => {
               if (item.OtpDay == '') {
@@ -479,59 +552,78 @@ const CmsFinalOtpVerification = ({ route }) => {
 
               <Text style={styles.sendOtpText}>{`${item.OtpDay == '' ? 'Send OTP to Customer Point' : 'Continue'}`}</Text>
             </TouchableOpacity>} */}
-          {(otpis) &&
+          {otpis && (
             <TouchableOpacity
               style={styles.sendOtpBtn}
-              onPress={handleOtpPress}
-            >
+              onPress={handleOtpPress}>
               <Text style={styles.sendOtpText}>
-                {(transactionCount !== denomData.length)
-                  ? 'Verify & Fill Next Data'
-                  : (item.OtpDay === '' ? 'Send OTP to Customer Point' : 'Continue')}
+                {transactionCount !== denomData.length
+                  ? translate('Verify & Fill Next Data')
+                  : item.OtpDay === ''
+                  ? translate('Send OTP to Customer Point')
+                  : translate('Continue')}
               </Text>
             </TouchableOpacity>
-          }
+          )}
 
+          {showOtpModal && (
+            <View style={styles.otpRow}>
+              {otp.map((digit, index) => (
+                <TextInput
+                  key={index}
+                  ref={ref => (inputsRef.current[index] = ref)}
+                  value={digit}
+                  onChangeText={value => handleOtpChange(value, index)}
+                  onKeyPress={e => handleKeyPress(e, index)}
+                  keyboardType="numeric"
+                  maxLength={1}
+                  style={[
+                    styles.otpInput,
+                    {backgroundColor: digit === '' ? '#fff' : '#d4f2ce'},
+                  ]}
+                />
+              ))}
+            </View>
+          )}
 
-          {(showOtpModal) && <View style={styles.otpRow}>
-            {otp.map((digit, index) => (
-              <TextInput
-                key={index}
-                ref={(ref) => (inputsRef.current[index] = ref)}
-                value={digit}
-                onChangeText={(value) => handleOtpChange(value, index)}
-                onKeyPress={(e) => handleKeyPress(e, index)}
-                keyboardType="numeric"
-                maxLength={1}
-                style={[styles.otpInput, { backgroundColor: digit === '' ? '#fff' : '#d4f2ce' }]}
-              />
-            ))}
-          </View>}
+          {showOtpModal && (
+            <TouchableOpacity
+              disabled={!isChecked}
+              onPress={() => handleSendOtp()}>
+              <Text style={styles.resendText}>
+                {translate('If OTP is not received,')}
+                <Text style={{color: 'green', fontWeight: 'bold'}}>
+                  {' '}
+                  {translate('Resend OTP')}
+                </Text>{' '}
+              </Text>
+            </TouchableOpacity>
+          )}
 
-          {(showOtpModal) && <TouchableOpacity disabled={!isChecked} onPress={() => handleSendOtp()}>
-            <Text style={styles.resendText}>If OTP is not received,
-              <Text style={{ color: 'green', fontWeight: 'bold' }}> Resend OTP</Text> </Text>
-          </TouchableOpacity>}
-
-          {(showOtpModal) && <TouchableOpacity style={styles.submitBtn} onPress={() => {
-            if (otp.length == 6) {
-              handleVerifyOtp()
-            } else {
-              ToastAndroid.show('Please Enter 6 Digit Otp', ToastAndroid.BOTTOM);
-            }
-          }}>
-            <Text style={styles.submitText}>Submit OTP</Text>
-          </TouchableOpacity>}
+          {showOtpModal && (
+            <TouchableOpacity
+              style={styles.submitBtn}
+              onPress={() => {
+                if (otp.length == 6) {
+                  handleVerifyOtp();
+                } else {
+                  ToastAndroid.show(
+                    translate('Please Enter 6 Digit Otp'),
+                    ToastAndroid.BOTTOM,
+                  );
+                }
+              }}>
+              <Text style={styles.submitText}>{translate('Submit OTP')}</Text>
+            </TouchableOpacity>
+          )}
         </View>
-
       </ScrollView>
     </View>
-
   );
 };
 
 const styles = StyleSheet.create({
-  main: { flex: 1, backgroundColor: '#fff' },
+  main: {flex: 1, backgroundColor: '#fff'},
 
   table: {
     borderWidth: wScale(0.5),
@@ -548,7 +640,7 @@ const styles = StyleSheet.create({
     fontSize: wScale(14),
     textAlign: 'center',
     borderWidth: wScale(0.5),
-    color: '#000'
+    color: '#000',
   },
   headerCell: {
     fontWeight: 'bold',
@@ -559,8 +651,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fdfcff',
     paddingHorizontal: wScale(15),
     paddingTop: hScale(10),
-    paddingBottom: hScale(10)
-
+    paddingBottom: hScale(10),
   },
   header: {
     flexDirection: 'row',
@@ -644,7 +735,7 @@ const styles = StyleSheet.create({
     fontSize: wScale(18),
     flex: 1,
     color: '#000',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   resendText: {
     textAlign: 'right',
@@ -671,6 +762,5 @@ const styles = StyleSheet.create({
     color: '#000',
   },
 });
-
 
 export default CmsFinalOtpVerification;

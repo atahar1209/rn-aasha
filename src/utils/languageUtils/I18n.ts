@@ -1,4 +1,4 @@
-import { I18n } from 'i18n-js';
+import {I18n} from 'i18n-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Language Files Import
@@ -13,7 +13,14 @@ import bn from './bn.json';
 
 // 1. I18n Instance Configuration
 const i18n = new I18n({
-  en, gj, hi, kn, mh, tl, tn, bn,
+  en,
+  gj,
+  hi,
+  kn,
+  mh,
+  tl,
+  tn,
+  bn,
 });
 
 // 2. Basic Configuration
@@ -23,13 +30,13 @@ i18n.locale = 'en';
 
 // 3. Fallback chain for missing languages
 i18n.fallbacks = {
-  'gj': 'en',
-  'hi': 'en',
-  'kn': 'en',
-  'mh': 'en',
-  'tl': 'en',
-  'tn': 'en',
-  'bn': 'en',
+  gj: 'en',
+  hi: 'en',
+  kn: 'en',
+  mh: 'en',
+  tl: 'en',
+  tn: 'en',
+  bn: 'en',
 };
 
 // 4. Store original translate function
@@ -39,7 +46,7 @@ const originalTranslate = i18n.t.bind(i18n);
  * CRASH-PROOF: Override i18n.t with safe wrapper
  * This prevents 'missingTranslation.get is not a function' error
  */
-i18n.t = function(scope: string, options?: any): string {
+i18n.t = function (scope: string, options?: any): string {
   try {
     if (!scope || typeof scope !== 'string') {
       console.warn('⚠️ Invalid translation key:', scope);
@@ -67,6 +74,7 @@ i18n.t = function(scope: string, options?: any): string {
  * Agar translation na mile, app crash nahi hoga
  */
 export const translate = (key: string, options?: any): string => {
+  console.warn(key);
   return i18n.t(key, options);
 };
 
@@ -142,7 +150,8 @@ export const getSupportedLocales = (): string[] => {
 export const hasTranslation = (key: string): boolean => {
   try {
     const locale = i18n.locale;
-    const localeData = i18n.translations[locale as keyof typeof i18n.translations];
+    const localeData =
+      i18n.translations[locale as keyof typeof i18n.translations];
 
     if (!localeData) return false;
 

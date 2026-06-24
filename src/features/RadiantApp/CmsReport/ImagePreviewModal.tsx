@@ -1,11 +1,18 @@
-import { translate } from "../../../utils/languageUtils/I18n";
+import {translate} from '../../../utils/languageUtils/I18n';
 import React from 'react';
-import { Modal, TouchableWithoutFeedback, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {
+  Modal,
+  TouchableWithoutFeedback,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ClosseModalSvg from '../../drawer/svgimgcomponents/ClosseModal';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 
 interface ImagePreviewModalProps {
   visible: boolean;
@@ -14,32 +21,41 @@ interface ImagePreviewModalProps {
   reUpload: () => void;
 }
 
-const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({ visible, imageUri, onClose, reUpload }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
+  visible,
+  imageUri,
+  onClose,
+  reUpload,
+}) => {
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const secondaryColorWithOpacity = `${colorConfig.secondaryColor}40`;
   const primaryColorWithOpacity = `${colorConfig.primaryColor}40`;
   return (
-    <Modal
-      visible={visible}
-      transparent={true}
-      onRequestClose={onClose}
-    >
-      <TouchableWithoutFeedback >
+    <Modal visible={visible} transparent={true} onRequestClose={onClose}>
+      <TouchableWithoutFeedback>
         <View style={styles.imageModalBackdrop}>
           <View style={styles.imageModalContainer}>
-            <View style={[styles.closeButton, { backgroundColor: secondaryColorWithOpacity }]}>
+            <View
+              style={[
+                styles.closeButton,
+                {backgroundColor: secondaryColorWithOpacity},
+              ]}>
               <TouchableOpacity
-                style={[styles.reUploadButton, { backgroundColor: primaryColorWithOpacity }]}
-                onPress={reUpload}
-              >
-                <Text style={styles.closeButtonText}>{translate("Re_Upload")}</Text>
+                style={[
+                  styles.reUploadButton,
+                  {backgroundColor: primaryColorWithOpacity},
+                ]}
+                onPress={reUpload}>
+                <Text style={styles.closeButtonText}>
+                  {translate('Re_Upload')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={onClose}>
                 <ClosseModalSvg size={35} />
               </TouchableOpacity>
             </View>
             <ImageViewer
-              imageUrls={[{ url: imageUri }]}
+              imageUrls={[{url: imageUri}]}
               enableSwipeDown
               onSwipeDown={onClose}
               enableImageZoom={true}

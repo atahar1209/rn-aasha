@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -10,30 +10,31 @@ import {
   ToastAndroid,
   Clipboard,
 } from 'react-native';
-import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { RootState } from '../../../reduxUtils/store';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {RootState} from '../../../reduxUtils/store';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 // ─── Static doc list ──────────────────────────────────────────────────────────
 
 const DOCS = [
-  { label: 'Aadhaar card',    icon: 'card-account-details-outline' },
-  { label: 'PAN card',        icon: 'credit-card-outline' },
-  { label: 'Driving licence', icon: 'car-outline' },
-  { label: 'Bank account',    icon: 'bank-outline' },
-  { label: 'Security cheque', icon: 'checkbook' },
-  { label: 'Education proof', icon: 'school-outline' },
+  {label: translate('Aadhaar card'), icon: 'card-account-details-outline'},
+  {label: translate('PAN card'), icon: 'credit-card-outline'},
+  {label: translate('Driving licence'), icon: 'car-outline'},
+  {label: translate('Bank account'), icon: 'bank-outline'},
+  {label: translate('Security cheque'), icon: 'checkbook'},
+  {label: translate('Education proof'), icon: 'school-outline'},
 ];
 
 // ─── Animated check circle ────────────────────────────────────────────────────
 
 const CheckCircle: React.FC = () => {
-  const scale      = useRef(new Animated.Value(0)).current;
-  const ringScale  = useRef(new Animated.Value(0.6)).current;
+  const scale = useRef(new Animated.Value(0)).current;
+  const ringScale = useRef(new Animated.Value(0.6)).current;
   const ringOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -66,10 +67,10 @@ const CheckCircle: React.FC = () => {
       <Animated.View
         style={[
           styles.checkRing,
-          { opacity: ringOpacity, transform: [{ scale: ringScale }] },
+          {opacity: ringOpacity, transform: [{scale: ringScale}]},
         ]}
       />
-      <Animated.View style={[styles.checkCircle, { transform: [{ scale }] }]}>
+      <Animated.View style={[styles.checkCircle, {transform: [{scale}]}]}>
         <Icon name="check-bold" size={wScale(40)} color="#27500A" />
       </Animated.View>
     </View>
@@ -84,24 +85,34 @@ const PulseDot: React.FC = () => {
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
-        Animated.timing(anim, { toValue: 0.2, duration: 750, easing: Easing.ease, useNativeDriver: true }),
-        Animated.timing(anim, { toValue: 1,   duration: 750, easing: Easing.ease, useNativeDriver: true }),
-      ])
+        Animated.timing(anim, {
+          toValue: 0.2,
+          duration: 750,
+          easing: Easing.ease,
+          useNativeDriver: true,
+        }),
+        Animated.timing(anim, {
+          toValue: 1,
+          duration: 750,
+          easing: Easing.ease,
+          useNativeDriver: true,
+        }),
+      ]),
     ).start();
   }, []);
 
-  return <Animated.View style={[styles.pulseDot, { opacity: anim }]} />;
+  return <Animated.View style={[styles.pulseDot, {opacity: anim}]} />;
 };
 
 // ─── Doc row with stagger animation ───────────────────────────────────────────
 
-const DocRow: React.FC<{ label: string; icon: string; delay: number }> = ({
+const DocRow: React.FC<{label: string; icon: string; delay: number}> = ({
   label,
   icon,
   delay,
 }) => {
   const translateX = useRef(new Animated.Value(30)).current;
-  const opacity    = useRef(new Animated.Value(0)).current;
+  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.parallel([
@@ -122,7 +133,8 @@ const DocRow: React.FC<{ label: string; icon: string; delay: number }> = ({
   }, []);
 
   return (
-    <Animated.View style={[styles.docRow, { opacity, transform: [{ translateX }] }]}>
+    <Animated.View
+      style={[styles.docRow, {opacity, transform: [{translateX}]}]}>
       <View style={styles.docLeft}>
         <View style={styles.docIconWrap}>
           <Icon name={icon} size={wScale(16)} color="#0F6E56" />
@@ -131,7 +143,7 @@ const DocRow: React.FC<{ label: string; icon: string; delay: number }> = ({
       </View>
       <View style={styles.verifiedBadge}>
         <Icon name="check-circle" size={wScale(12)} color="#27500A" />
-        <Text style={styles.verifiedText}>Verified</Text>
+        <Text style={styles.verifiedText}>{translate('Verified')}</Text>
       </View>
     </Animated.View>
   );
@@ -141,9 +153,9 @@ const DocRow: React.FC<{ label: string; icon: string; delay: number }> = ({
 
 const ApprovalStatusScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
-  const fadeAnim  = useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(40)).current;
 
   useEffect(() => {
@@ -164,7 +176,7 @@ const ApprovalStatusScreen: React.FC = () => {
 
   const handleCopy = () => {
     Clipboard.setString('RCE-2025-XXXX');
-    ToastAndroid.show('RCE ID copied!', ToastAndroid.SHORT);
+    ToastAndroid.show(translate('RCE ID copied!'), ToastAndroid.SHORT);
   };
 
   return (
@@ -173,50 +185,59 @@ const ApprovalStatusScreen: React.FC = () => {
 
       <ScrollView
         contentContainerStyle={styles.scroll}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         {/* ── Hero ── */}
         <Animated.View
           style={[
             styles.heroSection,
-            { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
-          ]}
-        >
+            {opacity: fadeAnim, transform: [{translateY: slideAnim}]},
+          ]}>
           <CheckCircle />
 
           <View style={styles.approvedPill}>
-            <Icon name="shield-check-outline" size={wScale(13)} color="#3B6D11" />
-            <Text style={styles.approvedPillText}>Documents Approved</Text>
+            <Icon
+              name="shield-check-outline"
+              size={wScale(13)}
+              color="#3B6D11"
+            />
+            <Text style={styles.approvedPillText}>
+              {translate('Documents Approved')}
+            </Text>
           </View>
 
-          <Text style={styles.heading}>Your Application is Verified!</Text>
+          <Text style={styles.heading}>
+            {translate('Your Application is Verified!')}
+          </Text>
           <Text style={styles.subHeading}>
-            Our CMS team has reviewed and approved all your submitted documents successfully.
+            {translate(
+              ' Our CMS team has reviewed and approved all your submitted documents successfully.',
+            )}
           </Text>
         </Animated.View>
 
         {/* ── RCE ID Card ── */}
-        <Animated.View style={{ opacity: fadeAnim }}>
+        <Animated.View style={{opacity: fadeAnim}}>
           <LinearGradient
             colors={['#0B2845', '#103B6E', '#0D2F58']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.rceCard}
-          >
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={styles.rceCard}>
             <View style={styles.rceDecorTop} />
             <View style={styles.rceDecorBottom} />
 
-            <Text style={styles.rceCardLabel}>RCE AGENT ID</Text>
+            <Text style={styles.rceCardLabel}>{translate('RCE AGENT ID')}</Text>
 
             <View style={styles.rceWaitRow}>
               <PulseDot />
               <Text style={styles.rceWaitText}>
-                Please wait — RCE ID is being generated…
+                {translate('Please wait — RCE ID is being generated…')}
               </Text>
             </View>
 
             <View style={styles.rceBottomRow}>
-              <Text style={styles.rcePlaceholder}>RCE — — — —</Text>
+              <Text style={styles.rcePlaceholder}>
+                {translate('RCE')} — — — —
+              </Text>
               {/* <TouchableOpacity
                 style={styles.copyBtn}
                 onPress={handleCopy}
@@ -229,35 +250,59 @@ const ApprovalStatusScreen: React.FC = () => {
 
             {/* progress bar */}
             <View style={styles.progressTrack}>
-              <View style={[styles.progressFill, { width: '60%' }]} />
+              <View style={[styles.progressFill, {width: '60%'}]} />
             </View>
-            <Text style={styles.progressLabel}>Processing your agent profile…</Text>
+            <Text style={styles.progressLabel}>
+              {translate(' Processing your agent profile…')}
+            </Text>
           </LinearGradient>
         </Animated.View>
 
         {/* ── 2-col step cards ── */}
         <View style={styles.stepRow}>
-          <View style={[styles.stepCard, { borderTopColor: '#3B6D11', borderTopWidth: 2.5 }]}>
-            <View style={[styles.stepIconWrap, { backgroundColor: '#EAF3DE' }]}>
-              <Icon name="file-check-outline" size={wScale(20)} color="#3B6D11" />
+          <View
+            style={[
+              styles.stepCard,
+              {borderTopColor: '#3B6D11', borderTopWidth: 2.5},
+            ]}>
+            <View style={[styles.stepIconWrap, {backgroundColor: '#EAF3DE'}]}>
+              <Icon
+                name="file-check-outline"
+                size={wScale(20)}
+                color="#3B6D11"
+              />
             </View>
-            <Text style={styles.stepTitle}>Documents</Text>
-            <Text style={styles.stepDesc}>All docs verified{'\n'}by CMS team</Text>
+            <Text style={styles.stepTitle}>{translate('Documents')}</Text>
+            <Text style={styles.stepDesc}>
+              {translate('All docs verified')}
+              {'\n'}
+              {translate('by CMS team')}
+            </Text>
             <View style={styles.stepStatusDone}>
               <Icon name="check-circle" size={wScale(11)} color="#3B6D11" />
-              <Text style={styles.stepStatusDoneText}>Done</Text>
+              <Text style={styles.stepStatusDoneText}>{translate('Done')}</Text>
             </View>
           </View>
 
-          <View style={[styles.stepCard, { borderTopColor: '#854F0B', borderTopWidth: 2.5 }]}>
-            <View style={[styles.stepIconWrap, { backgroundColor: '#FAEEDA' }]}>
+          <View
+            style={[
+              styles.stepCard,
+              {borderTopColor: '#854F0B', borderTopWidth: 2.5},
+            ]}>
+            <View style={[styles.stepIconWrap, {backgroundColor: '#FAEEDA'}]}>
               <Icon name="clock-outline" size={wScale(20)} color="#854F0B" />
             </View>
-            <Text style={styles.stepTitle}>RCE ID</Text>
-            <Text style={styles.stepDesc}>Will be issued{'\n'}shortly</Text>
+            <Text style={styles.stepTitle}>{translate('RCE ID')}</Text>
+            <Text style={styles.stepDesc}>
+              {translate('Will be issued')}
+              {'\n'}
+              {translate('shortly')}
+            </Text>
             <View style={styles.stepStatusPending}>
               <Icon name="dots-horizontal" size={wScale(11)} color="#854F0B" />
-              <Text style={styles.stepStatusPendingText}>Pending</Text>
+              <Text style={styles.stepStatusPendingText}>
+                {translate('Pending')}
+              </Text>
             </View>
           </View>
         </View>
@@ -268,7 +313,9 @@ const ApprovalStatusScreen: React.FC = () => {
             <View style={styles.docsHeaderIconWrap}>
               <Icon name="check-all" size={wScale(16)} color="#3B6D11" />
             </View>
-            <Text style={styles.docsCardTitle}>Approved Documents</Text>
+            <Text style={styles.docsCardTitle}>
+              {translate('Approved Documents')}
+            </Text>
             <View style={styles.docCountBadge}>
               <Text style={styles.docCountText}>{DOCS.length}</Text>
             </View>
@@ -288,25 +335,25 @@ const ApprovalStatusScreen: React.FC = () => {
             name="information-outline"
             size={wScale(18)}
             color="#185FA5"
-            style={{ marginTop: 1 }}
+            style={{marginTop: 1}}
           />
           <Text style={styles.infoStripText}>
-            Once your RCE ID is generated, you will receive an SMS and email
-            notification. You can then login to the agent portal and start working.
+            {translate(
+              'Once your RCE ID is generated, you will receive an SMS and email notification. You can then login to the agent portal and start working.',
+            )}
           </Text>
         </View>
 
         {/* ── Support ── */}
         <View style={styles.helpRow}>
-          <Text style={styles.helpText}>Need help? </Text>
+          <Text style={styles.helpText}>{translate('Need help?')} </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Support')}>
             <Text
               style={[
                 styles.helpLink,
-                { color: colorConfig?.primaryColor ?? '#185FA5' },
-              ]}
-            >
-              Contact support
+                {color: colorConfig?.primaryColor ?? '#185FA5'},
+              ]}>
+              {translate('Contact support')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -318,7 +365,6 @@ const ApprovalStatusScreen: React.FC = () => {
 // ─── Styles ───────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
-
   root: {
     flex: 1,
     backgroundColor: '#F2F4F8',

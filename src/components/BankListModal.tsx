@@ -1,157 +1,3 @@
-// import React, {useMemo, useState} from 'react';
-// import {
-//   View,
-//   Text,
-//   TouchableOpacity,
-//   StyleSheet,
-//   TextInput,
-//   Modal,
-//   TouchableWithoutFeedback,
-//   KeyboardAvoidingView,
-//   Platform,
-// } from 'react-native';
-// import {FlashList} from '@shopify/flash-list';
-// import {SCREEN_HEIGHT, hScale, wScale} from '../utils/styles/dimensions';
-// import ClosseModalSvg2 from '../features/drawer/svgimgcomponents/ClosseModal2';
-// import {useSelector} from 'react-redux';
-// import {RootState} from '../reduxUtils/store';
-// import {colors} from '../utils/styles/theme';
-// import {translate} from '../utils/languageUtils/I18n';
-
-// type Props = {
-//   visible: boolean;
-//   onClose: () => void;
-//   data: any[];
-//   onSelect: (item: any) => void;
-//   labelKey?: string;
-//   idKey?: string;
-//   title?: string;
-// };
-
-// const BankListModal = ({
-//   visible,
-//   onClose,
-//   data = [],
-//   onSelect,
-//   labelKey = 'bankName',
-//   idKey = 'idno',
-//   title = 'Select Bank',
-// }: Props) => {
-//   const {colorConfig} = useSelector((state: RootState) => state.userInfo);
-//   const [searchQuery, setSearchQuery] = useState('');
-
-//   // Memoized search for performance
-//   const filteredData = useMemo(() => {
-//     if (!searchQuery) {
-//       return data;
-//     }
-//     return data.filter(item =>
-//       item?.[labelKey]
-//         ?.toString()
-//         .toLowerCase()
-//         .includes(searchQuery.toLowerCase()),
-//     );
-//   }, [searchQuery, data, labelKey]);
-
-//   return (
-//     <Modal
-//       visible={visible}
-//       transparent
-//       animationType="slide"
-//       onRequestClose={onClose}>
-//       <TouchableWithoutFeedback onPress={onClose}>
-//         <View style={styles.overlay} />
-//       </TouchableWithoutFeedback>
-
-//       <KeyboardAvoidingView
-//         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-//         style={styles.contentContainer}>
-//         <View style={styles.sheet}>
-//           {/* Header Bar Indicator */}
-//           <View style={styles.dragIndicator} />
-
-//           {/* Header */}
-//           <View
-//             style={[
-//               styles.header,
-//               {backgroundColor: colorConfig.secondaryColor + '15'},
-//             ]}>
-//             <Text style={styles.title}>{title}</Text>
-//             <TouchableOpacity
-//               onPress={onClose}
-//               hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-//               <ClosseModalSvg2 size={30} />
-//             </TouchableOpacity>
-//           </View>
-
-//           {/* Search Section */}
-//           <View style={styles.searchWrapper}>
-//             <TextInput
-//               placeholder={translate('Search bank name')}
-//               value={searchQuery}
-//               onChangeText={setSearchQuery}
-//               style={[
-//                 styles.searchBar,
-//                 {borderColor: colorConfig.secondaryColor + '40'},
-//               ]}
-//               placeholderTextColor={colors.black75 || '#999'}
-//               cursorColor={colorConfig.secondaryColor}
-//               clearButtonMode="while-editing"
-//             />
-//           </View>
-
-//           {/* List Area */}
-//           <View style={{flex: 1}}>
-//             <FlashList
-//               data={filteredData}
-//               estimatedItemSize={65}
-//               keyExtractor={(item, index) =>
-//                 item?.[idKey]?.toString() || index.toString()
-//               }
-//               contentContainerStyle={{paddingBottom: 20}}
-//               ListEmptyComponent={
-//                 <View style={styles.emptyContainer}>
-//                   <Text style={styles.emptyText}>
-//                     {translate('No results found for')} "{searchQuery}"
-//                   </Text>
-//                 </View>
-//               }
-//               renderItem={({item}) => (
-//                 <TouchableOpacity
-//                   activeOpacity={0.6}
-//                   style={styles.item}
-//                   onPress={() => {
-//                     onSelect(item);
-//                     setSearchQuery(''); // Clear search on select
-//                   }}>
-//                   <View
-//                     style={[
-//                       styles.avatar,
-//                       {backgroundColor: colorConfig.secondaryColor + '10'},
-//                     ]}>
-//                     <Text
-//                       style={{
-//                         color: colorConfig.secondaryColor,
-//                         fontWeight: 'bold',
-//                       }}>
-//                       {item?.[labelKey]?.charAt(0).toUpperCase()}
-//                     </Text>
-//                   </View>
-//                   <Text style={styles.itemText}>
-//                     {item?.[labelKey] ?? 'N/A'}
-//                   </Text>
-//                 </TouchableOpacity>
-//               )}
-//             />
-//           </View>
-//         </View>
-//       </KeyboardAvoidingView>
-//     </Modal>
-//   );
-// };
-
-// export default BankListModal;
-
 import React, {useMemo, useState} from 'react';
 import {
   View,
@@ -189,7 +35,7 @@ const BankListModal = ({
   onSelect,
   labelKey = 'bankName',
   idKey = 'idno',
-  title = 'select_bank', // ✅ Modifed: String key ko clean localizable format me rakha
+  title = translate('Select Bank'),
 }: Props) => {
   const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const [searchQuery, setSearchQuery] = useState('');
@@ -230,7 +76,7 @@ const BankListModal = ({
               styles.header,
               {backgroundColor: colorConfig.secondaryColor + '15'},
             ]}>
-            <Text style={styles.title}>{translate(title)}</Text>
+            <Text style={styles.title}>{title}</Text>
             <TouchableOpacity
               onPress={onClose}
               hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
@@ -241,8 +87,7 @@ const BankListModal = ({
           {/* Search Section */}
           <View style={styles.searchWrapper}>
             <TextInput
-              // ✅ Modified: Key structure format setup kiya
-              placeholder={translate('search_bank_name')}
+              placeholder={translate('Search bank name')}
               value={searchQuery}
               onChangeText={setSearchQuery}
               style={[
@@ -267,8 +112,7 @@ const BankListModal = ({
               ListEmptyComponent={
                 <View style={styles.emptyContainer}>
                   <Text style={styles.emptyText}>
-                    {/* ✅ Fixed Bug: Localized static mapping text alag kiya aur input value ko end me merge kiya */}
-                    {translate('no_results_found')} "{searchQuery}"
+                    {translate('No results found for')} "{searchQuery}"
                   </Text>
                 </View>
               }
@@ -294,7 +138,8 @@ const BankListModal = ({
                     </Text>
                   </View>
                   <Text style={styles.itemText}>
-                    {item?.[labelKey] ?? 'N/A'}
+                    {item?.[labelKey ? labelKey : translate('bankName')] ??
+                      translate('N/A')}
                   </Text>
                 </TouchableOpacity>
               )}

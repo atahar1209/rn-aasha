@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
+import React from 'react';
+import {View, Text} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
 
-const RadintPickupSvg = ({ size = wScale(90), color = '#000' }) => {
-    const svgname = `
+const RadintPickupSvg = ({size = wScale(90), color = '#000'}) => {
+  const svgname = `
 
 
 
@@ -13,13 +13,12 @@ const RadintPickupSvg = ({ size = wScale(90), color = '#000' }) => {
 
 
 
-`
-    return (
-        <View>
-            <SvgXml xml={svgname} width={size} height={size} />
-        </View>
-    );
+`;
+  return (
+    <View>
+      <SvgXml xml={svgname} width={size} height={size} />
+    </View>
+  );
 };
-
 
 export default RadintPickupSvg;

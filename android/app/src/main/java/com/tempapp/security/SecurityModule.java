@@ -1,4 +1,4 @@
-package com.mobykwik.security;
+package com.digitalindiapay.security;
 
 import android.app.Activity;
 import android.app.KeyguardManager;

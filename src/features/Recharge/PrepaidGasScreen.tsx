@@ -1,38 +1,36 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  TextInput,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
   Text,
   TouchableOpacity,
   ToastAndroid,
-  Alert,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
-import { colors } from '../../utils/styles/theme';
-import { SCREEN_HEIGHT, hScale, wScale } from '../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { APP_URLS } from '../../utils/network/urls';
+import {colors} from '../../utils/styles/theme';
+import {SCREEN_HEIGHT, hScale, wScale} from '../../utils/styles/dimensions';
+import {FlashList} from '@shopify/flash-list';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { BottomSheet, Card } from '@rneui/base';
-import { translate } from '../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
+import {BottomSheet, Card} from '@rneui/base';
+import {translate} from '../../utils/languageUtils/I18n';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import DynamicButton from '../drawer/button/DynamicButton';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ShowLoader from '../../components/ShowLoder';
 import RecentText from '../../components/RecentText';
-import { useLocationHook } from '../../hooks/useLocationHook';
+import {useLocationHook} from '../../hooks/useLocationHook';
 
 const PrepaidGasScreen1 = () => {
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [textInput1, setTextInput1] = useState('');
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [textInput3, setTextInput3] = useState('');
@@ -88,7 +86,7 @@ const PrepaidGasScreen1 = () => {
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
 
@@ -192,17 +190,17 @@ const PrepaidGasScreen1 = () => {
       console.log(res);
 
       setIsagencies(res.data);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async function Statelist() {
     const data = {};
     try {
       const url = `${APP_URLS.gasCylinderState}`;
-      const res = await post({ url: url, config: null });
+      const res = await post({url: url, config: null});
       setstatelist(res.data);
       console.log(res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async function fatchDist(state: any) {
@@ -213,35 +211,32 @@ const PrepaidGasScreen1 = () => {
       };
 
       const url = await `${APP_URLS.DistrictByState}${state}`;
-      const res = await post({ url: url, config: null });
+      const res = await post({url: url, config: null});
 
       console.log(res.data);
       setDistList(res.data);
 
       //  setshowdistrictData(true);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   useEffect(() => {
     recenttransactions();
-
   }, []);
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
+      const response = await get({url: url});
       console.log('-*************************************', response);
 
       setHistorylist(response);
-      setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqTime(response[0].Reqesttime);
+      setReqId(response[0].Request_ID);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -250,15 +245,13 @@ const PrepaidGasScreen1 = () => {
 
   const formattedDate = `${year}-${month}-${day}`;
 
-
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId,Loc_Data } = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
   const onRechargePress = useCallback(async () => {
-
-    setShowLoader(true)
+    setShowLoader(true);
     setBottomSheetVisible(false);
 
     const mobileNetwork = await getNetworkCarrier();
@@ -268,7 +261,8 @@ const PrepaidGasScreen1 = () => {
       consumerNo,
       optcode,
       amount,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data.latitude,
+      Loc_Data.longitude,
 
       'city',
       'address',
@@ -308,25 +302,25 @@ const PrepaidGasScreen1 = () => {
       });
       console.log(res);
       console.log(status);
-      if(res.status ==='False'){
-        alert(res.message);
+      if (res.status === 'False') {
+        Alert.alert(res.message);
         setShowLoader(false);
 
-        return
+        return;
       }
       status = res.Response;
       Message = res.Message;
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     setCustomerID('');
     // setFastagOpt('Select Your Operator');
     setAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
 
     navigation.navigate('Rechargedetails', {
@@ -336,20 +330,25 @@ const PrepaidGasScreen1 = () => {
       status: status ?? 'Unknown',
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
-      Message: Message ?? 'No message available'
+      Message: Message ?? translate('No message available'),
     });
-    
-
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
+    getMobileIp,
+    userId,
     consumerNo,
     optcode,
+    amount,
+    Loc_Data.latitude,
+    Loc_Data.longitude,
+    accnumhint,
+    accnumhint2,
+    navigation,
+    mobileNumber,
+    reqId,
+    reqTime,
     post,
-    userId,
+    recenttransactions,
   ]);
   const [agencies, setagencies] = useState('');
   const [Isagencies, setIsagencies] = useState([]);
@@ -358,12 +357,12 @@ const PrepaidGasScreen1 = () => {
   const agency = () => {
     return (
       <FlashList
-        style={{ marginBottom: wScale(50), marginHorizontal: wScale(24) }}
+        style={{marginBottom: wScale(50), marginHorizontal: wScale(24)}}
         data={Isagencies}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           return (
             <View
-              style={{ marginVertical: wScale(8), marginHorizontal: wScale(24) }}>
+              style={{marginVertical: wScale(8), marginHorizontal: wScale(24)}}>
               <TouchableOpacity
                 onPress={async () => {
                   //   getHpAgency(selectedOpt,item);
@@ -401,12 +400,12 @@ const PrepaidGasScreen1 = () => {
   const showDistData = () => {
     return (
       <FlashList
-        style={{ marginBottom: wScale(50), marginHorizontal: wScale(24) }}
+        style={{marginBottom: wScale(50), marginHorizontal: wScale(24)}}
         data={DistList}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           return (
             <View
-              style={{ marginVertical: wScale(8), marginHorizontal: wScale(24) }}>
+              style={{marginVertical: wScale(8), marginHorizontal: wScale(24)}}>
               <TouchableOpacity
                 onPress={async () => {
                   setdistrict(item);
@@ -433,12 +432,12 @@ const PrepaidGasScreen1 = () => {
   const showStateListData = () => {
     return (
       <FlashList
-        style={{ marginBottom: wScale(50), marginHorizontal: wScale(24) }}
+        style={{marginBottom: wScale(50), marginHorizontal: wScale(24)}}
         data={statelist}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           return (
             <View
-              style={{ marginVertical: wScale(8), marginHorizontal: wScale(24) }}>
+              style={{marginVertical: wScale(8), marginHorizontal: wScale(24)}}>
               <TouchableOpacity
                 onPress={async () => {
                   setIsOperatorList(false);
@@ -481,17 +480,16 @@ const PrepaidGasScreen1 = () => {
       };
       const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=${agencies}&ProcessingCycle=''&acno=''&lt=''&ViewBill="Y"`;
 
-      const res = await get({ url: url });
-      console.log(":", res); console.log(data.Operator);
+      const res = await get({url: url});
+      console.log(':', res);
+      console.log(data.Operator);
       console.log(url);
-      setDueDate(res["rechargedueDate"]);
-      setAmount(res["monthlyRecharge"]);
-      setCustomerName(res["customerName"]);
-      setCustBal(res["balance"]);
+      setDueDate(res.rechargedueDate);
+      setAmount(res.monthlyRecharge);
+      setCustomerName(res.customerName);
+      setCustBal(res.balance);
       // setstatus(res["customerStatus"])
-
-
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const [mobileNumber, setMobileNumber] = useState('');
@@ -507,7 +505,7 @@ const PrepaidGasScreen1 = () => {
         Operatorcode: optcode,
       };
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
-      const res = await post({ url: url, data, config: config });
+      const res = await post({url: url, data, config: config});
 
       console.log(':', url);
       const billSts = res.RESULT;
@@ -517,25 +515,29 @@ const PrepaidGasScreen1 = () => {
         setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const validateFields = () => {
     if (!consumerNo) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount' || parseFloat(amount) <= 0) {
+    } else if (
+      !amount ||
+      amount === 'Enter Amount' ||
+      parseFloat(amount) <= 0
+    ) {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (!distributorId) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${distributorId}'`,
+        `${translate('Please Enter')} ${distributorId}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -545,7 +547,7 @@ const PrepaidGasScreen1 = () => {
       mobileNumber.length > 10
     ) {
       ToastAndroid.showWithGravity(
-        'Please Enter a 10-digit Mobile Number',
+        translate('Please Enter a 10-digit Mobile Number'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -558,11 +560,8 @@ const PrepaidGasScreen1 = () => {
     <View style={styles.main}>
       <AppBarSecond title={'Bharat Gas'} />
       <View style={styles.container}>
-        {showLoader && (
-          <ShowLoader />
-        )}
+        {showLoader && <ShowLoader />}
         {accntvisivility && (
-
           <TouchableOpacity
             onPress={() => {
               setIsisDistList(true);
@@ -575,9 +574,13 @@ const PrepaidGasScreen1 = () => {
                 editable={false}
               //   onChangeText={(text) => setAgencyCode(text)}
               /> */}
-            <FlotingInput label={agencies} editable={false}
-              onChangeTextCallback={(text) => setagencies(text)} />
-
+            <FlotingInput
+              label={agencies}
+              editable={false}
+              onChangeTextCallback={text => setagencies(text)}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
+            />
           </TouchableOpacity>
         )}
 
@@ -590,30 +593,38 @@ const PrepaidGasScreen1 = () => {
               editable={true}
               onChangeText={text => setdistributorId(text)}
             /> */}
-            <FlotingInput label={'Agenct Code'} 
-              onChangeTextCallback={(text) => setdistributorId(text)} value={distributorId} />
+            <FlotingInput
+              label={translate('Agenct Code')}
+              onChangeTextCallback={text => setdistributorId(text)}
+              value={distributorId}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
+            />
           </View>
         )}
         <View>
-
-          <FlotingInput label={paramname} value={consumerNo} onChangeTextCallback={text => setconsumerNo(text)} 
+          <FlotingInput
+            label={paramname}
+            value={consumerNo}
+            onChangeTextCallback={text => setconsumerNo(text)}
             maxLength={17}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
 
-          <View style={[styles.righticon2,]}>
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
-
                 onPress={() => {
                   billInfo();
                   setBottomSheetVisible(true);
-                }}
-              >
-                {
-                  showLoader2 ? <ActivityIndicator size={'large'} /> : <Text style={[styles.infobtntex,]}>Info</Text>
-
-                }
+                }}>
+                {showLoader2 ? (
+                  <ActivityIndicator size={'large'} />
+                ) : (
+                  <Text style={[styles.infobtntex]}>Info</Text>
+                )}
               </TouchableOpacity>
             )}
           </View>
@@ -628,9 +639,14 @@ const PrepaidGasScreen1 = () => {
               onChangeText={text => setMobileNumber(text)}
             /> */}
 
-        <FlotingInput label={'Mobile Number'} value={mobileNumber}
-          onChangeTextCallback={text => setMobileNumber(text)} keyboardType="number-pad"
+        <FlotingInput
+          label={translate('Mobile Number')}
+          value={mobileNumber}
+          onChangeTextCallback={text => setMobileNumber(text)}
+          keyboardType="number-pad"
           maxLength={10}
+          inputstyle={undefined}
+          labelinputstyle={undefined}
         />
 
         {/* <TextInput
@@ -640,12 +656,17 @@ const PrepaidGasScreen1 = () => {
           keyboardType="number-pad"
           onChangeText={text => setAmount(text)}
         /> */}
-        <FlotingInput label={'Enter Amount'}
-             maxLength={5}
-              value={amount} keyboardType="number-pad"
+        <FlotingInput
+          label={translate('Enter Amount')}
+          maxLength={5}
+          value={amount}
+          keyboardType="number-pad"
           onChangeTextCallback={text => {
             setAmount(text);
-          }} />
+          }}
+          inputstyle={undefined}
+          labelinputstyle={undefined}
+        />
 
         {/* <TouchableOpacity
           style={{ height: 50 }}
@@ -664,24 +685,26 @@ const PrepaidGasScreen1 = () => {
             </Text>
           </View>
         </TouchableOpacity> */}
-        <DynamicButton title={'Next'} onPress={() => {
-          validateFields();
-        }} />
+        <DynamicButton
+          title={'Next'}
+          onPress={() => {
+            validateFields();
+          }}
+        />
 
-        <View >
-
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
             onBackdropPress={() => setIsrecent(false)}
-
           />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
-           <RecentText/>
+            <RecentText />
           </TouchableOpacity>
         </View>
         {/* 
@@ -704,36 +727,34 @@ handleItemPress={handleItemPress}
           onBackdropPress={() => setBottomSheetVisible(false)}
           status={Status}
           details={[
-            { label: translate('User Name'), value2: CustomerName },
-            { label: translate('Customer ID'), value: mobileNumber },
-            { label: translate('Due Date'), value2: dueDate },
+            {label: translate('User Name'), value2: CustomerName},
+            {label: translate('Customer ID'), value: mobileNumber},
+            {label: translate('Due Date'), value2: dueDate},
             // { label: 'Operator Name', value2: FastagOpt },
-            { label: translate('Customer Status'), value2: Status },
+            {label: translate('Customer Status'), value2: Status},
             // { label: 'BillAmount', value2: billAmount },
-
           ]}
           lastlabel={translate('Transaction Amount')}
           lastvalue={amount}
           onRechargedetails={() => {
             if (amount === '0' || amount === '') {
               ToastAndroid.showWithGravity(
-                `Please Enter Amount`,
+                translate('Please Enter Amount'),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
-            } else { onRechargePress() }
-          }
-          }
+            } else {
+              onRechargePress();
+            }
+          }}
         />
 
-
-
-        <BottomSheet animationType="none"  
+        <BottomSheet
+          animationType="none"
           onBackdropPress={() => {
             setIsOperatorList(false);
           }}
-          isVisible={isOperatorList}
-        >
+          isVisible={isOperatorList}>
           <View
             style={{
               backgroundColor: colors.white,
@@ -749,7 +770,8 @@ handleItemPress={handleItemPress}
           </View>
         </BottomSheet>
 
-        <BottomSheet animationType="none"  
+        <BottomSheet
+          animationType="none"
           onBackdropPress={() => {
             setIsisDistList(false);
           }}
@@ -769,15 +791,21 @@ handleItemPress={handleItemPress}
           </View>
         </BottomSheet>
 
-        <BottomSheet animationType="none"  
+        <BottomSheet
+          animationType="none"
           // isVisible={bottomSheetVisible}
           onBackdropPress={() => setBottomSheetVisible(false)}>
-          <View style={{ bottom: hScale(10) }}>
+          <View style={{bottom: hScale(10)}}>
             <Card>
-              <Text>{translate('Due Date')}: {dueDate}</Text>
+              <Text>
+                {translate('Due Date')}: {dueDate}
+              </Text>
             </Card>
             <Card>
-              <Text> {translate("Agency Code")}: {distributorId}</Text>
+              <Text>
+                {' '}
+                {translate('Agency Code')}: {distributorId}
+              </Text>
             </Card>
             <Card>
               <Text>
@@ -786,7 +814,9 @@ handleItemPress={handleItemPress}
             </Card>
 
             <Card>
-              <Text>{translate("Recharge Amount")}: {amount}</Text>
+              <Text>
+                {translate('Recharge Amount')}: {amount}
+              </Text>
             </Card>
             <TouchableOpacity
               onPress={() => {
@@ -799,29 +829,27 @@ handleItemPress={handleItemPress}
         </BottomSheet>
       </View>
     </View>
-
   );
 };
 
 const styles = StyleSheet.create({
-
   main: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: wScale(30),
-    flex: 1
+    flex: 1,
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -834,20 +862,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',
     textAlign: 'right',
     paddingVertical: hScale(10),
   },
-
-
-
 
   DetailButton: {
     alignContent: 'center',

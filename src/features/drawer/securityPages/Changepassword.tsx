@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,36 +7,27 @@ import {
   Modal,
   ScrollView,
   Animated,
-  Alert,
-  TextInput,
   ToastAndroid,
   ActivityIndicator,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { SvgXml } from "react-native-svg";
-import { hScale, wScale } from "../../../utils/styles/dimensions";
-import FlotingInput from "./FlotingInput";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../reduxUtils/store";
-import { colors } from "../../../utils/styles/theme";
-import LinearGradient from "react-native-linear-gradient";
-import DynamicButton from "../button/DynamicButton";
-import AppBarSecond from "../headerAppbar/AppBarSecond";
-import {
-  ALERT_TYPE,
-  AlertNotificationDialog,
-  AlertNotificationRoot,
-  Dialog,
-} from "react-native-alert-notification";
-import ShowEye from "../HideShowImgBtn/ShowEye";
-import useAxiosHook from "../../../utils/network/AxiosClient";
-import { APP_URLS } from "../../../utils/network/urls";
-import { encrypt } from "../../../utils/encryptionUtils";
-import OTPModal from "../../../components/OTPModal";
-import CloseSvg from "../svgimgcomponents/CloseSvg";
-import { reset } from "../../../reduxUtils/store/userInfoSlice";
-import { translate } from "../../../utils/languageUtils/I18n";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import FlotingInput from './FlotingInput';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {colors} from '../../../utils/styles/theme';
+import DynamicButton from '../button/DynamicButton';
+import AppBarSecond from '../headerAppbar/AppBarSecond';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
+import ShowEye from '../HideShowImgBtn/ShowEye';
+import useAxiosHook from '../../../utils/network/AxiosClient';
+import {APP_URLS} from '../../../utils/network/urls';
+import {encrypt} from '../../../utils/encryptionUtils';
+import OTPModal from '../../../components/OTPModal';
+import CloseSvg from '../svgimgcomponents/CloseSvg';
+import {reset} from '../../../reduxUtils/store/userInfoSlice';
+import {translate} from '../../../utils/languageUtils/I18n';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const BackArrowImg = `    
 
@@ -47,7 +38,7 @@ const BackArrowImg = `
   `;
 
 const Changepassword = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [newsecure, setNewsecure] = useState(true);
   const [renewsecure, setRenewsecure] = useState(true);
@@ -56,26 +47,26 @@ const Changepassword = () => {
   const [isrenewpass, setIsrenewpass] = useState(false);
   const [isbutt, setIsButt] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [oldpass, setOldpass] = useState("");
-  const [newpass, setNewpass] = useState("");
-  const [renewpass, setRenewpass] = useState("");
+  const [oldpass, setOldpass] = useState('');
+  const [newpass, setNewpass] = useState('');
+  const [renewpass, setRenewpass] = useState('');
   const [bgcolorindex, setBgcolorindex] = useState(0);
   const [otpModalVisible, setOtpModalVisible] = useState(false);
-  const [mobileOtp, setMobileOtp] = useState("");
+  const [mobileOtp, setMobileOtp] = useState('');
   const [isOtp, setisOtp] = useState(false);
   const bgcolorAnimated = new Animated.Value(bgcolorindex);
-  const { post } = useAxiosHook();
+  const {post} = useAxiosHook();
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
 
   const gradientColors = [
     colorConfig.primaryColor,
     colorConfig.secondaryColor,
-    "red",
+    'red',
   ];
 
   const toggleBbColor = () => {
-    setBgcolorindex((prevIndex) => (prevIndex + 1) % gradientColors.length);
+    setBgcolorindex(prevIndex => (prevIndex + 1) % gradientColors.length);
   };
 
   useEffect(() => {
@@ -115,18 +106,18 @@ const Changepassword = () => {
     setIsLoading(false);
     if (response) {
       if (isOtp) {
-        console.log("otp verify ", response);
+        console.log('otp verify ', response);
         setOtpModalVisible(false);
         if (response?.Status) {
           Dialog.show({
             type: ALERT_TYPE.SUCCESS,
-            title: translate("ChangePassword.SUCCESS"),
+            title: translate('ChangePassword.SUCCESS'),
             textBody:
-              response.Message ||
+              translate(response.Message) ||
               translate(
-                "ChangePassword.Your password has been changed successfully.",
+                'ChangePassword.Your password has been changed successfully.',
               ),
-            button: translate("ChangePassword.OK"),
+            button: translate('ChangePassword.OK'),
             onPressButton: () => {
               dispatch(reset());
               // navigation.replace('Logout');
@@ -137,43 +128,43 @@ const Changepassword = () => {
         } else {
           Dialog.show({
             type: ALERT_TYPE.DANGER,
-            title: translate("ChangePassword.ERROR"),
+            title: translate('ChangePassword.ERROR'),
             textBody: response.Message,
-            button: translate("ChangePassword.OK"),
+            button: translate('ChangePassword.OK'),
             onPressButton: () => {
               setOtpModalVisible(true);
               Dialog.hide();
             },
           });
         }
-        setMobileOtp("");
+        setMobileOtp('');
         return;
       }
       if (response?.Status) {
-        setMobileOtp("");
+        setMobileOtp('');
         setisOtp(true);
         setOtpModalVisible(true);
       } else if (!response?.Status) {
         Dialog.show({
           type: ALERT_TYPE.DANGER,
-          title: translate("ChangePassword.ERROR"),
+          title: translate('ChangePassword.ERROR'),
           textBody: response.Message,
-          button: translate("ChangePassword.OK"),
+          button: translate('ChangePassword.OK'),
           onPressButton: () => {
             Dialog.hide();
           },
         });
       }
     }
-  }, [mobileOtp, newpass, oldpass, post, renewpass]);
+  }, [dispatch, isOtp, mobileOtp, newpass, oldpass, post, renewpass]);
 
   const handleBack = () => {
     navigation.goBack();
   };
   const BtnPress = () => {
-    if (oldpass === "") {
+    if (oldpass === '') {
       ToastAndroid.showWithGravity(
-        translate("ChangePassword.Please Enter Old Password !!!"), // Message to display
+        translate('ChangePassword.Please Enter Old Password !!!'), // Message to display
         ToastAndroid.SHORT, // Duration for which the toast is shown
         // Position where the toast appears
         ToastAndroid.BOTTOM,
@@ -182,7 +173,7 @@ const Changepassword = () => {
       // Check if newpass or renewpass is less than 6 characters
       ToastAndroid.showWithGravity(
         translate(
-          "ChangePassword.Password should be at least 6 characters long!",
+          'ChangePassword.Password should be at least 6 characters long!',
         ), // Message to display
         ToastAndroid.SHORT, // Duration for which the toast is shown
         ToastAndroid.BOTTOM, // Position where the toast appears
@@ -191,7 +182,7 @@ const Changepassword = () => {
       changePassword();
     } else {
       ToastAndroid.showWithGravity(
-        translate("ChangePassword.Passwords do not match"), // Message to display
+        translate('ChangePassword.Passwords do not match'), // Message to display
         ToastAndroid.SHORT, // Duration for which the toast is shown
         ToastAndroid.BOTTOM, // Position where the toast appears
       );
@@ -233,215 +224,267 @@ const Changepassword = () => {
 
   const checkOtp = useCallback(async () => {}, []);
 
-return (
-  <View style={styles.main}>
-    <AppBarSecond title={"Change Login Password"} />
+  return (
+    <View style={styles.main}>
+      <AppBarSecond title={'Change Login Password'} />
 
-    <KeyboardAwareScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{ flexGrow: 1 }}
-      enableOnAndroid={true}
-      extraScrollHeight={120} // बटन को कीबोर्ड से सुरक्षित दूरी पर रखने के लिए
-      keyboardShouldPersistTaps="handled"
-    >
-      <View style={styles.container}>
-        {/* पासवर्ड टिप्स सेक्शन */}
-        <View style={styles.passtipcontainer}>
-          <Text style={[styles.passtip, { color: colorConfig.primaryColor }]}>
-            {translate("Password Security Tips")}
-          </Text>
+      <KeyboardAwareScrollView
+        style={{flex: 1}}
+        contentContainerStyle={{flexGrow: 1}}
+        enableOnAndroid={true}
+        extraScrollHeight={120} // बटन को कीबोर्ड से सुरक्षित दूरी पर रखने के लिए
+        keyboardShouldPersistTaps="handled">
+        <View style={styles.container}>
+          {/* पासवर्ड टिप्स सेक्शन */}
+          <View style={styles.passtipcontainer}>
+            <Text style={[styles.passtip, {color: colorConfig.primaryColor}]}>
+              {translate('Password Security Tips')}
+            </Text>
 
-          <Animated.View
-            style={[
-              styles.animetedView,
-              { backgroundColor: gradientColors[bgcolorindex] },
-            ]}
-          >
-            <TouchableOpacity
-              onPress={() => setShowModal(true)}
-              activeOpacity={0.7}
-              style={styles.shomodalbtn}
-            >
-              <Text style={styles.shomodaltext}>!</Text>
-            </TouchableOpacity>
-          </Animated.View>
+            <Animated.View
+              style={[
+                styles.animetedView,
+                {backgroundColor: gradientColors[bgcolorindex]},
+              ]}>
+              <TouchableOpacity
+                onPress={() => setShowModal(true)}
+                activeOpacity={0.7}
+                style={styles.shomodalbtn}>
+                <Text style={styles.shomodaltext}>!</Text>
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
+
+          {/* पासवर्ड इनपुट सेक्शन */}
+          <View>
+            {isLoading && (
+              <ActivityIndicator color={colors.black} size="large" />
+            )}
+
+            {/* Current Password */}
+            <View style={{position: 'relative'}}>
+              <FlotingInput
+                label={translate('Current Password')}
+                value={oldpass}
+                secureTextEntry={secureTextEntry}
+                onChangeTextCallback={value => handlecurrentpass(value)}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+              />
+              {iscurrentpass && (
+                <View style={styles.righticon}>
+                  <TouchableOpacity
+                    onPressOut={toggleSecureTextEntry}
+                    onPressIn={toggleSecureTextEntry}>
+                    <ShowEye color1={undefined} color2={undefined} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+
+            {/* New Password */}
+            <View style={{position: 'relative'}}>
+              <FlotingInput
+                label={translate('Enter New Password')}
+                value={newpass}
+                secureTextEntry={newsecure}
+                onChangeTextCallback={value => handlenewpass(value)}
+                autoComplete="off"
+                autoCorrect={false}
+                contextMenuHidden={true}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+              />
+              {isnewpass && (
+                <View style={styles.righticon}>
+                  <TouchableOpacity
+                    onPressIn={newtoggle}
+                    onPressOut={newtoggle}>
+                    <ShowEye color1={undefined} color2={undefined} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+
+            {/* Re-enter Password */}
+            <View style={{position: 'relative', paddingBottom: hScale(10)}}>
+              <FlotingInput
+                label={translate('Re-enter New Password')}
+                value={renewpass}
+                secureTextEntry={renewsecure}
+                onChangeTextCallback={value => handlerenePass(value)}
+                autoComplete="off"
+                autoCorrect={false}
+                contextMenuHidden={true}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+              />
+              {isrenewpass && (
+                <View style={styles.righticon}>
+                  <TouchableOpacity
+                    onPressIn={renewtoggle}
+                    onPressOut={renewtoggle}>
+                    <ShowEye color1={undefined} color2={undefined} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+
+            <DynamicButton
+              title={'submit'}
+              onPress={() => {
+                if (
+                  oldpass.length >= 6 &&
+                  newpass.length >= 6 &&
+                  renewpass.length >= 6
+                ) {
+                  BtnPress();
+                } else {
+                  console.log(
+                    translate('Passwords should be at least 6 characters long'),
+                  );
+                }
+              }}
+              styleoveride={{
+                opacity:
+                  oldpass.length <= 5 ||
+                  newpass.length <= 5 ||
+                  renewpass.length <= 5
+                    ? 0.5
+                    : 1,
+              }}
+            />
+          </View>
         </View>
+      </KeyboardAwareScrollView>
 
-        {/* पासवर्ड इनपुट सेक्शन */}
-        <View>
-          {isLoading && <ActivityIndicator color={colors.black} size="large" />}
-          
-          {/* Current Password */}
-          <View style={{ position: "relative" }}>
-            <FlotingInput
-              label={"Current Password"}
-              value={oldpass}
-              secureTextEntry={secureTextEntry}
-              onChangeTextCallback={(value) => handlecurrentpass(value)}
-            />
-            {iscurrentpass && (
-              <View style={styles.righticon}>
-                <TouchableOpacity
-                  onPressOut={toggleSecureTextEntry}
-                  onPressIn={toggleSecureTextEntry}
-                >
-                  <ShowEye />
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+      {/* Security Tips Modal (इसे ScrollView के बाहर रखें) */}
+      <Modal transparent={true} animationType="slide" visible={showModal}>
+        <View style={styles.centerModal}>
+          <View
+            style={[styles.modalView, {borderColor: colorConfig.primaryColor}]}>
+            <View style={styles.cutborder}>
+              <TouchableOpacity
+                onPress={() => setShowModal(false)}
+                activeOpacity={0.7}
+                style={[
+                  styles.closebuttoX,
+                  {backgroundColor: colorConfig.primaryColor},
+                ]}>
+                <CloseSvg />
+              </TouchableOpacity>
+            </View>
 
-          {/* New Password */}
-          <View style={{ position: "relative" }}>
-            <FlotingInput
-              label={"Enter New Password"}
-              value={newpass}
-              secureTextEntry={newsecure}
-              onChangeTextCallback={(value) => handlenewpass(value)}
-              autoComplete="off"
-              autoCorrect={false}
-              contextMenuHidden={true}
-            />
-            {isnewpass && (
-              <View style={styles.righticon}>
-                <TouchableOpacity onPressIn={newtoggle} onPressOut={newtoggle}>
-                  <ShowEye />
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-
-          {/* Re-enter Password */}
-          <View style={{ position: "relative", paddingBottom: hScale(10) }}>
-            <FlotingInput
-              label={"Re-enter New Password"}
-              value={renewpass}
-              secureTextEntry={renewsecure}
-              onChangeTextCallback={(value) => handlerenePass(value)}
-              autoComplete="off"
-              autoCorrect={false}
-              contextMenuHidden={true}
-            />
-            {isrenewpass && (
-              <View style={styles.righticon}>
-                <TouchableOpacity onPressIn={renewtoggle} onPressOut={renewtoggle}>
-                  <ShowEye />
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-
-          <DynamicButton
-            title={"submit"}
-            onPress={() => {
-              if (oldpass.length >= 6 && newpass.length >= 6 && renewpass.length >= 6) {
-                BtnPress();
-              } else {
-                console.log(translate("Passwords should be at least 6 characters long"));
-              }
-            }}
-            styleoveride={{
-              opacity: oldpass.length <= 5 || newpass.length <= 5 || renewpass.length <= 5 ? 0.5 : 1,
-            }}
-          />
-        </View>
-      </View>
-    </KeyboardAwareScrollView>
-
-    {/* Security Tips Modal (इसे ScrollView के बाहर रखें) */}
-    <Modal transparent={true} animationType="slide" visible={showModal}>
-      <View style={styles.centerModal}>
-        <View style={[styles.modalView, { borderColor: colorConfig.primaryColor }]}>
-          <View style={styles.cutborder}>
-            <TouchableOpacity
-              onPress={() => setShowModal(false)}
-              activeOpacity={0.7}
-              style={[styles.closebuttoX, { backgroundColor: colorConfig.primaryColor }]}
-            >
-              <CloseSvg />
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.texttitalView, { backgroundColor: colorConfig.primaryColor }]}>
-            <View style={[styles.cutout, { borderTopColor: colorConfig.primaryColor }]} />
-            <Text style={styles.texttital}>{translate("Password Security Tips")}</Text>
-          </View>
-          
-          <ScrollView>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-              <View key={num} style={styles.tipcontant}>
-                <Text style={styles.tipTitle}>{num}. {translate(`Tip Title ${num}`)}</Text>
-                <Text style={styles.tipDescri}>{translate(`Tip Description ${num}`)}</Text>
-              </View>
-            ))}
-            {/* Modal Close Button */}
-            <TouchableOpacity onPress={() => setShowModal(false)} style={[styles.closebutto, { backgroundColor: colorConfig.primaryColor, margin: 20, padding: 10, borderRadius: 5 }]}>
-              <Text style={[styles.closetext, { textAlign: 'center', color: 'white' }]}>
-                {translate("ChangePassword.Close Tips")}
+            <View
+              style={[
+                styles.texttitalView,
+                {backgroundColor: colorConfig.primaryColor},
+              ]}>
+              <View
+                style={[
+                  styles.cutout,
+                  {borderTopColor: colorConfig.primaryColor},
+                ]}
+              />
+              <Text style={styles.texttital}>
+                {translate('Password Security Tips')}
               </Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      </View>
-    </Modal>
+            </View>
 
-    {/* OTP Modal */}
-    <OTPModal
-      setShowOtpModal={setOtpModalVisible}
-      disabled={mobileOtp.length !== 4}
-      showOtpModal={otpModalVisible}
-      setMobileOtp={setMobileOtp}
-      verifyOtp={() => {
-        setOtpModalVisible(false);
-        changePassword();
-      }}
-    />
-  </View>
-);
+            <ScrollView>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                <View key={num} style={styles.tipcontant}>
+                  <Text style={styles.tipTitle}>
+                    {num}. {translate(`Tip Title ${num}`)}
+                  </Text>
+                  <Text style={styles.tipDescri}>
+                    {translate(`Tip Description ${num}`)}
+                  </Text>
+                </View>
+              ))}
+              {/* Modal Close Button */}
+              <TouchableOpacity
+                onPress={() => setShowModal(false)}
+                style={[
+                  styles.closebutto,
+                  {
+                    backgroundColor: colorConfig.primaryColor,
+                    margin: 20,
+                    padding: 10,
+                    borderRadius: 5,
+                  },
+                ]}>
+                <Text
+                  style={[
+                    styles.closetext,
+                    {textAlign: 'center', color: 'white'},
+                  ]}>
+                  {translate('ChangePassword.Close Tips')}
+                </Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
+
+      {/* OTP Modal */}
+      <OTPModal
+        setShowOtpModal={setOtpModalVisible}
+        disabled={mobileOtp.length !== 4}
+        showOtpModal={otpModalVisible}
+        setMobileOtp={setMobileOtp}
+        verifyOtp={() => {
+          setOtpModalVisible(false);
+          changePassword();
+        }}
+        inputCount={0}
+      />
+    </View>
+  );
 };
 const styles = StyleSheet.create({
   main: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: hScale(25),
   },
   passtipcontainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: hScale(30),
   },
   shomodalbtn: {
     width: wScale(35),
     height: wScale(35),
-    alignItems: "center",
+    alignItems: 'center',
   },
   animetedView: {
     borderRadius: wScale(20),
-    alignItems: "center",
+    alignItems: 'center',
     marginLeft: wScale(5),
   },
   shomodaltext: {
-    color: "white",
+    color: 'white',
     fontSize: wScale(27),
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   passtip: {
     fontSize: wScale(25),
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   centerModal: {
-    alignItems: "center",
-    justifyContent: "flex-end",
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     flex: 1,
-    backgroundColor: "rgba(0,0,0,.6)",
+    backgroundColor: 'rgba(0,0,0,.6)',
   },
   modalView: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingTop: hScale(50),
     borderRadius: wScale(10),
     elevation: 5,
@@ -456,10 +499,10 @@ const styles = StyleSheet.create({
     width: wScale(190),
     height: hScale(40),
     borderTopLeftRadius: wScale(5),
-    position: "absolute",
+    position: 'absolute',
     top: hScale(-1),
     left: wScale(-1),
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingBottom: hScale(3),
     borderBottomRightRadius: 0,
   },
@@ -471,10 +514,10 @@ const styles = StyleSheet.create({
     borderLeftWidth: wScale(3), // Width of the triangle
     width: wScale(90),
     height: hScale(40),
-    borderRightColor: "transparent", // Hide the right edge
-    borderBottomColor: "transparent", // Hide the bottom edge
-    borderLeftColor: "transparent", // Hide the left edge
-    position: "absolute",
+    borderRightColor: 'transparent', // Hide the right edge
+    borderBottomColor: 'transparent', // Hide the bottom edge
+    borderLeftColor: 'transparent', // Hide the left edge
+    position: 'absolute',
     right: wScale(-50),
     zIndex: wScale(0),
     top: wScale(0),
@@ -485,34 +528,34 @@ const styles = StyleSheet.create({
   },
   texttital: {
     fontSize: wScale(18),
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: 'bold',
+    color: '#fff',
     width: 240,
     paddingLeft: wScale(10),
   },
 
   tipTitle: {
     fontSize: wScale(20),
-    fontWeight: "bold",
-    color: "#000",
+    fontWeight: 'bold',
+    color: '#000',
   },
   tipDescri: {
     fontSize: wScale(16),
-    textAlign: "justify",
-    color: "#000",
+    textAlign: 'justify',
+    color: '#000',
   },
   closebuttoX: {
     borderRadius: wScale(24),
     paddingVertical: hScale(5),
-    alignItems: "center",
+    alignItems: 'center',
     height: wScale(48),
     width: wScale(48),
-    justifyContent: "center",
+    justifyContent: 'center',
     elevation: 5,
   },
   cutborder: {
     paddingLeft: wScale(2),
-    position: "absolute",
+    position: 'absolute',
     right: wScale(-12),
     top: hScale(-12),
     borderRadius: wScale(24),
@@ -520,34 +563,34 @@ const styles = StyleSheet.create({
   },
   closebutto: {
     borderRadius: wScale(4),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     height: wScale(55),
   },
 
   closetext: {
     fontSize: wScale(20),
-    color: "white",
+    color: 'white',
   },
   subnitbtn: {
-    alignItems: "center",
+    alignItems: 'center',
     height: hScale(55),
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: wScale(5),
   },
   submittext: {
     fontSize: wScale(18),
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   LinearGradient: {
-    width: "100%",
+    width: '100%',
     borderRadius: wScale(5),
     marginTop: wScale(10),
   },
   righticon: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(20),
     top: hScale(12),
     opacity: 0.2,

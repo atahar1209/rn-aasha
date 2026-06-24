@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,14 +6,10 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  SafeAreaView,
-  StatusBar,
   Alert,
   Platform,
   Linking,
   ScrollView,
-  ActivityIndicator,
-  Animated,
   ToastAndroid,
 } from 'react-native';
 import {
@@ -21,32 +17,38 @@ import {
   CameraOptions,
   ImagePickerResponse,
 } from 'react-native-image-picker';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { useSelector } from 'react-redux';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {useSelector} from 'react-redux';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
-import { useLocationHook } from '../../hooks/useLocationHook';
+import {useNavigation} from '@react-navigation/native';
+import {useLocationHook} from '../../hooks/useLocationHook';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { RootState } from '../../reduxUtils/store';
-import { APP_URLS } from '../../utils/network/urls';
+import {RootState} from '../../reduxUtils/store';
+import {APP_URLS} from '../../utils/network/urls';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
-import GradientBorder from '../../components/AnimatedBorderView';
-import { hScale, SCREEN_HEIGHT, SCREEN_WIDTH, wScale } from '../../utils/styles/dimensions';
+import {
+  hScale,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  wScale,
+} from '../../utils/styles/dimensions';
 import ShareGoback from '../../components/ShareGoback';
 import MovingDotBorderText from '../../components/AnimatedBorderView';
 import ShowLoader from '../../components/ShowLoder';
-import DynamicButton from '../drawer/button/DynamicButton';
-import { translate } from '../../utils/languageUtils/I18n';
+import {translate} from '../../utils/languageUtils/I18n';
 
-
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const SelfieScreen: React.FC = () => {
-  const { post } = useAxiosHook()
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
-  const { isLocationPermissionGranted, getLocation, checkLocationPermissionStatus, getLatLongValue } = useLocationHook();
+  const {post} = useAxiosHook();
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
+  const {
+    isLocationPermissionGranted,
+    getLocation,
+    checkLocationPermissionStatus,
+    getLatLongValue,
+  } = useLocationHook();
 
   const [base64Img, setBase64Img] = useState<string>();
   const [loading, setLoading] = useState(false);
@@ -55,11 +57,11 @@ const SelfieScreen: React.FC = () => {
   const [addressError, setAddressError] = useState<boolean>(false);
   const viewShotRef = useRef<ViewShot>(null);
 
-  const { Loc_Data } = useSelector((state: any) => state.userInfo || {});
-  const latitude = Loc_Data['latitude'] || '0';
-  const longitude = Loc_Data['longitude'] || '0';
+  const {Loc_Data} = useSelector((state: any) => state.userInfo || {});
+  const latitude = Loc_Data.latitude || '0';
+  const longitude = Loc_Data.longitude || '0';
   const navigation = useNavigation();
-  const [id, setId] = useState('')
+  const [id, setId] = useState('');
   /* ---------------- Permission ---------------- */
   const handleCameraPermission = async () => {
     const permission =
@@ -73,17 +75,23 @@ const SelfieScreen: React.FC = () => {
       openCamera();
     } else if (status === RESULTS.DENIED) {
       const result = await request(permission);
-      if (result === RESULTS.GRANTED) openCamera();
+      if (result === RESULTS.GRANTED) {
+        openCamera();
+      }
     } else {
-      Alert.alert('Permission Blocked', 'Please Allow Camera permission', [
-        { text: 'Cancel' },
-        { text: 'Settings', onPress: Linking.openSettings },
-      ]);
+      Alert.alert(
+        translate('Permission Blocked'),
+        translate('Please Allow Camera permission'),
+        [
+          {text: translate('Cancel')},
+          {text: translate('Settings'), onPress: Linking.openSettings},
+        ],
+      );
     }
   };
   const init = async () => {
     try {
-      const res1 = await post({ url: APP_URLS.RCEID });
+      const res1 = await post({url: APP_URLS.RCEID});
       console.log('INIT API RESPONSE 👉', res1);
 
       if (res1) {
@@ -111,7 +119,6 @@ const SelfieScreen: React.FC = () => {
   };
 
   useEffect(() => {
-
     init();
   }, []);
   const checkLocationPermission = async () => {
@@ -122,7 +129,9 @@ const SelfieScreen: React.FC = () => {
 
     const status = await check(permission);
 
-    if (status === RESULTS.GRANTED) return true;
+    if (status === RESULTS.GRANTED) {
+      return true;
+    }
 
     if (status === RESULTS.DENIED) {
       const result = await request(permission);
@@ -130,11 +139,11 @@ const SelfieScreen: React.FC = () => {
     }
 
     Alert.alert(
-      'Location Permission',
-      'key_pleaseena_66',
+      translate('Location Permission'),
+      translate('key_pleaseena_66'),
       [
-        { text: 'Cancel' },
-        { text: 'Open Settings', onPress: Linking.openSettings },
+        {text: translate('Cancel')},
+        {text: translate('Open Settings'), onPress: Linking.openSettings},
       ],
     );
     return false;
@@ -142,10 +151,7 @@ const SelfieScreen: React.FC = () => {
   /* ---------------- Open Camera ---------------- */
   const openCamera = () => {
     if (!latitude || !longitude || latitude === '0' || longitude === '0') {
-      Alert.alert(
-        'Location Info',
-        'key_unableto_107',
-      );
+      Alert.alert(translate('Location Info'), translate('key_unableto_107'));
       return;
     }
     const options: CameraOptions = {
@@ -156,15 +162,19 @@ const SelfieScreen: React.FC = () => {
     };
 
     launchCamera(options, async (res: ImagePickerResponse) => {
-      if (res.didCancel) return;
+      if (res.didCancel) {
+        return;
+      }
 
       if (res.errorCode) {
-        Alert.alert('Camera Error', res.errorMessage || '');
+        Alert.alert(translate('Camera Error'), res.errorMessage || '');
         return;
       }
 
       const asset = res.assets?.[0];
-      if (!asset?.base64) return;
+      if (!asset?.base64) {
+        return;
+      }
 
       setBase64Img(asset.base64);
       fetchAddress(latitude, longitude);
@@ -190,7 +200,7 @@ const SelfieScreen: React.FC = () => {
       );
 
       if (!res.ok) {
-        throw new Error(`API Error: ${res.status}`);
+        throw new Error(`${translate('API Error')}: ${res.status}`);
       }
 
       const data = await res.json();
@@ -199,7 +209,7 @@ const SelfieScreen: React.FC = () => {
         let add = '';
         //const displayAddress = `${add.road || ''} ${add.}`
 
-        add = formatAddress(data.address)
+        add = formatAddress(data.address);
         setAddressData(add);
       } else {
         setAddressData(null);
@@ -222,7 +232,6 @@ const SelfieScreen: React.FC = () => {
       // );
     }
   }, [addressError]);
-
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -259,41 +268,45 @@ const SelfieScreen: React.FC = () => {
         res?.Content?.ADDINFO?.status === true
       ) {
         ToastAndroid.showWithGravity(
-          'Image uploaded successfully.',
+          translate('Image uploaded successfully.'),
           ToastAndroid.LONG,
-          ToastAndroid.CENTER
+          ToastAndroid.CENTER,
         );
-        init()
-        navigation.navigate('ImgPendingcms')
+        init();
+        navigation.navigate('ImgPendingcms');
       } else {
         Alert.alert(
-          'Failed',
-          res?.Content?.ADDINFO?.message || 'Upload failed'
+          translate('Failed'),
+          res?.Content?.ADDINFO?.message || translate('Upload failed'),
         );
       }
-
     } catch (error) {
       console.log('API ERROR ❌', error);
-      Alert.alert('Error', 'Something went wrong');
+      Alert.alert(translate('Error'), translate('Something went wrong'));
     } finally {
       setLoading(false);
     }
   };
 
-
   /* ---------------- Share ---------------- */
   const handleShare = async () => {
-    if (!finalImageUri) return;
+    if (!finalImageUri) {
+      return;
+    }
     try {
       await Share.open({
-        title: 'GPS Photo',
+        title: translate('GPS Photo'),
         url: finalImageUri,
-        message: `GPS Photo\nLatitude: ${latitude}\nLongitude: ${longitude}`,
+        message: `${translate('GPS Photo')}\n${translate(
+          'Latitude',
+        )}: ${latitude}\n${translate('Longitude')}: ${longitude}`,
       });
-    } catch { }
+    } catch {}
   };
   const formatAddress = (address: any): string => {
-    if (!address) return '';
+    if (!address) {
+      return '';
+    }
 
     const parts = [
       address.road,
@@ -307,11 +320,6 @@ const SelfieScreen: React.FC = () => {
     return parts.filter(Boolean).join(', ');
   };
 
-
-
-
-
-
   return (
     <View style={styles.main}>
       <AppBarSecond title={'Selfie with Store'} />
@@ -319,7 +327,11 @@ const SelfieScreen: React.FC = () => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.container}>
           <View style={styles.headerText}>
-            <MovingDotBorderText title={'key_pleaseupl_62'} />
+            <MovingDotBorderText
+              title={translate('key_pleaseupl_62')}
+              children={undefined}
+              height={undefined}
+            />
           </View>
 
           <ViewShot ref={viewShotRef}>
@@ -328,17 +340,18 @@ const SelfieScreen: React.FC = () => {
                 style={[
                   styles.cameraFrame,
                   base64Img ? styles.activeBorder : styles.inactiveBorder,
-                ]}
-              >
+                ]}>
                 {base64Img ? (
                   <Image
-                    source={{ uri: `data:image/jpeg;base64,${base64Img}` }}
+                    source={{uri: `data:image/jpeg;base64,${base64Img}`}}
                     style={styles.capturedImage}
                   />
                 ) : (
-                  <TouchableOpacity style={styles.placeholder} onPress={handleCameraPermission}>
-                    <Text style={{ fontSize: 50 }}>📸</Text>
-                    <Text>{translate("No Photo")}</Text>
+                  <TouchableOpacity
+                    style={styles.placeholder}
+                    onPress={handleCameraPermission}>
+                    <Text style={{fontSize: 50}}>📸</Text>
+                    <Text>{translate('No Photo')}</Text>
                   </TouchableOpacity>
                 )}
 
@@ -350,7 +363,7 @@ const SelfieScreen: React.FC = () => {
                       </Text>
                     ) : (
                       <Text style={styles.overlayAddress}>
-                        📍 {translate("Location unavailable")}
+                        📍 {translate('Location unavailable')}
                       </Text>
                     )}
 
@@ -362,39 +375,33 @@ const SelfieScreen: React.FC = () => {
                       {new Date().toLocaleString()}
                     </Text>
                   </View>
-
                 )}
               </View>
             </View>
           </ViewShot>
           {addressError && (
-            <Text style={{ fontSize: 11, color: '#D63031', marginTop: 4 }}>
-             { translate("Address not available, showing GPS only")}
+            <Text style={{fontSize: 11, color: '#D63031', marginTop: 4}}>
+              {translate('Address not available, showing GPS only')}
             </Text>
           )}
           {/* LAT LONG SCREEN DISPLAY */}
 
-
           {loading && <ShowLoader />}
 
-
-
           {base64Img ? (
-            <ShareGoback onGoBack={handleCameraPermission} submit={handleSubmit}
-              goBackIcon={'camera-reverse'} goBackTitle='Retake' />
-
-          ) :
+            <ShareGoback
+              onGoBack={handleCameraPermission}
+              submit={handleSubmit}
+              goBackIcon={'camera-reverse'}
+              goBackTitle="Retake"
+            />
+          ) : (
             <View style={styles.footer}>
               <ShareGoback onCamera={handleCameraPermission} />
-            </View>}
-
-
-
-
-
+            </View>
+          )}
         </View>
       </ScrollView>
-
     </View>
   );
 };
@@ -403,8 +410,8 @@ export default SelfieScreen;
 
 /* ---------------- STYLES ---------------- */
 const styles = StyleSheet.create({
-  main: { flex: 1, backgroundColor: '#F8F9FA' },
-  container: { flex: 1, paddingHorizontal: wScale(10) },
+  main: {flex: 1, backgroundColor: '#F8F9FA'},
+  container: {flex: 1, paddingHorizontal: wScale(10)},
 
   headerRow: {
     marginTop: hScale(20),
@@ -414,10 +421,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  title: { fontSize: wScale(24), fontWeight: 'bold', color: '#2D3436' },
-  subtitle: { fontSize: wScale(14), color: '#636E72' },
+  title: {fontSize: wScale(24), fontWeight: 'bold', color: '#2D3436'},
+  subtitle: {fontSize: wScale(14), color: '#636E72'},
 
-  scrollContent: { paddingVertical: hScale(0) },
+  scrollContent: {paddingVertical: hScale(0)},
 
   captureContainer: {
     backgroundColor: '#FFF',
@@ -426,9 +433,9 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: wScale(10),
-    shadowOffset: { width: 0, height: hScale(4) },
+    shadowOffset: {width: 0, height: hScale(4)},
     elevation: 6,
-    marginBottom: hScale(30)
+    marginBottom: hScale(30),
   },
 
   cameraFrame: {
@@ -441,12 +448,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  activeBorder: { borderColor: '#34C759' },
-  inactiveBorder: { borderColor: '#007AFF', borderStyle: 'dashed' },
+  activeBorder: {borderColor: '#34C759'},
+  inactiveBorder: {borderColor: '#007AFF', borderStyle: 'dashed'},
 
-  capturedImage: { width: '100%', height: '100%' },
+  capturedImage: {width: '100%', height: '100%'},
 
-  placeholder: { alignItems: 'center' },
+  placeholder: {alignItems: 'center'},
 
   gpsOverlay: {
     position: 'absolute',
@@ -483,7 +490,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.08,
     shadowRadius: wScale(8),
-    shadowOffset: { width: 0, height: hScale(3) },
+    shadowOffset: {width: 0, height: hScale(3)},
     elevation: 4,
   },
 
@@ -495,8 +502,7 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 
   btn: {

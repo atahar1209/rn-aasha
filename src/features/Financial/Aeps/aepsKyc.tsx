@@ -1,24 +1,24 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useCallback, useEffect, useState } from 'react';
-import { 
-  View, 
-  Text, 
-  ScrollView, 
-  Alert, 
-  StyleSheet, 
-  ToastAndroid 
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  StyleSheet,
+  ToastAndroid,
 } from 'react-native';
-import { useDeviceInfoHook } from '../../../utils/hooks/useDeviceInfoHook';
-import { useNavigation } from '@react-navigation/native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { APP_URLS } from '../../../utils/network/urls';
+import {useDeviceInfoHook} from '../../../utils/hooks/useDeviceInfoHook';
+import {useNavigation} from '@react-navigation/native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
 import DynamicButton from '../../drawer/button/DynamicButton';
 import OTPModal from '../../../components/OTPModal';
 import ShowLoader from '../../../components/ShowLoder';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 
 const Aepsekyc = () => {
   const [MailOtp, setMailOtp] = useState('');
@@ -27,17 +27,19 @@ const Aepsekyc = () => {
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [primarykeyid, setprimarykeyid] = useState('');
   const [encodeFPTxnId, setencodeFPTxnId] = useState('');
-  
-  const navigation = useNavigation<any>();
-  const { post } = useAxiosHook();
-  const { Loc_Data, activeAepsLine } = useSelector((state: RootState) => state.userInfo);
 
-  const { latitude, longitude } = Loc_Data;
-  const { getMobileDeviceId } = useDeviceInfoHook();
-  
+  const navigation = useNavigation<any>();
+  const {post} = useAxiosHook();
+  const {Loc_Data, activeAepsLine} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
+
+  const {latitude, longitude} = Loc_Data;
+  const {getMobileDeviceId} = useDeviceInfoHook();
+
   // Dynamic Theme Colors
   const themeColor = activeAepsLine ? '#1FAA59' : '#F4C430'; // Green vs Yellow
-  const themeBg = activeAepsLine ? '#E8F5E9' : '#FFFDE7';    // Light Green vs Light Yellow
+  const themeBg = activeAepsLine ? '#E8F5E9' : '#FFFDE7'; // Light Green vs Light Yellow
   const textColor = activeAepsLine ? '#1B5E20' : '#856404'; // Deep Green vs Deep Brown
 
   const Model = getMobileDeviceId();
@@ -45,88 +47,135 @@ const Aepsekyc = () => {
   // Date Formatting Logic
   const now = new Date();
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const formattedDate = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const formattedDate = `${days[now.getDay()]} ${now.getDate()} ${
+    months[now.getMonth()]
+  } ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
   useEffect(() => {
     if (!latitude || !longitude || latitude.length < 1) {
-      ToastAndroid.show('Fetching Location...', ToastAndroid.SHORT);
+      ToastAndroid.show(translate('Fetching Location'), ToastAndroid.SHORT);
     }
   }, [longitude, latitude]);
 
-  const kycotpsend = useCallback(async (deviceid: string) => {
-    setIsLoading(true);
-    try {
-      const url = activeAepsLine ? APP_URLS.sendekycotpNifi : APP_URLS.sendekycotp;
-      
-      const requestData = {
-        latitude: latitude || "0.0",
-        longitude: longitude || "0.0",
-        ImeiNo: deviceid ?? '',
-      };
+  const kycotpsend = useCallback(
+    async (deviceid: string) => {
+      setIsLoading(true);
+      try {
+        const url = activeAepsLine
+          ? APP_URLS.sendekycotpNifi
+          : APP_URLS.sendekycotp;
+        const requestData = {
+          latitude: latitude || '0.0',
+          longitude: longitude || '0.0',
+          ImeiNo: deviceid ?? '',
+        };
 
-      const headers = {
-        trnTimestam: formattedDate,
-        deviceIMEI: deviceid ?? '',
-      };
+        const headers = {
+          trnTimestam: formattedDate,
+          deviceIMEI: deviceid ?? '',
+        };
 
-      const response = await post({
-        url: url,
-        data: JSON.stringify(requestData),
-        config: { headers },
-      });
+        const response = await post({
+          url: url,
+          data: JSON.stringify(requestData),
+          config: {headers},
+        });
 
-      if (response?.Status) {
-        setprimarykeyid(response.primaryKeyId);
-        setencodeFPTxnId(response.encodeFPTxnId);
-        setShowOtpInput(true);
-        ToastAndroid.show(`OTP Sent: ${response.Message}`, ToastAndroid.SHORT);
-      } else {
-        Alert.alert('E-KYC Error', response?.Message || 'Failed to send OTP');
+        if (response?.Status) {
+          setprimarykeyid(response.primaryKeyId);
+          setencodeFPTxnId(response.encodeFPTxnId);
+          setShowOtpInput(true);
+          ToastAndroid.show(
+            `${translate('OTP Sent')}: ${response.Message}`,
+            ToastAndroid.SHORT,
+          );
+        } else {
+          Alert.alert(
+            translate('E-KYC Error'),
+            response?.Message || translate('Failed to send OTP'),
+          );
+        }
+      } catch (error: any) {
+        Alert.alert(
+          translate('Error'),
+          error.message || translate('Something went wrong'),
+        );
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Something went wrong');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [latitude, longitude, formattedDate, activeAepsLine, post]);
+    },
+    [latitude, longitude, formattedDate, activeAepsLine, post],
+  );
 
   const handleOtpSend = () => {
     if (!latitude || !longitude) {
-      Alert.alert("Location Missing", "Please enable GPS and wait for coordinates.");
+      Alert.alert(
+        translate('Location Missing'),
+        translate('Please enable GPS and wait for coordinates.'),
+      );
       return;
     }
     kycotpsend(Model);
   };
 
-  const verifyotp = useCallback(async (otp: string, deviceid: string, prikey: string, encodeFPTxnid: string) => {
-    setIsLoading(true);
-    try {
-      const requestBody = {
-        latitude: latitude,
-        longitude: longitude,
-        ImeiNo: deviceid,
-        otp: otp,
-        primaryKeyId: prikey,
-        encodeFPTxnId: encodeFPTxnid
-      };
+  const verifyotp = useCallback(
+    async (
+      otp: string,
+      deviceid: string,
+      prikey: string,
+      encodeFPTxnid: string,
+    ) => {
+      setIsLoading(true);
+      try {
+        const requestBody = {
+          latitude: latitude,
+          longitude: longitude,
+          ImeiNo: deviceid,
+          otp: otp,
+          primaryKeyId: prikey,
+          encodeFPTxnId: encodeFPTxnid,
+        };
 
-      const response = await post({
-        url: activeAepsLine ? 'AEPS/api/Nifi/data/EkycVerifyOtp' : 'AEPS/api/data/EkycVerifyOtp',
-        data: JSON.stringify(requestBody),
-      });
+        const response = await post({
+          url: activeAepsLine
+            ? 'AEPS/api/Nifi/data/EkycVerifyOtp'
+            : 'AEPS/api/data/EkycVerifyOtp',
+          data: JSON.stringify(requestBody),
+        });
 
-      if (response?.Status === true) {
-        navigation?.navigate("Aepsekycscan");
-      } else {
-        Alert.alert('Verification Failed', response?.Message || 'Invalid OTP');
+        if (response?.Status === true) {
+          navigation?.navigate('Aepsekycscan');
+        } else {
+          Alert.alert(
+            translate('Verification Failed'),
+            response?.Message || translate('Invalid OTP'),
+          );
+        }
+      } catch (error: any) {
+        Alert.alert(
+          translate('Error'),
+          error.message || translate('Verification process failed'),
+        );
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Verification process failed');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [latitude, longitude, activeAepsLine, navigation, post]);
+    },
+    [latitude, longitude, activeAepsLine, navigation, post],
+  );
 
   const handleVerifyOtp = async () => {
     const id = getMobileDeviceId();
@@ -136,42 +185,60 @@ const Aepsekyc = () => {
   return (
     <View style={styles.main}>
       <AppBarSecond title={'E-Kyc'} />
-      
       {/* Dynamic Status Bar */}
-      <View style={[styles.statusIndicator, { backgroundColor: themeColor }]}>
+      <View style={[styles.statusIndicator, {backgroundColor: themeColor}]}>
         <Text style={styles.statusText}>
-          {activeAepsLine ? '✅ LINE 1 (NIFI) ACTIVE' : '⚡ LINE 2 (STANDARD) ACTIVE'}
+          {activeAepsLine
+            ? translate('LINE 1 (NIFI) ACTIVE')
+            : translate('LINE 2 (STANDARD) ACTIVE')}
         </Text>
       </View>
 
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{flexGrow: 1}}>
         <View style={styles.container}>
           {!showOtpInput ? (
-            <View style={[styles.infoCard, { backgroundColor: themeBg, borderColor: themeColor }]}>
-              
-              <View style={[styles.iconCircle, { backgroundColor: themeColor }]}>
+            <View
+              style={[
+                styles.infoCard,
+                {backgroundColor: themeBg, borderColor: themeColor},
+              ]}>
+              <View style={[styles.iconCircle, {backgroundColor: themeColor}]}>
                 <Text style={styles.iconText}>!</Text>
               </View>
 
-              <Text style={[styles.title, { color: themeColor }]}>
-                {translate("EKYC_is_Not_Completed") || "E-KYC PENDING"}
+              <Text style={[styles.title, {color: themeColor}]}>
+                {translate('EKYC_is_Not_Completed') ||
+                  translate('E-KYC PENDING')}
               </Text>
 
               <View style={styles.contentBox}>
-                <Text style={[styles.infoText, { color: textColor }]}>• {translate("key_dearcus_143")}</Text>
-                <Text style={[styles.infoText, { color: textColor }]}>• {translate("key_forcomp_190")}</Text>
-                <Text style={[styles.infoText, { color: textColor }]}>• {translate("3_Please_firstly_Connect_Your_Mobile_with_Finger_Print_Scanner_Device_Morpho_Mantra_Startek")}</Text>
+                <Text style={[styles.infoText, {color: textColor}]}>
+                  • {translate('key_dearcus_143')}
+                </Text>
+                <Text style={[styles.infoText, {color: textColor}]}>
+                  • {translate('key_forcomp_190')}
+                </Text>
+                <Text style={[styles.infoText, {color: textColor}]}>
+                  •{' '}
+                  {translate(
+                    '3_Please_firstly_Connect_Your_Mobile_with_Finger_Print_Scanner_Device_Morpho_Mantra_Startek',
+                  )}
+                </Text>
               </View>
 
               <DynamicButton
                 onPress={handleOtpSend}
-                title={isLoading ? 'SENDING...' : 'PROCEED TO KYC'}
+                title={
+                  isLoading ? translate('SENDING') : translate('PROCEED TO KYC')
+                }
                 disabled={isLoading}
               />
             </View>
           ) : (
             <View style={styles.otpWrapper}>
-              <Text style={styles.otpHint}>Enter 6-digit OTP sent to your registered mobile</Text>
+              <Text style={styles.otpHint}>
+                {translate('Enter 6-digit OTP sent to your registered mobile')}
+              </Text>
               <OTPModal
                 inputCount={6}
                 setShowOtpModal={setOtpModalVisible1}
@@ -184,14 +251,13 @@ const Aepsekyc = () => {
           )}
         </View>
       </ScrollView>
-
       {isLoading && <ShowLoader />}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main: { flex: 1, backgroundColor: '#F9F9F9' },
+  main: {flex: 1, backgroundColor: '#F9F9F9'},
   statusIndicator: {
     paddingVertical: 4,
     alignItems: 'center',
@@ -214,7 +280,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 10,
   },
@@ -227,7 +293,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
   },
-  iconText: { color: '#FFF', fontSize: 24, fontWeight: 'bold' },
+  iconText: {color: '#FFF', fontSize: 24, fontWeight: 'bold'},
   title: {
     fontSize: hScale(18),
     fontWeight: '900',
@@ -255,7 +321,7 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 20,
     textAlign: 'center',
-  }
+  },
 });
 
 export default Aepsekyc;

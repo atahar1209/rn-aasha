@@ -1,57 +1,56 @@
-import React from "react";
+/* eslint-disable quotes */
+/* eslint-disable no-fallthrough */
+import React from 'react';
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
-  Image,
   TouchableOpacity,
   ScrollView,
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { SvgXml } from "react-native-svg";
-import { useNavigation } from "@react-navigation/native";
-import { hScale, wScale } from "../../utils/styles/dimensions";
-import { useSelector } from "react-redux";
-import { RootState } from "../../reduxUtils/store";
-import AppBar from "./headerAppbar/AppBar";
-import { translate } from "../../utils/languageUtils/I18n";
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {SvgXml} from 'react-native-svg';
+import {useNavigation} from '@react-navigation/native';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import AppBar from './headerAppbar/AppBar';
+import {translate} from '../../utils/languageUtils/I18n';
 const Security = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
   const navigation = useNavigation();
 
   const handleBack = () => {
     navigation.goBack();
   };
-  const handlePress = (key) => {
+  const handlePress = key => {
     switch (key) {
-      case "1":
-        navigation.navigate("Changepassword");
+      case '1':
+        navigation.navigate('Changepassword');
         break;
-      case "2":
-        navigation.navigate("ChangeForgotPin");
+      case '2':
+        navigation.navigate('ChangeForgotPin');
         break;
-      case "3":
-        {
-        }
-        navigation.navigate("MobileDeviceReg");
+      case '3':
+        navigation.navigate('MobileDeviceReg');
 
         break;
-      case "4":
-        navigation.navigate("ManageLogin");
+      case '4':
+        navigation.navigate('ManageLogin');
 
         break;
-      case "5":
-        navigation.navigate("SetOtpPass");
+      case '5':
+        navigation.navigate('SetOtpPass');
 
         break;
-      case "6":
-        navigation.navigate("ScreenLock");
+      case '6':
+        navigation.navigate('ScreenLock');
         break;
-      case "7":
-        navigation.navigate("MandatorySim");
-      case "8":
+      case '7':
+        navigation.navigate('MandatorySim');
+      case '8':
 
       //    navigation.navigate('LoginReport')
       default:
@@ -66,14 +65,14 @@ const Security = () => {
 
   const data = [
     {
-      key: "1",
+      key: '1',
       texts: [
         {
-          text: translate("Security.Change Login Password"),
+          text: translate('Security.Change Login Password'),
           style: styles.text1,
         },
         {
-          text: translate("Security.Change L & P"),
+          text: translate('Security.Change L & P'),
           style: styles.text2,
         },
       ],
@@ -81,14 +80,14 @@ const Security = () => {
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><rect width="512" height="512" rx="102.4" ry="102.4" fill="#fff" shape="rounded"></rect><g transform="matrix(0.88,0,0,0.88,30.720058593750053,30.71993637084961)"><path fill="#ffbc4b" fill-rule="evenodd" d="M107.955 236.124h13.517v-64.938c0-52.076 42.6-94.676 94.676-94.676 52.047 0 94.647 42.6 94.647 94.676v64.938h13.517c28.884 0 52.531 23.648 52.531 52.503v164.252c0 28.884-23.648 52.503-52.531 52.503H107.955c-28.884 0-52.503-23.619-52.503-52.503V288.627c.001-28.855 23.62-52.503 52.503-52.503zm68.837 0h78.683v-64.938c0-21.542-17.814-39.356-39.327-39.356-21.542 0-39.356 17.814-39.356 39.356z" clip-rule="evenodd" opacity="1" data-original="#23a8fe" class=""></path><path fill="#de8029" fill-rule="evenodd" d="M376.843 306.27v133.348H252.572l-57.027 55.235V306.27z" clip-rule="evenodd" opacity="1" data-original="#0083e0" class=""></path><path fill="#6d46bc" fill-rule="evenodd" d="M428.13 182.54c-8.124-43.792-29.63-83.979-62.25-115.46-40.4-38.99-93.575-60.463-149.732-60.463C97.239 6.618.5 103.344.5 222.238c0 6.09 4.954 11.045 11.044 11.045s11.044-4.955 11.044-11.045c0-106.713 86.831-193.53 193.559-193.53 93.478 0 171.285 65.376 189.498 153.833H375.79l43.539 50.824 43.51-50.824H428.13z" clip-rule="evenodd" opacity="1" data-original="#ffb74d" class=""></path><path fill="#de8029" fill-rule="evenodd" d="M208.578 76.824a95.118 95.118 0 0 1 7.569-.313c52.047 0 94.647 42.6 94.647 94.676v64.91a56.582 56.582 0 0 0-3.13-.085h-13.517v-64.967c.001-49.003-37.733-89.611-85.569-94.221zm102.814 159.3h12.919c28.884 0 52.531 23.648 52.531 52.503v164.252c0 28.884-23.648 52.503-52.531 52.503h-2.134c22.025-6.659 38.018-28.599 38.018-52.645V288.513c.001-27.631-21.626-50.453-48.803-52.389zm-103.269-103.44c-17.757 3.756-31.331 19.72-31.331 38.502v64.824h-16.647v-64.967c0-21.513 17.814-39.327 39.356-39.327a39.32 39.32 0 0 1 8.622.968z" clip-rule="evenodd" opacity="1" data-original="#0083e0" class=""></path><path fill="#6d46bc" fill-rule="evenodd" d="M481.791 285.44H159.149c-16.334 0-29.709 13.375-29.709 29.709v73.902c0 16.363 13.375 29.709 29.709 29.709h36.396v55.263l57.027-55.263h229.219c16.334 0 29.709-13.346 29.709-29.709v-73.902c0-16.334-13.375-29.709-29.709-29.709z" clip-rule="evenodd" opacity="1" data-original="#ffb74d" class=""></path><g fill="#eaf6ff"><path d="M259.883 332.777a7.03 7.03 0 0 0-9.602-2.572l-16.832 9.719v-19.426a7.029 7.029 0 0 0-14.058 0v19.426l-16.831-9.719a7.029 7.029 0 1 0-7.03 12.174l16.834 9.721-16.834 9.721a7.029 7.029 0 0 0 3.521 13.118 7.003 7.003 0 0 0 3.509-.943l16.831-9.719v19.426a7.029 7.029 0 0 0 14.058 0v-19.426l16.832 9.719a7.024 7.024 0 0 0 9.602-2.573 7.029 7.029 0 0 0-2.572-9.602l-16.834-9.721 16.834-9.721a7.029 7.029 0 0 0 2.572-9.602zM353.933 332.777a7.03 7.03 0 0 0-9.602-2.572l-16.832 9.72v-19.426a7.029 7.029 0 0 0-14.058 0v19.426l-16.831-9.719a7.029 7.029 0 1 0-7.03 12.174l16.834 9.721-16.834 9.721a7.028 7.028 0 0 0-2.572 9.602 7.027 7.027 0 0 0 9.602 2.573l16.831-9.719v19.426a7.029 7.029 0 0 0 14.058 0v-19.426l16.832 9.72a7.024 7.024 0 0 0 9.602-2.573 7.029 7.029 0 0 0-2.572-9.602l-16.834-9.721 16.834-9.721a7.032 7.032 0 0 0 2.572-9.604zM445.382 361.821l-16.827-9.722 16.827-9.722a7.03 7.03 0 0 0-7.032-12.173l-16.802 9.708v-19.415a7.029 7.029 0 0 0-14.058 0v19.432l-16.831-9.724a7.03 7.03 0 0 0-7.032 12.173l16.827 9.722-16.827 9.722a7.03 7.03 0 0 0 7.032 12.173l16.831-9.724v19.432a7.029 7.029 0 0 0 14.058 0v-19.415l16.802 9.708a7.024 7.024 0 0 0 9.602-2.57 7.03 7.03 0 0 0-2.57-9.605z" fill="#ffffff" opacity="1" data-original="#eaf6ff" class=""></path></g><path fill="#472887" fill-rule="evenodd" d="M140.339 304.25h322.614c16.334 0 29.709 13.375 29.709 29.709v73.93a30.02 30.02 0 0 1-1.508 9.362c11.781-3.956 20.347-15.111 20.347-28.201v-73.902c0-16.334-13.375-29.709-29.709-29.709H159.149c-13.062 0-24.245 8.537-28.201 20.347a29.4 29.4 0 0 1 9.391-1.536z" clip-rule="evenodd" opacity="1" data-original="#e09109" class=""></path></g></svg>            `,
     },
     {
-      key: "2",
+      key: '2',
       texts: [
         {
-          text: translate("Security.Change or Forget PIN"),
+          text: translate('Security.Change or Forget PIN'),
           style: styles.text1,
         },
         {
-          text: translate("Security.Forget PIN"),
+          text: translate('Security.Forget PIN'),
           style: styles.text2,
         },
       ],
@@ -97,14 +96,14 @@ const Security = () => {
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 500 500" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><rect width="500" height="500" rx="100" ry="100" fill="#e5e5e5" shape="rounded"></rect><g transform="matrix(1.0000000000000002,0,0,1.0000000000000002,-4.999999999999972,-15.000000000000028)"><path fill="#947bff" d="M254.335 251.518H113.752L63.638 275.66 48.35 335.973H206.34l15.253-16.009h111.648s-23.962-54.426-78.906-68.446z" opacity="1" data-original="#947bff" class=""></path><path fill="#7b5cff" d="M333.241 319.964s-18.306-41.577-59.605-61.413c-12.014 25.306-56.192 73.23-216.743 43.723l-8.541 33.699H206.34l15.254-16.009H333.24z" opacity="1" data-original="#7b5cff" class=""></path><path fill="#0ce433" d="M432.61 319.33H224.568c-9.117 0-16.507 7.39-16.507 16.508v70.597c0 9.116 7.39 16.507 16.507 16.507H432.61c9.117 0 16.507-7.39 16.507-16.507v-70.597c0-9.117-7.39-16.508-16.507-16.508z" opacity="1" data-original="#3ac3ed" class=""></path><path fill="#3afc03" d="M449.117 335.838c0-9.117-7.39-16.508-16.507-16.508h-22.937c1.814 35.956-17.388 104.423-201.613 72.17v14.935c0 9.116 7.391 16.507 16.508 16.507H432.61c9.116 0 16.507-7.39 16.507-16.507z" opacity="1" data-original="#20a9c9" class=""></path><path fill="#ff786e" d="M408.897 189.498h-71.382c-9.367 0-16.961 7.593-16.961 16.961v54.888c0 9.367 7.594 16.961 16.96 16.961h71.382c9.368 0 16.961-7.594 16.961-16.96v-54.889c0-9.368-7.593-16.961-16.96-16.961z" opacity="1" data-original="#ff786e"></path><path fill="#ea433f" d="M337.515 278.308h71.381c9.368 0 16.961-7.594 16.961-16.96v-54.889c0-6.814-4.027-12.674-9.824-15.37 2.55 27.231-9.446 65.407-95.48 67.89v2.368c0 9.367 7.594 16.961 16.962 16.961z" opacity="1" data-original="#ea433f"></path><path fill="#7b5cff" d="m101.488 203.454 16.07-26.22 9.305-2.538s16.061 55.963 37.215 67.242l-15.224 36.37s-41.445-22.837-47.366-74.854z" opacity="1" data-original="#7b5cff" class=""></path><path fill="#f7f9f8" d="M165.77 247.013h35.916L211.022 280s-10.573 11.87-30.026 11.645-32.141-7.265-32.141-7.265z" opacity="1" data-original="#f7f9f8" class=""></path><path fill="#e2e2e2" d="M195.947 247.013c-6.98 14.884-20.689 34.419-43.034 28.4l-4.06 8.967s12.688 7.038 32.142 7.264C200.448 291.871 211.02 280 211.02 280l-9.335-32.986z" opacity="1" data-original="#e2e2e2"></path><path fill="#f7f9f8" d="M126.862 174.696s22.976 76.123 54.202 69.357 39.26-26.643 39.26-26.643l14.802-46.52s-70.202-32.987-108.264 3.806z" opacity="1" data-original="#f7f9f8" class=""></path><path fill="#e2e2e2" d="M228.038 167.951c-8.632 16.8-36.937 62.54-83.344 48.383 9.434 16.453 22.03 30.826 36.37 27.719 31.225-6.767 39.26-26.643 39.26-26.643l14.802-46.52s-2.611-1.226-7.088-2.939z" opacity="1" data-original="#e2e2e2"></path><path fill="#947bff" d="M95.99 193.718s85.639-91.991 164.3 0c0 0-5.71-111.639-72.952-118.616s-80.56 71.682-80.56 71.682z" opacity="1" data-original="#947bff" class=""></path><path fill="#7b5cff" d="M214.987 85.522c14.543 20.858 24.453 50.176-13.3 69.447 19.014 4.357 39.024 15.853 58.602 38.749 0 0-4.042-78.923-45.302-108.196z" opacity="1" data-original="#7b5cff" class=""></path><path fill="#7b5cff" d="M239.779 171.58c-1.37-1.5-10.793 61.477-38.092 71.204l13.822 35.524s80.093-45.562 24.27-106.728z" opacity="1" data-original="#7b5cff" class=""></path><g fill="#0a0a0a"><path d="M341.53 290.66h63.95c17.4 0 31.555-14.155 31.555-31.555v-48.834c0-13.875-9.007-25.68-21.479-29.894v-27.31c0-22.415-18.236-40.65-40.65-40.65s-40.65 18.235-40.65 40.65a7.5 7.5 0 1 0 15 0c0-14.143 11.506-25.65 25.65-25.65s25.65 11.507 25.65 25.65v25.65H341.53c-17.399 0-31.553 14.156-31.553 31.554v48.834c0 17.4 14.154 31.555 31.553 31.555zm-16.554-80.389c0-9.127 7.425-16.553 16.553-16.553h63.951c9.128 0 16.555 7.426 16.555 16.553v48.834c0 9.128-7.427 16.555-16.555 16.555h-63.95c-9.129 0-16.554-7.427-16.554-16.554zM292.787 363.266c-1.238-3.847-5.565-5.742-9.231-4.041l-9.211 4.27 1.3-10.142c.515-4.021-2.618-7.581-6.672-7.581h-.03c-4.05 0-7.183 3.555-6.672 7.574l1.308 10.294-9.377-4.158c-3.643-1.615-7.883.273-9.12 4.061-1.26 3.858 1.157 7.944 5.144 8.697l9.912 1.874-6.932 7.474c-2.767 2.983-2.271 7.721 1.053 10.068l.065.046c3.263 2.303 7.803 1.272 9.75-2.214l5.071-9.076 4.86 8.972c1.955 3.609 6.659 4.64 9.945 2.18l.03-.022c3.19-2.389 3.616-7.013.915-9.944l-7.035-7.63 9.804-1.779c4.001-.726 6.448-4.808 5.202-8.679zM353.65 363.266c-1.239-3.847-5.566-5.742-9.233-4.041l-9.21 4.27 1.3-10.142c.515-4.021-2.618-7.581-6.672-7.581h-.03c-4.051 0-7.183 3.555-6.672 7.574l1.308 10.294-9.377-4.158c-3.643-1.615-7.884.273-9.12 4.061-1.26 3.858 1.157 7.944 5.144 8.697l9.911 1.874-6.931 7.474c-2.767 2.983-2.272 7.721 1.053 10.068l.065.046c3.263 2.303 7.803 1.272 9.75-2.214l5.07-9.076 4.86 8.972c1.955 3.609 6.66 4.64 9.945 2.18l.03-.022c3.191-2.389 3.617-7.013.915-9.944l-7.034-7.63 9.804-1.779c4-.726 6.447-4.808 5.202-8.679zM414.511 363.266c-1.238-3.847-5.565-5.742-9.232-4.041l-9.21 4.27 1.299-10.142c.515-4.021-2.617-7.581-6.671-7.581h-.03c-4.051 0-7.183 3.555-6.672 7.574l1.308 10.294-9.377-4.158c-3.643-1.615-7.884.273-9.12 4.061-1.26 3.858 1.157 7.944 5.144 8.697l9.91 1.874-6.93 7.474c-2.767 2.983-2.272 7.721 1.053 10.068l.065.046c3.263 2.303 7.802 1.272 9.75-2.214l5.07-9.076 4.86 8.972c1.955 3.609 6.659 4.64 9.945 2.18l.03-.022c3.191-2.389 3.616-7.013.915-9.944l-7.034-7.63 9.804-1.779c4-.726 6.447-4.808 5.202-8.679zM252.53 259.627l19.91 10.205a7.5 7.5 0 0 0 10.095-3.254 7.5 7.5 0 0 0-3.254-10.096l-18.463-9.463c8.592-15.818 9.06-28.517 9.017-31.805l.005-.061c7.923-67.317-22.755-110.071-49.94-134.102-23.077-20.4-57.428-19.87-79.901 1.232-23.744 22.295-51.382 63.457-48.22 132.939.04.876.237 1.704.549 2.472 1.245 9.875 4.62 19.594 10.053 29.035l-31.997 16.4a37.839 37.839 0 0 0-19.418 24.39l-9.89 39.113a7.5 7.5 0 0 0 14.541 3.678l9.89-39.114a22.832 22.832 0 0 1 11.719-14.717l33.677-17.26c6.942 8.763 15.728 17.225 26.324 25.275 13.046 9.913 28.438 14.914 43.926 14.914 13.53 0 27.136-3.816 39.316-11.511 14.546-9.19 24.812-18.958 32.06-28.27zm-34.757 12.053c-7.004-6.075-10.243-17.737-11.433-24.992 7.764-4.789 14.695-12.163 20.717-22.136 7.825-12.96 13.1-28.462 16.923-42.108 8.75 8.326 12.418 18.909 10.897 31.54a7.574 7.574 0 0 0-.05.71c-.002.105.003.208.005.313.002.105-.002.21.004.316.018.306 1.262 29.596-37.063 56.357zM133.1 174.137c.6-.281 1.21-.56 1.838-.837 14.491-6.376 31.824-9.476 48.724-9.476 17.394 0 34.317 3.295 47.203 9.679-8.22 30.962-21.192 64.768-47.781 64.768-35.318 0-47.634-52.204-49.984-64.134zm17.166-80.918c16.793-15.769 42.46-16.17 59.699-.93 18.332 16.205 38.416 41.887 44.37 79.291a61.884 61.884 0 0 0-5.751-4.824c-31.283-23.2-86.483-21.794-119.686-7.187-7.636 3.36-14.193 7.377-19.576 11.93 6.8-38.367 24.86-63.177 40.944-78.28zm-43.195 110.123c.516-4.949 2.99-13.03 12.478-20.854 1.737 7.39 4.948 18.668 10.329 30.041 7.002 14.798 15.79 25.715 26.019 32.506-.927 6.893-3.999 19.568-11.24 26.248-19.233-14.995-40.642-38.601-37.586-67.941zm50.648 76.001c4.603-5.292 8.164-12.272 10.62-20.843a81.473 81.473 0 0 0 1.665-6.982 48.935 48.935 0 0 0 13.08 1.752c3.114 0 6.133-.316 9.065-.915.361 1.773.816 3.72 1.39 5.763 2.479 8.82 6.128 15.977 10.87 21.371-15.082 6.596-31.924 6.494-46.69-.146z" fill="#000000" opacity="1" data-original="#0a0a0a" class=""></path><path d="M435.975 310.071H223.687c-12.78 0-23.178 10.398-23.178 23.179v77.375c0 12.781 10.398 23.179 23.179 23.179h212.287c12.78 0 23.179-10.398 23.179-23.179V333.25c0-12.781-10.398-23.179-23.179-23.179zm8.179 100.554c0 4.51-3.67 8.179-8.179 8.179H223.687c-4.51 0-8.178-3.67-8.178-8.179V333.25c0-4.51 3.669-8.179 8.179-8.179h212.287c4.51 0 8.179 3.67 8.179 8.179z" fill="#000000" opacity="1" data-original="#0a0a0a" class=""></path></g></g></svg>            `,
     },
     {
-      key: "3",
+      key: '3',
       texts: [
         {
-          text: translate("Security.Mob Registration Settings"),
+          text: translate('Security.Mob Registration Settings'),
           style: [styles.text1, styles.extra],
         },
         {
-          text: translate("Security.Registration"),
+          text: translate('Security.Registration'),
           style: styles.text2,
         },
       ],
@@ -113,14 +112,14 @@ const Security = () => {
 `,
     },
     {
-      key: "4",
+      key: '4',
       texts: [
         {
-          text: translate("Security.Manage Login Platform"),
+          text: translate('Security.Manage Login Platform'),
           style: styles.text1,
         },
         {
-          text: translate("Security.Manage Login"),
+          text: translate('Security.Manage Login'),
           style: styles.text2,
         },
       ],
@@ -129,14 +128,14 @@ const Security = () => {
 `,
     },
     {
-      key: "5",
+      key: '5',
       texts: [
         {
-          text: translate("Security.Set One Time Password"),
+          text: translate('Security.Set One Time Password'),
           style: styles.text1,
         },
         {
-          text: translate("Security.OTP setting"),
+          text: translate('Security.OTP setting'),
           style: styles.text2,
         },
       ],
@@ -145,14 +144,14 @@ const Security = () => {
             `,
     },
     {
-      key: "6",
+      key: '6',
       texts: [
         {
-          text: translate("Security.Screen Lock Setting"),
+          text: translate('Security.Screen Lock Setting'),
           style: styles.text1,
         },
         {
-          text: translate("Security.Screen Lock"),
+          text: translate('Security.Screen Lock'),
           style: styles.text2,
         },
       ],
@@ -160,14 +159,14 @@ const Security = () => {
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 64 64" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><rect width="64" height="64" rx="12.8" ry="12.8" fill="#e5e5e5" shape="rounded"></rect><g transform="matrix(1.0200000000000005,0,0,1.0200000000000005,-0.6400000000000148,-0.6500000000000057)"><linearGradient id="a" x1="33" x2="57" y1="43.23" y2="43.23" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0c408d"></stop><stop offset="1" stop-color="#015bbb"></stop></linearGradient><linearGradient id="b" x1="7" x2="40" y1="32" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#015bbb"></stop><stop offset="1" stop-color="#02aff8"></stop></linearGradient><linearGradient id="c" x1="11" x2="36" y1="32.5" y2="32.5" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#02aff8"></stop><stop offset="1" stop-color="#02dbf8"></stop></linearGradient><g data-name="personal device"><path fill="url(#a)" d="M57 31.42v8.86A19.2 19.2 0 0 1 45 58a19.3 19.3 0 0 1-4.74-2.78c-.22-.17-.43-.35-.64-.54A18.55 18.55 0 0 1 36 50.49a17.39 17.39 0 0 1-1.17-2.11A18.72 18.72 0 0 1 33 41.17v-9.75l3-.74 4-1 4.08-1 .92-.23 3.47.85.22.06z" opacity="1" data-original="url(#a)"></path><path fill="url(#b)" d="M33 31.42v9.74a18.72 18.72 0 0 0 1.81 7.21A17.39 17.39 0 0 0 36 50.49a18.55 18.55 0 0 0 3.62 4.19A4 4 0 0 1 36 57H11a4 4 0 0 1-4-4V11a4 4 0 0 1 4-4h25a4 4 0 0 1 4 4v18.7l-4 1z" opacity="1" data-original="url(#b)" class=""></path><circle cx="17" cy="10" r="1" fill="#015bbb" opacity="1" data-original="#015bbb"></circle><path fill="#015bbb" d="M31 11h-9a1 1 0 0 1 0-2h9a1 1 0 0 1 0 2z" opacity="1" data-original="#015bbb"></path><path fill="url(#c)" d="M33 31.42v9.74a18.72 18.72 0 0 0 1.81 7.21A17.39 17.39 0 0 0 36 50.49V52H11V13h25v17.68z" opacity="1" data-original="url(#c)" class=""></path><g fill="#fff"><circle cx="23.5" cy="22" r="4" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></circle><path d="M23.5 26a6.5 6.5 0 0 1 6.5 6.5V35H17v-2.5a6.5 6.5 0 0 1 6.5-6.5zM30 42H17a1 1 0 0 1 0-2h13a1 1 0 0 1 0 2zM30 47H17a1 1 0 0 1 0-2h13a1 1 0 0 1 0 2z" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></path><rect width="14" height="11" x="38" y="39" rx="3" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></rect><path d="M49 41h-8a1 1 0 0 1-1-1v-1a5 5 0 0 1 10 0v1a1 1 0 0 1-1 1zm-7-2h6a3 3 0 0 0-6 0z" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></path></g><path fill="#015bbb" d="M45 46a1 1 0 0 1-1-1v-1a1 1 0 0 1 2 0v1a1 1 0 0 1-1 1z" opacity="1" data-original="#015bbb"></path></g></g></svg>`,
     },
     {
-      key: "7",
+      key: '7',
       texts: [
         {
-          text: translate("Security.Mandatory SIM Setting"),
+          text: translate('Security.Mandatory SIM Setting'),
           style: styles.text1,
         },
         {
-          text: translate("Security.Set SIM"),
+          text: translate('Security.Set SIM'),
           style: styles.text2,
         },
       ],
@@ -190,7 +189,7 @@ const Security = () => {
     //     }
   ];
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <TouchableOpacity onPress={() => handlePress(item.key)} activeOpacity={0.7}>
       <View style={styles.changelogin}>
         <SvgXml xml={item.svg} width={wScale(102)} height={hScale(102)} />
@@ -209,24 +208,23 @@ const Security = () => {
   return (
     <LinearGradient
       colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-      style={styles.LinearGradient}
-    >
+      style={styles.LinearGradient}>
       <AppBar
-        title={"Manage Important Security"}
+        title={'Manage Important Security'}
         actionButton={undefined}
         onActionPress={undefined}
+        onPressBack={undefined}
       />
       <ScrollView>
         <View style={styles.description}>
           <View
             style={[
               styles.security,
-              { backgroundColor: colorConfig.secondaryColor },
-            ]}
-          >
+              {backgroundColor: colorConfig.secondaryColor},
+            ]}>
             <View style={styles.textContainer}>
               <Text style={styles.securitytext}>
-                {translate("MIS description2")}
+                {translate('MIS description2')}
               </Text>
             </View>
             <SvgXml
@@ -243,7 +241,7 @@ const Security = () => {
               <FlatList
                 data={data}
                 renderItem={renderItem}
-                keyExtractor={(item) => item.key}
+                keyExtractor={item => item.key}
               />
             </View>
           </View>
@@ -255,23 +253,23 @@ const Security = () => {
 
 const styles = StyleSheet.create({
   main: {
-    width: "100%",
+    width: '100%',
     paddingBottom: wScale(10),
     paddingHorizontal: wScale(10),
     flex: 1,
   },
   security: {
-    flexDirection: "row",
-    width: "100%",
+    flexDirection: 'row',
+    width: '100%',
     borderRadius: wScale(5),
-    alignItems: "center",
+    alignItems: 'center',
   },
-  extra: { width: wScale(240), marginRight: wScale(-10) },
+  extra: {width: wScale(240), marginRight: wScale(-10)},
   LinearGradient: {
     flex: 1,
   },
   description: {
-    backgroundColor: "rgba(225,225,225,0.4)",
+    backgroundColor: 'rgba(225,225,225,0.4)',
     borderTopRightRadius: wScale(5),
     borderTopLeftRadius: wScale(5),
     marginHorizontal: wScale(10),
@@ -279,52 +277,52 @@ const styles = StyleSheet.create({
   },
   shadow: {
     elevation: 2,
-    shadowColor: "#000",
+    shadowColor: '#000',
     marginHorizontal: wScale(10),
   },
   securitytext: {
     fontSize: wScale(14),
-    color: "white",
-    textAlign: "justify",
+    color: 'white',
+    textAlign: 'justify',
   },
   listcontainer: {
-    width: "100%",
-    backgroundColor: "rgba(225,225,225,0.4)",
+    width: '100%',
+    backgroundColor: 'rgba(225,225,225,0.4)',
     paddingHorizontal: wScale(8),
     paddingBottom: 5,
     borderBottomRightRadius: wScale(5),
     borderBottomLeftRadius: wScale(5),
   },
   changelogin: {
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginVertical: wScale(5),
     borderRadius: wScale(5),
     paddingVertical: wScale(2),
-    alignItems: "center",
+    alignItems: 'center',
     paddingRight: wScale(6),
     elevation: 2,
   },
 
   textContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingLeft: wScale(5),
     flex: 1,
   },
   text1: {
-    color: "black",
+    color: 'black',
     fontSize: wScale(20),
-    fontWeight: "bold",
+    fontWeight: 'bold',
     // textAlign: 'justify',
     paddingBottom: wScale(3),
     width: wScale(240),
-    textAlign: "center",
+    textAlign: 'center',
   },
   text2: {
-    color: "black",
+    color: 'black',
     fontSize: wScale(12),
-    textAlign: "justify",
+    textAlign: 'justify',
   },
   nextarrowstyle: {
     marginTop: hScale(20),

@@ -1,28 +1,45 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {
-  View, Text, StyleSheet, TextInput,
-  TouchableOpacity, ImageBackground, ToastAndroid,
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ImageBackground,
+  ToastAndroid,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { decryptData } from '../../../utils/encryptionUtils';
-import { useFocusEffect } from '@react-navigation/native';
+import {APP_URLS} from '../../../utils/network/urls';
+import {decryptData} from '../../../utils/encryptionUtils';
+import {useFocusEffect} from '@react-navigation/native';
 import ShowLoaderBtn from '../../../components/ShowLoaderBtn';
-import { setCmsAddMFrom } from '../../../reduxUtils/store/userInfoSlice';
+import {setCmsAddMFrom} from '../../../reduxUtils/store/userInfoSlice';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 // ─── Wallet Card ────────────────────────────────────────────────────────────
-const WalletCell = ({ label, value, loading, align }: {
-  label: string; value: number; loading: boolean;
+const WalletCell = ({
+  label,
+  value,
+  loading,
+  align,
+}: {
+  label: string;
+  value: number;
+  loading: boolean;
   align: 'flex-start' | 'center' | 'flex-end';
 }) => (
-  <View style={[styles.walletCell, { alignItems: align }]}>
+  <View style={[styles.walletCell, {alignItems: align}]}>
     <Text style={styles.label}>{label}</Text>
-    {loading ? <ShowLoaderBtn color="#000" /> : <Text style={styles.amount}>₹{value}</Text>}
+    {loading ? (
+      <ShowLoaderBtn color="#000" />
+    ) : (
+      <Text style={styles.amount}>₹{value}</Text>
+    )}
   </View>
 );
 
@@ -30,8 +47,10 @@ const WalletCell = ({ label, value, loading, align }: {
 export default function CmsQrAddMoney() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { colorConfig, IsDealer } = useSelector((state: RootState) => state.userInfo);
-  const { get } = useAxiosHook();
+  const {colorConfig, IsDealer} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
+  const {get} = useAxiosHook();
 
   const [loading, setLoading] = useState(true);
   const [amount, setAmount] = useState('');
@@ -55,7 +74,14 @@ export default function CmsQrAddMoney() {
 
       if (response?.data) {
         if (IsDealer) {
-          const { kkkk, vvvv, posremain, remainbal, holdandleanbal, cmsremainbal } = response.data;
+          const {
+            kkkk,
+            vvvv,
+            posremain,
+            remainbal,
+            holdandleanbal,
+            cmsremainbal,
+          } = response.data;
           setWalletData({
             remainbal: Number(decryptData(kkkk, vvvv, remainbal)) || 0,
             posremain: Number(decryptData(kkkk, vvvv, posremain)) || 0,
@@ -63,7 +89,9 @@ export default function CmsQrAddMoney() {
             cmsremainbal: Number(cmsremainbal) || 0,
           });
         } else {
-          const data = Array.isArray(response.data) ? response.data[0] : response.data;
+          const data = Array.isArray(response.data)
+            ? response.data[0]
+            : response.data;
           setWalletData({
             remainbal: Number(data?.remainbal) || 0,
             posremain: Number(data?.posremain) || 0,
@@ -83,42 +111,55 @@ export default function CmsQrAddMoney() {
     useCallback(() => {
       setAmount('');
       fetchWalletData();
-    }, [])
+    }, []),
   );
 
   // ── Add Money ──────────────────────────────────────────────────────────────
   const handleAddMoney = () => {
     if (!amount) {
-      ToastAndroid.show('Please enter amount', ToastAndroid.SHORT);
+      ToastAndroid.show(translate('Please enter amount'), ToastAndroid.SHORT);
       inputRef.current?.focus();
       return;
     }
     dispatch(setCmsAddMFrom('PageA'));
-    navigation.navigate('AddMoneyOptions', { amount, paymentMode: 'UPI' });
+    navigation.navigate('AddMoneyOptions', {amount, paymentMode: 'UPI'});
   };
 
   const walletItems = [
-    { label: 'Main Wallet', value: walletData.remainbal, align: 'flex-start' },
-    { label: 'POS Wallet', value: walletData.posremain, align: 'center' },
-    { label: 'Hold & Lean', value: walletData.holdandleanbal, align: 'center' },
-    { label: 'CMS Wallet', value: walletData.cmsremainbal, align: 'flex-end' },
+    {
+      label: translate('Main Wallet'),
+      value: walletData.remainbal,
+      align: 'flex-start',
+    },
+    {
+      label: translate('POS Wallet'),
+      value: walletData.posremain,
+      align: 'center',
+    },
+    {
+      label: translate('Hold & Lean'),
+      value: walletData.holdandleanbal,
+      align: 'center',
+    },
+    {
+      label: translate('CMS Wallet'),
+      value: walletData.cmsremainbal,
+      align: 'flex-end',
+    },
   ] as const;
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <ImageBackground
       source={require('../../../../assets/images/CmsAddMoneyBg.jpeg')}
-      imageStyle={styles.borderRadius}
-    >
+      imageStyle={styles.borderRadius}>
       <View
         style={[
           styles.container,
           styles.borderRadius,
-          { backgroundColor: `${colorConfig.secondaryColor}33` },
-        ]}
-      >
+          {backgroundColor: `${colorConfig.secondaryColor}33`},
+        ]}>
         <View style={styles.box}>
-
           {/* 🔹 WALLET BALANCE — single row */}
           <View style={styles.walletGrid}>
             {walletItems.map((item, i) => (
@@ -135,12 +176,11 @@ export default function CmsQrAddMoney() {
           {/* 🔹 INPUT + BUTTON */}
           <LinearGradient
             colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.actionBox}
-          >
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            style={styles.actionBox}>
             <View style={styles.inputBox}>
-              <Text style={styles.inputLabel}>Enter Amount</Text>
+              <Text style={styles.inputLabel}>{translate('Enter Amount')}</Text>
               <View style={styles.inputRow}>
                 <Text style={styles.rupee}>₹</Text>
                 <TextInput
@@ -157,11 +197,15 @@ export default function CmsQrAddMoney() {
               </View>
             </View>
 
-            <TouchableOpacity style={[styles.addButton,{backgroundColor:!amount ? 'rgba(0, 0, 0, 0.5)' : '#000'}]} onPress={handleAddMoney}>
-              <Text style={styles.btnText}>Add Money</Text>
+            <TouchableOpacity
+              style={[
+                styles.addButton,
+                {backgroundColor: !amount ? 'rgba(0, 0, 0, 0.5)' : '#000'},
+              ]}
+              onPress={handleAddMoney}>
+              <Text style={styles.btnText}>{translate('Add Money')}</Text>
             </TouchableOpacity>
           </LinearGradient>
-
         </View>
       </View>
     </ImageBackground>
@@ -194,7 +238,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wScale(8),
   },
   walletCell: {
-    alignItems: 'center',   // center ya 'flex-start' apne hisab se
+    alignItems: 'center', // center ya 'flex-start' apne hisab se
     flex: 1,
   },
   walletRowItem: {
@@ -204,7 +248,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#0002',
   },
-
 
   label: {
     color: '#000',
@@ -226,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  inputBox: { flex: 1 },
+  inputBox: {flex: 1},
   inputLabel: {
     color: '#fff',
     fontSize: wScale(13),

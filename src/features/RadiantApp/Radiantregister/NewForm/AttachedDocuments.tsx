@@ -1,6 +1,6 @@
 // screens/AttachedDocuments.tsx
 
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -10,37 +10,34 @@ import {
   Image,
   ActivityIndicator,
   Alert,
-  Platform,
   Modal,
 } from 'react-native';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 
-import {
-  StepBanner,
-  AppInput,
-  SectionCard,
-  NavRow,
-  getStepColor,
-} from '../../components/FormUI';
-import { colors } from '../../../../utils/styles/theme';
-import { useFormCtx } from './FormContext';
+import {SectionCard, NavRow, getStepColor} from '../../components/FormUI';
+import {colors} from '../../../../utils/styles/theme';
+import {useFormCtx} from './FormContext';
 import useAxiosHook from '../../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../../utils/network/urls';
-import { toast } from './AadhaarPanVerification/types';
-import { hScale, wScale } from '../../../../utils/styles/dimensions';
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
+import {APP_URLS} from '../../../../utils/network/urls';
+import {toast} from './AadhaarPanVerification/types';
+import {hScale, wScale} from '../../../../utils/styles/dimensions';
 import ImagePreviewModal from '../ImagePreviewModal';
 import PassportPhotoScreen from '../../components/FaceDetectionScreen';
 import ShowLoader from '../../../../components/ShowLoder';
 // ✅ Top pe import add karo
-import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
-import { Dimensions } from 'react-native';
+import {
+  Camera,
+  useCameraDevice,
+  useCameraPermission,
+} from 'react-native-vision-camera';
+import {Dimensions} from 'react-native';
+import {translate} from '../../../../utils/languageUtils/I18n';
 
-const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
+const {width: SCREEN_W, height: SCREEN_H} = Dimensions.get('window');
 
 const STEP = 5;
 
@@ -50,7 +47,7 @@ interface DocField {
   name: string;
 }
 
-const emptyDoc = (): DocField => ({ base64: '', uri: '', name: '' });
+const emptyDoc = (): DocField => ({base64: '', uri: '', name: ''});
 
 interface FormValues {
   creditCardScore: string;
@@ -116,29 +113,32 @@ const CameraModal = ({
   const [capturing, setCapturing] = useState(false);
 
   const takePhoto = async () => {
-    if (!camera.current || capturing) return;
+    if (!camera.current || capturing) {
+      return;
+    }
     setCapturing(true);
     try {
-      const photo = await camera.current.takePhoto({ flash: 'off' });
+      const photo = await camera.current.takePhoto({flash: 'off'});
       onCapture('file://' + photo.path);
     } catch (e) {
       console.log('❌ Vision Camera capture error:', e);
-      toast('Photo capture failed. Try again.');
+      toast(translate('Photo capture failed. Try again.'));
     } finally {
       setCapturing(false);
     }
   };
 
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   return (
     <Modal
       visible={visible}
       animationType="slide"
       transparent={false}
-      onRequestClose={onClose}
-    >
-      <View style={{ flex: 1, backgroundColor: '#000' }}>
+      onRequestClose={onClose}>
+      <View style={{flex: 1, backgroundColor: '#000'}}>
         {device ? (
           <Camera
             ref={camera}
@@ -148,9 +148,10 @@ const CameraModal = ({
             photo={true}
           />
         ) : (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: '#fff', fontSize: wScale(14) }}>
-              Camera not available
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{color: '#fff', fontSize: wScale(14)}}>
+              {translate('Camera not available')}
             </Text>
           </View>
         )}
@@ -158,15 +159,18 @@ const CameraModal = ({
         {/* Controls */}
         <View style={cam.controls}>
           <TouchableOpacity style={cam.sideBtn} onPress={onClose}>
-            <MaterialCommunityIcons name="close" size={wScale(28)} color="#fff" />
+            <MaterialCommunityIcons
+              name="close"
+              size={wScale(28)}
+              color="#fff"
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={cam.captureBtn}
             onPress={takePhoto}
             disabled={capturing}
-            activeOpacity={0.8}
-          >
+            activeOpacity={0.8}>
             {capturing ? (
               <ActivityIndicator color="#000" size="small" />
             ) : (
@@ -231,53 +235,57 @@ const DocCard = ({
   const [ispass, setIspass] = useState(false);
   const [cameraVisible, setCameraVisible] = useState(false);
 
-  const { hasPermission, requestPermission } = useCameraPermission();
+  const {hasPermission, requestPermission} = useCameraPermission();
   const [displayUri, setDisplayUri] = useState('');
-useEffect(() => {
-  if (!doc.uri) return;
+  useEffect(() => {
+    if (!doc.uri) {
+      return;
+    }
 
-  if (doc.base64) {
-    setDisplayUri(`data:image/jpeg;base64,${doc.base64}`);
-    return;
-  }
+    if (doc.base64) {
+      setDisplayUri(`data:image/jpeg;base64,${doc.base64}`);
+      return;
+    }
 
-  if (doc.uri.startsWith('http')) {
-    // ✅ RNFS download — SSL bypass
-    const localPath = `${RNFS.CachesDirectoryPath}/img_${Date.now()}.jpg`;
-    RNFS.downloadFile({
-      fromUrl: doc.uri,
-      toFile: localPath,
-      discretionary: true,
-      cacheable: true,
-    }).promise
-      .then(result => {
-        console.log('✅ RNFS download result:', result.statusCode);
-        return RNFS.readFile(localPath, 'base64');
+    if (doc.uri.startsWith('http')) {
+      // ✅ RNFS download — SSL bypass
+      const localPath = `${RNFS.CachesDirectoryPath}/img_${Date.now()}.jpg`;
+      RNFS.downloadFile({
+        fromUrl: doc.uri,
+        toFile: localPath,
+        discretionary: true,
+        cacheable: true,
       })
-      .then(b64 => {
-        console.log('✅ base64 length:', b64?.length);
-        setDisplayUri(`data:image/jpeg;base64,${b64}`);
-      })
-      .catch(e => {
-        console.log('❌ RNFS error:', e);
-        setDisplayUri(doc.uri); // fallback
-      });
-    return;
-  }
+        .promise.then(result => {
+          console.log('✅ RNFS download result:', result.statusCode);
+          return RNFS.readFile(localPath, 'base64');
+        })
+        .then(b64 => {
+          console.log('✅ base64 length:', b64?.length);
+          setDisplayUri(`data:image/jpeg;base64,${b64}`);
+        })
+        .catch(e => {
+          console.log('❌ RNFS error:', e);
+          setDisplayUri(doc.uri); // fallback
+        });
+      return;
+    }
 
-  setDisplayUri(doc.uri);
-}, [doc.uri, doc.base64]);
+    setDisplayUri(doc.uri);
+  }, [doc.uri, doc.base64]);
   // ── Gallery se image pick ─────────────────────────────
   const handleImage = async (res: any) => {
-    if (res.didCancel || !res.assets?.[0]) return;
+    if (res.didCancel || !res.assets?.[0]) {
+      return;
+    }
     const asset = res.assets[0];
     setLoading(true);
     try {
       const base64 = await toBase64(asset.uri);
-      onPick({ base64, uri: asset.uri, name: asset.fileName ?? 'doc' });
+      onPick({base64, uri: asset.uri, name: asset.fileName ?? 'doc'});
       setPreviewVisible(true);
     } catch {
-      toast('Could not read image');
+      toast(translate('Could not read image'));
     } finally {
       setLoading(false);
     }
@@ -289,10 +297,10 @@ useEffect(() => {
     setLoading(true);
     try {
       const base64 = await toBase64(uri);
-      onPick({ base64, uri, name: 'photo.jpg' });
+      onPick({base64, uri, name: 'photo.jpg'});
       setPreviewVisible(true);
     } catch {
-      toast('Could not read image');
+      toast(translate('Could not read image'));
     } finally {
       setLoading(false);
     }
@@ -303,7 +311,7 @@ useEffect(() => {
     if (!hasPermission) {
       const granted = await requestPermission();
       if (!granted) {
-        toast('Camera permission required');
+        toast(translate('Camera permission required'));
         return;
       }
     }
@@ -313,21 +321,21 @@ useEffect(() => {
   // ── Gallery open ──────────────────────────────────────
   const pickFromGallery = () => {
     launchImageLibrary(
-      { mediaType: 'photo', quality: 0.5, includeBase64: false },
+      {mediaType: 'photo', quality: 0.5, includeBase64: false},
       handleImage,
     );
   };
 
   // ── Pick option alert ─────────────────────────────────
   const pick = () => {
-    if (label === 'Passport Size Photo') {
+    if (label === translate('Passport Size Photo')) {
       setIspass(true);
       return;
     }
-    Alert.alert('Select Image', 'Choose option', [
-      { text: 'Camera', onPress: pickFromCamera },
-      { text: 'Gallery', onPress: pickFromGallery },
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(translate('Select Image'), translate('Choose option'), [
+      {text: translate('Camera'), onPress: pickFromCamera},
+      {text: translate('Gallery'), onPress: pickFromGallery},
+      {text: translate('Cancel'), style: 'cancel'},
     ]);
   };
 
@@ -342,7 +350,6 @@ useEffect(() => {
 
   return (
     <View style={dc.wrapper}>
-
       {/* ── Vision Camera Modal ── */}
       <CameraModal
         visible={cameraVisible}
@@ -355,10 +362,9 @@ useEffect(() => {
         visible={ispass}
         animationType="slide"
         transparent={false}
-        onRequestClose={() => setIspass(false)}
-      >
+        onRequestClose={() => setIspass(false)}>
         <PassportPhotoScreen
-          onContinue={(data) => {
+          onContinue={data => {
             onPick(data);
             setPreviewVisible(true);
             setIspass(false);
@@ -375,16 +381,15 @@ useEffect(() => {
 
       {/* ── Thumbnail ya Upload Button ── */}
       {hasDoc ? (
-         <TouchableOpacity
-    activeOpacity={0.85}
-    onPress={() => {
-      console.log('👁️ Preview URI:', doc.uri);   // ✅ yeh add karo
-      setPreviewVisible(true);
-    }}
-    style={dc.preview}
-  >
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={() => {
+            console.log('👁️ Preview URI:', doc.uri); // ✅ yeh add karo
+            setPreviewVisible(true);
+          }}
+          style={dc.preview}>
           <Image
-  source={{ uri: displayUri }}  // ✅ doc.uri → displayUri
+            source={{uri: displayUri}} // ✅ doc.uri → displayUri
             style={dc.thumb}
             resizeMode="cover"
           />
@@ -392,7 +397,9 @@ useEffect(() => {
             <Text style={dc.fileName} numberOfLines={1}>
               {doc.name}
             </Text>
-            <Text style={dc.uploaded}>Uploaded ✓ (tap to preview)</Text>
+            <Text style={dc.uploaded}>
+              {translate('Uploaded')} ✓ (tap to preview)
+            </Text>
           </View>
           <TouchableOpacity
             onPress={e => {
@@ -400,8 +407,7 @@ useEffect(() => {
               onRemove();
             }}
             style={dc.removeBtn}
-            activeOpacity={0.7}
-          >
+            activeOpacity={0.7}>
             <MaterialCommunityIcons
               name="close-circle"
               size={wScale(20)}
@@ -411,11 +417,10 @@ useEffect(() => {
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
-          style={[dc.pickBtn, { borderColor: color + '66' }]}
+          style={[dc.pickBtn, {borderColor: color + '66'}]}
           onPress={pick}
           activeOpacity={0.8}
-          disabled={loading}
-        >
+          disabled={loading}>
           {loading ? (
             <ActivityIndicator size="small" color={color} />
           ) : (
@@ -425,7 +430,9 @@ useEffect(() => {
                 size={wScale(20)}
                 color={color}
               />
-              <Text style={[dc.pickText, { color }]}>Tap to upload</Text>
+              <Text style={[dc.pickText, {color}]}>
+                {translate('Tap to upload')}
+              </Text>
             </>
           )}
         </TouchableOpacity>
@@ -434,7 +441,7 @@ useEffect(() => {
       {/* ── Image Preview Modal ── */}
       <ImagePreviewModal
         visible={previewVisible}
-  imageUri={displayUri}  // ✅ doc.uri → displayUri
+        imageUri={displayUri} // ✅ doc.uri → displayUri
         reUploadBtn={true}
         onClose={() => setPreviewVisible(false)}
         saveClose={() => setPreviewVisible(false)}
@@ -517,9 +524,9 @@ const dc = StyleSheet.create({
 });
 
 // ─── Main Screen ──────────────────────────────────────────
-const AttachedDocuments = ({ onNext }: { onNext: () => void }) => {
-  const { post } = useAxiosHook();
-  const { formData, updateStep, nextStep } = useFormCtx();
+const AttachedDocuments = ({onNext}: {onNext: () => void}) => {
+  const {post} = useAxiosHook();
+  const {formData, updateStep, nextStep} = useFormCtx();
   const stepColor = getStepColor(STEP);
 
   // Doc states
@@ -541,16 +548,27 @@ const AttachedDocuments = ({ onNext }: { onNext: () => void }) => {
     validateOnBlur: true,
     validateOnChange: false,
 
-    onSubmit: async (values) => {
-
+    onSubmit: async values => {
       // if (!passportPhoto.base64) { toast('Passport size photo required'); return; }
       // if (!panCard.base64) { toast('PAN card copy required'); return; }
       // if (!aadhaarFront.base64) { toast('Aadhaar front copy required'); return; }
       // if (!aadhaarBack.base64) { toast('Aadhaar back copy required'); return; }
-if (!passportPhoto.base64 && !passportPhoto.uri) { toast('Passport size photo required'); return; }
-if (!panCard.base64 && !panCard.uri) { toast('PAN card copy required'); return; }
-if (!aadhaarFront.base64 && !aadhaarFront.uri) { toast('Aadhaar front copy required'); return; }
-if (!aadhaarBack.base64 && !aadhaarBack.uri) { toast('Aadhaar back copy required'); return; }
+      if (!passportPhoto.base64 && !passportPhoto.uri) {
+        toast(translate('Passport size photo required'));
+        return;
+      }
+      if (!panCard.base64 && !panCard.uri) {
+        toast(translate('PAN card copy required'));
+        return;
+      }
+      if (!aadhaarFront.base64 && !aadhaarFront.uri) {
+        toast(translate('Aadhaar front copy required'));
+        return;
+      }
+      if (!aadhaarBack.base64 && !aadhaarBack.uri) {
+        toast(translate('Aadhaar back copy required'));
+        return;
+      }
       try {
         const payload = {
           Pancardcopy: panCard.base64,
@@ -559,54 +577,113 @@ if (!aadhaarBack.base64 && !aadhaarBack.uri) { toast('Aadhaar back copy required
           OtherCopy: otherDoc.base64 || '',
           Passportsizephoto: passportPhoto.base64,
         };
- console.log('📤 InsertForm6 URL    :', APP_URLS.InsertForm6Update);
-        console.log('📦 InsertForm5 REQUEST:', JSON.stringify(payload, null, 2));
+        console.log('📤 InsertForm6 URL    :', APP_URLS.InsertForm6Update);
+        console.log(
+          '📦 InsertForm5 REQUEST:',
+          JSON.stringify(payload, null, 2),
+        );
 
-        const res = await post({ url: APP_URLS.InsertForm6Update, data: payload });
+        const res = await post({
+          url: APP_URLS.InsertForm6Update,
+          data: payload,
+        });
         console.log('📥 InsertForm6 RESPONSE:', JSON.stringify(res, null, 2));
 
-       if (res?.StatusCode === 200) {
-  if (res?.Content?.Status === true) {
-    toast(res.Content.Message || 'Documents saved!');
-    updateStep('attachedDocuments', values);
-    nextStep();
-    onNext();
-  } else {
-    toast(res?.Content?.Message || 'Submit failed. Try again.');
-  }
-} else {
-  toast(res?.message || 'Submit failed. Try again.');
-}
+        if (res?.StatusCode === 200) {
+          if (res?.Content?.Status === true) {
+            toast(res.Content.Message || 'Documents saved!');
+            updateStep('attachedDocuments', values);
+            nextStep();
+            onNext();
+          } else {
+            toast(
+              res?.Content?.Message || translate('Submit failed. Try again.'),
+            );
+          }
+        } else {
+          toast(res?.message || translate('Submit failed. Try again.'));
+        }
       } catch (err) {
         console.log('❌ InsertForm6 ERROR:', err);
-        toast('Something went wrong. Try again.');
+        toast(translate('Something went wrong. Try again.'));
       }
     },
   });
 
-  const { values, errors, touched, handleSubmit, setFieldValue, setFieldTouched } = formik;
+  const {
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    setFieldValue,
+    setFieldTouched,
+  } = formik;
 
-  const [loading,setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchForm6Data = async () => {
       try {
-        const response = await post({ url: APP_URLS.ShowForm6 });
+        const response = await post({url: APP_URLS.ShowForm6});
         const res = response?.data || response;
         console.log('✅ ShowForm6 RESPONSE:', JSON.stringify(res, null, 2));
         if (res?.StatusCode === 200) {
-                    setLoading(false);
+          setLoading(false);
 
           const c = res?.Content;
           setOtherId(c);
 
-          if (c?.Pancardimage) {setPanCard(p => ({ ...p, uri: c.Pancardimage, name: 'PAN Card' }));}
-          if (c?.aadharcardfront) {setAadhaarFront(p => ({ ...p, uri: c.aadharcardfront, name: 'Aadhaar Front' }));}
-          if (c?.aadharcardback) {setAadhaarBack(p => ({ ...p, uri: c.aadharcardback, name: 'Aadhaar Back' }));}
-          if (c?.Securitycheck) {setSecurityCheck(p => ({ ...p, uri: c.Securitycheck, name: 'Security Check' }));}
-          if (c?.CreditCardscoreimage) {setCreditCardImg(p => ({ ...p, uri: c.CreditCardscoreimage, name: 'Credit Card Score' }));}
-          if (c?.Policeverificationimage) {setPoliceVerImg(p => ({ ...p, uri: c.Policeverificationimage, name: 'Police Verification' }));}
-          if (c?.OtherImage) {setOtherDoc(p => ({ ...p, uri: c.OtherImage, name: 'Other Document' }));}
-          if (c?.passpostsizephoto) {setPassportPhoto(p => ({ ...p, uri: c.passpostsizephoto, name: 'Passport Photo' }));}
+          if (c?.Pancardimage) {
+            setPanCard(p => ({...p, uri: c.Pancardimage, name: 'PAN Card'}));
+          }
+          if (c?.aadharcardfront) {
+            setAadhaarFront(p => ({
+              ...p,
+              uri: c.aadharcardfront,
+              name: translate('Aadhaar Front'),
+            }));
+          }
+          if (c?.aadharcardback) {
+            setAadhaarBack(p => ({
+              ...p,
+              uri: c.aadharcardback,
+              name: translate('Aadhaar Back'),
+            }));
+          }
+          if (c?.Securitycheck) {
+            setSecurityCheck(p => ({
+              ...p,
+              uri: c.Securitycheck,
+              name: translate('Security Check'),
+            }));
+          }
+          if (c?.CreditCardscoreimage) {
+            setCreditCardImg(p => ({
+              ...p,
+              uri: c.CreditCardscoreimage,
+              name: translate('Credit Card Score'),
+            }));
+          }
+          if (c?.Policeverificationimage) {
+            setPoliceVerImg(p => ({
+              ...p,
+              uri: c.Policeverificationimage,
+              name: translate('Police Verification'),
+            }));
+          }
+          if (c?.OtherImage) {
+            setOtherDoc(p => ({
+              ...p,
+              uri: c.OtherImage,
+              name: translate('Other Document'),
+            }));
+          }
+          if (c?.passpostsizephoto) {
+            setPassportPhoto(p => ({
+              ...p,
+              uri: c.passpostsizephoto,
+              name: translate('Passport Photo'),
+            }));
+          }
         }
       } catch (err) {
         console.log('❌ ShowForm6 ERROR:', err);
@@ -631,14 +708,16 @@ if (!aadhaarBack.base64 && !aadhaarBack.uri) { toast('Aadhaar back copy required
       <ScrollView
         contentContainerStyle={s.scroll}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-                      {loading&&<ShowLoader/>}
+        showsVerticalScrollIndicator={false}>
+        {loading && <ShowLoader />}
 
         {/* ── Identity Documents ── */}
-        <SectionCard title="Identity Documents" icon="card-account-details-outline" iconColor={stepColor}>
+        <SectionCard
+          title={translate('Identity Documents')}
+          icon="card-account-details-outline"
+          iconColor={stepColor}>
           <DocCard
-            label="PAN Card Copy"
+            label={translate('PAN Card Copy')}
             icon="card-text-outline"
             doc={panCard}
             required
@@ -647,7 +726,7 @@ if (!aadhaarBack.base64 && !aadhaarBack.uri) { toast('Aadhaar back copy required
             onRemove={() => setPanCard(emptyDoc())}
           />
           <DocCard
-            label="Aadhaar Card – Front"
+            label={translate('Aadhaar Card – Front')}
             icon="card-account-details"
             doc={aadhaarFront}
             required
@@ -656,7 +735,7 @@ if (!aadhaarBack.base64 && !aadhaarBack.uri) { toast('Aadhaar back copy required
             onRemove={() => setAadhaarFront(emptyDoc())}
           />
           <DocCard
-            label="Aadhaar Card – Back"
+            label={translate('Aadhaar Card – Back')}
             icon="card-account-details-outline"
             doc={aadhaarBack}
             required
@@ -665,7 +744,7 @@ if (!aadhaarBack.base64 && !aadhaarBack.uri) { toast('Aadhaar back copy required
             onRemove={() => setAadhaarBack(emptyDoc())}
           />
           <DocCard
-            label="Passport Size Photo"
+            label={translate('Passport Size Photo')}
             icon="camera-account"
             doc={passportPhoto}
             required
@@ -676,10 +755,14 @@ if (!aadhaarBack.base64 && !aadhaarBack.uri) { toast('Aadhaar back copy required
         </SectionCard>
 
         {/* ── Other Documents ── */}
-        <SectionCard title="Other Documents" icon="folder-open-outline" iconColor={stepColor}>
+        <SectionCard
+          title={translate('Other Documents')}
+          icon="folder-open-outline"
+          iconColor={stepColor}>
           <DocCard
-            label={`Select ${otherId.OtherDocName} Photo`}
-
+            label={`${translate('Select')} ${otherId.OtherDocName} ${translate(
+              'Photo',
+            )}`}
             icon="file-plus-outline"
             doc={otherDoc}
             color={stepColor}
@@ -710,11 +793,31 @@ if (!aadhaarBack.base64 && !aadhaarBack.uri) { toast('Aadhaar back copy required
 export default AttachedDocuments;
 
 const s = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.light_blue },
-  scroll: { padding: 16, paddingBottom: 40 },
-  fieldLabel: { fontSize: wScale(13), color: '#374151', fontWeight: '500', marginBottom: hScale(8) },
-  toggleRow: { flexDirection: 'row', gap: wScale(10), marginBottom: hScale(4) },
-  toggleBtn: { flexDirection: 'row', alignItems: 'center', gap: wScale(6), paddingHorizontal: wScale(16), paddingVertical: hScale(10), borderRadius: wScale(8), borderWidth: 1.5, borderColor: '#D1D5DB', backgroundColor: '#F9FAFB' },
-  toggleText: { fontSize: wScale(13), color: '#6B7280', fontWeight: '500' },
-  errText: { fontSize: wScale(11), color: '#EF4444', marginTop: hScale(-2), marginBottom: hScale(8) },
+  screen: {flex: 1, backgroundColor: colors.light_blue},
+  scroll: {padding: 16, paddingBottom: 40},
+  fieldLabel: {
+    fontSize: wScale(13),
+    color: '#374151',
+    fontWeight: '500',
+    marginBottom: hScale(8),
+  },
+  toggleRow: {flexDirection: 'row', gap: wScale(10), marginBottom: hScale(4)},
+  toggleBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wScale(6),
+    paddingHorizontal: wScale(16),
+    paddingVertical: hScale(10),
+    borderRadius: wScale(8),
+    borderWidth: 1.5,
+    borderColor: '#D1D5DB',
+    backgroundColor: '#F9FAFB',
+  },
+  toggleText: {fontSize: wScale(13), color: '#6B7280', fontWeight: '500'},
+  errText: {
+    fontSize: wScale(11),
+    color: '#EF4444',
+    marginTop: hScale(-2),
+    marginBottom: hScale(8),
+  },
 });

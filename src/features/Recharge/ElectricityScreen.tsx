@@ -1,5 +1,6 @@
-import LottieView from 'lottie-react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable quotes */
+/* eslint-disable dot-notation */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,31 +8,29 @@ import {
   TouchableOpacity,
   ToastAndroid,
   Alert,
-
 } from 'react-native';
-import { translate } from '../../utils/languageUtils/I18n';
-import { APP_URLS } from '../../utils/network/urls';
-import { colors } from '../../utils/styles/theme';
+import {translate} from '../../utils/languageUtils/I18n';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { encrypt } from '../../utils/encryptionUtils';
-import { SCREEN_HEIGHT, hScale, wScale } from '../../utils/styles/dimensions';
-import { RootState } from '../../reduxUtils/store';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {encrypt} from '../../utils/encryptionUtils';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {RootState} from '../../reduxUtils/store';
 import DynamicButton from '../drawer/button/DynamicButton';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
-import { ActivityIndicator } from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import ElectricityOperatorBottomSheet from '../../components/ElectricityOperatorBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
 import ShowLoader from '../../components/ShowLoder';
 import RecentText from '../../components/RecentText';
-import { useLocationHook } from '../../hooks/useLocationHook';
+import {useLocationHook} from '../../hooks/useLocationHook';
 const ElectricityScreen = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo)
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [ProceedSheetVisible, setProceedSheetVisible] = useState(false);
   const [stateOperatorVisible, setOperatorSheetVisible] = useState(false);
@@ -43,9 +42,9 @@ const ElectricityScreen = () => {
   const [optcode, setoptcode] = useState('');
   const [dueDate, setDueDate] = useState('N/A');
   const [CustomerName, setCustomerName] = useState('');
-  const [custBal, setCustBal] = useState(('N/A'));
+  const [custBal, setCustBal] = useState('N/A');
   const [Status, setstatus] = useState(translate('Status'));
-  const [path, setpath] = useState("");
+  const [path, setpath] = useState('');
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [billAmount, setbillAmount] = useState('');
@@ -54,7 +53,7 @@ const ElectricityScreen = () => {
   const [isOp, setIsop] = useState(false);
   const [operatorList, setoperatorList] = useState([]);
   const [isvisible, setIsvisible] = useState(false);
-  
+
   const [consumerNo, setconsumerNo] = useState(translate(''));
 
   const [accnumhint, setAccnumhint] = useState('');
@@ -86,90 +85,87 @@ const ElectricityScreen = () => {
   const [agencyCode, setAgencyCode] = useState('');
   const [agencyCode2, setAgencyCode2] = useState('');
 
-
   const navigation = useNavigation<any>();
-  const { get, post } = useAxiosHook();
- 
-
+  const {get, post} = useAxiosHook();
 
   useEffect(() => {
     recenttransactions();
-  }, [])
+  }, []);
 
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
-      const response = await get({ url: url })
-      setHistorylist(response)
-      setReqTime(response[0]['Reqesttime'])
-      setReqId(response[0]['Request_ID'])
-    } catch (error) {
-    }
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
+      const response = await get({url: url});
+      setHistorylist(response);
+      setReqTime(response[0]['Reqesttime']);
+      setReqId(response[0]['Request_ID']);
+    } catch (error) {}
   };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = ('0 ' + (currentDate.getMonth() + 1)).slice(-2);
-  const day = ('0' + (currentDate.getDate())).slice(-2);
+  const day = ('0' + currentDate.getDate()).slice(-2);
   const formattedDate = `${year}-${month}-${day}`;
 
-
   async function billInfo() {
-
-    ViewbillInfoStatus()
+    ViewbillInfoStatus();
     try {
       // const url = `${APP_URLS.rechargeViewBill}billnumber=210324010714&Operator=EAV&billunit=Jaipur Vidyut Vitran Nigam - RAJASTHAN&ProcessingCycle&acno&lt&ViewBill=Y`
       const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=${agencyCode}&ProcessingCycle&acno&lt&ViewBill=Y`;
-      console.log(url)
+      console.log(url);
 
-      
-      const res = await get({ url: url });
-      console.log(res, '==============**---*====')
+      const res = await get({url: url});
+      console.log(res, '==============**---*====');
       if (res['RESULT'] === 0) {
-        const addinfo = res['ADDINFO']
+        const addinfo = res['ADDINFO'];
         const billinfoo = addinfo['BillInfo'];
-        setDueDate(billinfoo["billDueDate"]);
-        setAmount(billinfoo["billAmount"]);
-        setCustomerName(billinfoo["customerName"]);
-        setCustBal(billinfoo["balance"]);
-        setbillAmount(billinfoo["billAmount"]);
-        if (billinfoo["billAmount"]) {
-          setAmount(billinfoo["billAmount"]);
+        setDueDate(billinfoo['billDueDate']);
+        setAmount(billinfoo['billAmount']);
+        setCustomerName(billinfoo['customerName']);
+        setCustBal(billinfoo['balance']);
+        setbillAmount(billinfoo['billAmount']);
+        if (billinfoo['billAmount']) {
+          setAmount(billinfoo['billAmount']);
         }
-        setstatus(res["customerStatus"])
-        setShowLoader2(false)
-        console.log(res["customerStatus"], '==============**---*====')
+        setstatus(res['customerStatus']);
+        setShowLoader2(false);
+        console.log(res['customerStatus'], '==============**---*====');
         setBottomSheetVisible(true);
       } else {
-        setShowLoader2(false)
-        Alert.alert(res['ADDINFO']['ERRORMSG'], res['ADDINFO']['Message'], [{ text: 'OK', onPress: () => { } }]);
+        setShowLoader2(false);
+        Alert.alert(res['ADDINFO']['ERRORMSG'], res['ADDINFO']['Message'], [
+          {text: 'OK', onPress: () => {}},
+        ]);
       }
-    } catch (error) { }
+    } catch (error) {}
   }
   const validateFields = () => {
     if (!paramname) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-
-    } else if (stateName === 'Select Your State & Operator') {
+    } else if (stateName === translate('Select Your State & Operator')) {
       ToastAndroid.showWithGravity(
-        'Please Select an State',
+        translate('Please Select an State'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount' || parseFloat(amount) <= 0) {
+    } else if (
+      !amount ||
+      amount === translate('Enter Amount') ||
+      parseFloat(amount) <= 0
+    ) {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else {
       setBottomSheetVisible(true);
     }
-
   };
   async function ViewbillInfoStatus() {
     try {
@@ -183,18 +179,16 @@ const ElectricityScreen = () => {
       };
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
 
-      console.log(url)
-      const res = await post({ url: url, data});
+      console.log(url);
+      const res = await post({url: url, data});
       const billSts = res['RESULT'];
       if (billSts === 'Y') {
         // setIsinfo(true);
       } else {
         //    setIsinfo(false);
       }
-    } catch (error) { }
+    } catch (error) {}
   }
-
-
 
   useEffect(() => {
     stateList();
@@ -203,14 +197,13 @@ const ElectricityScreen = () => {
   async function stateList() {
     try {
       const url = `${APP_URLS.statelist}`;
-      const data = await get({  url });
+      const data = await get({url});
 
       console.log('====================================');
-      console.log(data );
+      console.log(data);
       console.log('====================================');
 
-      
-      setstateslist(data );
+      setstateslist(data);
       return data;
     } catch (error) {
       console.error('Error fetching  state list:', error.message);
@@ -218,15 +211,12 @@ const ElectricityScreen = () => {
     } finally {
     }
   }
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId ,Loc_Data} = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
- 
   const onRechargePress = useCallback(async () => {
-
-    
     setBottomSheetVisible(false);
     setShowLoader(true);
     const mobileNetwork = await getNetworkCarrier();
@@ -236,7 +226,8 @@ const ElectricityScreen = () => {
       consumerNo,
       optcode,
       amount,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data['latitude'],
+      Loc_Data['longitude'],
 
       'city',
       'address',
@@ -269,7 +260,7 @@ const ElectricityScreen = () => {
 
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${agencyCode}&bu=${agencyCode2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&billduedate=${dueDate}`;
 
-    console.log(url, '*-*-*-*')
+    console.log(url, '*-*-*-*');
     let status, Message;
     try {
       const res = await post({
@@ -277,65 +268,70 @@ const ElectricityScreen = () => {
       });
       console.log(res, '*-*-*-*');
       console.log(status, '*-*-*-*');
-      if(res.status ==='False'){
-        alert(res.message);
+      if (res.status === 'False') {
+        Alert.alert(res.message);
         setShowLoader(false);
 
-        return
+        return;
       }
       status = res.Response;
       Message = res.Message;
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     setconsumerNo('');
-    setStateName('Select Your State & Operator');
-    setopt('')
+    setStateName(translate('Select Your State & Operator'));
+    setopt('');
     setAmount('');
     setbillAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
 
     navigation.navigate('Rechargedetails', {
-      mobileNumber: consumerNo ?? '',  // Default to an empty string if null or undefined
-      Amount: amount ?? 0,             // Default to 0 if null or undefined
-      operator: opt ?? 'N/A',          // Default to 'N/A' if null or undefined
-      status: status ?? 'Unknown',     // Default to 'Unknown' if null or undefined
-      reqId: reqId ?? '',              // Default to an empty string if null or undefined
-      reqTime: reqTime ?? new Date().toISOString(),  // Default to current time if null or undefined
-      Message: Message ?? 'No message available'  // Default to 'No message available' if null or undefined
+      mobileNumber: consumerNo ?? '', // Default to an empty string if null or undefined
+      Amount: amount ?? 0, // Default to 0 if null or undefined
+      operator: opt ?? 'N/A', // Default to 'N/A' if null or undefined
+      status: status ?? 'Unknown', // Default to 'Unknown' if null or undefined
+      reqId: reqId ?? '', // Default to an empty string if null or undefined
+      reqTime: reqTime ?? new Date().toISOString(), // Default to current time if null or undefined
+      Message: Message ?? translate('No message available'), // Default to 'No message available' if null or undefined
     });
-    
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
-    paramname,
-    optcode,
-    post,
+    getMobileIp,
     userId,
+    consumerNo,
+    optcode,
+    amount,
+    Loc_Data,
+    agencyCode,
+    agencyCode2,
+    dueDate,
+    navigation,
+    opt,
+    reqId,
+    reqTime,
+    post,
+    recenttransactions,
   ]);
   async function GetOptlist(state_id: any) {
-     setoperatorList([]);
-     setopt('Select Your Operator');
+    setoperatorList([]);
+    setopt(translate('Select Your Operator'));
     try {
       const url = `${APP_URLS.electricity_opt_Via_StateId}${state_id}`;
-      const dataa = await get({ url });
+      const dataa = await get({url});
       console.log(dataa['myprop2Items']);
       console.log('====================================');
-
 
       console.log(url);
       console.log(dataa);
       console.log('====================================');
-       setoperatorList(dataa['myprop2Items']);
-      setpath(dataa["path"]);
+      setoperatorList(dataa['myprop2Items']);
+      setpath(dataa['path']);
 
       if (operatorList != null) {
         setIsop(true);
@@ -349,7 +345,7 @@ const ElectricityScreen = () => {
     }
   }
   const handleItemPress = item => {
-    console.log(item, 'iiiiiiiiiiiiiiiiiiiiiiii')
+    console.log(item, 'iiiiiiiiiiiiiiiiiiiiiiii');
     setAccntvisivility(false);
     setAccntvisivility2(false);
 
@@ -401,163 +397,158 @@ const ElectricityScreen = () => {
         setAccntvisivility2(false);
       }
     }
-
   };
   return (
     <View style={styles.main}>
       <AppBarSecond
-        title='Electricity Rechage'
+        title="Electricity Rechage"
         onActionPress={undefined}
         actionButton={undefined}
         onPressBack={undefined}
       />
       <View style={styles.container}>
-        {showLoader && (
-
-          <ShowLoader />
-        )}
+        {showLoader && <ShowLoader />}
         <TouchableOpacity
           onPress={() => {
             setIsvisible(true);
-          }}
-        >
-
+          }}>
           <FlotingInput
             label={stateName}
             labelinputstyle={[
-              stateName === "Select Your State & Operator"
+              stateName === translate('Select Your State & Operator')
                 ? null
                 : styles.labelinputstyle,
             ]}
             editable={false}
+            inputstyle={undefined}
+            onChangeTextCallback={undefined}
           />
-          {opt === "Select Your Operator" ? null : (
-            <Text style={[styles.circletext, { color: colorConfig.primaryColor }]}>
+          {opt === translate('Select Your Operator') ? null : (
+            <Text
+              style={[styles.circletext, {color: colorConfig.primaryColor}]}>
               {opt}
             </Text>
           )}
 
           <View style={[styles.righticon2]}>
-
             <OnelineDropdownSvg />
-
           </View>
         </TouchableOpacity>
 
-
         {accntvisivility && (
           <View>
-
-            <FlotingInput label={accnumhint} value={agencyCode}
-            onChangeTextCallback={text => setAgencyCode(text)} 
-            inputstyle={undefined} 
-            autoCapitalize='characters'
-
-            labelinputstyle={undefined}            />
-
+            <FlotingInput
+              label={accnumhint}
+              value={agencyCode}
+              onChangeTextCallback={text => setAgencyCode(text)}
+              inputstyle={undefined}
+              autoCapitalize="characters"
+              labelinputstyle={undefined}
+            />
           </View>
         )}
 
         {accntvisivility2 && (
           <View>
-
-            <FlotingInput label={accnumhint2}
+            <FlotingInput
+              label={accnumhint2}
               value={agencyCode2}
-              autoCapitalize='characters'
-
-              onChangeTextCallback={text => setAgencyCode2(text)} />
+              autoCapitalize="characters"
+              onChangeTextCallback={text => setAgencyCode2(text)}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
+            />
             <View style={styles.righticon2}>
               <TouchableOpacity style={styles.infobtntex}>
-                <Text style={styles.infobtntex}>{translate("Info")}</Text>
+                <Text style={styles.infobtntex}>{translate('Info')}</Text>
               </TouchableOpacity>
             </View>
-
           </View>
         )}
 
         <ElectricityOperatorBottomSheet
-           showState={false}
+          showState={false}
           isModalVisible={isvisible}
           stateData={stateslist}
           setModalVisible={setIsvisible}
           setOperatorcode={setoptcode}
           setOperator={setopt}
           operatorData={operatorList}
-          GetOptlist={(v)=>GetOptlist(v)}
-          handleItemPress={(item) => { handleItemPress(item) }}
+          GetOptlist={v => GetOptlist(v)}
+          handleItemPress={item => {
+            handleItemPress(item);
+          }}
           setState={setStateName}
-
         />
 
         <View>
-          <FlotingInput label={paramname}
-        autoCapitalize='characters'
-
+          <FlotingInput
+            label={paramname}
+            autoCapitalize="characters"
             onChangeTextCallback={text => {
-              setconsumerNo(text)
+              setconsumerNo(text);
               if (text.length >= 1) {
-                setIsinfo(true)
+                setIsinfo(true);
               } else {
-                setIsinfo(false)
+                setIsinfo(false);
               }
               setconsumerNo(text);
-            }
-            }
+            }}
             value={consumerNo}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
 
-
-          <View style={[styles.righticon2,]}>
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
                 onPress={() => {
                   billInfo();
-                  setShowLoader2(true)
+                  setShowLoader2(true);
                 }}>
-                {
-                  showLoader2 ? <ActivityIndicator size={'large'} /> : <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
-                }
+                {showLoader2 ? (
+                  <ActivityIndicator size={'large'} />
+                ) : (
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
+                )}
               </TouchableOpacity>
             )}
           </View>
         </View>
 
-
-        <FlotingInput label={'Enter Amount'}
-             maxLength={5}
-             
+        <FlotingInput
+          label={translate('Enter Amount')}
+          maxLength={5}
           keyboardType="number-pad"
           value={amount || billAmount || ''}
           onChangeTextCallback={text => setAmount(text)}
-
+          inputstyle={undefined}
+          labelinputstyle={undefined}
         />
 
-
         <DynamicButton
-
-          title='Next'
+          title="Next"
           onPress={() => {
             // billInfo();
-            validateFields()
-          }} styleoveride />
-        <View >
-
+            validateFields();
+          }}
+          styleoveride
+        />
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
             onBackdropPress={() => setIsrecent(false)}
-
           />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
-                         <RecentText />
-
+            <RecentText />
           </TouchableOpacity>
-
         </View>
         <Rechargeconfirm
           Lottieimg={require('../../utils/lottieIcons/light-bulb.json')}
@@ -565,37 +556,48 @@ const ElectricityScreen = () => {
           onBackdropPress={() => setBottomSheetVisible(false)}
           status={Status}
           details={[
-            { label: 'User Name', value2: CustomerName === '' ? 'N/A' : CustomerName },
-            { label: 'Customer ID', value: consumerNo },
-            { label: 'Due Date', value2: dueDate === '' ? 'N/A' : dueDate },
-            { label: 'Operator Name', value2: opt },
-            { label: 'Customer Status', value2: Status === '' ? 'N/A' : Status },
-            { label: 'BillAmount', value2: billAmount === '' ? 'N / A' : billAmount },
-
+            {
+              label: translate('User Name'),
+              value2: CustomerName === '' ? translate('N/A') : CustomerName,
+            },
+            {label: translate('Customer ID'), value: consumerNo},
+            {
+              label: translate('Due Date'),
+              value2: dueDate === '' ? translate('N/A') : dueDate,
+            },
+            {label: translate('Operator Name'), value2: opt},
+            {
+              label: translate('Customer Status'),
+              value2: Status === '' ? translate('N/A') : Status,
+            },
+            {
+              label: translate('BillAmount'),
+              value2: billAmount === '' ? 'N / A' : billAmount,
+            },
           ]}
-          lastlabel={'Transaction Amount'}
+          lastlabel={translate('Transaction Amount')}
           lastvalue={amount || billAmount}
           onRechargedetails={() => {
             if ((amount === '0' || amount === '') && !billAmount) {
               ToastAndroid.showWithGravity(
-                `Please Enter Amount`,
+                translate(`Please Enter Amount`),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
-            } else { onRechargePress() }
-          }
-          }
+            } else {
+              onRechargePress();
+            }
+          }}
         />
-
       </View>
-    </View >
-
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1, backgroundColor: '#fff'
+    flex: 1,
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
@@ -604,23 +606,23 @@ const styles = StyleSheet.create({
   },
   labelinputstyle: {
     fontSize: wScale(20),
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: hScale(-7),
   },
   circletext: {
-    position: "absolute",
+    position: 'absolute',
     top: hScale(38),
     paddingLeft: wScale(15),
     fontSize: wScale(12),
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
 
@@ -634,16 +636,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   operatioimg: {
     width: wScale(45),
     height: wScale(45),
-
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 });
 

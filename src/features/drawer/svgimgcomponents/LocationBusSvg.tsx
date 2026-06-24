@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
+import React from 'react';
+import {View, Text} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
 
-const LocationBusSvg = ({ size = wScale(30) }) => {
-    const searchicon = `
+const LocationBusSvg = ({size = wScale(30)}) => {
+  const searchicon = `
 
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -49,13 +49,12 @@ const LocationBusSvg = ({ size = wScale(30) }) => {
 </g>
 </svg>
 
-`
-return (
-        <View>
-            <SvgXml xml={searchicon} width={size} height={size} />
-        </View>
-    );
+`;
+  return (
+    <View>
+      <SvgXml xml={searchicon} width={size} height={size} />
+    </View>
+  );
 };
-
 
 export default LocationBusSvg;

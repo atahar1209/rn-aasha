@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   TextInput,
   View,
@@ -9,21 +9,21 @@ import {
   ToastAndroid,
   Alert,
 } from 'react-native';
-import { colors } from './../../utils/styles/theme';
-import { SCREEN_HEIGHT, hScale, wScale } from './../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { APP_URLS } from './../../utils/network/urls';
+import {colors} from './../../utils/styles/theme';
+import {SCREEN_HEIGHT, hScale, wScale} from './../../utils/styles/dimensions';
+import {FlashList} from '@shopify/flash-list';
+import {APP_URLS} from './../../utils/network/urls';
 import useAxiosHook from './../../utils/network/AxiosClient';
-import { BottomSheet, Card } from '@rneui/base';
-import { translate } from './../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
-import { useLocationHook } from '../../utils/hooks/useLocationHook';
+import {BottomSheet, Card} from '@rneui/base';
+import {translate} from './../../utils/languageUtils/I18n';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
+import {useLocationHook} from '../../utils/hooks/useLocationHook';
 
 const LICBill = () => {
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [textInput1, setTextInput1] = useState('');
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [textInput3, setTextInput3] = useState('');
@@ -89,43 +89,43 @@ const LICBill = () => {
     //  setParamName('Customer ID');
     setValues('');
     setRegx('');
-    console.log(item['OPtCode']);
+    console.log(item.OPtCode);
     setVisibility(false);
     if (!item.customerparams || item.customerparams.length === 0) {
       //clearState();
     } else {
       const custparam = item.customerparams;
 
-      setDataType(custparam[0]['dataType']);
-      setMaxLength(custparam[0]['maxLength']);
-      setMinLength(custparam[0]['minLength']);
-      setVisibility(custparam[0]['visibility']);
-      setOptional(custparam[0]['optional']);
-      setParamName(custparam[0]['paramName']);
-      setRegx(custparam[0]['regex']);
-      setValues(custparam[0]['values']);
+      setDataType(custparam[0].dataType);
+      setMaxLength(custparam[0].maxLength);
+      setMinLength(custparam[0].minLength);
+      setVisibility(custparam[0].visibility);
+      setOptional(custparam[0].optional);
+      setParamName(custparam[0].paramName);
+      setRegx(custparam[0].regex);
+      setValues(custparam[0].values);
 
       if (custparam.length === 2) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setKey2(custparam[1]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setKey2(custparam[1].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
         setAccntvisivility2(false);
       } else if (custparam.length === 3) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setAccnumhint2(custparam[2]['paramName']);
-        setAccmaxlength2(custparam[2]['maxLength']);
-        setKey2(custparam[1]['dataType']);
-        setKey3(custparam[2]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setAccnumhint2(custparam[2].paramName);
+        setAccmaxlength2(custparam[2].maxLength);
+        setKey2(custparam[1].dataType);
+        setKey3(custparam[2].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setKeyType3(
-          custparam[2]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[2].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
 
@@ -168,8 +168,8 @@ const LICBill = () => {
       const res = await get({
         url: url,
       });
-      console.log(res['myprop2Items']);
-      setInsuranceOptList(res['myprop2Items']);
+      console.log(res.myprop2Items);
+      setInsuranceOptList(res.myprop2Items);
     } catch (error) {
       console.error(error);
     }
@@ -177,11 +177,11 @@ const LICBill = () => {
 
   const showBottomSheetList = () => {
     return (
-      <View style={{ marginVertical: wScale(8), marginHorizontal: wScale(24) }}>
+      <View style={{marginVertical: wScale(8), marginHorizontal: wScale(24)}}>
         <FlashList
-          style={{ marginBottom: wScale(50), marginHorizontal: wScale(24) }}
+          style={{marginBottom: wScale(50), marginHorizontal: wScale(24)}}
           data={insuranceOptList}
-          renderItem={({ item }) => {
+          renderItem={({item}) => {
             return (
               <View
                 style={{
@@ -191,14 +191,14 @@ const LICBill = () => {
                 <TouchableWithoutFeedback
                   onPress={async () => {
                     handleItemPress(item);
-                    setOptCode(item['OPtCode']);
-                    setselectedOpt(item['Operatorname']);
+                    setOptCode(item.OPtCode);
+                    setselectedOpt(item.Operatorname);
                     setIsOperatorList(false);
                     ViewbillInfoStatus();
-                    console.log(item['OPtCode']);
+                    console.log(item.OPtCode);
                   }}>
-                  <Text style={{ color: '#ff4670', fontSize: 18 }}>
-                    {item['Operatorname']}
+                  <Text style={{color: '#ff4670', fontSize: 18}}>
+                    {item.Operatorname}
                   </Text>
                 </TouchableWithoutFeedback>
               </View>
@@ -210,10 +210,10 @@ const LICBill = () => {
     );
   };
 
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId ,Loc_Data} = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
   const onRechargePress = useCallback(async () => {
     const mobileNetwork = await getNetworkCarrier();
@@ -222,7 +222,8 @@ const LICBill = () => {
       userId,
       consumerNo,
       optcode,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data.latitude,
+      Loc_Data.longitude,
 
       'city',
       'address',
@@ -265,84 +266,88 @@ const LICBill = () => {
     });
 
     if (!res.ok) {
-      Alert.alert(res['Response'], res['Message'], [{ text: 'OK', onPress: () => { } }]);
-
+      Alert.alert(res.Response, res.Message, [
+        {text: translate('OK'), onPress: () => {}},
+      ]);
     }
 
     console.log('onRechargePress', res);
-
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
+    getMobileIp,
+    userId,
     consumerNo,
     optcode,
+    Loc_Data.latitude,
+    Loc_Data.longitude,
+    amount,
+    accnumhint,
+    accnumhint2,
     post,
-    userId,
   ]);
-
-
 
   async function billInfo() {
     try {
-   
       const url = `${APP_URLS.rechargeViewBill}`;
 
-      const res = await get({ url: url });
+      const res = await get({url: url});
       console.log(data.Operator);
       console.log(url);
-      setDueDate(res["rechargedueDate"]);
-      setAmount(res["monthlyRecharge"]);
-      setCustomerName(res["customerName"]);
-      setCustBal(res["balance"]);
+      setDueDate(res.rechargedueDate);
+      setAmount(res.monthlyRecharge);
+      setCustomerName(res.customerName);
+      setCustBal(res.balance);
       //setstatus(res["customerStatus"])
 
       // console.log(":", res);
-    } catch (error) { }
+    } catch (error) {}
   }
   async function ViewbillInfoStatus() {
     console.log(optcode);
     try {
       const config = {
         headers: {
-          Authorization: `Bearer`,
+          Authorization: 'Bearer',
         },
       };
       const data = {
         Operatorcode: optcode,
       };
 
-      const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=&ProcessingCycle&acno&lt&ViewBill=Y`; const res = await post({ url: url, data, config: config });
+      const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=&ProcessingCycle&acno&lt&ViewBill=Y`;
+      const res = await post({url: url, data, config: config});
 
       console.log(':', url);
-      const billSts = res['RESULT'];
+      const billSts = res.RESULT;
       if (billSts === 'Y') {
         setIsinfo(true);
       } else {
         setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const validateFields = () => {
-    if (paramname == 'Consumer Number') {
+    if (paramname === 'Consumer Number') {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (selectedOpt === 'Select Your Operator') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount' || parseFloat(amount) <= 0) {
+    } else if (
+      !amount ||
+      amount === 'Enter Amount' ||
+      parseFloat(amount) <= 0
+    ) {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -350,10 +355,10 @@ const LICBill = () => {
     }
   };
   return (
-    <View style={{ alignContent: 'center', alignItems: 'center' }}>
+    <View style={{alignContent: 'center', alignItems: 'center'}}>
       <TextInput
         style={styles.DetailButton}
-        placeholder={'Select Operator'}
+        placeholder={translate('Select Operator')}
         onChangeText={text => setTextInput1(text)}
         editable={false}
         value={selectedOpt}
@@ -373,7 +378,7 @@ const LICBill = () => {
             style={{}}
             //value={agencyCode}
             placeholder={accnumhint}
-          //   onChangeText={(text) => setAgencyCode(text)}
+            //   onChangeText={(text) => setAgencyCode(text)}
           />
           <TouchableOpacity>
             <Text style={{}}>📅</Text>
@@ -383,15 +388,15 @@ const LICBill = () => {
 
       {accntvisivility2 && (
         <View style={styles.DetailButton}>
-          <View style={{ flexDirection: 'row', alignContent: 'space-between' }}>
+          <View style={{flexDirection: 'row', alignContent: 'space-between'}}>
             <TextInput
               style={{}}
               // value=''
               placeholder={accnumhint2}
-            // onChangeText={(text) => setAccnumhint2(text)}
+              // onChangeText={(text) => setAccnumhint2(text)}
             />
             <TouchableOpacity>
-              <Text style={{ top: hScale(15), left: wScale(5) }}></Text>
+              <Text style={{top: hScale(15), left: wScale(5)}} />
             </TouchableOpacity>
           </View>
         </View>
@@ -399,12 +404,12 @@ const LICBill = () => {
       <View
         style={[
           styles.DetailButton,
-          { flexDirection: 'row', justifyContent: 'space-between' },
+          {flexDirection: 'row', justifyContent: 'space-between'},
         ]}>
         <TextInput
           placeholder={paramname}
           value={consumerNo}
-          // 
+          //
           onChangeText={text => setconsumerNo(text)}
         />
         {isInfo && (
@@ -413,7 +418,7 @@ const LICBill = () => {
               billInfo();
               setBottomSheetVisible(true);
             }}>
-            <Text style={{}}>Info</Text>
+            <Text style={{}}>{translate('Info')}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -426,7 +431,7 @@ const LICBill = () => {
       />
 
       <TouchableOpacity
-        style={{ height: 50 }}
+        style={{height: 50}}
         onPress={() => {
           validateFields();
         }}>
@@ -443,7 +448,8 @@ const LICBill = () => {
         </View>
       </TouchableOpacity>
 
-      <BottomSheet animationType="none"  
+      <BottomSheet
+        animationType="none"
         isVisible={isOperatorList}
         onBackdropPress={() => {
           setIsOperatorList(false);
@@ -453,20 +459,25 @@ const LICBill = () => {
             height: SCREEN_HEIGHT / 1.5,
             flex: 1,
             marginBottom: wScale(40),
-          }}></View>
+          }}
+        />
         {showBottomSheetList()}
       </BottomSheet>
 
-      <BottomSheet animationType="none"  
+      <BottomSheet
+        animationType="none"
         isVisible={bottomSheetVisible}
-        
         onBackdropPress={() => setBottomSheetVisible(false)}>
-        <View style={{ bottom: hScale(10) }}>
+        <View style={{bottom: hScale(10)}}>
           <Card>
-            <Text>{ translate('Operator')}: {selectedOpt}</Text>
+            <Text>
+              {translate('Operator')}: {selectedOpt}
+            </Text>
           </Card>
           <Card>
-            <Text>{translate("Due Date")}: {dueDate}</Text>
+            <Text>
+              {translate('Due Date')}: {dueDate}
+            </Text>
           </Card>
           <Card>
             <Text>
@@ -479,7 +490,9 @@ const LICBill = () => {
             </Text>
           </Card>
           <Card>
-            <Text>{translate('Recharge Amount')}: {amount}</Text>
+            <Text>
+              {translate('Recharge Amount')}: {amount}
+            </Text>
           </Card>
           <TouchableOpacity
             onPress={() => {

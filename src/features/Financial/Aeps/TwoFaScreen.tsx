@@ -1,57 +1,86 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, StyleSheet, NativeModules, Alert, ToastAndroid, BackHandler } from 'react-native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { useDeviceInfoHook } from '../../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-// import { UsbSerialManager, Parity } from 'react-native-usb-serialport-for-android';
-import { APP_URLS } from '../../../utils/network/urls';
-import useAxiosHook from '../../../utils/network/AxiosClient';
-import axios from 'axios';
-import DeviceInfo from 'react-native-device-info';
-import DynamicButton from '../../drawer/button/DynamicButton';
-import { AepsContext } from './context/AepsContext';
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable quotes */
+import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {
-  getDeviceInfo,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+  StyleSheet,
+  NativeModules,
+  Alert,
+  ToastAndroid,
+  BackHandler,
+} from 'react-native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {useDeviceInfoHook} from '../../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+// import { UsbSerialManager, Parity } from 'react-native-usb-serialport-for-android';
+import {APP_URLS} from '../../../utils/network/urls';
+import useAxiosHook from '../../../utils/network/AxiosClient';
+import DynamicButton from '../../drawer/button/DynamicButton';
+import {AepsContext} from './context/AepsContext';
+import {
   isDriverFound,
   openFingerPrintScanner,
-  openFaceAuth
+  openFaceAuth,
 } from 'react-native-rdservice-fingerprintscanner';
-import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
-import { colors } from '../../../utils/styles/theme';
-import RNFS from 'react-native-fs';
+import {colors} from '../../../utils/styles/theme';
 import ShowLoader from '../../../components/ShowLoder';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import DeviceConnected from './checkDeviceConnected';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
 import SelectDevice from './DeviceSelect';
-import { useLocationHook } from '../../../hooks/useLocationHook';
 import CloseSvg from '../../drawer/svgimgcomponents/CloseSvg';
-import { onReceiveNotification2 } from '../../../utils/NotificationService';
-import { appendLog } from '../../../components/log_file_Saver';
-import Entypo from 'react-native-vector-icons/Entypo';  // or another icon set like MaterialIcons
-import { translate } from '../../../utils/languageUtils/I18n';
-import { logToFirebase } from '../../../utils/firebaselog';
+import {onReceiveNotification2} from '../../../utils/NotificationService';
+import Entypo from 'react-native-vector-icons/Entypo'; // or another icon set like MaterialIcons
+import {translate} from '../../../utils/languageUtils/I18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const TwoFAVerify = ({ handle }) => {
-  const [isFace, setIsFace] = useState(false)
+const TwoFAVerify = ({handle}) => {
+  const [isFace, setIsFace] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [deviceName, setDeviceName] = useState('');
-  const { userId, colorConfig, Loc_Data, activeAepsLine } = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = Loc_Data;
+  const {userId, colorConfig, Loc_Data, activeAepsLine} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
+  const {latitude, longitude} = Loc_Data;
   const [is2fa, setis2fa] = useState(false);
-  const { aadharNumber, setAadharNumber, mobileNumber, setMobileNumber, consumerName, setConsumerName, bankName,
-    setBankName, setFingerprintData, scanFingerprint, fingerprintData } = useContext(AepsContext);
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {
+    aadharNumber,
+    setAadharNumber,
+    mobileNumber,
+    setMobileNumber,
+    consumerName,
+    setConsumerName,
+    bankName,
+    setBankName,
+    setFingerprintData,
+    scanFingerprint,
+    fingerprintData,
+  } = useContext(AepsContext);
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { post } = useAxiosHook()
+  const {post} = useAxiosHook();
 
   const now = new Date();
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
-  const [bankid, setBankId] = useState('')
+  const [bankid, setBankId] = useState('');
 
   const dayOfWeek = days[now.getDay()];
   const dayOfMonth = now.getDate();
@@ -63,8 +92,8 @@ const TwoFAVerify = ({ handle }) => {
 
   const formattedDate = `${dayOfWeek} ${dayOfMonth} ${month} ${hours}:${minutes}:${seconds}`;
 
-  const capture = async (rdServicePackage) => {
-    setIsLoading(true)
+  const capture = async rdServicePackage => {
+    setIsLoading(true);
     let pidOptions = '';
     switch (rdServicePackage) {
       case 'com.mantra.mfs110.rdservice':
@@ -75,7 +104,7 @@ const TwoFAVerify = ({ handle }) => {
         break;
       case 'com.acpl.registersdk_l1':
         pidOptions = `<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0"  timeout="10000"  otp="" pTimeout="20000" posh="UNKNOWN" env="P" />  <Demo/> <CustOpts><Param name="" value="" /></CustOpts> </PidOptions>`;
-        console.log(pidOptions)
+        console.log(pidOptions);
 
         break;
       case 'com.acpl.registersdk':
@@ -97,12 +126,12 @@ const TwoFAVerify = ({ handle }) => {
     // captureFinger(pidOptions)
 
     openFingerPrintScanner(rdServicePackage, pidOptions)
-      .then(async (res) => {
-        setIsLoading(true)
+      .then(async res => {
+        setIsLoading(true);
         // setisFacialTan(false);
 
         // 🔥 Full response console me
-        console.log("Fingerprint Response:", res);
+        console.log('Fingerprint Response:', res);
 
         // 🔥 Firebase me full response save
         // await logToFirebase("fingerprint_response", {
@@ -111,33 +140,25 @@ const TwoFAVerify = ({ handle }) => {
         //   response: res
         // });
 
-        if (res.errorCode == 720) {
+        if (res.errorCode === 720) {
           setFingerprintData(720);
           setIsLoading(false);
 
-        //  await logToFirebase("fingerprint_error_720", res);
-
-        }
-        else if (res.status === -1) {
-
+          //  await logToFirebase("fingerprint_error_720", res);
+        } else if (res.status === -1) {
           setFingerprintData(-1);
           setIsLoading(false);
 
           //await logToFirebase("fingerprint_status_minus_1", res);
-
-        }
-        else if (res.status === 1 || res.errorCode == 0) {
-
-        //  await logToFirebase("fingerprint_success", res);
+        } else if (res.status === 1 || res.errorCode === 0) {
+          //  await logToFirebase("fingerprint_success", res);
 
           OnPressEnq(res.piddataJsonString, res.piddataXML);
 
-          console.log("Data Received Successfully");
+          console.log('Data Received Successfully');
         }
-
       })
-      .catch(async (error) => {
-
+      .catch(async error => {
         setFingerprintData(720);
 
         // 🔥 Error Firebase me
@@ -147,9 +168,8 @@ const TwoFAVerify = ({ handle }) => {
         //   pidOptions
         // });
 
-        Alert.alert('Please check if the device is connected.');
+        Alert.alert(translate('Please check if the device is connected.'));
       });
-
   };
   // const OnPressEnq2 = async (fingerprintData) => {
   //   try {
@@ -234,84 +254,79 @@ const TwoFAVerify = ({ handle }) => {
   //   }
   // };
 
-
-  const OnPressEnq2 = async (fingerprintData) => {
+  const OnPressEnq2 = async fingerprintData => {
     try {
-
       const parsedJson =
-        typeof fingerprintData?.piddataJsonString === "string"
+        typeof fingerprintData?.piddataJsonString === 'string'
           ? JSON.parse(fingerprintData.piddataJsonString)
           : fingerprintData?.piddataJsonString;
 
       const pidData = parsedJson?.PidData;
-      if (!pidData) throw new Error("Invalid PID Data");
+      if (!pidData) {
+        throw new Error(translate('Invalid PID Data'));
+      }
 
       const DevInfo = pidData.DeviceInfo || {};
       const Resp = pidData.Resp || {};
 
-
-
       const cardnumberORUID = {
         adhaarNumber: aadharNumber,
-        indicatorforUID: "0",
-        nationalBankIdentificationNumber: bankid
+        indicatorforUID: '0',
+        nationalBankIdentificationNumber: bankid,
       };
 
       const captureResponse = {
-
         Devicesrno:
-          DevInfo?.additional_info?.Param?.[0]?.value ||
-          DevInfo?.dc ||
-          "",
+          DevInfo?.additional_info?.Param?.[0]?.value || DevInfo?.dc || '',
 
-        PidDatatype: "X",
+        PidDatatype: 'X',
 
         Piddata:
-          typeof pidData.Data === "object"
+          typeof pidData.Data === 'object'
             ? pidData.Data.content
-            : pidData.Data || "",
+            : pidData.Data || '',
 
-        ci: pidData.Skey?.ci || "",
+        ci: pidData.Skey?.ci || '',
 
-        dc: DevInfo.dc || "",
-        dpID: DevInfo.dpId || "",
+        dc: DevInfo.dc || '',
+        dpID: DevInfo.dpId || '',
 
-        errCode: Resp.errCode ?? "",
-        errInfo: Resp.errInfo || "",
+        errCode: Resp.errCode ?? '',
+        errInfo: Resp.errInfo || '',
 
-        fCount: Resp.fCount || "0",
-        fType: Resp.fType || "0",
+        fCount: Resp.fCount || '0',
+        fType: Resp.fType || '0',
 
         hmac:
-          typeof pidData.Hmac === "object"
+          typeof pidData.Hmac === 'object'
             ? pidData.Hmac.content
-            : pidData.Hmac || "",
+            : pidData.Hmac || '',
 
-        iCount: Resp.iCount || "0",
-        iType: Resp.iType || "0",
+        iCount: Resp.iCount || '0',
+        iType: Resp.iType || '0',
 
-        mc: DevInfo.mc || "",
-        mi: DevInfo.mi || "",
+        mc: DevInfo.mc || '',
+        mi: DevInfo.mi || '',
 
-        nmPoints: Resp.nmPoints || "0",
+        nmPoints: Resp.nmPoints || '0',
 
-        pCount: Resp.pCount || "0",
-        pType: Resp.pType || "0",
+        pCount: Resp.pCount || '0',
+        pType: Resp.pType || '0',
 
-        qScore: Resp.qScore || "-1",
+        qScore: Resp.qScore || '-1',
 
-        rdsID: DevInfo.rdsId || "",
-        rdsVer: DevInfo.rdsVer || "",
+        rdsID: DevInfo.rdsId || '',
+        rdsVer: DevInfo.rdsVer || '',
 
         sessionKey:
-          typeof pidData.Skey === "object"
+          typeof pidData.Skey === 'object'
             ? pidData.Skey.content
-            : pidData.Skey || ""
+            : pidData.Skey || '',
       };
 
       console.log(
-        "Mapped Response for Face Auth:",
-        JSON.stringify(captureResponse, null, 2)
+        'Mapped Response for Face Auth:',
+        JSON.stringify(captureResponse, null, 2),
       );
 
       console.log('====================================');
@@ -319,17 +334,15 @@ const TwoFAVerify = ({ handle }) => {
       console.log('====================================');
       console.log(cardnumberORUID);
 
-      BEnQ(captureResponse, cardnumberORUID, "", true);
-
+      BEnQ(captureResponse, cardnumberORUID, '', true);
     } catch (error) {
-
-      console.error("OnPressEnq2 Error:", error);
-      Alert.alert("Error", "Biometric processing failed.");
-
+      console.error('OnPressEnq2 Error:', error);
+      Alert.alert(
+        translate('Error'),
+        translate('Biometric processing failed.'),
+      );
     } finally {
-
-   //   setIsLoading(false);
-
+      //   setIsLoading(false);
     }
   };
   const OnPressEnq = async (fingerprintDataString, pidDataXml) => {
@@ -339,262 +352,249 @@ const TwoFAVerify = ({ handle }) => {
       // 1. Safe JSON Parse
       let parsedJson;
       try {
-        parsedJson = typeof fingerprintDataString === "string"
-          ? JSON.parse(fingerprintDataString)
-          : fingerprintDataString;
+        parsedJson =
+          typeof fingerprintDataString === 'string'
+            ? JSON.parse(fingerprintDataString)
+            : fingerprintDataString;
       } catch (e) {
-        throw new Error("Invalid fingerprint JSON format");
+        throw new Error(translate('Invalid fingerprint JSON format'));
       }
 
       const pidData = parsedJson?.PidData;
-      if (!pidData) throw new Error("Invalid PID Data structure from scanner");
+      if (!pidData) {
+        throw new Error(translate('Invalid PID Data structure from scanner'));
+      }
 
       const DevInfo = pidData.DeviceInfo || {};
       const Resp = pidData.Resp || {};
 
       // 2. Hardware Error Check
-      if (Resp.errCode !== "0") {
-        throw new Error(Resp.errInfo || "Fingerprint capture failed");
+      if (Resp.errCode !== '0') {
+        throw new Error(
+          Resp.errInfo || translate('Fingerprint capture failed'),
+        );
       }
 
       // 3. Extract Serial Number
       const params = DevInfo.additional_info?.Param || [];
-      const srNo = params.find(p => p.name?.toLowerCase() === "srno")?.value || "";
+      const srNo =
+        params.find(p => p.name?.toLowerCase() === 'srno')?.value || '';
 
       // 4. Aadhaar + Bank Info (Check if variables exist)
 
-
       const cardnumberORUID = {
         adhaarNumber: aadharNumber,
-        indicatorforUID: "0",
-        nationalBankIdentificationNumber: bankid
+        indicatorforUID: '0',
+        nationalBankIdentificationNumber: bankid,
       };
 
       // 5. Build Capture Payload
       const captureResponse = {
         Devicesrno: srNo,
-        PidDatatype: "X",
-        Piddata: pidData.Data?.content || "",
-        ci: pidData.Skey?.ci || "",
-        dc: DevInfo.dc || "",
-        dpID: DevInfo.dpId || "",
-        errCode: Resp.errCode || "0",
-        errInfo: Resp.errInfo || "Success",
-        fCount: Resp.fCount || "1",
-        fType: Resp.fType || "2",
-        hmac: pidData.Hmac || "", // Direct string fix
-        iCount: Resp.iCount || "0",
-        iType: "0",
-        mc: DevInfo.mc || "",
-        mi: DevInfo.mi || "",
-        nmPoints: Resp.nmPoints || "0",
-        pCount: Resp.pCount || "0",
-        pType: "0",
-        qScore: Resp.qScore || "0",
-        rdsID: DevInfo.rdsId || "",
-        rdsVer: DevInfo.rdsVer || "",
-        sessionKey: pidData.Skey?.content || "" // Skey content fix
+        PidDatatype: 'X',
+        Piddata: pidData.Data?.content || '',
+        ci: pidData.Skey?.ci || '',
+        dc: DevInfo.dc || '',
+        dpID: DevInfo.dpId || '',
+        errCode: Resp.errCode || '0',
+        errInfo: Resp.errInfo || 'Success',
+        fCount: Resp.fCount || '1',
+        fType: Resp.fType || '2',
+        hmac: pidData.Hmac || '', // Direct string fix
+        iCount: Resp.iCount || '0',
+        iType: '0',
+        mc: DevInfo.mc || '',
+        mi: DevInfo.mi || '',
+        nmPoints: Resp.nmPoints || '0',
+        pCount: Resp.pCount || '0',
+        pType: '0',
+        qScore: Resp.qScore || '0',
+        rdsID: DevInfo.rdsId || '',
+        rdsVer: DevInfo.rdsVer || '',
+        sessionKey: pidData.Skey?.content || '', // Skey content fix
       };
 
-      console.log("Payload Ready:", captureResponse);
+      console.log('Payload Ready:', captureResponse);
 
       // 6. API Call
-       BEnQ(captureResponse, cardnumberORUID, pidDataXml, false);
-
+      BEnQ(captureResponse, cardnumberORUID, pidDataXml, false);
     } catch (error) {
-      console.error("OnPressEnq Process Error:", error);
-      Alert.alert("Authentication Failed", error.message);
+      console.error('OnPressEnq Process Error:', error);
+      Alert.alert(translate('Authentication Failed'), error.message);
     } finally {
-     // setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
-  const saveJdata = async (data) => {
+  const saveJdata = async data => {
     try {
-      await AsyncStorage.setItem("jdata", JSON.stringify(data));
-      console.log("jdata saved successfully");
+      await AsyncStorage.setItem('jdata', JSON.stringify(data));
+      console.log('jdata saved successfully');
     } catch (error) {
-      console.log("Failed to save jdata", error);
+      console.log('Failed to save jdata', error);
     }
   };
   const loadJdata = async () => {
     try {
-      const stored = await AsyncStorage.getItem("jdata");
+      const stored = await AsyncStorage.getItem('jdata');
       if (stored) {
         const parsed = JSON.parse(stored);
-        console.log("Stored jdata:***********************************************************", parsed);  // 📢 Console me print yahi aayega
+        console.log(
+          'Stored jdata:***********************************************************',
+          parsed,
+        ); // 📢 Console me print yahi aayega
         return parsed;
       }
     } catch (error) {
-      console.log("Error reading jdata", error);
+      console.log('Error reading jdata', error);
     }
   };
-  const provider =
-             activeAepsLine?.provider;
+  const provider = activeAepsLine?.provider;
 
-  const BEnQ = useCallback(async (captureResponse1, cardnumberORUID1, pidDataX, isFace) => {
-    try {
-      setIsLoading(true);
-const provider =
-             activeAepsLine?.provider;
-     
-           console.log(
-             'Current Provider:',
-             provider
-           );
-     
-           // =========================
-           // URL SELECT
-           // =========================
-     
-           let finalUrl = '';
-     
-           if (provider === 'NIFI') {
-     
-             finalUrl =
-              APP_URLS?.twofaNifi ?? "" ;
-           }
-     
-           else if (provider === 'CHAGANS') {
-     
-             finalUrl =
-               'AEPS/api/Chagan/data/Validate2FA';
-           }
-     
-           else if (provider === 'FINGPAY') {
-     
-             finalUrl =
-               APP_URLS?.twofa ?? "";
-           }
-     
-           console.log(
-             'Calling URL:',
-             finalUrl
-           );
+  const BEnQ = useCallback(
+    async (captureResponse1, cardnumberORUID1, pidDataX, isFace) => {
+      try {
+        setIsLoading(true);
+        const provider = activeAepsLine?.provider;
 
+        console.log('Current Provider:', provider);
 
-      const Model = getMobileDeviceId();
-      const address = 'vwi';
+        // =========================
+        // URL SELECT
+        // =========================
 
-      const jdata = {
-        capxml: pidDataX,
-        captureResponse: captureResponse1 ?? "",
-        cardnumberORUID: cardnumberORUID1 ?? "",
-        languageCode: 'en',
-        latitude: latitude ?? 0,
-        longitude: longitude ?? 0,
-        mobileNumber: '',
-        merchantTranId: userId ?? "",
-        merchantTransactionId: userId ?? "",
-        paymentType: 'B',
-        otpnum: '',
-        requestRemarks: 'TN3000CA06532',
-        subMerchantId: 'A2zsuvidhaa',
-        timestamp: formattedDate ?? "",
-        transactionType: 'M',
-        name: '',
-        Address: address,
-        transactionAmount: '',
-        ServideType: 'AEPS',
-        isFacialTan: isFace
-      };
-      const headers = {
-        'trnTimestamp': formattedDate ?? "",
-        'deviceIMEI': Model ?? "",
-        "Content-type": "application/json",
-        "Accept": "application/json",
-      };
+        let finalUrl = '';
 
+        if (provider === 'NIFI') {
+          finalUrl = APP_URLS?.twofaNifi ?? '';
+        } else if (provider === 'CHAGANS') {
+          finalUrl = 'AEPS/api/Chagan/data/Validate2FA';
+        } else if (provider === 'FINGPAY') {
+          finalUrl = APP_URLS?.twofa ?? '';
+        }
 
-      await saveJdata(jdata);
+        console.log('Calling URL:', finalUrl);
 
-      const data = JSON.stringify(jdata);
+        const Model = getMobileDeviceId();
+        const address = 'vwi';
 
-      // ✅ Log request headers and body
-      // await logToFile('Request Headers', headers);
-      //  await logToFile('Request Body', jdata);
+        const jdata = {
+          capxml: pidDataX,
+          captureResponse: captureResponse1 ?? '',
+          cardnumberORUID: cardnumberORUID1 ?? '',
+          languageCode: 'en',
+          latitude: latitude ?? 0,
+          longitude: longitude ?? 0,
+          mobileNumber: '',
+          merchantTranId: userId ?? '',
+          merchantTransactionId: userId ?? '',
+          paymentType: 'B',
+          otpnum: '',
+          requestRemarks: 'TN3000CA06532',
+          subMerchantId: 'A2zsuvidhaa',
+          timestamp: formattedDate ?? '',
+          transactionType: 'M',
+          name: '',
+          Address: address,
+          transactionAmount: '',
+          ServideType: 'AEPS',
+          isFacialTan: isFace,
+        };
+        const headers = {
+          trnTimestamp: formattedDate ?? '',
+          deviceIMEI: Model ?? '',
+          'Content-type': 'application/json',
+          Accept: 'application/json',
+        };
 
-      const response = await post({
-        url: finalUrl,
+        await saveJdata(jdata);
 
-        data: data,
-        config: { headers },
-      });
+        const data = JSON.stringify(jdata);
 
-      // ✅ Log response
-      //  await logToFile('API Response', response);
-      // Alert.alert(
-      //   '2FA Request Payload',
-      //   JSON.stringify(jdata, null, 2),
-      //   [{ text: 'OK' }]
-      // );
+        // ✅ Log request headers and body
+        // await logToFile('Request Headers', headers);
+        //  await logToFile('Request Body', jdata);
 
-      if (!response) {
-        console.error("Invalid response from API.");
+        const response = await post({
+          url: finalUrl,
+
+          data: data,
+          config: {headers},
+        });
+
+        // ✅ Log response
+        //  await logToFile('API Response', response);
+        // Alert.alert(
+        //   '2FA Request Payload',
+        //   JSON.stringify(jdata, null, 2),
+        //   [{ text: 'OK' }]
+        // );
+
+        if (!response) {
+          console.error('Invalid response from API.');
+          setIsLoading(false);
+          return;
+        }
+
+        setFingerprintData(720);
         setIsLoading(false);
-        return;
-      }
 
-      setFingerprintData(720);
-      setIsLoading(false);
-
-      const isSuccess = response?.Status === true || response?.Status === 'true';
-      setis2fa(isSuccess)
-      let mockNotification = {};
-      if (isSuccess) {
-        mockNotification = {
-          notification: {
-            title: "TwoFa Status",
-            body: "Your 2FA has been successfully completed!", // ✅ cleaner message
-          },
-        };
-
-        Alert.alert(
-          "Message:",
-          `✅ Your 2FA has been successfully completed!\n\nDetails:\n${JSON.stringify(
-            response.Message,
-            null,
-            2
-          )}`,
-          [
-            {
-              text: "OK",
-              onPress: () => handle(), // close modal instead of navigation
+        const isSuccess =
+          response?.Status === true || response?.Status === 'true';
+        setis2fa(isSuccess);
+        let mockNotification = {};
+        if (isSuccess) {
+          mockNotification = {
+            notification: {
+              title: translate('TwoFa Status'),
+              body: translate('Your 2FA has been successfully completed!'), // ✅ cleaner message
             },
-          ]
-        );
-      } else {
-        mockNotification = {
-          notification: {
-            title: "TwoFa Status",
-            body: "2FA failed. Please try again.", // ❌ failure message
-          },
-        };
+          };
 
-        Alert.alert(
-          "Message:",
-          `❌ 2FA failed. Please try again.\n\nDetails:\n${JSON.stringify(
-            response.Message,
-            null,
-            2
-          )}`,
-          [{ text: 'OK' }]
+          Alert.alert(
+            translate('Message:'),
+            `✅ ${translate(
+              'Your 2FA has been successfully completed!',
+            )}\n\n${translate('Details:')}\n${JSON.stringify(
+              response.Message,
+              null,
+              2,
+            )}`,
+            [
+              {
+                text: translate('OK'),
+                onPress: () => handle(), // close modal instead of navigation
+              },
+            ],
+          );
+        } else {
+          mockNotification = {
+            notification: {
+              title: translate('TwoFa Status'),
+              body: translate('2FA failed. Please try again.'), // ❌ failure message
+            },
+          };
 
-        );
+          Alert.alert(
+            translate('Message:'),
+            `❌ ${translate('2FA failed. Please try again.')}\n\n${translate(
+              'Details',
+            )}:\n${JSON.stringify(response.Message, null, 2)}`,
+            [{text: 'OK'}],
+          );
+        }
+
+        onReceiveNotification2(mockNotification);
+      } catch (error) {
+        console.error('Error during balance enquiry:', error);
+        //await logToFile('API Error', error.message || error);
+        setIsLoading(false);
       }
+    },
+    [latitude, longitude, formattedDate, userId, isFace, navigation],
+  );
 
-      onReceiveNotification2(mockNotification);
-
-    } catch (error) {
-      console.error('Error during balance enquiry:', error);
-      //await logToFile('API Error', error.message || error);
-      setIsLoading(false);
-    }
-  }, [latitude, longitude, formattedDate, userId, isFace, navigation]);
-
-
-
-  const address = 'vwi'
+  const address = 'vwi';
   // const readSavedData = async () => {
   //   try {
   //     const pathBody = `${RNFS.DocumentDirectoryPath}/requestBody.json`;
@@ -614,12 +614,11 @@ const provider =
     const savedFData = await AsyncStorage.getItem('fingerprintData');
     const savedHeaders = await AsyncStorage.getItem('headers');
 
-    console.log(savedFData, '***************')
-    console.log(savedJData)
-    console.log(savedHeaders)
-
-  }
-  const handleSelection = (selectedOption) => {
+    console.log(savedFData, '***************');
+    console.log(savedJData);
+    console.log(savedHeaders);
+  };
+  const handleSelection = selectedOption => {
     //read()
     if (deviceName === 'Device') {
       return;
@@ -635,50 +634,55 @@ const provider =
     };
     const selectedCapture = captureMapping[selectedOption];
     if (selectedCapture) {
-
       if (selectedOption === 'Aadhaar Face RD') {
-        setIsFace(selectedOption === 'Aadhaar Face RD')
+        setIsFace(selectedOption === 'Aadhaar Face RD');
         openFace();
       } else {
-        setIsFace(false)
+        setIsFace(false);
 
         isDriverFound(selectedCapture)
-          .then((res) => {
+          .then(res => {
             capture(selectedCapture);
           })
-          .catch((error) => {
+          .catch(error => {
             console.error('Error finding driver:', error);
-            alert('Error: Could not find the selected driver.');
+            Alert.alert(
+              translate('Error: Could not find the selected driver.'),
+            );
           });
       }
     } else {
-      alert('Invalid option selected');
+      Alert.alert(translate('Invalid option selected'));
     }
   };
 
   const openFace = useCallback(() => {
     openFaceAuth(userId)
-      .then(async (response) => {
+      .then(async response => {
         console.log('Face Auth Response:', JSON.stringify(response));
 
         if (response.errorCode === 892) {
-          ToastAndroid.show('Error during face authentication 892', ToastAndroid.BOTTOM);
+          ToastAndroid.show(
+            translate('Error during face authentication 892'),
+            ToastAndroid.BOTTOM,
+          );
           return;
         }
-
 
         try {
           console.log('Calling OnPressEnq2...');
           OnPressEnq2(response);
-          ToastAndroid.show('Scan', ToastAndroid.BOTTOM);
-
+          ToastAndroid.show(translate('Scan'), ToastAndroid.BOTTOM);
         } catch (err) {
           console.error('Error in OnPressEnq2:', err);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Catch block error:', error);
-        ToastAndroid.show('Error during face authentication', ToastAndroid.BOTTOM);
+        ToastAndroid.show(
+          translate('Error during face authentication'),
+          ToastAndroid.BOTTOM,
+        );
       });
   }, [userId, OnPressEnq2]);
 
@@ -687,7 +691,7 @@ const provider =
       const savedResponse = await AsyncStorage.getItem('faceAuthResponse');
       if (savedResponse !== null) {
         const parsedResponse = JSON.parse(savedResponse);
-        console.log(savedResponse)
+        console.log(savedResponse);
       } else {
         console.log('No response saved in AsyncStorage');
       }
@@ -702,45 +706,38 @@ const provider =
     };
   }, []);
   const backHandler = () => {
-    Alert.alert(
-      null,
-      "Do you really want to cancel ?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        {
-          text: "OK",
-          onPress: () => {
-            navigation.navigate('Dashboard');
+    Alert.alert(null, translate('Do you really want to cancel ?'), [
+      {
+        text: translate('Cancel'),
+        onPress: () => console.log('Cancel Pressed'),
+        style: translate('cancel'),
+      },
+      {
+        text: translate('OK'),
+        onPress: () => {
+          navigation.navigate('Dashboard');
 
-            //  sendResponse('User cancelled');
-          }
-        }
-      ]
-    );
+          //  sendResponse('User cancelled');
+        },
+      },
+    ]);
     return true;
   };
   return (
-    <View style={[styles.main, { borderColor: colorConfig.secondaryColor }]}>
+    <View style={[styles.main, {borderColor: colorConfig.secondaryColor}]}>
       {/* <AppBarSecond/> */}
-
 
       <View style={styles.cutborder}>
         <TouchableOpacity
           onPress={() => {
             if (is2fa) {
-              handle()
+              handle();
             }
-
-          }
-          }
+          }}
           activeOpacity={0.7}
           style={[
             styles.closebuttoX,
-            { backgroundColor: colorConfig.secondaryColor },
+            {backgroundColor: colorConfig.secondaryColor},
           ]}>
           <CloseSvg />
         </TouchableOpacity>
@@ -748,70 +745,78 @@ const provider =
       <View
         style={[
           styles.texttitalView,
-          { backgroundColor: colorConfig.secondaryColor },
+          {backgroundColor: colorConfig.secondaryColor},
         ]}>
         <View
-          style={[
-            styles.cutout,
-            { borderTopColor: colorConfig.secondaryColor },
-          ]}
+          style={[styles.cutout, {borderTopColor: colorConfig.secondaryColor}]}
         />
-        <TouchableOpacity onPress={() => {
-          navigation.goBack();
-
-        }}>
-          <Entypo name="back" size={20} color={'#ffff'} style={{ left: wScale(10) }} />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Entypo
+            name="back"
+            size={20}
+            color={'#ffff'}
+            style={{left: wScale(10)}}
+          />
         </TouchableOpacity>
 
-
-        {Loc_Data['isGPS'] && <TouchableOpacity  >
-          <Entypo name="location" size={wScale(30)} color={Loc_Data['isGPS'] ? '#ffff' : colorConfig.secondaryColor} style={{ left: wScale(-10) }} />
-        </TouchableOpacity>
-        }
+        {Loc_Data.isGPS && (
+          <TouchableOpacity>
+            <Entypo
+              name="location"
+              size={wScale(30)}
+              color={Loc_Data.isGPS ? '#ffff' : colorConfig.secondaryColor}
+              style={{left: wScale(-10)}}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       <View style={styles.container}>
-
-
         <View style={styles.card}>
-          <Text style={styles.title}>{translate("AePS 2FA")}</Text>
+          <Text style={styles.title}>{translate('AePS 2FA')}</Text>
           <Text style={styles.title}>{deviceName}</Text>
-          <Text style={styles.deviceConnectionText}>{translate(`Device Connection`)}</Text>
-          <Text style={styles.infoText}>{translate("key_connect_1")}</Text>
-          <Text style={styles.infoText}>{translate("key_dearcu_2")}</Text>
+          <Text style={styles.deviceConnectionText}>
+            {translate(`Device Connection`)}
+          </Text>
+          <Text style={styles.infoText}>{translate('key_connect_1')}</Text>
+          <Text style={styles.infoText}>{translate('key_dearcu_2')}</Text>
           {/* <Text style={styles.infoText}>3. Face authentication is disabled on the bank side for 2FA verification.</Text> */}
         </View>
-        <Text style={styles.title}></Text>
+        <Text style={styles.title} />
 
-        {deviceName && <DynamicButton
-          title={'scan'}
-          onPress={async () => {
-            handleSelection(deviceName);
-
-          }}
-          styleoveride={undefined}
-        />}
-
+        {deviceName && (
+          <DynamicButton
+            title={'scan'}
+            onPress={async () => {
+              handleSelection(deviceName);
+            }}
+            styleoveride={undefined}
+          />
+        )}
 
         {isLoading && <ShowLoader />}
-        <SelectDevice setDeviceName={setDeviceName}
+        <SelectDevice
+          setDeviceName={setDeviceName}
           isface2={true}
           device={deviceName}
           isface={provider === 'CHAGANS' ? false : true}
           opPress={() => {
-            loadJdata();    // 👈 function call
+            loadJdata(); // 👈 function call
 
-            console.log(latitude, longitude)
-            handleSelection(deviceName)
-          }
-
-          } pkg={undefined}
+            console.log(latitude, longitude);
+            handleSelection(deviceName);
+          }}
+          pkg={undefined}
           onPressface={() => {
             loadJdata();
-            setIsFace(true)
-            handleSelection('Aadhaar Face RD')
+            setIsFace(true);
+            handleSelection('Aadhaar Face RD');
           }}
-          isProcees={true} />
+          isProcees={true}
+        />
       </View>
     </View>
   );
@@ -824,13 +829,13 @@ const styles = StyleSheet.create({
     paddingTop: hScale(50),
     marginHorizontal: wScale(10),
     borderWidth: 1,
-    paddingBottom:hScale(50),
-    marginTop: hScale(30)
+    paddingBottom: hScale(50),
+    marginTop: hScale(30),
   },
   container: {
     flex: 1,
     paddingHorizontal: wScale(15),
-    paddingTop: hScale(0)
+    paddingTop: hScale(0),
   },
 
   card: {
@@ -845,35 +850,33 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: hScale(10),
     textAlign: 'center',
-    color: colors.black75
+    color: colors.black75,
   },
   deviceConnectionText: {
     fontSize: wScale(18),
     marginBottom: hScale(10),
     textAlign: 'center',
-    color: colors.black75
-
+    color: colors.black75,
   },
   infoText: {
     fontSize: wScale(16),
     marginBottom: hScale(14),
     textAlign: 'center',
-    color: colors.black75
-
+    color: colors.black75,
   },
 
   loadingIndicator: {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{ translateX: -25 }, { translateY: -25 }],
+    transform: [{translateX: -25}, {translateY: -25}],
   },
   texttital: {
     fontSize: wScale(18),
     fontWeight: 'bold',
     color: '#fff',
     width: 240,
-    paddingLeft: wScale(10)
+    paddingLeft: wScale(10),
   },
   texttitalView: {
     width: wScale(150),

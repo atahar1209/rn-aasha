@@ -1,38 +1,33 @@
-import LottieView from 'lottie-react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ToastAndroid,
-  FlatList,
   ActivityIndicator,
-  
   Alert,
 } from 'react-native';
-import { translate } from '../../utils/languageUtils/I18n';
-import { APP_URLS } from '../../utils/network/urls';
-import { colors } from '../../utils/styles/theme';
+import {translate} from '../../utils/languageUtils/I18n';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
-import { hScale, wScale } from '../../utils/styles/dimensions';
+import {hScale, wScale} from '../../utils/styles/dimensions';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import DynamicButton from '../drawer/button/DynamicButton';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
 import OperatorBottomSheet from '../../components/OperatorBottomSheet';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ShowLoader from '../../components/ShowLoder';
 import RecentText from '../../components/RecentText';
-import { useLocationHook } from '../../hooks/useLocationHook';
 
 const WaterBillScreen = () => {
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [CustomerID, setCustomerID] = useState('');
   const [amount, setAmount] = useState('');
   const [ProceedSheetVisible, setProceedSheetVisible] = useState(false);
@@ -58,7 +53,7 @@ const WaterBillScreen = () => {
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
   const [agencyCode, setAgencyCode] = useState('');
@@ -79,9 +74,9 @@ const WaterBillScreen = () => {
       const token = await APP_URLS.getToke;
       const data = {};
       const url = `${APP_URLS.getDthOperator}Water`;
-      const response = await get({ url });
-      setWaterBillOperators(response['myprop2Items']);
-      console.log(response['myprop2Items']);
+      const response = await get({url});
+      setWaterBillOperators(response.myprop2Items);
+      console.log(response.myprop2Items);
     } catch (e) {
       console.error(e);
     }
@@ -89,24 +84,24 @@ const WaterBillScreen = () => {
 
   useEffect(() => {
     recenttransactions();
-
   }, []);
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
-      console.log('-*************************************recenttransaction', response);
+      const response = await get({url: url});
+      console.log(
+        '-*************************************recenttransaction',
+        response,
+      );
 
       setHistorylist(response);
-      setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqTime(response[0].Reqesttime);
+      setReqId(response[0].Request_ID);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -116,11 +111,11 @@ const WaterBillScreen = () => {
   const formattedDate = `${year}-${month}-${day}`;
   const [dueDate, setDueDate] = useState('Date');
 
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId, Loc_Data } = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = Loc_Data;
- 
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = Loc_Data;
+
   const onRechargePress = useCallback(async () => {
     try {
       console.log('Raw LatLong:', latitude, longitude);
@@ -200,18 +195,18 @@ const WaterBillScreen = () => {
       // =========================
       // API CALL
       // =========================
-      const res = await post({ url });
+      const res = await post({url});
 
       console.log('Recharge Response:', res);
 
       if (res?.status === 'False') {
-        alert(res?.message || 'Recharge failed');
+        Alert.alert(res?.message || translate('Recharge failed'));
         setShowLoader(false);
         return;
       }
 
-      const status = res?.Response || 'Success';
-      const Message = res?.Message || 'Recharge Successful';
+      const status = res?.Response || translate('Success');
+      const Message = res?.Message || translate('Recharge Successful');
 
       await recenttransactions();
 
@@ -219,7 +214,7 @@ const WaterBillScreen = () => {
       // RESET UI
       // =========================
       setCustomerID('');
-      setFastagOpt('Select Your Operator');
+      setFastagOpt(translate('Select Your Operator'));
       setAmount('');
       setIsInfo(false);
       setShowLoader(false);
@@ -236,22 +231,27 @@ const WaterBillScreen = () => {
         reqTime: reqTime || new Date().toISOString(),
         Message,
       });
-
     } catch (error) {
       console.error('Recharge failed:', error);
       setShowLoader(false);
-      alert('Recharge failed, please try again');
+      Alert.alert(translate('Recharge failed, please try again'));
     }
   }, [
-    amount,
     latitude,
     longitude,
+    getNetworkCarrier,
+    getMobileIp,
+    userId,
     CustomerID,
     optcode,
-    userId,
-    getMobileIp,
-    getNetworkCarrier,
+    amount,
+    agencyCode,
     post,
+    recenttransactions,
+    navigation,
+    FastagOpt,
+    reqId,
+    reqTime,
   ]);
 
   // async function billInfo() {
@@ -262,7 +262,6 @@ const WaterBillScreen = () => {
   //         Authorization: `Bearer ${token}`,
   //       },
   //     };
-
 
   //     const url = `${APP_URLS.rechargeViewBill}billnumber=${paramname}&Operator=${optcode}&billunit=&ProcessingCycle=''&acno=''&lt=""&ViewBill:"Y"`;
   //     const res = await post({ url: url });
@@ -340,44 +339,53 @@ const WaterBillScreen = () => {
 
       const url = `${APP_URLS.rechargeViewBill}billnumber=${CustomerID}&Operator=${optcode}&billunit&ProcessingCycle&acno&lt&ViewBill=Y`;
 
-      console.log("🔗 BillInfo URL:", url);
+      console.log('🔗 BillInfo URL:', url);
 
-      const res = await get({ url });
+      const res = await get({url});
 
-      console.log("📥 BillInfo Response:", res);
+      console.log('📥 BillInfo Response:', res);
 
       if (res?.RESULT === 0) {
         const billInfo = res?.ADDINFO?.BillInfo;
 
         if (billInfo) {
-          setDueDate(billInfo.billDueDate || "");
-          setAmount(billInfo.billAmount || "");
-          setCustomerName(billInfo.customerName || "");
-          setCustBal(billInfo.balance || "");
+          setDueDate(billInfo.billDueDate || '');
+          setAmount(billInfo.billAmount || '');
+          setCustomerName(billInfo.customerName || '');
+          setCustBal(billInfo.balance || '');
         }
         // setLandLineOPSheet(true)
         setProceedSheetVisible(true);
-
       } else {
         Alert.alert(
-          res?.ADDINFO || "Error",
-          res?.Message || "Something went wrong",
-          [{ text: "OK" }]
+          res?.ADDINFO || translate('Error'),
+          res?.Message || translate('Something went wrong'),
+          [{text: translate('OK')}],
         );
       }
     } catch (error) {
-      console.log("❌ Bill Info Error:", error);
-      Alert.alert("Error", "Unable to fetch bill details");
+      console.log('❌ Bill Info Error:', error);
+      Alert.alert(
+        translate('Error'),
+        translate('Unable to fetch bill details'),
+      );
     } finally {
       setShowLoader2(false);
     }
-  }, [CustomerID, optcode]);
+  }, [CustomerID, get, optcode]);
 
   const handlePayPress = async () => {
     if (FastagOpt === 'Select Your Operator') {
-      ToastAndroid.show('Please Select an Operator', ToastAndroid.SHORT);
+      ToastAndroid.show(
+        translate('Please Select an Operator'),
+        ToastAndroid.SHORT,
+      );
     } else if (!CustomerID) {
-      ToastAndroid.showWithGravity(`Please Enter ${paramname}`, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+      ToastAndroid.showWithGravity(
+        `${translate('Please Enter')} ${paramname}`,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
     } else {
       billInfo();
       // if (billResult.result === '1') {
@@ -388,7 +396,6 @@ const WaterBillScreen = () => {
       // }
     }
   };
-
 
   const [accnumhint, setAccnumhint] = useState('');
   const [accmaxlength, setAccmaxlength] = useState(0);
@@ -404,9 +411,9 @@ const WaterBillScreen = () => {
   const [keyType3, setKeyType3] = useState('');
   const [accntvisivility2, setAccntvisivility2] = useState(false);
   const handleItemPress = item => {
-    setFastagOpt(item['Operatorname']);
-    setWaterBillOperator(item['Operatorname']);
-    setOptCode(item['OPtCode']);
+    setFastagOpt(item.Operatorname);
+    setWaterBillOperator(item.Operatorname);
+    setOptCode(item.OPtCode);
     setDataType('');
     setMinLength(0);
     setOptional('');
@@ -419,36 +426,36 @@ const WaterBillScreen = () => {
       clearState();
     } else {
       const custparam = item.customerparams;
-      setDataType(custparam[0]['dataType']);
-      setMaxLength(custparam[0]['maxLength']);
-      setMinLength(custparam[0]['minLength']);
-      setVisibility(custparam[0]['visibility']);
-      setOptional(custparam[0]['optional']);
-      setParamName(custparam[0]['paramName']);
-      setOptCode(item['OPtCode']);
-      setRegx(custparam[0]['regex']);
-      setValues(custparam[0]['values']);
+      setDataType(custparam[0].dataType);
+      setMaxLength(custparam[0].maxLength);
+      setMinLength(custparam[0].minLength);
+      setVisibility(custparam[0].visibility);
+      setOptional(custparam[0].optional);
+      setParamName(custparam[0].paramName);
+      setOptCode(item.OPtCode);
+      setRegx(custparam[0].regex);
+      setValues(custparam[0].values);
       if (custparam.length === 2) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setKey2(custparam[1]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setKey2(custparam[1].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
         setAccntvisivility2(false);
       } else if (custparam.length === 3) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setAccnumhint2(custparam[2]['paramName']);
-        setAccmaxlength2(custparam[2]['maxLength']);
-        setKey2(custparam[1]['dataType']);
-        setKey3(custparam[2]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setAccnumhint2(custparam[2].paramName);
+        setAccmaxlength2(custparam[2].maxLength);
+        setKey2(custparam[1].dataType);
+        setKey3(custparam[2].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setKeyType3(
-          custparam[2]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[2].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
         setAccntvisivility2(true);
@@ -495,103 +502,120 @@ const WaterBillScreen = () => {
       amount,
       custBal,
     });
-  }, [CustomerID, dueDate, amount, custBal,]);
+  }, [CustomerID, dueDate, amount, custBal]);
 
   return (
     <View style={styles.main}>
       <AppBarSecond title={'Water Bill Screen'} />
       <View style={styles.container}>
-        {showLoader && (
-          <ShowLoader />
-        )}
+        {showLoader && <ShowLoader />}
         <TouchableOpacity
           style={{}}
           onPress={() => {
             setLandLineOPSheet(true);
           }}>
-
-          <FlotingInput label={FastagOpt} editable={false} />
-
-
+          <FlotingInput
+            label={FastagOpt}
+            editable={false}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+            onChangeTextCallback={undefined}
+          />
         </TouchableOpacity>
         {accntvisivility && (
-          <View
-          >
-            <FlotingInput label={accnumhint} onChangeTextCallback={(text) => setAgencyCode(text)}
+          <View>
+            <FlotingInput
+              label={accnumhint}
+              onChangeTextCallback={text => setAgencyCode(text)}
               value={agencyCode}
-
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
 
             <TouchableOpacity>
-              <Text style={{}}></Text>
+              <Text style={{}} />
             </TouchableOpacity>
           </View>
         )}
 
         {accntvisivility2 && (
-          <View >
-
-            <FlotingInput label={accnumhint2} onChangeTextCallback={(text) => setAgencyCode2(text)}
+          <View>
+            <FlotingInput
+              label={accnumhint2}
+              onChangeTextCallback={text => setAgencyCode2(text)}
               value={agencyCode2}
-
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <View style={[styles.righticon2]}>
               <TouchableOpacity>
-
-                <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
+                <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
               </TouchableOpacity>
-
             </View>
-
           </View>
         )}
 
         <View>
-          <FlotingInput label={paramname} value={CustomerID}
-
+          <FlotingInput
+            label={paramname}
+            value={CustomerID}
             onChangeTextCallback={text => {
               handleTextChange(text);
               if (text.length >= 5) {
-                setIsInfo(true)
+                setIsInfo(true);
               } else {
-                setIsInfo(false)
+                setIsInfo(false);
               }
-            }} />
-          <View style={[styles.righticon2,]}>
+            }}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+          />
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
-
-                onPress={() => handlePayPress()}
-              >
-                {
-                  showLoader2 ? <ActivityIndicator size={'large'} /> : <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
-
-                }
+                onPress={() => handlePayPress()}>
+                {showLoader2 ? (
+                  <ActivityIndicator size={'large'} />
+                ) : (
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
+                )}
               </TouchableOpacity>
             )}
           </View>
-
         </View>
 
-        <FlotingInput label={'Enter Amount'}
+        <FlotingInput
+          label={translate('Enter Amount')}
           maxLength={5}
-          value={amount} keyboardType="number-pad"
+          value={amount}
+          keyboardType="number-pad"
           onChangeTextCallback={text => {
-            setAmount(text); setAmount(text.replace(/\D/g, ""));
-          }} />
+            setAmount(text);
+            setAmount(text.replace(/\D/g, ''));
+          }}
+          inputstyle={undefined}
+          labelinputstyle={undefined}
+        />
 
-        <DynamicButton title={'Next'} onPress={() => { handlePayPress(); }} styleoveride={undefined} />
-        <View >
+        <DynamicButton
+          title={'Next'}
+          onPress={() => {
+            handlePayPress();
+          }}
+          styleoveride={undefined}
+        />
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
             onBackdropPress={() => setIsrecent(false)}
           />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
             <RecentText />
           </TouchableOpacity>
@@ -601,14 +625,18 @@ const WaterBillScreen = () => {
           isModalVisible={LandLineOPSheet}
           operatorData={waterBillOperators}
           //// stateData={stateList}
-          selectedOperator={() => { FastagOpt; setLandLineOPSheet(false) }}
+          selectedOperator={() => {
+            FastagOpt;
+            setLandLineOPSheet(false);
+          }}
           setModalVisible={setLandLineOPSheet}
           selectOperator={selectOperator}
           setOperatorcode={setOptCode}
           showState={false}
           // selectOperatorImage={setOptimg}
-          handleItemPress={(item) => { handleItemPress(item) }}
-
+          handleItemPress={item => {
+            handleItemPress(item);
+          }}
         />
         <Rechargeconfirm
           Lottieimg={require('../../utils/lottieIcons/biomass.json')}
@@ -616,26 +644,26 @@ const WaterBillScreen = () => {
           onBackdropPress={() => setProceedSheetVisible(false)}
           status={Status}
           details={[
-            { label: 'User Name', value2: CustomerName },
-            { label: 'Customer ID', value: CustomerID },
-            { label: 'Due Date', value2: dueDate },
-            { label: 'Operator Name', value2: FastagOpt },
-            { label: 'Customer Status', value2: Status },
+            {label: translate('User Name'), value2: CustomerName},
+            {label: translate('Customer ID'), value: CustomerID},
+            {label: translate('Due Date'), value2: dueDate},
+            {label: translate('Operator Name'), value2: FastagOpt},
+            {label: translate('Customer Status'), value2: Status},
             // { label: 'BillAmount', value2: billAmount },
-
           ]}
-          lastlabel={'Transaction Amount'}
+          lastlabel={translate('Transaction Amount')}
           lastvalue={amount}
           onRechargedetails={() => {
             if (amount === '0' || amount === '') {
               ToastAndroid.showWithGravity(
-                `Please Enter Amount`,
+                translate('Please Enter Amount'),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
-            } else { onRechargePress() }
-          }
-          }
+            } else {
+              onRechargePress();
+            }
+          }}
         />
       </View>
     </View>
@@ -645,21 +673,21 @@ const WaterBillScreen = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: wScale(30),
-    flex: 1
+    flex: 1,
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -672,11 +700,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',

@@ -1,22 +1,32 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Animated, ScrollView, StatusBar } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  Animated,
+  ScrollView,
+  StatusBar,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import useAxiosHook from '../../../utils/network/AxiosClient';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
-import { hScale } from '../../../utils/styles/dimensions';
+import {hScale} from '../../../utils/styles/dimensions';
 
-const RegisterVM30 = ({ route }) => {
-  const { deviceSerial } = route.params;
+const RegisterVM30 = ({route}) => {
+  const {deviceSerial} = route.params;
   const [devicenum, setDeviceNum] = useState(deviceSerial);
   const [validate, setValidate] = useState(false);
   const navigation = useNavigation();
-  
+
   // Animations
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
 
-  const { post } = useAxiosHook();
+  const {post} = useAxiosHook();
 
   useEffect(() => {
     setDeviceNum(deviceSerial);
@@ -30,25 +40,34 @@ const RegisterVM30 = ({ route }) => {
         toValue: 0,
         duration: 600,
         useNativeDriver: true,
-      })
+      }),
     ]).start();
-  }, [deviceSerial]);
+  }, [deviceSerial, fadeAnim, slideAnim]);
 
-  const deviceRegister = async (serialno) => {
+  const deviceRegister = async serialno => {
     try {
-      const res = await post({ url: `MICROATM/api/data/SubmitSnNo?DeviceSnNo=${serialno}` });
-      const { status, msg } = res;
+      const res = await post({
+        url: `MICROATM/api/data/SubmitSnNo?DeviceSnNo=${serialno}`,
+      });
+      const {status, msg} = res;
 
       if (status === 'Success') {
-        Alert.alert('Activation Successful', msg, [
-          { text: 'Awesome', onPress: () => navigation.goBack() },
+        Alert.alert(translate('Activation Successful'), msg, [
+          {text: translate('Awesome'), onPress: () => navigation.goBack()},
         ]);
       } else {
-        Alert.alert('Activation Failed', msg || 'Invalid Serial Number', [{ text: 'Try Again', style: 'cancel' }]);
+        Alert.alert(
+          translate('Activation Failed'),
+          msg || translate('Invalid Serial Number'),
+          [{text: translate('Try Again'), style: 'cancel'}],
+        );
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Network Error', 'Please check your connection');
+      Alert.alert(
+        translate('Network Error'),
+        translate('Please check your connection'),
+      );
     }
   };
 
@@ -66,20 +85,31 @@ const RegisterVM30 = ({ route }) => {
       <StatusBar barStyle="dark-content" backgroundColor="#f4f7fe" />
       <AppBarSecond title={'Device Activation'} />
 
-      <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
-        <Animated.View style={[styles.mainCard, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
-          
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        showsVerticalScrollIndicator={false}>
+        <Animated.View
+          style={[
+            styles.mainCard,
+            {opacity: fadeAnim, transform: [{translateY: slideAnim}]},
+          ]}>
           {/* Success Badge */}
           <View style={styles.headerSection}>
             <View style={styles.successBadge}>
               <Text style={styles.checkIcon}>✓</Text>
             </View>
-            <Text style={styles.titleText}>{translate("Verification_Complete")}</Text>
-            <Text style={styles.subTitleText}>{translate("key_merchantp_149")}</Text>
+            <Text style={styles.titleText}>
+              {translate('Verification_Complete')}
+            </Text>
+            <Text style={styles.subTitleText}>
+              {translate('key_merchantp_149')}
+            </Text>
           </View>
 
           <View style={styles.formContainer}>
-            <Text style={styles.label}>{translate("Device_Serial_Number")}</Text>
+            <Text style={styles.label}>
+              {translate('Device_Serial_Number')}
+            </Text>
             <View style={[styles.inputWrapper, validate && styles.errorBorder]}>
               <TextInput
                 style={styles.input}
@@ -90,19 +120,25 @@ const RegisterVM30 = ({ route }) => {
                 placeholderTextColor="#A0AEC0"
               />
             </View>
-            {validate && <Text style={styles.errorText}>Serial number is required</Text>}
+            {validate && (
+              <Text style={styles.errorText}>
+                {translate('Serial number is required')}
+              </Text>
+            )}
 
-            <TouchableOpacity 
-              activeOpacity={0.8} 
-              style={styles.primaryButton} 
-              onPress={handleSubmit}
-            >
-              <Text style={styles.buttonText}>{translate("Activate_Device")}</Text>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.primaryButton}
+              onPress={handleSubmit}>
+              <Text style={styles.buttonText}>
+                {translate('Activate_Device')}
+              </Text>
             </TouchableOpacity>
-            
-            <Text style={styles.footerNote}>{translate("key_ensurethe_150")}</Text>
-          </View>
 
+            <Text style={styles.footerNote}>
+              {translate('key_ensurethe_150')}
+            </Text>
+          </View>
         </Animated.View>
       </ScrollView>
     </View>
@@ -124,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: {width: 0, height: 10},
     shadowOpacity: 0.08,
     shadowRadius: 20,
     elevation: 8,
@@ -202,7 +238,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 16,
     shadowColor: '#0061FF',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 4,
@@ -218,7 +254,7 @@ const styles = StyleSheet.create({
     color: '#A0AEC0',
     fontSize: 12,
     marginTop: 20,
-  }
+  },
 });
 
 export default RegisterVM30;

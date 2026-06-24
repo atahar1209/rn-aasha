@@ -1,50 +1,42 @@
+/* eslint-disable quotes */
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable dot-notation */
 
-import LottieView from 'lottie-react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ToastAndroid,
-  FlatList,
   Alert,
-  KeyboardAvoidingView, Platform,
-  ScrollView
 } from 'react-native';
-import { BottomSheet, Card, Image } from '@rneui/themed';
-import { translate } from '../../utils/languageUtils/I18n';
-import { APP_URLS } from '../../utils/network/urls';
-import { colors } from '../../utils/styles/theme';
+import {BottomSheet} from '@rneui/themed';
+import {translate} from '../../utils/languageUtils/I18n';
+import {APP_URLS} from '../../utils/network/urls';
 import FlashList from '@shopify/flash-list/dist/FlashList';
-import { SCREEN_HEIGHT, hScale, wScale } from '../../utils/styles/dimensions';
-import DropdownSvg from '../../utils/svgUtils/DropdownSvg';
+import {SCREEN_HEIGHT, hScale, wScale} from '../../utils/styles/dimensions';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { useLocationHook } from '../../utils/hooks/useLocationHook';
-import { encrypt } from '../../utils/encryptionUtils';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {useLocationHook} from '../../utils/hooks/useLocationHook';
+import {encrypt} from '../../utils/encryptionUtils';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import ShowLoader from '../../components/ShowLoder';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
 import DynamicButton from '../drawer/button/DynamicButton';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
-import OperatorBottomSheet from '../../components/OperatorBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
-import ElectricityOperatorBottomSheet from '../../components/ElectricityOperatorBottomSheet';
 import ClosseModalSvg2 from '../drawer/svgimgcomponents/ClosseModal2';
-import { useNavigation } from '@react-navigation/native';
-import { combineSlices } from '@reduxjs/toolkit';
+import {useNavigation} from '@react-navigation/native';
 import RecentText from '../../components/RecentText';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GasCylinderScreen = () => {
-
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const color1 = `${colorConfig.secondaryColor}20`;
   const [CustomerID, setCustomerID] = useState('');
   const [amount, setAmount] = useState('');
@@ -56,16 +48,14 @@ const GasCylinderScreen = () => {
   const [CustomerName, setCustomerName] = useState('N/A');
   const [selectbool, setSelectbool] = useState(true);
 
-  const [GasCylenderBillOpt, setGasCylenderBillOpt] = useState(
-    []
-  );
+  const [GasCylenderBillOpt, setGasCylenderBillOpt] = useState([]);
   const [district, setdistrict] = useState('Select Your District');
   const [operator, setCylenderBillOpt] = useState('Select Your Operator');
   const [isdist, setIsdist] = useState(true);
   const [distCode, setDistCode] = useState('');
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
 
@@ -81,20 +71,18 @@ const GasCylinderScreen = () => {
   }, []);
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
+      const response = await get({url: url});
       console.log('-*************************************', response);
 
       setHistorylist(response);
       setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqId(response[0]['Request_ID']);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -102,14 +90,14 @@ const GasCylinderScreen = () => {
   const day = ('0' + currentDate.getDate()).slice(-2);
 
   const formattedDate = `${year}-${month}-${day}`;
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   async function Statelist() {
     const data = {};
     try {
       const url = `${APP_URLS.gasCylinderState}`;
-      const res = await post({ url: url, config: null });
+      const res = await post({url: url, config: null});
       setstatelist(res['data']);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async function fatchDist(state: any) {
@@ -120,13 +108,13 @@ const GasCylinderScreen = () => {
       };
 
       const url = `${APP_URLS.DistrictByState}${state}`;
-      const res = await post({ url: url, config: null });
+      const res = await post({url: url, config: null});
 
       console.log(res['data']);
       setdistrictData(res['data']);
 
       //  setshowdistrictData(true);
-    } catch (error) { }
+    } catch (error) {}
   }
   const [statelist, setstatelist] = useState([]);
   const [districtData, setdistrictData] = useState([]);
@@ -135,7 +123,7 @@ const GasCylinderScreen = () => {
 
   const [showdistrictData, setshowdistrictData] = useState(false);
   const [stateData, setStateData] = useState(translate('Select Your State'));
-  const [selectedBharat, setSeleectedBharat] = useState(false)
+  const [selectedBharat, setSeleectedBharat] = useState(false);
   const handleInfoPress = () => {
     billInfo();
     setBottomSheetVisible(true);
@@ -145,23 +133,18 @@ const GasCylinderScreen = () => {
     return (
       <FlashList
         data={statelist}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           return (
-            <View
-            >
+            <View>
               <TouchableOpacity
                 style={[styles.operatorview]}
-
                 onPress={async () => {
                   setshowStateList(false);
                   setStateData(item);
                   fatchDist(item);
-                  console.log(item)
+                  console.log(item);
                 }}>
-                <Text style={[styles.operatornametext]}>
-
-                  {item}
-                </Text>
+                <Text style={[styles.operatornametext]}>{item}</Text>
               </TouchableOpacity>
             </View>
           );
@@ -176,11 +159,11 @@ const GasCylinderScreen = () => {
     try {
       const url = `${APP_URLS.getIndaneAgency}statename=${stateName}&District=${district}`;
 
-      const res = await post({ url: url });
+      const res = await post({url: url});
       console.log('', res);
 
       setGasCylenderBillOpt(res['data']);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const [optcode, setOptCode] = useState('');
@@ -205,21 +188,16 @@ const GasCylinderScreen = () => {
         console.log(res['balance']);
         setBottomSheetVisible(true);
         // setShowLoader2(false);
-
       } else {
-        Alert.alert('Info', res.ADDINFO);
+        Alert.alert(translate('Info'), res.ADDINFO);
         setShowLoader2(false);
-
       }
     } catch (error) {
       console.error('Error fetching bill info:', error);
-
     }
 
     console.log('urllll-*--*-*-*-*-*-*-*-*-***--*-*');
-
   }
-
 
   async function ViewbillInfoStatus() {
     console.log(optcode);
@@ -229,36 +207,32 @@ const GasCylinderScreen = () => {
         Operatorcode: optcode,
       };
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
-      const res = await post({ url: url, });
+      const res = await post({url: url});
       console.log(':', url);
       const billSts = res['RESULT'];
       if (billSts === 'Y') {
         setIsinfo(true);
-
       } else {
         // setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
   const showBottomSheetList = () => {
     return (
       <FlashList
         data={selectbool ? districtData : GasCylenderBillOpt}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           return (
-            <View
-            >
+            <View>
               <TouchableOpacity
                 style={[styles.operatorview]}
-
                 onPress={async () => {
-
                   if (selectbool) {
                     setSelectbool(false);
                     setdistrict(item);
 
-                    console.log('stateData', stateData)
+                    console.log('stateData', stateData);
                     switch (ddlStatus) {
                       case 'HP':
                         getHpAgency(stateData, item);
@@ -273,19 +247,15 @@ const GasCylinderScreen = () => {
                       default:
                         break;
                     }
-
                   } else {
-                    console.log(item)
-                    setDistCode(item['Distcode'])
-                    setCylenderBillOpt(item['Name'])
+                    console.log(item);
+                    setDistCode(item['Distcode']);
+                    setCylenderBillOpt(item['Name']);
                     setshowdistrictData(false);
                     setSelectbool(true);
-
                   }
-
                 }}>
                 <Text style={[styles.operatornametext]}>
-
                   {selectbool ? item : item['Name']}
                 </Text>
               </TouchableOpacity>
@@ -296,18 +266,18 @@ const GasCylinderScreen = () => {
       />
     );
   };
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId } = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
   const readLatLongFromStorage = async () => {
     try {
       const locationData = await AsyncStorage.getItem('locationData');
 
       if (locationData !== null) {
-        const { latitude, longitude } = JSON.parse(locationData);
+        const {latitude, longitude} = JSON.parse(locationData);
         console.log('Latitude:', latitude, 'Longitude:', longitude);
-        return { latitude, longitude };
+        return {latitude, longitude};
       } else {
         console.log('No location data found');
         return null;
@@ -319,7 +289,7 @@ const GasCylinderScreen = () => {
   };
   const onRechargePress = useCallback(async () => {
     const loc = await readLatLongFromStorage();
-    setShowLoader(true)
+    setShowLoader(true);
     const mobileNetwork = await getNetworkCarrier();
     const ip = await getMobileIp();
     const encryption = await encrypt([
@@ -368,15 +338,15 @@ const GasCylinderScreen = () => {
       Message = res.Message;
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     setCustomerID('');
-    setCylenderBillOpt('Select Your Operator');
+    setCylenderBillOpt(translate('Select Your Operator'));
     setAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
 
     navigation.navigate('Rechargedetails', {
@@ -386,58 +356,58 @@ const GasCylinderScreen = () => {
       status,
       reqId,
       reqTime,
-      Message
+      Message,
     });
-
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
+    getMobileIp,
+    userId,
     CustomerID,
     operator,
+    amount,
+    distributorId,
+    MobileNumber,
+    dueDate,
+    navigation,
+    reqId,
+    reqTime,
     post,
-    userId,
+    recenttransactions,
   ]);
   async function getHpAgency(stateName: string, district: string) {
     console.log(stateName, district);
     try {
       const url = `${APP_URLS.hpAgency}statename=${stateName}&District=${district}`;
 
-      const res = await post({ url: url });
+      const res = await post({url: url});
       setGasCylenderBillOpt(res['data']);
       setSelectbool(false);
       console.log(res);
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
   const [ddlStatus, setDdlStatus] = useState('HP');
 
   const Options = () => {
     const buttonData = [
-      { title: 'Hp', key: 'Hp' },
-      { title: 'Indian', key: 'Indian' },
-      { title: 'Bharat', key: 'Bharat' },
+      {title: translate('Hp'), key: 'Hp'},
+      {title: translate('Indian'), key: 'Indian'},
+      {title: translate('Bharat'), key: 'Bharat'},
     ];
 
-    const handlePress = async (key) => {
-
-
+    const handlePress = async key => {
       setSelectedFilter(key);
       console.log(`Selected Filter: ${key}`);
       setDdlStatus(key);
       switch (key) {
-        case "Hp":
-          setSeleectedBharat(false)
+        case 'Hp':
+          setSeleectedBharat(false);
           break;
         case 'Indian':
-          setSeleectedBharat(false)
+          setSeleectedBharat(false);
 
           break;
         case 'Bharat':
-          setSeleectedBharat(true)
+          setSeleectedBharat(true);
           break;
         default:
           break;
@@ -446,15 +416,17 @@ const GasCylinderScreen = () => {
 
     return (
       <View style={styles.row}>
-        {buttonData.map((button) => (
+        {buttonData.map(button => (
           <TouchableOpacity
             key={button.key}
             style={[
               styles.button,
-              { backgroundColor: selectedFilter === button.key ? 'green' : 'lightgreen' },
+              {
+                backgroundColor:
+                  selectedFilter === button.key ? 'green' : 'lightgreen',
+              },
             ]}
-            onPress={() => handlePress(button.key)}
-          >
+            onPress={() => handlePress(button.key)}>
             <Text style={styles.buttonText}>{button.title}</Text>
           </TouchableOpacity>
         ))}
@@ -472,9 +444,8 @@ const GasCylinderScreen = () => {
         enableOnAndroid={true}
         extraScrollHeight={100}
         showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1 ,paddingBottom:50 }}
-      >
+        style={{flex: 1}}
+        contentContainerStyle={{flexGrow: 1, paddingBottom: 50}}>
         <Options />
 
         <View style={styles.container}>
@@ -482,10 +453,14 @@ const GasCylinderScreen = () => {
 
           {/* State Selection - Only if not Bharat Gas */}
           {selectedBharat === false && (
-            <TouchableOpacity
-              onPress={() => setshowStateList(true)}
-            >
-              <FlotingInput label={stateData} editable={false} />
+            <TouchableOpacity onPress={() => setshowStateList(true)}>
+              <FlotingInput
+                label={stateData}
+                editable={false}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+                onChangeTextCallback={undefined}
+              />
               <View style={[styles.righticon2]}>
                 <OnelineDropdownSvg />
               </View>
@@ -494,10 +469,14 @@ const GasCylinderScreen = () => {
 
           {/* District Selection - Only if not Bharat Gas */}
           {selectedBharat === false && (
-            <TouchableOpacity
-              onPress={() => setshowdistrictData(true)}
-            >
-              <FlotingInput label={district} editable={false} />
+            <TouchableOpacity onPress={() => setshowdistrictData(true)}>
+              <FlotingInput
+                label={district}
+                editable={false}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+                onChangeTextCallback={undefined}
+              />
               <View style={[styles.righticon2]}>
                 <OnelineDropdownSvg />
               </View>
@@ -507,7 +486,13 @@ const GasCylinderScreen = () => {
           {/* Operator Selection - Only if not Bharat Gas */}
           {selectedBharat === false && (
             <View>
-              <FlotingInput label={operator} editable={false} />
+              <FlotingInput
+                label={operator}
+                editable={false}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+                onChangeTextCallback={undefined}
+              />
               <View style={[styles.righticon2]}>
                 <OnelineDropdownSvg />
               </View>
@@ -518,25 +503,29 @@ const GasCylinderScreen = () => {
           {selectedBharat === true && (
             <View>
               <FlotingInput
-                label={'Agency Code'}
+                label={translate('Agency Code')}
                 keyboardType="numeric"
-                onChangeTextCallback={(text) => setdistributorId(text)}
+                onChangeTextCallback={text => setdistributorId(text)}
                 value={distributorId}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
               />
               <FlotingInput
-                label={'Mobile Number'}
+                label={translate('Mobile Number')}
                 keyboardType="numeric"
                 maxLength={10}
-                onChangeTextCallback={(text) => setMobileNumber(text)}
+                onChangeTextCallback={text => setMobileNumber(text)}
                 value={MobileNumber}
+                inputstyle={undefined}
+                labelinputstyle={undefined}
               />
             </View>
           )}
 
           {/* Customer ID & Info Logic */}
-          <View style={{ position: 'relative' }}>
+          <View style={{position: 'relative'}}>
             <FlotingInput
-              label={'Customer Id'}
+              label={translate('Customer Id')}
               value={CustomerID}
               keyboardType="numeric"
               maxLength={maxlen}
@@ -544,14 +533,15 @@ const GasCylinderScreen = () => {
                 setCustomerID(text);
                 setIsinfo(text.length >= 5);
               }}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <View style={[styles.righticon2]}>
               {isInfo && (
                 <TouchableOpacity
                   style={styles.infobtn}
-                  onPress={handleInfoPress}
-                >
-                  <Text style={[styles.infobtntex]}>{translate("Info")}</Text>
+                  onPress={handleInfoPress}>
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -559,27 +549,29 @@ const GasCylinderScreen = () => {
 
           {/* Amount Input */}
           <FlotingInput
-            label={'Enter Amount'}
+            label={translate('Enter Amount')}
             value={amount}
             keyboardType="numeric"
             onChangeTextCallback={text => {
-              setAmount(text.replace(/\D/g, ""));
+              setAmount(text.replace(/\D/g, ''));
             }}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
 
           <DynamicButton
             title={'Next'}
-            onPress={() => { setProceedSheetVisible(true) }}
+            onPress={() => {
+              setProceedSheetVisible(true);
+            }}
           />
 
           {/* Recent History Toggle */}
           <TouchableOpacity
             onPress={() => setIsrecent(true)}
-            style={styles.recentviewbtn}
-          >
+            style={styles.recentviewbtn}>
             <RecentText />
           </TouchableOpacity>
-
         </View>
       </KeyboardAwareScrollView>
 
@@ -596,17 +588,17 @@ const GasCylinderScreen = () => {
         isModalVisible={ProceedSheetVisible}
         onBackdropPress={() => setProceedSheetVisible(false)}
         details={[
-          { label: 'User Name', value2: CustomerName },
-          { label: 'Customer ID', value: CustomerID },
-          { label: 'Due Date', value2: dueDate },
-          { label: 'Operator Name', value2: operator },
+          {label: translate('User Name'), value2: CustomerName},
+          {label: translate('Customer ID'), value: CustomerID},
+          {label: translate('Due Date'), value2: dueDate},
+          {label: translate('Operator Name'), value2: operator},
         ]}
         lastlabel={'Transaction Amount'}
         lastvalue={amount}
         onRechargedetails={() => {
           if (!amount || amount === '0') {
             ToastAndroid.showWithGravity(
-              `Please Enter Amount`,
+              translate(`Please Enter Amount`),
               ToastAndroid.SHORT,
               ToastAndroid.BOTTOM,
             );
@@ -619,9 +611,11 @@ const GasCylinderScreen = () => {
       {/* District/Operator List Sheet */}
       <BottomSheet animationType="none" isVisible={showdistrictData}>
         <View style={styles.bottomsheetview}>
-          <View style={[styles.StateTitle, { backgroundColor: color1 }]}>
+          <View style={[styles.StateTitle, {backgroundColor: color1}]}>
             <Text style={styles.stateTitletext}>
-              {selectbool ? "Select Your District" : "Select Your Operator"}
+              {selectbool
+                ? translate('Select Your District')
+                : translate('Select Your Operator')}
             </Text>
             <TouchableOpacity onPress={() => setshowdistrictData(false)}>
               <ClosseModalSvg2 />
@@ -634,8 +628,10 @@ const GasCylinderScreen = () => {
       {/* State List Sheet */}
       <BottomSheet animationType="none" isVisible={showStateList}>
         <View style={styles.bottomsheetview}>
-          <View style={[styles.StateTitle, { backgroundColor: color1 }]}>
-            <Text style={styles.stateTitletext}>{translate("Select_Your_State")}</Text>
+          <View style={[styles.StateTitle, {backgroundColor: color1}]}>
+            <Text style={styles.stateTitletext}>
+              {translate('Select_Your_State')}
+            </Text>
             <TouchableOpacity onPress={() => setshowStateList(false)}>
               <ClosseModalSvg2 />
             </TouchableOpacity>
@@ -655,16 +651,16 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: wScale(30),
-    flex: 1
+    flex: 1,
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -677,11 +673,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',
@@ -692,28 +688,28 @@ const styles = StyleSheet.create({
     marginTop: hScale(-7),
   },
   circletext: {
-    position: "absolute",
+    position: 'absolute',
     top: hScale(30),
     paddingLeft: wScale(15),
     fontSize: wScale(12),
   },
   operatorview: {
-    flexDirection: "row-reverse",
-    alignItems: "center",
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
     paddingHorizontal: wScale(10),
   },
   operatornametext: {
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
     fontSize: wScale(20),
-    color: "#000",
+    color: '#000',
     flex: 1,
-    borderBottomColor: "#000",
+    borderBottomColor: '#000',
     borderBottomWidth: wScale(0.5),
-    alignSelf: "center",
+    alignSelf: 'center',
     paddingVertical: hScale(30),
   },
   bottomsheetview: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     height: SCREEN_HEIGHT / 1.3,
 
     borderTopLeftRadius: 15,
@@ -721,9 +717,9 @@ const styles = StyleSheet.create({
   },
   titleview: {
     flex: 1,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   row: {
     flexDirection: 'row',
@@ -734,17 +730,17 @@ const styles = StyleSheet.create({
     paddingVertical: hScale(10),
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
     paddingHorizontal: wScale(10),
     marginBottom: hScale(10),
   },
   stateTitletext: {
     fontSize: wScale(22),
-    color: "#000",
-    fontWeight: "bold",
-    textTransform: "uppercase",
+    color: '#000',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
   button: {
     flex: 1,
@@ -760,4 +756,3 @@ const styles = StyleSheet.create({
 });
 
 export default GasCylinderScreen;
-

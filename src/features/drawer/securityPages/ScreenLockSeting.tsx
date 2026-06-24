@@ -1,19 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { NativeModules, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
-import AppBarSecond from "../headerAppbar/AppBarSecond";
-import { hScale, wScale } from "../../../utils/styles/dimensions";
-import DynamicButton from "../button/DynamicButton";
-import { RootState } from "../../../reduxUtils/store";
-import { useSelector } from "react-redux";
-import DynamicSecurityPages from "./DynamicComponet";
-import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
-import { useDispatch } from "react-redux";
-import { setFingerprintStatus, setUnlocked } from "../../../reduxUtils/store/userInfoSlice";
-import { translate } from "../../../utils/languageUtils/I18n";
+import React, {useCallback, useEffect, useState} from 'react';
+import {NativeModules, StyleSheet, ToastAndroid, View} from 'react-native';
+import AppBarSecond from '../headerAppbar/AppBarSecond';
+import {wScale} from '../../../utils/styles/dimensions';
+import DynamicButton from '../button/DynamicButton';
+import {RootState} from '../../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import DynamicSecurityPages from './DynamicComponet';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
+import {useDispatch} from 'react-redux';
+import {
+  setFingerprintStatus,
+  setUnlocked,
+} from '../../../reduxUtils/store/userInfoSlice';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 const texts = [
-  { text: "ScreenLock.Device Lock ON", color: "green" },
-  { text: "ScreenLock.Device Lock OFF", color: "red" },
+  {text: translate('ScreenLock.Device Lock ON'), color: 'green'},
+  {text: translate('ScreenLock.Device Lock OFF'), color: 'red'},
 ];
 
 const help = `
@@ -24,116 +27,112 @@ const topsvgimg = `
 `;
 
 const ScreenLock = () => {
-  const { SecurityModule } = NativeModules;
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {SecurityModule} = NativeModules;
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const color1 = `${colorConfig.secondaryColor}10`;
   const [isLockEnabled, setIsLockEnabled] = useState(false);
-  const { isFingerprintEnabled } = useSelector(
+  const {isFingerprintEnabled} = useSelector(
     (state: RootState) => state.userInfo,
   );
 
   const dispatch = useDispatch();
-  const [text, setText] = useState(translate("ScreenLock.Select Mode"));
-  const [textColor, setTextColor] = useState("#000"); // Setting default text color to black
+  const [text, setText] = useState(translate('ScreenLock.Select Mode'));
+  const [textColor, setTextColor] = useState('#000'); // Setting default text color to black
   const [clickCount, setClickCount] = useState(0);
 
   // ✅ Sync with redux whenever redux changes
   useEffect(() => {
     setIsLockEnabled(isFingerprintEnabled);
   }, [isFingerprintEnabled]);
-useEffect(() => {
+  useEffect(() => {
     if (isLockEnabled) {
-      setText("ScreenLock.Device Lock ON");
-      setTextColor("green");
+      setText('ScreenLock.Device Lock ON');
+      setTextColor('green');
     } else {
-      setText("ScreenLock.Device Lock OFF");
-      setTextColor("red");
+      setText('ScreenLock.Device Lock OFF');
+      setTextColor('red');
     }
   }, [isLockEnabled]);
 
-useEffect(()=>{
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const status = await SecurityModule.checkDeviceSecurity();
+        if (status === 'SECURE') {
+          ToastAndroid.show('Dscreen lock available.', ToastAndroid.BOTTOM);
+        } else {
+          ToastAndroid.show('No screen lock available.', ToastAndroid.BOTTOM);
 
-  const checkStatus = async () => {
-  try {
-    const status = await SecurityModule.checkDeviceSecurity();
-    if (status === "SECURE") {
-      ToastAndroid.show("Dscreen lock available.",ToastAndroid.BOTTOM);
-    } else {
-            ToastAndroid.show("No screen lock available.",ToastAndroid.BOTTOM);
+          console.log('Device par koi lock nahi laga hai.');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    checkStatus();
+    //unlockApp()
+  }, [isLockEnabled]);
 
-      console.log("Device par koi lock nahi laga hai.");
+  const unlockApp = async () => {
+    try {
+      const isUnlocked = await SecurityModule.showScreenLock();
+      if (isUnlocked) {
+        // Yahan apna payment ya wallet logic likhein
+        console.log('User ne sahi PIN/Pattern dala. Access Granted!');
+      } else {
+        console.log('User ne galat dala ya cancel kar diya.');
+      }
+    } catch (error) {
+      if (error.code === 'NO_LOCK') {
+        alert('Please set a screen lock in your phone settings first.');
+      } else {
+        console.error(error.message);
+      }
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
-checkStatus()
-//unlockApp()
-},[isLockEnabled])
-
-
-
-const unlockApp = async () => {
-  try {
-    const isUnlocked = await SecurityModule.showScreenLock();
-    if (isUnlocked) {
-      // Yahan apna payment ya wallet logic likhein
-      console.log("User ne sahi PIN/Pattern dala. Access Granted!");
-    } else {
-      console.log("User ne galat dala ya cancel kar diya.");
-    }
-  } catch (error) {
-    if (error.code === "NO_LOCK") {
-      alert("Please set a screen lock in your phone settings first.");
-    } else {
-      console.error(error.message);
-    }
-  }
-};
-  console.log(isLockEnabled)
-   // ✅ Safe toggle (no stale state)
+  };
+  console.log(isLockEnabled);
+  // ✅ Safe toggle (no stale state)
   const handlePress = () => {
     setIsLockEnabled(prev => !prev);
   };
   const setDeviceLock = useCallback(() => {
     dispatch(setFingerprintStatus(isLockEnabled));
-if(isLockEnabled){
-  dispatch(setUnlocked(false))
-}
+    if (isLockEnabled) {
+      dispatch(setUnlocked(false));
+    }
     Dialog.show({
       type: ALERT_TYPE.SUCCESS,
-      title: translate("SUCCESS"),
+      title: translate('SUCCESS'),
       textBody: translate(
-        "ScreenLock.Device Lock Setting Updated Successfully."
+        'ScreenLock.Device Lock Setting Updated Successfully.',
       ),
-      button: translate("OK"),
+      button: translate('OK'),
       onPressButton: () => Dialog.hide(),
     });
   }, [dispatch, isLockEnabled]);
   return (
     <View>
-      <AppBarSecond title={"ScreenLock.Screen Lock Setting"} />
+      <AppBarSecond title={'ScreenLock.Screen Lock Setting'} />
       <View style={styles.container}>
         <DynamicSecurityPages
-          mobilestyle={{ backgroundColor: color1 }}
-          hedingstyle={{ backgroundColor: colorConfig.primaryColor }}
+          mobilestyle={{backgroundColor: color1}}
+          hedingstyle={{backgroundColor: colorConfig.primaryColor}}
           topsvgimg={topsvgimg}
-          title={"ScreenLock.Device Lock Authentication"}
-          content={"ScreenLock.description"}
-          secondtitle={"ScreenLock.Selective Active Mode "}
+          title={'ScreenLock.Device Lock Authentication'}
+          content={'ScreenLock.description'}
+          secondtitle={'ScreenLock.Selective Active Mode '}
           selectedtext={text}
-          selecttexcolor={{ color: textColor }}
+          selecttexcolor={{color: textColor}}
           buttonText={text}
-          buttontextstyle={{ color: textColor }}
+          buttontextstyle={{color: textColor}}
           buttonImg={help}
           onPressImg={handlePress}
         />
         <DynamicButton
-          title={"ScreenLock.Save Change"}
+          title={'ScreenLock.Save Change'}
           onPress={setDeviceLock}
         />
       </View>
-
     </View>
   );
 };

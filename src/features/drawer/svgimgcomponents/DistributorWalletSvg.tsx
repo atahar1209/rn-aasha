@@ -1,11 +1,10 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
-import { color } from "@rneui/base";
+import React from 'react';
+import {View, Text} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
 
-const DistributorWalletSvg = ({ size = wScale(34), color = '#fff' }) => {
-    const svgname = `
+const DistributorWalletSvg = ({size = wScale(34), color = '#fff'}) => {
+  const svgname = `
 
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Svg Vector Icons : http://www.onlinewebfonts.com/icon -->
@@ -17,12 +16,11 @@ const DistributorWalletSvg = ({ size = wScale(34), color = '#fff' }) => {
 
 
 `;
-    return (
-        <View>
-            <SvgXml xml={svgname} width={size} height={size} />
-        </View>
-    );
+  return (
+    <View>
+      <SvgXml xml={svgname} width={size} height={size} />
+    </View>
+  );
 };
-
 
 export default DistributorWalletSvg;

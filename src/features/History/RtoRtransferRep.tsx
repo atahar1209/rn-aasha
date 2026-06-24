@@ -1,12 +1,12 @@
-import { translate } from "../../utils/languageUtils/I18n";
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react/jsx-no-undef */
+import {translate} from '../../utils/languageUtils/I18n';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  Platform,
 } from 'react-native';
 
 const RToRFundReport = () => {
@@ -18,11 +18,11 @@ const RToRFundReport = () => {
   const [showToDate, setShowToDate] = useState(false);
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  const month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
-  const day = ("0" + currentDate.getDate()).slice(-2);
+  const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+  const day = ('0' + currentDate.getDate()).slice(-2);
 
   const formattedDate = `${year}-${month}-${day}`;
-  const formatDate = (date) => {
+  const formatDate = date => {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   };
 
@@ -31,7 +31,7 @@ const RToRFundReport = () => {
       setLoading(true);
       const response = await fetch(
         `http://api.vastwebindia.com/Retailer/api/data/rem_rem_fund_transfer_report?txt_frm_date=${formatDate(
-          fromDate
+          fromDate,
         )}&txt_to_date=${formatDate(toDate)}&RetailerId1=ALL`,
         {
           method: 'POST',
@@ -39,13 +39,13 @@ const RToRFundReport = () => {
             Accept: 'application/json',
             Authorization: 'Bearer <your_access_token>',
           },
-        }
+        },
       );
       const data = await response.json();
       if (response.ok) {
         setInforeport(data.Report);
       } else {
-        throw new Error('Failed to fetch report');
+        throw new Error(translate('Failed to fetch report'));
       }
     } catch (error) {
       console.error('Error fetching report:', error);
@@ -84,29 +84,49 @@ const RToRFundReport = () => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
-          <TouchableOpacity onPress={showFromDatepicker} style={styles.datePicker}>
-            <Text style={styles.datePickerText}>From Date: {formatDate(fromDate)}</Text>
+          <TouchableOpacity
+            onPress={showFromDatepicker}
+            style={styles.datePicker}>
+            <Text style={styles.datePickerText}>
+              {translate('From Date')}: {formatDate(fromDate)}
+            </Text>
             <MaterialIcons name="date-range" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={showToDatepicker} style={styles.datePicker}>
-            <Text style={styles.datePickerText}>To Date: {formatDate(toDate)}</Text>
+          <TouchableOpacity
+            onPress={showToDatepicker}
+            style={styles.datePicker}>
+            <Text style={styles.datePickerText}>
+              {translate('To Date')}: {formatDate(toDate)}
+            </Text>
             <MaterialIcons name="date-range" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={fetchRToRFundReport} style={styles.searchButton}>
+          <TouchableOpacity
+            onPress={fetchRToRFundReport}
+            style={styles.searchButton}>
             <MaterialIcons name="search" size={24} color="white" />
           </TouchableOpacity>
         </View>
         <View style={styles.reportContainer}>
           {loading ? (
-            <Text>{translate("Loading")}</Text>
+            <Text>{translate('Loading')}</Text>
           ) : (
             inforeport.map((item, index) => (
               <View key={index} style={styles.reportItem}>
-                <Text style={styles.reportText}>Name: {item.transfertoretailername || 'N/A'}</Text>
-                <Text style={styles.reportText}>Date: {item.tran_date || 'N/A'}</Text>
-                <Text style={styles.reportText}>Pre Balance: ₹{item.rem_from_old_bal || 0}</Text>
-                <Text style={styles.reportText}>Post Balance: ₹{item.rem_from_new || 0}</Text>
-                <Text style={styles.reportText}>Amount: ₹{item.value || 0}</Text>
+                <Text style={styles.reportText}>
+                  {translate('Name')}: {item.transfertoretailername || 'N/A'}
+                </Text>
+                <Text style={styles.reportText}>
+                  {translate('Date')}: {item.tran_date || 'N/A'}
+                </Text>
+                <Text style={styles.reportText}>
+                  {translate('Pre Balance')}: ₹{item.rem_from_old_bal || 0}
+                </Text>
+                <Text style={styles.reportText}>
+                  {translate('Post Balance')}: ₹{item.rem_from_new || 0}
+                </Text>
+                <Text style={styles.reportText}>
+                  {translate('Amount')}: ₹{item.value || 0}
+                </Text>
               </View>
             ))
           )}

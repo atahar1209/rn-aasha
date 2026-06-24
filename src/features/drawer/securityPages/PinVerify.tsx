@@ -1,11 +1,18 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Modal } from 'react-native';
-import React, { useState } from 'react';
+import {translate} from '../../../utils/languageUtils/I18n';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
+import React, {useState} from 'react';
 
-const PinVerificationModal = ({ isVisible, onClose, onSuccess }) => {
+const PinVerificationModal = ({isVisible, onClose, onSuccess}) => {
   const [enteredPin, setEnteredPin] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const storedPin = "1234"; // Example stored PIN for demo
+  const storedPin = '1234'; // Example stored PIN for demo
 
   const handleVerifyPin = () => {
     if (enteredPin === '') {
@@ -18,7 +25,7 @@ const PinVerificationModal = ({ isVisible, onClose, onSuccess }) => {
       onSuccess('ok'); // Trigger the success callback passed from parent
       onClose(); // Close the modal
     } else {
-      setErrorMessage('Incorrect PIN. Please try again.');
+      setErrorMessage(translate('Incorrect PIN. Please try again.'));
     }
   };
 
@@ -27,28 +34,31 @@ const PinVerificationModal = ({ isVisible, onClose, onSuccess }) => {
       transparent={true}
       animationType="fade"
       visible={isVisible}
-      onRequestClose={onClose}
-    >
+      onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalHeading}>{translate("Enter_PIN")}</Text>
+          <Text style={styles.modalHeading}>{translate('Enter_PIN')}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter PIN"
+            placeholder={translate('Enter_PIN')}
             value={enteredPin}
             onChangeText={setEnteredPin}
             keyboardType="number-pad"
             secureTextEntry={true}
             maxLength={6}
           />
-          {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+          {errorMessage ? (
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          ) : null}
 
-          <TouchableOpacity style={styles.submitButton} onPress={handleVerifyPin}>
-            <Text style={styles.submitButtonText}>{translate("Verify")}</Text>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={handleVerifyPin}>
+            <Text style={styles.submitButtonText}>{translate('Verify')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>{translate("Cancel")}</Text>
+            <Text style={styles.closeButtonText}>{translate('Cancel')}</Text>
           </TouchableOpacity>
         </View>
       </View>

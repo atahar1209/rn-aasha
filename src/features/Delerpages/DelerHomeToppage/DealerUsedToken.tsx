@@ -1,37 +1,37 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, Animated } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, Animated} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { colors } from '../../../utils/styles/theme';
-import { hScale } from '../../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { DotLoader } from '../../../components/DotLoader ';
+import {APP_URLS} from '../../../utils/network/urls';
+import {colors} from '../../../utils/styles/theme';
+import {hScale} from '../../../utils/styles/dimensions';
+import {FlashList} from '@shopify/flash-list';
+import {DotLoader} from '../../../components/DotLoader ';
 
 const DealerUsedToken = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const color1 = `${colorConfig.secondaryColor}20`;
   const [usedToken, setUsedToken] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
-  const { get } = useAxiosHook();
+  const {get} = useAxiosHook();
 
-  const fadeAnim = new Animated.Value(0);  
+  const fadeAnim = new Animated.Value(0);
 
   const fetchUsedTokens = async () => {
     try {
-      const res = await get({ url: APP_URLS.UsedTokens });
+      const res = await get({url: APP_URLS.UsedTokens});
       if (res) {
         setUsedToken(res.Report);
       }
     } catch (error) {
-      setErrorMessage('Failed to load tokens');
+      setErrorMessage(translate('Failed to load tokens'));
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -39,7 +39,6 @@ const DealerUsedToken = () => {
     fetchUsedTokens();
   }, []);
 
- 
   if (loading) {
     return <DotLoader />;
   }
@@ -47,44 +46,66 @@ const DealerUsedToken = () => {
   if (usedToken.length === 0 && !errorMessage) {
     return (
       <View style={styles.noDataContainer}>
-        <Text style={styles.noDataMessage}>{translate("No_Tokens_Available")}</Text>
+        <Text style={styles.noDataMessage}>
+          {translate('No_Tokens_Available')}
+        </Text>
       </View>
     );
   }
 
-  const renderItem = ({ item }) => (
-    <View style={[styles.card, { backgroundColor: color1 }]}>
+  const renderItem = ({item}) => (
+    <View style={[styles.card, {backgroundColor: color1}]}>
       <View style={styles.row}>
         <View style={styles.column}>
-          <Text style={styles.label}>{translate("Pre_Stock")}</Text>
+          <Text style={styles.label}>{translate('Pre_Stock')}</Text>
           <Text style={styles.value}>{item.RemainTokenPre}</Text>
         </View>
         <View style={styles.separator} />
         <View style={styles.column}>
-          <Text style={styles.label}>{translate("Used_Token")}</Text>
+          <Text style={styles.label}>{translate('Used_Token')}</Text>
           <Text style={styles.value}>{item.usedtoken}</Text>
         </View>
         <View style={styles.separator} />
         <View style={styles.column}>
-          <Text style={styles.label}>{translate("Post_Stock")}</Text>
+          <Text style={styles.label}>{translate('Post_Stock')}</Text>
           <Text style={styles.value}>{item.RemainTokenPost}</Text>
         </View>
       </View>
 
       <View style={styles.details}>
-        <View style={[styles.separator2, { backgroundColor: colorConfig.secondaryColor }]} />
+        <View
+          style={[
+            styles.separator2,
+            {backgroundColor: colorConfig.secondaryColor},
+          ]}
+        />
         <Text style={[styles.detailsText]}>
-          Tokens No: {item.JoiningTokenId}
+          {translate('Tokens No')}: {item.JoiningTokenId}
         </Text>
-        <View style={[styles.separator2, { backgroundColor: colorConfig.secondaryColor }]} />
+        <View
+          style={[
+            styles.separator2,
+            {backgroundColor: colorConfig.secondaryColor},
+          ]}
+        />
         <Text style={styles.detailsText}>
-          Retailer Info: {item.Email.toLowerCase()}
+          {translate('Retailer Info')}: {item.Email.toLowerCase()}
         </Text>
-        <View style={[styles.separator2, { backgroundColor: colorConfig.secondaryColor }]} />
+        <View
+          style={[
+            styles.separator2,
+            {backgroundColor: colorConfig.secondaryColor},
+          ]}
+        />
         <Text style={styles.detailsText}>
-          Transaction Date: {item.JoinDate}
+          {translate('Transaction Date')}: {item.JoinDate}
         </Text>
-        <View style={[styles.separator2, { backgroundColor: colorConfig.secondaryColor }]} />
+        <View
+          style={[
+            styles.separator2,
+            {backgroundColor: colorConfig.secondaryColor},
+          ]}
+        />
       </View>
     </View>
   );
@@ -93,7 +114,7 @@ const DealerUsedToken = () => {
     <FlashList
       data={usedToken}
       renderItem={renderItem}
-      keyExtractor={(item) => item.JoiningTokenId.toString()}
+      keyExtractor={item => item.JoiningTokenId.toString()}
       estimatedItemSize={100} // Adjust this based on your item size
       contentContainerStyle={styles.container}
     />

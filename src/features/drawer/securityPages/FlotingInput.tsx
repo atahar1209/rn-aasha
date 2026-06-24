@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
-import { TextInput, View, Animated, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { hScale, wScale } from "../../../utils/styles/dimensions";
-import { translate } from "../../../utils/languageUtils/I18n";
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  TextInput,
+  View,
+  Animated,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 const FlotingInput = ({
   inputstyle,
@@ -24,12 +30,12 @@ const FlotingInput = ({
       duration: 150,
       useNativeDriver: false,
     }).start();
-  }, [isFocused, value]);
+  }, [animatedFocused, isFocused, value]);
 
   const handleFocus = () => {
     setIsFocused(true);
     if (!value?.trim()) {
-      onChangeTextCallback?.("");
+      onChangeTextCallback?.('');
     }
   };
 
@@ -47,7 +53,7 @@ const FlotingInput = ({
   };
 
   const labelStyle = {
-    position: "absolute",
+    position: 'absolute',
     left: wScale(12),
     zIndex: 1,
     top: animatedFocused.interpolate({
@@ -60,31 +66,30 @@ const FlotingInput = ({
     }),
     color: animatedFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: ["#000", "#1f1d1d"],
+      outputRange: ['#000', '#1f1d1d'],
     }),
     backgroundColor: animatedFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: ["transparent", "rgba(255,255,255,1)"],
+      outputRange: ['transparent', 'rgba(255,255,255,1)'],
     }),
     paddingHorizontal: wScale(2),
     height: animatedFocused.interpolate({
       inputRange: [0, 1],
       outputRange: [hScale(48), hScale(18)],
     }),
-    justifyContent: "center",
-    textAlignVertical: "center",
+    justifyContent: 'center',
+    textAlignVertical: 'center',
   };
 
   return (
     <TouchableWithoutFeedback onPress={focusInput}>
       {/* pointerEvents setup taaki dropdown case mein parent click pakad sake */}
-      <View style={styles.main} pointerEvents={editable ? "auto" : "none"}>
+      <View style={styles.main} pointerEvents={editable ? 'auto' : 'none'}>
         <Animated.Text
           numberOfLines={1}
           ellipsizeMode="tail"
           style={[labelStyle, labelinputstyle]}
-          pointerEvents="none"
-        >
+          pointerEvents="none">
           {translate(label)}
         </Animated.Text>
 
@@ -101,7 +106,7 @@ const FlotingInput = ({
           onChangeText={onChangeTextCallback}
           autoFocus={autoFocus}
           cursorColor="#000"
-          placeholder="" 
+          placeholder=""
         />
       </View>
     </TouchableWithoutFeedback>
@@ -114,12 +119,12 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: wScale(0.5),
-    borderColor: "#000",
+    borderColor: '#000',
     borderRadius: wScale(5),
     paddingLeft: wScale(15),
     height: hScale(48),
-    width: "100%",
-    color: "#000",
+    width: '100%',
+    color: '#000',
     fontSize: hScale(20),
     marginBottom: hScale(18),
   },

@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
+import React from 'react';
+import {View} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
 
-const Airtalsvg = ({ size = wScale(40), color='#000' }) => {
-    const searchicon = `
+const Airtalsvg = ({size = wScale(40), color = '#000'}) => {
+  const searchicon = `
 
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -125,13 +125,12 @@ Created by potrace 1.10, written by Peter Selinger 2001-2011
 </svg>
 
 
-`
-    return (
-        <View>
-            <SvgXml xml={searchicon} width={size} height={size} />
-        </View>
-    );
+`;
+  return (
+    <View>
+      <SvgXml xml={searchicon} width={size} height={size} />
+    </View>
+  );
 };
-
 
 export default Airtalsvg;

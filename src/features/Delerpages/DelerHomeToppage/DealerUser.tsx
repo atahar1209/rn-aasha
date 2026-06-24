@@ -1,44 +1,46 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import { hScale, SCREEN_WIDTH, wScale } from '../../../utils/styles/dimensions';
-import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
-import { colors } from '../../../utils/styles/theme';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {hScale, SCREEN_WIDTH, wScale} from '../../../utils/styles/dimensions';
+import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import {colors} from '../../../utils/styles/theme';
 import CreateUser from './CreateUser';
 import RetailerList from './RetailerList';
 const DealerUser = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const color1 = `${colorConfig.primaryColor}20`;
- const [index, setIndex] = useState(0);
-
+  const [index, setIndex] = useState(0);
   const renderScene = SceneMap({
-    'UsersList': RetailerList,
-    'CreateUsers': CreateUser,
-
-
+    UsersList: RetailerList,
+    CreateUsers: CreateUser,
   });
   const [routes] = useState([
-
-    { key: 'UsersList', title: 'Users List' },
-    { key: 'CreateUsers', title: 'Create User' },
-
+    {key: 'UsersList', title: translate('Users List')},
+    {key: 'CreateUsers', title: translate('Create User')},
   ]);
-
 
   return (
     <View style={styles.main}>
-      <AppBarSecond title={"All Users"} />
-      <View style={[{ backgroundColor: colorConfig.secondaryColor, marginTop: hScale(-12) }]}>
+      <AppBarSecond title={'All Users'} />
+      <View
+        style={[
+          {backgroundColor: colorConfig.secondaryColor, marginTop: hScale(-12)},
+        ]}>
         <View style={[styles.header, {}]}>
-          <Text style={[styles.remainText, {
-            marginRight: wScale(10),
-          }]}>{translate("To_Main_Wallet")}</Text>
-          <Text style={styles.remainText}>0
-            {/* {remainToken === '' ? '0' : remainToken} */}
+          <Text
+            style={[
+              styles.remainText,
+              {
+                marginRight: wScale(10),
+              },
+            ]}>
+            {translate('To_Main_Wallet')}
+          </Text>
+          <Text style={styles.remainText}>
+            0{/* {remainToken === '' ? '0' : remainToken} */}
           </Text>
         </View>
       </View>
@@ -46,19 +48,26 @@ const DealerUser = () => {
       <View style={styles.container}>
         <TabView
           lazy
-          navigationState={{ index, routes }}
+          navigationState={{index, routes}}
           renderScene={renderScene}
           onIndexChange={setIndex}
-          initialLayout={{ width: SCREEN_WIDTH }}
-          renderTabBar={(props) => (
+          initialLayout={{width: SCREEN_WIDTH}}
+          renderTabBar={props => (
             <TabBar
               {...props}
-              indicatorStyle={[styles.indicator, { backgroundColor: colorConfig.primaryColor }]}
-              style={[styles.tabbar, { backgroundColor: color1 }]}
-              renderLabel={({ route, focused }) => (
+              indicatorStyle={[
+                styles.indicator,
+                {backgroundColor: colorConfig.primaryColor},
+              ]}
+              style={[styles.tabbar, {backgroundColor: color1}]}
+              renderLabel={({route, focused}) => (
                 <View style={styles.labelview}>
                   {/* {getSvgimg(route.key)}  */}
-                  <Text style={[styles.labelstyle, { color: focused ? colors.dark_black : colors.black75 }]}>
+                  <Text
+                    style={[
+                      styles.labelstyle,
+                      {color: focused ? colors.dark_black : colors.black75},
+                    ]}>
                     {route.title}
                   </Text>
                 </View>
@@ -83,7 +92,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wScale(10),
     justifyContent: 'center',
     paddingVertical: hScale(4),
-    borderWidth: wScale(.8),
+    borderWidth: wScale(0.8),
     minWidth: wScale(190),
     alignSelf: 'center',
     alignItems: 'center',
@@ -101,12 +110,11 @@ const styles = StyleSheet.create({
     elevation: 0,
     marginBottom: hScale(10),
   },
-  indicator: {
-  },
+  indicator: {},
   labelstyle: {
     fontSize: wScale(13),
     color: colors.black,
-    width: "100%",
+    width: '100%',
     textAlign: 'center',
   },
   labelview: {

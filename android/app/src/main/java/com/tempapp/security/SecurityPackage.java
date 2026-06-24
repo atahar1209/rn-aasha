@@ -1,4 +1,4 @@
-package com.mobykwik.security;
+package com.digitalindiapay.security;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

@@ -1,43 +1,38 @@
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable comma-dangle */
+/* eslint-disable quotes */
+/* eslint-disable dot-notation */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  TextInput,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
   Text,
   TouchableOpacity,
   ToastAndroid,
   Alert,
   ActivityIndicator,
-  
 } from 'react-native';
-import { colors } from '../../utils/styles/theme';
-import { SCREEN_HEIGHT, hScale, wScale } from '../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { APP_URLS } from '../../utils/network/urls';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { BottomSheet, Card } from '@rneui/base';
-import { translate } from '../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
-import AppBar from '../drawer/headerAppbar/AppBar';
+import {translate} from '../../utils/languageUtils/I18n';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import DynamicButton from '../drawer/button/DynamicButton';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
 import OperatorBottomSheet from '../../components/OperatorBottomSheet';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ShowLoader from '../../components/ShowLoder';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
-import ElectricityOperatorBottomSheet from '../../components/ElectricityOperatorBottomSheet';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
 import RecentText from '../../components/RecentText';
-import { useLocationHook } from '../../hooks/useLocationHook';
+import {useLocationHook} from '../../hooks/useLocationHook';
 
 const FastagScreen = () => {
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [textInput1, setTextInput1] = useState('');
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [insuranceOptList, setInsuranceOptList] = useState([]);
@@ -78,7 +73,7 @@ const FastagScreen = () => {
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
   const [dueDate, setDueDate] = useState('Date');
-  const [CustomerName, setCustomerName] = useState(('N/A'));
+  const [CustomerName, setCustomerName] = useState('N/A');
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
   const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
@@ -86,12 +81,12 @@ const FastagScreen = () => {
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [agencyCode, setAgencyCode] = useState('');
-  const [agencyCode2, setAgencyCode2] = useState('')
+  const [agencyCode2, setAgencyCode2] = useState('');
   const [isrecent, setIsrecent] = useState(false);
 
   const [historylist, setHistorylist] = useState([]);
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const navigation = useNavigation<any>();
 
   useEffect(() => {
@@ -162,39 +157,35 @@ const FastagScreen = () => {
 
     console.log(item);
   };
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId, Loc_Data } = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
   useEffect(() => {
     recenttransactions();
-  }, [])
+  }, []);
 
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
-      const response = await get({ url: url })
-      setHistorylist(response)
-      setReqTime(response[0]['Reqesttime'])
-      setReqId(response[0]['Request_ID'])
-    } catch (error) {
-    }
-  };
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
+      const response = await get({url: url});
+      setHistorylist(response);
+      setReqTime(response[0]['Reqesttime']);
+      setReqId(response[0]['Request_ID']);
+    } catch (error) {}
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = ('0 ' + (currentDate.getMonth() + 1)).slice(-2);
-  const day = ('0' + (currentDate.getDate())).slice(-2);
+  const day = ('0' + currentDate.getDate()).slice(-2);
   const formattedDate = `${year}-${month}-${day}`;
 
-
- 
   const onRechargePress = useCallback(async () => {
-
-    const loc = await readLatLongFromStorage()
+    const loc = await readLatLongFromStorage();
     setBottomSheetVisible(false);
-    setShowLoader(true)
+    setShowLoader(true);
     const mobileNetwork = await getNetworkCarrier();
     const ip = await getMobileIp();
     const encryption = await encrypt([
@@ -202,7 +193,8 @@ const FastagScreen = () => {
       consumerNo,
       optcode,
       amount,
-      Loc_Data['latitude'], Loc_Data['longitude'],
+      Loc_Data['latitude'],
+      Loc_Data['longitude'],
 
       'city',
       'address',
@@ -242,33 +234,28 @@ const FastagScreen = () => {
       });
       console.log(res);
       console.log(status);
-      if(res['status'] ==='False'){
-
-        alert(res['message'])
+      if (res['status'] === 'False') {
+        Alert.alert(res['message']);
         // {"message": "Error In Location Info", "status": "False"}
-      //  ToastAndroid.show(res['message'],ToastAndroid.BOTTOM);
+        //  ToastAndroid.show(res['message'],ToastAndroid.BOTTOM);
         setShowLoader(false);
-
         return;
-        
-        }
+      }
       status = res.Response;
       Message = res.Message;
 
-
-
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     // setconsumerNo('');
-    setselectedOpt('Select Your Operator');
-    setconsumerNo('Customer ID')
+    setselectedOpt(translate('Select Your Operator'));
+    setconsumerNo(translate('Customer ID'));
     setAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
 
     navigation.navigate('Rechargedetails', {
@@ -278,18 +265,25 @@ const FastagScreen = () => {
       status: status ?? 'Unknown',
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
-      Message: Message ?? 'No message'
+      Message: Message ?? translate('No message'),
     });
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
+    getMobileIp,
+    userId,
     consumerNo,
     optcode,
+    amount,
+    Loc_Data,
+    agencyCode,
+    agencyCode2,
+    dueDate,
+    navigation,
+    selectedOpt,
+    reqId,
+    reqTime,
     post,
-    userId,
+    recenttransactions,
   ]);
   const clearState = () => {
     setDataType('');
@@ -331,7 +325,7 @@ const FastagScreen = () => {
       // Construct URL properly, ensuring all parameters are included
       const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=&ProcessingCycle=&acno=&lt=&ViewBill=Y`;
 
-      const res = await get({ url: url });
+      const res = await get({url: url});
       console.log(res, '*********************');
       console.log(url);
 
@@ -341,39 +335,39 @@ const FastagScreen = () => {
 
         // Check if BillInfo is available
         if (billinfoo && addinfo.IsSuccess) {
-          setDueDate(billinfoo["billDueDate"]);
-          setAmount(billinfoo["billAmount"]);
-          setCustomerName(billinfoo["customerName"]);
-          setCustBal(billinfoo["balance"]);
-          setAmount(billinfoo["billAmount"]);
+          setDueDate(billinfoo['billDueDate']);
+          setAmount(billinfoo['billAmount']);
+          setCustomerName(billinfoo['customerName']);
+          setCustBal(billinfoo['balance']);
+          setAmount(billinfoo['billAmount']);
           setShowLoader2(false);
           setBottomSheetVisible(true);
         } else {
-
           setShowLoader2(false);
-          Alert.alert('Error', 'Bill info is missing.', [{ text: 'OK', onPress: () => { } }]);
+          Alert.alert(translate('Error'), translate('Bill info is missing.'), [
+            {text: 'OK', onPress: () => {}},
+          ]);
         }
       } else {
-
         setShowLoader2(false);
-        const errorMsg = res?.['ADDINFO']?.['ERRORMSG'] || res?.['ADDINFO']?.Message;
+        const errorMsg =
+          res?.['ADDINFO']?.['ERRORMSG'] || res?.['ADDINFO']?.Message;
         const price = res?.['ADDINFO']?.['PRICE'] || 'N/A';
         const status = res?.['ADDINFO']?.['STATUS'] || 'Failed';
         setAmount(price);
 
-
         Alert.alert(
           'Error Information',
-          `Price: ${price}\nError Message: ${errorMsg}\nStatus: ${status}`,
-          [{ text: 'OK', onPress: () => { } }]
+          `Price: ${price}\n${translate(
+            'Error Message',
+          )}: ${errorMsg}\n${translate('Status')}: ${status}`,
+          [{text: 'OK', onPress: () => {}}],
         );
       }
-
     } catch (error) {
-
       console.error('Error occurred in billInfo:', error);
       setShowLoader2(false);
-      ToastAndroid.show('key_anerroro_12', ToastAndroid.LONG);
+      ToastAndroid.show(translate('key_anerroro_12'), ToastAndroid.LONG);
     }
   }
 
@@ -389,7 +383,7 @@ const FastagScreen = () => {
         Operatorcode: optcode,
       };
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
-      const res = await post({ url: url, data, config: config });
+      const res = await post({url: url, data, config: config});
 
       console.log(':', url);
       const billSts = res['RESULT'];
@@ -399,25 +393,29 @@ const FastagScreen = () => {
         setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const validateFields = () => {
     if (!paramname) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (selectedOpt === 'Select Your Operator') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount' || parseFloat(amount) <= 0) {
+    } else if (
+      !amount ||
+      amount === 'Enter Amount' ||
+      parseFloat(amount) <= 0
+    ) {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -427,117 +425,128 @@ const FastagScreen = () => {
   };
   return (
     <View style={styles.main}>
-      <AppBarSecond title='Fastag Screen' />
+      <AppBarSecond title="Fastag Screen" />
       <View style={styles.container}>
-        {showLoader && (
-          <ShowLoader />
-        )}
+        {showLoader && <ShowLoader />}
         <TouchableOpacity onPress={() => setIsOperatorList(true)}>
-          <FlotingInput label={selectedOpt}
+          <FlotingInput
+            label={selectedOpt}
             editable={false}
             onChangeTextCallback={text => setTextInput1(text)}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
           <View style={[styles.righticon2]}>
-
             <OnelineDropdownSvg />
-
           </View>
         </TouchableOpacity>
         {accntvisivility && (
           <View>
-
-            <FlotingInput label={accnumhint} value={agencyCode}
+            <FlotingInput
+              label={accnumhint}
+              value={agencyCode}
               onChangeTextCallback={text => setAgencyCode(text)}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
-
           </View>
         )}
 
         {accntvisivility2 && (
           <View>
-
-            <FlotingInput label={accnumhint2} value={accnumhint2}
-              onChangeTextCallback={text => setAccnumhint2(text)} />
+            <FlotingInput
+              label={accnumhint2}
+              value={accnumhint2}
+              onChangeTextCallback={text => setAccnumhint2(text)}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
+            />
             <View style={styles.righticon2}>
               <TouchableOpacity style={styles.infobtntex}>
-                <Text style={styles.infobtntex}>{translate("Info")}</Text>
+                <Text style={styles.infobtntex}>{translate('Info')}</Text>
               </TouchableOpacity>
             </View>
-
           </View>
         )}
 
         <View>
-
-          <FlotingInput label={paramname}
+          <FlotingInput
+            label={paramname}
             onChangeTextCallback={text => {
               setconsumerNo(text);
             }}
             value={consumerNo}
             autoCapitalize="characters"
-          // maxLength={maxlength || 12}
-
+            inputstyle={undefined}
+            labelinputstyle={undefined} // maxLength={maxlength || 12}
           />
-          <View style={[styles.righticon2,]}>
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
                 onPress={() => {
                   billInfo();
 
-                  setShowLoader2(true)
-
+                  setShowLoader2(true);
                 }}>
-                {
-                  showLoader2 ? <ActivityIndicator size={'large'} /> : <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
-                }
+                {showLoader2 ? (
+                  <ActivityIndicator size={'large'} />
+                ) : (
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
+                )}
               </TouchableOpacity>
             )}
           </View>
         </View>
-        <FlotingInput label={'Enter Amount'}
+        <FlotingInput
+          label={translate('Enter Amount')}
           maxLength={5}
-
           keyboardType="number-pad"
           value={amount}
           maxLength={5}
-          onChangeTextCallback={text => setAmount(text)} />
+          onChangeTextCallback={text => setAmount(text)}
+          inputstyle={undefined}
+          labelinputstyle={undefined}
+        />
         <DynamicButton
-
-          title='Next'
+          title="Next"
           onPress={() => {
             // billInfo();
-            validateFields()
-          }} styleoveride />
-        <View >
-
+            validateFields();
+          }}
+          styleoveride
+        />
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
             onBackdropPress={() => setIsrecent(false)}
-
           />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
             <RecentText />
           </TouchableOpacity>
-
         </View>
         <OperatorBottomSheet
           isModalVisible={isOperatorList}
           operatorData={insuranceOptList}
           //// stateData={stateList}
-          selectedOperator={() => { selectedOpt; setIsOperatorList(false) }}
+          selectedOperator={() => {
+            selectedOpt;
+            setIsOperatorList(false);
+          }}
           setModalVisible={setIsOperatorList}
           selectOperator={selectOperator}
           setOperatorcode={setOptCode}
           showState={false}
           // selectOperatorImage={setOptimg}
-          handleItemPress={(item) => { handleItemPress(item) }}
-
+          handleItemPress={item => {
+            handleItemPress(item);
+          }}
         />
 
         <Rechargeconfirm
@@ -546,26 +555,26 @@ const FastagScreen = () => {
           onBackdropPress={() => setBottomSheetVisible(false)}
           status={Status}
           details={[
-            { label: 'User Name', value2: CustomerName },
-            { label: 'Customer ID', value: consumerNo },
-            { label: 'Due Date', value2: dueDate },
-            { label: 'Operator Name', value2: selectedOpt },
-            { label: 'Customer Status', value2: Status },
+            {label: translate('User Name'), value2: CustomerName},
+            {label: translate('Customer ID'), value: consumerNo},
+            {label: translate('Due Date'), value2: dueDate},
+            {label: translate('Operator Name'), value2: selectedOpt},
+            {label: translate('Customer Status'), value2: Status},
             // { label: 'BillAmount', value2: billAmount },
-
           ]}
-          lastlabel={'Transaction Amount'}
+          lastlabel={translate('Transaction Amount')}
           lastvalue={amount}
           onRechargedetails={() => {
             if (amount === '0' || amount === '') {
               ToastAndroid.showWithGravity(
-                `Please Enter Amount`,
+                translate(`Please Enter Amount`),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
-            } else { onRechargePress() }
-          }
-          }
+            } else {
+              onRechargePress();
+            }
+          }}
         />
       </View>
     </View>
@@ -573,20 +582,20 @@ const FastagScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  main: { flex: 1, backgroundColor: '#fff' },
+  main: {flex: 1, backgroundColor: '#fff'},
   container: {
     paddingHorizontal: wScale(20),
     flex: 1,
     paddingTop: hScale(30),
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -599,11 +608,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',

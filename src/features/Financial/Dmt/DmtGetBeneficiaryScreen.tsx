@@ -1,36 +1,49 @@
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable react/no-unstable-nested-components */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  View, Text, TextInput, Button, ActivityIndicator, StyleSheet, ToastAndroid, TouchableOpacity, Alert, ScrollView, Keyboard,
-
+  View,
+  Text,
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  Keyboard,
 } from 'react-native';
-import { APP_URLS } from '../../../utils/network/urls';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { translate } from '../../../utils/languageUtils/I18n';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { useFocusEffect } from '@react-navigation/native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
+import {useFocusEffect} from '@react-navigation/native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import DynamicButton from '../../drawer/button/DynamicButton';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import LinearGradient from 'react-native-linear-gradient';
-import { FlashList } from '@shopify/flash-list';
-import { SvgXml } from 'react-native-svg';
+import {FlashList} from '@shopify/flash-list';
+import {SvgXml} from 'react-native-svg';
 import OTPModal from '../../../components/OTPModal';
-import { captureFinger, getDeviceInfo, isDriverFound, openFingerPrintScanner } from 'react-native-rdservice-fingerprintscanner';
+import {
+  getDeviceInfo,
+  isDriverFound,
+  openFingerPrintScanner,
+} from 'react-native-rdservice-fingerprintscanner';
 import ShowLoader from '../../../components/ShowLoder';
 import SelectDevice from '../Aeps/DeviceSelect';
-import { colors } from '../../../utils/styles/theme';
-import { useRdDeviceConnectionHook } from '../../../hooks/useRdDeviceConnectionHook';
-import { BottomSheet } from '@rneui/themed';
+import {colors} from '../../../utils/styles/theme';
+import {BottomSheet} from '@rneui/themed';
 import DmtAddNewBenificiaryScreen from './DmtAddNewBeneficiarycreen';
-import { useLocationHook } from '../../../hooks/useLocationHook';
-import { onReceiveNotification2 } from '../../../utils/NotificationService';
+import {onReceiveNotification2} from '../../../utils/NotificationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const GetBenifiaryScreenDmt = ({ route }) => {
+const GetBenifiaryScreenDmt = ({route}) => {
   //const {isDeviceConnected} = useRdDeviceConnectionHook();
 
-  const { colorConfig, Loc_Data } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, Loc_Data} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const EditIcon = ` 
 
  <?xml version="1.0" encoding="UTF-8"?>
@@ -50,12 +63,12 @@ const GetBenifiaryScreenDmt = ({ route }) => {
   const [fingerprintData, setFingerprintData] = useState('');
   const [beneficiaryData, setBeneficiaryData] = useState([]);
   const [remid, setRemid] = useState('');
-  const { post, get } = useAxiosHook();
+  const {post, get} = useAxiosHook();
   const [isLoading, setisLoading] = useState(true);
   const navigation = useNavigation<any>();
   const [nodata, setnodata] = useState(false);
-  const [accHolder, setAccHolder] = useState('')
-  const [bankname, setBankName] = useState('')
+  const [accHolder, setAccHolder] = useState('');
+  const [bankname, setBankName] = useState('');
   const [ACCno, setAccNo] = useState('');
   const [ifsc, setIfsc] = useState('');
   const [showOtpView, setShowOtpView] = useState(false);
@@ -83,36 +96,36 @@ const GetBenifiaryScreenDmt = ({ route }) => {
   useFocusEffect(
     React.useCallback(() => {
       // setBanklist([])
-    }, [])
+    }, []),
   );
 
-
   const a2z = async (res, no) => {
-
-
     if (res.RESULT === '0') {
-      const add = res.ADDINFO
+      const add = res.ADDINFO;
       if (add.statuscode === 'RNF') {
         Alert.alert(
           add.status,
-          "",
+          '',
           [
             {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
+              text: translate('Cancel'),
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
             },
             {
-              text: "Register",
-              onPress: () => navigation.navigate("NumberRegisterScreen", { No: no, Name: dmttype, remid: remid })
-              ,
+              text: translate('Register'),
+              onPress: () =>
+                navigation.navigate('NumberRegisterScreen', {
+                  No: no,
+                  Name: dmttype,
+                  remid: remid,
+                }),
             },
           ],
-          { cancelable: false }
+          {cancelable: false},
         );
       } else if (add.statuscode === 'TXN') {
-
-        console.log()
+        console.log();
         const beneficiary = add?.data?.beneficiary || [];
         const remid = add?.data?.remitter?.id || '';
         setRemid(remid);
@@ -130,47 +143,53 @@ const GetBenifiaryScreenDmt = ({ route }) => {
           setnodata(false);
         }
       }
-
-
-
     }
-  }
+  };
 
   const verifyEkycOtp = async () => {
-
-
     console.log(customerDet);
-    const stateResp = customerDet.stateResp === undefined ? customerDet?.stateresp : customerDet?.stateResp;
-    const ekyc_id = customerDet?.ekyc_id === undefined ? customerDet?.kyc_id : customerDet?.ekyc_id;
+    const stateResp =
+      customerDet.stateResp === undefined
+        ? customerDet?.stateresp
+        : customerDet?.stateResp;
+    const ekyc_id =
+      customerDet?.ekyc_id === undefined
+        ? customerDet?.kyc_id
+        : customerDet?.ekyc_id;
 
-
-    const res = await post({ url: `MoneyDMT/api/Money/KYCEnterOTP?sender_number=${sendernum}&stateresp=${stateResp}&kyc_id=${ekyc_id}&Otp=${mobileOtp}` });
-    console.log(`MoneyDMT/api/Money/KYCEnterOTP?sender_number=${sendernum}&stateresp=${stateResp}&kyc_id=${ekyc_id}&Otp=${mobileOtp}`)
-    console.log(`MoneyDMT/api/Money/KYCEnterOTP?sender_number=${sendernum}&stateresp=${stateResp}&kyc_id=${ekyc_id}&Otp=${mobileOtp}`)
+    const res = await post({
+      url: `MoneyDMT/api/Money/KYCEnterOTP?sender_number=${sendernum}&stateresp=${stateResp}&kyc_id=${ekyc_id}&Otp=${mobileOtp}`,
+    });
+    console.log(
+      `MoneyDMT/api/Money/KYCEnterOTP?sender_number=${sendernum}&stateresp=${stateResp}&kyc_id=${ekyc_id}&Otp=${mobileOtp}`,
+    );
+    console.log(
+      `MoneyDMT/api/Money/KYCEnterOTP?sender_number=${sendernum}&stateresp=${stateResp}&kyc_id=${ekyc_id}&Otp=${mobileOtp}`,
+    );
     console.log(res);
     if (res?.RESULT === '0') {
-
       if (res.ADDINFO.status) {
         ToastAndroid.showWithGravity(
-          res.ADDINFO.message || 'Successfully verified',
+          res.ADDINFO.message || translate('Successfully verified'),
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
         );
 
-
         const mockNotification = {
           notification: {
             title: '',
-            body: res.ADDINFO.message || 'Successfully verified',
-
+            body: res.ADDINFO.message || translate('Successfully verified'),
           },
         };
 
         // Call the function
         onReceiveNotification2(mockNotification);
-        navigation.navigate("DmtAddNewBenificiaryScreen", { no: sendernum, remid: remid, Name: dmttype });
-      }
-      else {
+        navigation.navigate('DmtAddNewBenificiaryScreen', {
+          no: sendernum,
+          remid: remid,
+          Name: dmttype,
+        });
+      } else {
         ToastAndroid.showWithGravity(
           res.ADDINFO.message,
           ToastAndroid.SHORT,
@@ -186,52 +205,41 @@ const GetBenifiaryScreenDmt = ({ route }) => {
         //   }
         // }
       }
-    }
-    else {
+    } else {
       ToastAndroid.showWithGravity(
-        'Something went wrong. Please try Again',
+        translate('Something went wrong. Please try Again'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-
     }
     setIsload(false);
-
-  }
-  const { latitude, longitude } = Loc_Data;
+  };
+  const {latitude, longitude} = Loc_Data;
   const start = () => {
     getDeviceInfo()
-      .then(async (res) => {
+      .then(async res => {
         const deviceInfoString = JSON.stringify(res, null, 2);
         const isReady = res.rdServiceInfoJson.RDService.status;
         const rdServicePackage = res.rdServicePackage;
         // await post({ url: 'AEPS/api/Aeps/ErrorMessage', data: { Message: JSON.stringify(res) } });
 
-
-
-
         if (isReady === 'READY') {
-
-
           capture(rdServicePackage);
-
 
           console.log('Device is ready:', isReady);
         } else {
-
-
-
           Alert.alert(
-            'Device Status',
+            translate('Device Status'),
             isReady === 'NOTREADY'
-              ? 'Device is not ready. key_errorwhil_37.'
-              : 'Device is ready.',
-            [
-              { text: 'OK', onPress: () => console.log('OK Pressed') },
-            ],
-            { cancelable: false }
+              ? translate('Device is not ready. key_errorwhil_37.')
+              : translate('Device is ready.'),
+            [{text: translate('OK'), onPress: () => console.log('OK Pressed')}],
+            {cancelable: false},
           );
-          console.log('Device is', isReady === 'NOTREADY' ? 'not ready' : 'ready');
+          console.log(
+            'Device is',
+            isReady === 'NOTREADY' ? 'not ready' : 'ready',
+          );
 
           setFingerprintData('');
         }
@@ -246,41 +254,44 @@ const GetBenifiaryScreenDmt = ({ route }) => {
         //     console.error('Error writing file:', error);
         //   });
       })
-      .catch(async (error) => {
+      .catch(async error => {
         // await post({ url: 'AEPS/api/Aeps/ErrorMessage', data: { Message: JSON.stringify({
         //   message: error?.message,
         //   line: error?.line,
         //   column: error?.column
         // }) } });
-        Alert.alert(
-          'Error',
-          'key_errorwhil_37'
-        );
+        Alert.alert(translate('Error'), translate('key_errorwhil_37'));
         // console.error('Error while fetching device info:', error);
       });
   };
-  const capture = (rdServicePackage) => {
+  const capture = rdServicePackage => {
     let pidOptions = '';
 
     switch (rdServicePackage) {
       case 'com.mantra.mfs110.rdservice':
-        pidOptions = `<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0" timeout="10000" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" pTimeout="20000" posh="UNKNOWN" env="P"  /> <CustOpts><Param name="mantrakey" value="" /></CustOpts> </PidOptions>`;
+        pidOptions =
+          '<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0" timeout="10000" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" pTimeout="20000" posh="UNKNOWN" env="P"  /> <CustOpts><Param name="mantrakey" value="" /></CustOpts> </PidOptions>';
         break;
       case 'com.mantra.rdservice':
-        pidOptions = `<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0" timeout="10000" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" pTimeout="20000" posh="UNKNOWN" env="P"  /> <CustOpts><Param name="mantrakey" value="" /></CustOpts> </PidOptions>`;
+        pidOptions =
+          '<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0" timeout="10000" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" pTimeout="20000" posh="UNKNOWN" env="P"  /> <CustOpts><Param name="mantrakey" value="" /></CustOpts> </PidOptions>';
         break;
       case 'com.acpl.registersdk_l1':
-        pidOptions = `<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" timeout="10000"  otp="" pTimeout="20000" posh="UNKNOWN" env="P" />  <Demo/> <CustOpts><Param name="" value="" /></CustOpts> </PidOptions>`;
+        pidOptions =
+          '<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" timeout="10000"  otp="" pTimeout="20000" posh="UNKNOWN" env="P" />  <Demo/> <CustOpts><Param name="" value="" /></CustOpts> </PidOptions>';
         break;
       case 'com.acpl.registersdk':
-        pidOptions = `<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" timeout="10000"  otp="" pTimeout="20000" posh="UNKNOWN" env="P" />  <Demo/> <CustOpts><Param name="" value="" /></CustOpts> </PidOptions>`;
+        pidOptions =
+          '<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" pCount="0" pgCount="2" format="0" pidVer="2.0" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" timeout="10000"  otp="" pTimeout="20000" posh="UNKNOWN" env="P" />  <Demo/> <CustOpts><Param name="" value="" /></CustOpts> </PidOptions>';
         break;
       case 'com.idemia.l1rdservice':
-        pidOptions = `<PidOptions ver="1.0"><Opts env="P" fCount="1" fType="2" iCount="0" iType="" pCount="0" pType="" format="0" pidVer="2.0" timeout="20000" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" posh="UNKNOWN" /><Demo></Demo><CustOpts><Param name="" value="" /></CustOpts></PidOptions>`;
+        pidOptions =
+          '<PidOptions ver="1.0"><Opts env="P" fCount="1" fType="2" iCount="0" iType="" pCount="0" pType="" format="0" pidVer="2.0" timeout="20000" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" posh="UNKNOWN" /><Demo></Demo><CustOpts><Param name="" value="" /></CustOpts></PidOptions>';
         break;
       case 'com.scl.rdservice':
         //  pidOptions = '<PidOptions ver="1.0"> <Opts fCount="1" fType="2" iCount="0" iType="" pCount="0" pType="" format="0" pidVer="2.0" timeout="20000"  posh="UNKNOWN" env="P" /> <Demo></Demo> <CustOpts><Param name="" value="" /></CustOpts> </PidOptions>';
-        pidOptions = `<PidOptions ver="1.0"><Opts env="P" fCount="1" fType="2" iCount="0" iType="" pCount="0" pType="" format="0" pidVer="2.0" timeout="20000" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" posh="UNKNOWN" /><Demo></Demo><CustOpts><Param name="" value="" /></CustOpts></PidOptions>`;
+        pidOptions =
+          '<PidOptions ver="1.0"><Opts env="P" fCount="1" fType="2" iCount="0" iType="" pCount="0" pType="" format="0" pidVer="2.0" timeout="20000" wadh="18f4CEiXeXcfGXvgWA/blxD+w2pw7hfQPY45JMytkPw=" posh="UNKNOWN" /><Demo></Demo><CustOpts><Param name="" value="" /></CustOpts></PidOptions>';
         break;
       default:
         console.error('Unsupported rdServicePackage');
@@ -288,90 +299,117 @@ const GetBenifiaryScreenDmt = ({ route }) => {
     }
 
     // Add necessary dependencies
-    handleFingerprintScanner(rdServicePackage, pidOptions)
+    handleFingerprintScanner(rdServicePackage, pidOptions);
   };
-  const handleFingerprintScanner = useCallback(async (rdServicePackage, pidOptions) => {
-    try {
-      const res = await openFingerPrintScanner(rdServicePackage, pidOptions);
-      console.log(res, 'AEPS***');
+  const handleFingerprintScanner = useCallback(
+    async (rdServicePackage, pidOptions) => {
+      try {
+        const res = await openFingerPrintScanner(rdServicePackage, pidOptions);
+        console.log(res, 'AEPS***');
 
-      if (res.message === 'Device Driver not found') {
-        ToastAndroid.showWithGravity(
-          res.message,
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-        );
-        return;
-      }
-
-      const deviceInfoString = JSON.stringify(res, null, 2);
-
-      if (res.errorCode === 0) {
-        setIsShowloader(true);
-
-        const data = {
-          sender_number: sendernum, // Ensure sendernum is defined
-          latitude: latitude, // Ensure latitude is defined
-          longitude: longitude, // Ensure longitude is defined
-          aadharcard: aadharNumber, // Ensure aadharNumber is defined
-          pid: res.pidDataXML,
-        };
-
-        try {
-          const response = await post({ url: 'MoneyDMT/api/Money/EKYC_Register', data });
-          setIsShowloader(false);
-
-          if (response) {
-            const add = response.ADDINFO;
-
-            if (add) {
-              if (response.RESULT === '0') {
-                if (add.message === 'Kyc completed and OTP has been sent to remitter mobile number.') {
-                  setShowOtpView(true);
-                  setCustomer(add);
-                  const mockNotification = {
-                    notification: {
-                      title: '',
-                      body: add.message,
-                    },
-                  };
-
-                  // Call the function
-                  onReceiveNotification2(mockNotification);
-
-                } else {
-                  checksendernumber(sendernum); // Ensure checksendernumber is defined
-                  Alert.alert('', `Message: ${add.message}\n`, [{ text: 'OK' }]);
-                }
-              }
-
-
-            } else {
-              console.error('ADDINFO is missing in the response');
-              Alert.alert('Error', 'Failed to fetch KYC details. Please try again later.');
-            }
-          } else {
-            console.error('No response received from the server');
-            Alert.alert('Error', 'No response received from the server');
-          }
-        } catch (error) {
-          console.error('Error while sending request:', error);
-          Alert.alert('Error', 'An error occurred while processing your request. Please try again later.');
+        if (res.message === 'Device Driver not found') {
+          ToastAndroid.showWithGravity(
+            res.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+          );
+          return;
         }
+
+        const deviceInfoString = JSON.stringify(res, null, 2);
+
+        if (res.errorCode === 0) {
+          setIsShowloader(true);
+
+          const data = {
+            sender_number: sendernum, // Ensure sendernum is defined
+            latitude: latitude, // Ensure latitude is defined
+            longitude: longitude, // Ensure longitude is defined
+            aadharcard: aadharNumber, // Ensure aadharNumber is defined
+            pid: res.pidDataXML,
+          };
+
+          try {
+            const response = await post({
+              url: 'MoneyDMT/api/Money/EKYC_Register',
+              data,
+            });
+            setIsShowloader(false);
+
+            if (response) {
+              const add = response.ADDINFO;
+
+              if (add) {
+                if (response.RESULT === '0') {
+                  if (
+                    add.message ===
+                    translate(
+                      'Kyc completed and OTP has been sent to remitter mobile number.',
+                    )
+                  ) {
+                    setShowOtpView(true);
+                    setCustomer(add);
+                    const mockNotification = {
+                      notification: {
+                        title: '',
+                        body: add.message,
+                      },
+                    };
+
+                    // Call the function
+                    onReceiveNotification2(mockNotification);
+                  } else {
+                    checksendernumber(sendernum); // Ensure checksendernumber is defined
+                    Alert.alert(
+                      '',
+                      `${translate('Message')}: ${add.message}\n`,
+                      [{text: translate('OK')}],
+                    );
+                  }
+                }
+              } else {
+                console.error('ADDINFO is missing in the response');
+                Alert.alert(
+                  translate('Error'),
+                  translate(
+                    'Failed to fetch KYC details. Please try again later.',
+                  ),
+                );
+              }
+            } else {
+              console.error('No response received from the server');
+              Alert.alert(
+                translate('Error'),
+                translate('No response received from the server'),
+              );
+            }
+          } catch (error) {
+            console.error('Error while sending request:', error);
+            Alert.alert(
+              translate('Error'),
+              translate(
+                'An error occurred while processing your request. Please try again later.',
+              ),
+            );
+          }
+        }
+      } catch (error) {
+        console.error('Fingerprint scanner error:', error);
+        setFingerprintData('');
+        Alert.alert(translate('Please check if the device is connected.'));
       }
-    } catch (error) {
-      console.error('Fingerprint scanner error:', error);
-      setFingerprintData('');
-      Alert.alert('Please check if the device is connected.');
-    }
-  }, [sendernum, latitude, longitude, aadharNumber]);
+    },
+    [sendernum, latitude, longitude, aadharNumber, post, checksendernumber],
+  );
   const [deviceName, setDeviceName] = useState('');
 
-
-  const handleSelection = (selectedOption) => {
-
+  const handleSelection = selectedOption => {
     if (deviceName === 'Device') {
-      ToastAndroid.showWithGravity('Please Select Your Device', ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+      ToastAndroid.showWithGravity(
+        translate('Please Select Your Device'),
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
       return;
     }
     const captureMapping = {
@@ -384,22 +422,20 @@ const GetBenifiaryScreenDmt = ({ route }) => {
       'Aadhaar Face RD': 'Aadhaar Face RD',
     };
 
-    console.log(captureMapping[selectedOption])
+    console.log(captureMapping[selectedOption]);
     if (captureMapping[selectedOption]) {
       isDriverFound(captureMapping[selectedOption])
-        .then((res) => {
+        .then(res => {
           capture(captureMapping[selectedOption]);
 
-
           //  alert(`Capture Mapping: ${captureMapping[selectedOption]}\nResponse: ${JSON.stringify(res)}`);
-
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('Error finding driver:', error);
-          alert('key_errorcou_39');
+          Alert.alert('key_errorcou_39');
         });
     } else {
-      alert('Invalid option selected');
+      Alert.alert(translate('Invalid option selected'));
     }
   };
 
@@ -413,13 +449,10 @@ const GetBenifiaryScreenDmt = ({ route }) => {
     }
   };
 
-  const getJsonData = async (key) => {
+  const getJsonData = async key => {
     try {
       const jsonData = await AsyncStorage.getItem(key);
-
-
       console.log(jsonData);
-
       if (jsonData !== null) {
         const parsedData = JSON.parse(jsonData);
         // console.log('Retrieved data:', parsedData);
@@ -433,13 +466,12 @@ const GetBenifiaryScreenDmt = ({ route }) => {
     }
   };
 
-
   const checkRadiant = (res, no) => {
-    console.log(res.ADDINFO,);
+    console.log(res.ADDINFO);
     const ADDINFO = res?.ADDINFO;
     setisLoading(false);
     setCustomer(ADDINFO);
-    setremitter(ADDINFO?.data?.remitter || '')
+    setremitter(ADDINFO?.data?.remitter || '');
     const remid = ADDINFO?.data?.remitter?.id || '';
     setRemid(remid);
     if (res?.RESULT === '0') {
@@ -448,7 +480,6 @@ const GetBenifiaryScreenDmt = ({ route }) => {
 
       if (ADDINFO.statuscode === 'TXN') {
         setBanklist(benes);
-
       } else if (ADDINFO.statuscode === 'TXNP') {
         setTXNP(ADDINFO.statuscode === 'TXNP');
         setBanklist([]);
@@ -461,8 +492,6 @@ const GetBenifiaryScreenDmt = ({ route }) => {
       } else {
         setnodata(false);
       }
-
-
     } else if (ADDINFO.statuscode === 'ERR') {
       ToastAndroid.showWithGravity(
         ADDINFO.status,
@@ -471,15 +500,12 @@ const GetBenifiaryScreenDmt = ({ route }) => {
       );
     } else {
       if (ADDINFO.statuscode === 'TXNP') {
-
         setTXNP(ADDINFO.statuscode === 'TXNP');
 
         //start()
+      } else if (ADDINFO.statuscode === 'OTP') {
+        setShowOtpView(true);
       }
-      else if (ADDINFO.statuscode === 'OTP') {
-        setShowOtpView(true)
-      }
-
 
       //   Alert.alert(
       //     res.ADDINFO || "User does not exist",
@@ -498,68 +524,63 @@ const GetBenifiaryScreenDmt = ({ route }) => {
       //     ],
       //     { cancelable: false }
       //   );
-
-
     }
-  }
+  };
 
+  const [isload, setIsload] = useState(false);
 
+  const checksendernumber = useCallback(
+    async number => {
+      setIsload(true);
+      setBanklist([]);
+      setisLoading(true);
+      console.log(dmttype);
 
+      try {
+        const url = `MoneyDMT/api/Money/GetBeneficiaryList?sender_number=${number}&latitude=${latitude}&longitude=${longitude}`;
+        console.log(url, 'Request URL');
 
-  const [isload, setIsload] = useState(false)
+        const res = await get({url});
+        console.log(res);
 
+        setOnTap1(false);
+        checkRadiant(res, number); // Ensure checkRadiant is defined
 
-  const checksendernumber = useCallback(async (number) => {
-    setIsload(true);
-    setBanklist([]);
-    setisLoading(true);
-    console.log(dmttype);
-
-    try {
-      const url = `MoneyDMT/api/Money/GetBeneficiaryList?sender_number=${number}&latitude=${latitude}&longitude=${longitude}`;
-      console.log(url, 'Request URL');
-
-      const res = await get({ url });
-      console.log(res);
-
-      setOnTap1(false);
-      checkRadiant(res, number); // Ensure checkRadiant is defined
-
-      setisLoading(false);
-      setIsload(false);
-    } catch (error) {
-      setIsload(false);
-      setisLoading(false);
-      console.error('Error:', error);
-    }
-  }, [latitude, longitude]); // Add necessary dependencies
-
+        setisLoading(false);
+        setIsload(false);
+      } catch (error) {
+        setIsload(false);
+        setisLoading(false);
+        console.error('Error:', error);
+      }
+    },
+    [dmttype, get, latitude, longitude],
+  ); // Add necessary dependencies
 
   const [unqid, setUnqiD] = useState('');
   const getGenUniqueId = async () => {
     try {
-
       //  const dmt2 = await get({ url: 'Retailer/api/data/DMTStatusCheck1' });
 
-      const url = `${APP_URLS.getGenIMPSUniqueId}`
+      const url = `${APP_URLS.getGenIMPSUniqueId}`;
       //  console.log(dmt2,'111111111111111111111111111111111');
-      const res = await get({ url: url });
-      setUnqiD(res['Message']);
+      const res = await get({url: url});
+      setUnqiD(res.Message);
       setisLoading(false);
 
       //  setDmttype(dmt2.Name1);
-      if (res['Response'] == 'Failed') {
+      if (res.Response === 'Failed') {
         ToastAndroid.showWithGravity(
-          res['Message'],
+          res.Message,
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
-        )
+        );
       } else {
         ToastAndroid.showWithGravity(
-          res['Response'],
+          res.Response,
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
-        )
+        );
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -574,29 +595,26 @@ const GetBenifiaryScreenDmt = ({ route }) => {
   };
   async function adhar_Validation(adharnumber) {
     try {
-      const response = await get({ url: `${APP_URLS.aadharValidation}${adharnumber}` })
+      const response = await get({
+        url: `${APP_URLS.aadharValidation}${adharnumber}`,
+      });
       console.log(response);
-      if (response['status'] === true) {
+      if (response.status === true) {
         // setIsValid(true);
       } else {
         //  setIsValid(false);
         ToastAndroid.showWithGravity(
-          `Please Enter Valid Aadhar number`,
+          translate('Please Enter Valid Aadhar number'),
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
         );
-
       }
-
-    } catch (error) {
-
-    }
-
+    } catch (error) {}
   }
   async function getUserNamefunction(MoNumber) {
-    console.log(MoNumber)
+    console.log(MoNumber);
     try {
-      const response = await get({ url: `${APP_URLS.aepsNameinfo}${MoNumber}` })
+      const response = await get({url: `${APP_URLS.aepsNameinfo}${MoNumber}`});
       console.log(response);
       // setAutofcs(true);
       // setConsumerName(response.RESULT);
@@ -604,78 +622,124 @@ const GetBenifiaryScreenDmt = ({ route }) => {
       console.error('Error:', error);
     }
   }
-  const handleImpsPress2 = async (item) => {
+  const handleImpsPress2 = async item => {
     console.log('IMPS pressed for:', item);
-    const bankname = item['bankname'];
-    const ACCno = item['AccountNumber'];
-    const accHolder = item['fname'];
-    const ifsc = item['ifsc'];
-    await setIfsc(item['ifsc']);
-    await setAccHolder(item['fname']);
-    await setAccNo(item['AccountNumber']);
-    await setBankName(item['bankname']);
-    const BeneficiaryMobile = item['BeneficiaryMobile'];
+    const bankname = item.bankname;
+    const ACCno = item.AccountNumber;
+    const accHolder = item.fname;
+    const ifsc = item.ifsc;
+    await setIfsc(item.ifsc);
+    await setAccHolder(item.fname);
+    await setAccNo(item.AccountNumber);
+    await setBankName(item.bankname);
+    const BeneficiaryMobile = item.BeneficiaryMobile;
     const remid = customerDet.id;
-    navigation.navigate("toBankScreen", {
-      BeneficiaryMobile, remid, bankname, ACCno, accHolder, ifsc, mode: 'IMPS', unqid, kyc
-    },);
+    navigation.navigate('toBankScreen', {
+      BeneficiaryMobile,
+      remid,
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'IMPS',
+      unqid,
+      kyc,
+    });
   };
-  const handleImpsPress = async (item) => {
+  const handleImpsPress = async item => {
     console.log('IMPS pressed for:', item);
-    const bankname = item['bank'];
-    const ACCno = item['account'];
-    const accHolder = item['name'];
-    const ifsc = item['ifsc'];
-    const id = item['id']
-    await setIfsc(item['ifsc']);
-    await setAccHolder(item['name']);
-    await setAccNo(item['account']);
-    await setBankName(item['bank'])
-    console.log({ bankname, ACCno, accHolder, ifsc, mode: 'IMPS', unqid, kyc, sendernum, dmttype, id })
-    navigation.navigate("DmtTransferScreen",
-      { bankname, ACCno, accHolder, ifsc, mode: 'IMPS', unqid, kyc, sendernum, dmttype, id },);
-
+    const bankname = item.bank;
+    const ACCno = item.account;
+    const accHolder = item.name;
+    const ifsc = item.ifsc;
+    const id = item.id;
+    await setIfsc(item.ifsc);
+    await setAccHolder(item.name);
+    await setAccNo(item.account);
+    await setBankName(item.bank);
+    console.log({
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'IMPS',
+      unqid,
+      kyc,
+      sendernum,
+      dmttype,
+      id,
+    });
+    navigation.navigate('DmtTransferScreen', {
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'IMPS',
+      unqid,
+      kyc,
+      sendernum,
+      dmttype,
+      id,
+    });
   };
 
-
-  const handleNeftPress = async (item) => {
-    const bankname = item['bank'];
-    const ACCno = item['account'];
-    const accHolder = item['name'];
-    await setIfsc(item['ifsc']);
-    await setAccHolder(item['name']);
-    await setAccNo(item['account']);
-    await setBankName(item['bank'])
-    navigation.navigate("DmtTransferScreen", { bankname, ACCno, accHolder, ifsc, mode: 'NEFT', unqid },);
+  const handleNeftPress = async item => {
+    const bankname = item.bank;
+    const ACCno = item.account;
+    const accHolder = item.name;
+    await setIfsc(item.ifsc);
+    await setAccHolder(item.name);
+    await setAccNo(item.account);
+    await setBankName(item.bank);
+    navigation.navigate('DmtTransferScreen', {
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'NEFT',
+      unqid,
+    });
     console.log('NEFT pressed for:', item);
   };
 
-  const handleDeletePress = async (item) => {
+  const handleDeletePress = async item => {
     setisLoading(true);
 
     Alert.alert(
-      'Delete Account',
-      `Account: ${item.account}\nBank: ${item.bank}\nID: ${item.id}\nIFSC: ${item.ifsc}\nName: ${item.name}`,
+      translate('Delete Account'),
+      `${translate('Account')}: ${item.account}\n${translate('Bank')}: ${
+        item.bank
+      }\n${translate('ID')}: ${item.id}\n${translate('IFSC')}: ${
+        item.ifsc
+      }\n${translate('Name')}: ${item.name}`,
       [
         {
-          text: 'Cancel',
+          text: translate('Cancel'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
-          text: 'Confirm',
+          text: translate('Confirm'),
           onPress: async () => {
             try {
               const res = await post({
-                url: `MoneyDMT/api/Money/DeleteReceipent?mobile=${sendernum}&beneficiaryid=${item.id}`
+                url: `MoneyDMT/api/Money/DeleteReceipent?mobile=${sendernum}&beneficiaryid=${item.id}`,
               });
 
-              if (res['RESULT'] === '1') {
-                ToastAndroid.showWithGravity(res['ADDINFO'], ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+              if (res.RESULT === '1') {
+                ToastAndroid.showWithGravity(
+                  res.ADDINFO,
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                );
               } else {
                 checksendernumber(sendernum);
-                const response = JSON.parse(res['ADDINFO']);
-                ToastAndroid.showWithGravity(response.status, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+                const response = JSON.parse(res.ADDINFO);
+                ToastAndroid.showWithGravity(
+                  response.status,
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                );
                 console.log(response);
               }
             } catch (error) {
@@ -684,15 +748,13 @@ const GetBenifiaryScreenDmt = ({ route }) => {
           },
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
-
   const toggleEditable = () => {
     setEditable(!editable);
-
-  }
+  };
 
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState([]);
@@ -701,15 +763,16 @@ const GetBenifiaryScreenDmt = ({ route }) => {
     filterData(searchText);
   }, [searchText, isR, beneficiaryData, banklist]);
 
-  const filterData = (text) => {
+  const filterData = text => {
     const dataToFilter = isR ? beneficiaryData : banklist;
 
     if (!text.trim()) {
       setFilteredData(dataToFilter);
     } else {
-      const filtered = dataToFilter.filter(item =>
-        item.name?.toLowerCase().includes(text.toLowerCase()) ||
-        item.account?.toString().includes(text)
+      const filtered = dataToFilter.filter(
+        item =>
+          item.name?.toLowerCase().includes(text.toLowerCase()) ||
+          item.account?.toString().includes(text),
       );
       setFilteredData(filtered);
     }
@@ -720,54 +783,75 @@ const GetBenifiaryScreenDmt = ({ route }) => {
       <FlashList
         data={filteredData}
         keyExtractor={item => item.id || item.name.toString()}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <View style={styles.itemContainer}>
             {item.isbankdown ? (
-              <Text style={styles.noteText}>{translate("Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime")}</Text>
+              <Text style={styles.noteText}>
+                {translate(
+                  'Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime',
+                )}
+              </Text>
             ) : null}
-            <View style={{
-              borderBottomWidth: wScale(.5), borderBottomColor: '#000',
-              marginBottom: hScale(8), paddingBottom: hScale(5)
-            }}>
-
+            <View
+              style={{
+                borderBottomWidth: wScale(0.5),
+                borderBottomColor: '#000',
+                marginBottom: hScale(8),
+                paddingBottom: hScale(5),
+              }}>
               <View style={styles.row}>
-                <Text style={styles.itemLabel}>{translate("Name")}</Text>
+                <Text style={styles.itemLabel}>{translate('Name')}</Text>
                 <Text style={styles.itemValue}>{item.name}</Text>
               </View>
 
               <View style={styles.row}>
-                <Text style={styles.itemLabel}>{translate("IFSC_Code")}</Text>
+                <Text style={styles.itemLabel}>{translate('IFSC_Code')}</Text>
                 <Text style={styles.itemValue}>{item.ifsc}</Text>
               </View>
             </View>
 
-            <View style={[styles.row,]}>
-              <Text style={styles.itemLabel}>{translate("Bank_Name")}</Text>
-              <Text style={styles.itemValue} numberOfLines={1} ellipsizeMode='tail'>{item.bank}</Text>
+            <View style={[styles.row]}>
+              <Text style={styles.itemLabel}>{translate('Bank_Name')}</Text>
+              <Text
+                style={styles.itemValue}
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {item.bank}
+              </Text>
             </View>
-            <View style={{
-              borderTopWidth: wScale(.5), borderTopColor: '#000',
-              marginTop: hScale(8)
-            }}>
-
-              <View style={[styles.row, { marginTop: hScale(8), }]}>
-                <View >
-                  <Text style={styles.itemLabel}>{translate("Account")}</Text>
-                  <Text style={[styles.itemValue, { textAlign: 'left' }]} numberOfLines={1} ellipsizeMode='tail'>{item.account}</Text>
+            <View
+              style={{
+                borderTopWidth: wScale(0.5),
+                borderTopColor: '#000',
+                marginTop: hScale(8),
+              }}>
+              <View style={[styles.row, {marginTop: hScale(8)}]}>
+                <View>
+                  <Text style={styles.itemLabel}>{translate('Account')}</Text>
+                  <Text
+                    style={[styles.itemValue, {textAlign: 'left'}]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {item.account}
+                  </Text>
                 </View>
-                <TouchableOpacity style={[styles.button, styles.impsButton]} onPress={() => handleImpsPress(item)}>
-                  <Text style={styles.buttonText}>{translate("IMPS")}</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.impsButton]}
+                  onPress={() => handleImpsPress(item)}>
+                  <Text style={styles.buttonText}>{translate('IMPS')}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.neftButton]} onPress={() => handleNeftPress(item)}>
-                  <Text style={styles.buttonText}>{translate("NEFT")}</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.neftButton]}
+                  onPress={() => handleNeftPress(item)}>
+                  <Text style={styles.buttonText}>{translate('NEFT')}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={() => handleDeletePress(item)}>
-                  <Text style={styles.buttonText} >{translate("Delete")}</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.deleteButton]}
+                  onPress={() => handleDeletePress(item)}>
+                  <Text style={styles.buttonText}>{translate('Delete')}</Text>
                 </TouchableOpacity>
-
               </View>
             </View>
-
           </View>
         )}
         keyExtractor={item => item.name}
@@ -776,52 +860,52 @@ const GetBenifiaryScreenDmt = ({ route }) => {
     );
   };
 
-
-
   return (
     <View style={styles.main}>
       {isload && <ShowLoader />}
-      <LinearGradient colors={[colorConfig.primaryColor, colorConfig.secondaryColor]} style={styles.lineargradient}>
-        <View style={styles.container} >
-          {sendernum.length === 10 && <TextInput
-            placeholder="Search by Name or Account No"
-            value={searchText}
-            onChangeText={setSearchText}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 5,
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              color: '#000',
-              fontSize:wScale(18)
-            }}
-            placeholderTextColor="#888"
-          />
-          }
-
-          <View style={{
-            marginTop: hScale(10)
-          }}>
+      <LinearGradient
+        colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+        style={styles.lineargradient}>
+        <View style={styles.container}>
+          {sendernum.length === 10 && (
             <TextInput
-              placeholder='Enter Remitter Registered  Number'
+              placeholder={translate('Search by Name or Account No')}
+              value={searchText}
+              onChangeText={setSearchText}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 5,
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                color: '#000',
+                fontSize: wScale(18),
+              }}
+              placeholderTextColor="#888"
+            />
+          )}
+
+          <View
+            style={{
+              marginTop: hScale(10),
+            }}>
+            <TextInput
+              placeholder={translate('Enter Remitter Registered  Number')}
               style={styles.inputstyle}
               placeholderTextColor={colors.black75}
-
               maxLength={10}
               keyboardType="number-pad"
               value={sendernum}
               onChangeText={text => {
-                setSendernum(text)
+                setSendernum(text);
                 if (text.length === 10) {
-                  setSendernum(text)
+                  setSendernum(text);
                   setNxtbtn(true);
                   setOnTap(false);
                   setOnTap1(true);
                   checksendernumber(text);
                   Keyboard.dismiss();
-
                 } else {
-                  setTXNP(false)
+                  setTXNP(false);
                   setNxtbtn(false);
                   setOnTap(true);
                   setOnTap1(false);
@@ -829,61 +913,78 @@ const GetBenifiaryScreenDmt = ({ route }) => {
               }}
             />
 
-
-
-            {
-              banklist == null ? null :
-                <View style={[styles.righticon2]}>
-                  <TouchableOpacity style={{ backgroundColor: colorConfig.secondaryColor, paddingVertical: hScale(4) }}
-                    onPress={toggleEditable}>
-                    <SvgXml xml={EditIcon} width={wScale(40)} height={wScale(28)} />
-                  </TouchableOpacity>
-                </View>
-            }
-          </View>
-          {aadharNumber.length === 12 && <SelectDevice setDeviceName={setDeviceName} device={'Device'} opPress={() => handleSelection(deviceName)} />
-          }
-          {isTXNP && <View style={{}}>
-            <TextInput
-              placeholder='Enter Aadhar Number'
-              style={styles.inputstyle}
-              placeholderTextColor={colors.black75}
-
-              maxLength={12}
-              keyboardType="number-pad"
-              value={aadharNumber}
-              onChangeText={text => {
-                setAadharNumber(text);
-                if (text.length === 12) {
-                  setAadharNumber(text);
-                  adhar_Validation(text);
-                  Keyboard.dismiss();
-
-                } else {
-
-                }
-              }}
-            />
-            {
+            {banklist == null ? null : (
               <View style={[styles.righticon2]}>
-
-                {aadharNumber.length === 12 && <TouchableOpacity style={{}}
-                  onPress={() => {
-
-
-                    handleSelection(deviceName)
-                  }}>
-                  <Text style={{ color: colorConfig.secondaryColor, padding: hScale(5) }}>{translate("Scan")}</Text>
-                </TouchableOpacity>}
-
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: colorConfig.secondaryColor,
+                    paddingVertical: hScale(4),
+                  }}
+                  onPress={toggleEditable}>
+                  <SvgXml
+                    xml={EditIcon}
+                    width={wScale(40)}
+                    height={wScale(28)}
+                  />
+                </TouchableOpacity>
               </View>
-            }
-          </View>}
+            )}
+          </View>
+          {aadharNumber.length === 12 && (
+            <SelectDevice
+              setDeviceName={setDeviceName}
+              device={'Device'}
+              opPress={() => handleSelection(deviceName)}
+              pkg={undefined}
+              onPressface={undefined}
+              isProcees={undefined}
+            />
+          )}
+          {isTXNP && (
+            <View style={{}}>
+              <TextInput
+                placeholder={translate('Enter Aadhar Number')}
+                style={styles.inputstyle}
+                placeholderTextColor={colors.black75}
+                maxLength={12}
+                keyboardType="number-pad"
+                value={aadharNumber}
+                onChangeText={text => {
+                  setAadharNumber(text);
+                  if (text.length === 12) {
+                    setAadharNumber(text);
+                    adhar_Validation(text);
+                    Keyboard.dismiss();
+                  } else {
+                  }
+                }}
+              />
+              {
+                <View style={[styles.righticon2]}>
+                  {aadharNumber.length === 12 && (
+                    <TouchableOpacity
+                      style={{}}
+                      onPress={() => {
+                        handleSelection(deviceName);
+                      }}>
+                      <Text
+                        style={{
+                          color: colorConfig.secondaryColor,
+                          padding: hScale(5),
+                        }}>
+                        {translate('Scan')}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              }
+            </View>
+          )}
 
-          {remitter === null ? null :
-            <View style={[styles.limitview, { flexDirection: 'row' }]}>
+          {remitter === null ? null : (
+            <View style={[styles.limitview, {flexDirection: 'row'}]}>
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Consume_limit")}</Text>
+                <Text style={styles.label}>{translate('Consume_limit')}</Text>
                 <Text style={styles.value}>
                   {remitter === null ? '0000' : remitter.consumedlimit}
                 </Text>
@@ -891,38 +992,47 @@ const GetBenifiaryScreenDmt = ({ route }) => {
               <View style={styles.borderview} />
 
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Remain_limit")}</Text>
-                <Text style={[styles.value, { textAlign: 'center' }]}>
+                <Text style={styles.label}>{translate('Remain_limit')}</Text>
+                <Text style={[styles.value, {textAlign: 'center'}]}>
                   {remitter === null ? '0000' : remitter.remaininglimit}
                 </Text>
               </View>
               <View style={styles.borderview} />
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Per_txn_limit")}</Text>
-                <Text style={[styles.value, { textAlign: 'right' }]}>
+                <Text style={styles.label}>{translate('Per_txn_limit')}</Text>
+                <Text style={[styles.value, {textAlign: 'right'}]}>
                   {remitter === null ? '0000' : remitter.perm_txn_limit}
                 </Text>
               </View>
             </View>
-          }
+          )}
 
-
-
-          {isTXNP1 == 'TXN' && <DynamicButton
-            title={onTap1 ? <ActivityIndicator size={'large'} color={colorConfig.labelColor} /> : banklist.length === 0 ? "Next" : "Add Acount"}
-            disabled={!nxtbtn}
-            onPress={() => {
-              if (banklist.length === 0) {
-                handleNextButtonPress();
-              } else {
-
-                setIsVisible2(true)
-                //  navigation.navigate("DmtAddNewBenificiaryScreen", { no: sendernum });
+          {isTXNP1 === 'TXN' && (
+            <DynamicButton
+              title={
+                onTap1 ? (
+                  <ActivityIndicator
+                    size={'large'}
+                    color={colorConfig.labelColor}
+                  />
+                ) : banklist.length === 0 ? (
+                  'Next'
+                ) : (
+                  'Add Acount'
+                )
               }
-            }}
-          />}
+              disabled={!nxtbtn}
+              onPress={() => {
+                if (banklist.length === 0) {
+                  handleNextButtonPress();
+                } else {
+                  setIsVisible2(true);
+                  //  navigation.navigate("DmtAddNewBenificiaryScreen", { no: sendernum });
+                }
+              }}
+            />
+          )}
         </View>
-
       </LinearGradient>
 
       {/* <TouchableOpacity style={{}}
@@ -945,7 +1055,11 @@ const GetBenifiaryScreenDmt = ({ route }) => {
         }}
       />
       <BottomSheet
-        animationType="none"   onBackdropPress={() => { setIsVisible2(false) }} isVisible={isVisible2}>
+        animationType="none"
+        onBackdropPress={() => {
+          setIsVisible2(false);
+        }}
+        isVisible={isVisible2}>
         {/* no: sendernum, remid: remid, Name: dmttype  */}
         <DmtAddNewBenificiaryScreen
           Name={dmttype}
@@ -958,82 +1072,85 @@ const GetBenifiaryScreenDmt = ({ route }) => {
           onPress2={() => {
             setisLoading(true);
 
-            checksendernumber(sendernum)
+            checksendernumber(sendernum);
             setIsVisible2(false);
           }}
-
         />
-
       </BottomSheet>
       <ScrollView>
-        {nodata ? <View style={styles.container}>
-          <Text style={styles.title}>{translate('No Data Found')}</Text>
-
-          <DynamicButton title={'ADD ACC'} onPress={() => {
-            setIsVisible2(true)
-            //  navigation.navigate("DmtAddNewBenificiaryScreen", 
-            // 
-            // { no: sendernum, remid: remid, Name: dmttype });
-
-          }} />
-
-        </View>
-          : <></>
-        }
-        {showloader && <ShowLoader />}
-        {banklist.length == 0 ?
+        {nodata ? (
           <View style={styles.container}>
-            <Text style={styles.titletext}>{translate("Very_Important_Notice")}</Text>
-            <View style={styles.textview} >
+            <Text style={styles.title}>{translate('No Data Found')}</Text>
+
+            <DynamicButton
+              title={'ADD ACC'}
+              onPress={() => {
+                setIsVisible2(true);
+                //  navigation.navigate("DmtAddNewBenificiaryScreen",
+                //
+                // { no: sendernum, remid: remid, Name: dmttype });
+              }}
+            />
+          </View>
+        ) : (
+          <></>
+        )}
+        {showloader && <ShowLoader />}
+        {banklist.length == 0 ? (
+          <View style={styles.container}>
+            <Text style={styles.titletext}>
+              {translate('Very_Important_Notice')}
+            </Text>
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('D1')}</Text>
             </View>
 
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('D2')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('D3')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('D4')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('D5')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('D6')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('D7')}</Text>
             </View>
           </View>
-          : <View style={{
-            paddingTop: hScale(20),
-          }}>
+        ) : (
+          <View
+            style={{
+              paddingTop: hScale(20),
+            }}>
             <BeneficiaryList />
           </View>
-        }
-
-
+        )}
       </ScrollView>
-    </View >
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    paddingBottom: hScale(20)
+    paddingBottom: hScale(20),
   },
   lineargradient: {
-    paddingTop: hScale(10)
+    paddingTop: hScale(10),
   },
   container: {
     paddingHorizontal: wScale(10),
@@ -1049,13 +1166,13 @@ const styles = StyleSheet.create({
   },
 
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "78%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '78%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
 
@@ -1063,13 +1180,13 @@ const styles = StyleSheet.create({
     fontSize: wScale(24),
     fontWeight: 'bold',
     marginBottom: hScale(20),
-    color: '#000'
+    color: '#000',
   },
   titletext: {
     color: 'red',
     fontSize: wScale(18),
     paddingBottom: hScale(15),
-    paddingTop: hScale(5)
+    paddingTop: hScale(5),
   },
   bulletPoint: {
     backgroundColor: 'red',
@@ -1081,14 +1198,13 @@ const styles = StyleSheet.create({
   },
   textview: {
     flexDirection: 'row',
-    paddingBottom: hScale(10)
+    paddingBottom: hScale(10),
   },
   textstyle: {
     color: 'black',
     fontSize: wScale(14),
     flex: 1,
     textAlign: 'justify',
-
   },
   itemContainer: {
     flex: 1,
@@ -1097,13 +1213,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 2,
     marginBottom: hScale(10),
-    marginHorizontal: wScale(10)
+    marginHorizontal: wScale(10),
   },
 
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   itemLabel: {
     fontSize: wScale(16),
@@ -1113,12 +1229,13 @@ const styles = StyleSheet.create({
   itemValue: {
     fontSize: wScale(16),
     color: '#555',
-    flex: 1, textAlign: 'right'
+    flex: 1,
+    textAlign: 'right',
   },
   noteText: {
     fontSize: wScale(14),
     color: '#d9534f',
-    marginBottom: hScale(10)
+    marginBottom: hScale(10),
   },
 
   button: {
@@ -1154,7 +1271,7 @@ const styles = StyleSheet.create({
   },
   tabstyle: {
     paddingVertical: hScale(10),
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     marginBottom: hScale(10),
     borderRadius: 5,
   },
@@ -1174,18 +1291,17 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#fff'
-
+    color: '#fff',
   },
   value: {
     fontSize: 14,
-    color: '#fff'
+    color: '#fff',
   },
   borderview: {
     height: '100%',
     width: wScale(0.7),
-    backgroundColor: "#fff",
-  }
+    backgroundColor: '#fff',
+  },
 });
 
 export default GetBenifiaryScreenDmt;

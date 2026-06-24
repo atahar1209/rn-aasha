@@ -1,11 +1,10 @@
 // screens/BasicInfoScreen.tsx
 
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, ToastAndroid } from 'react-native';
-import { useFormik } from 'formik';
+import React, {useEffect, useState} from 'react';
+import {View, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
+import {useFormik} from 'formik';
 
 import {
-  StepBanner,
   AppInput,
   SelectPicker,
   SectionCard,
@@ -13,33 +12,64 @@ import {
   getStepColor,
 } from '../../components/FormUI';
 
-import { colors } from '../../../../utils/styles/theme';
-import { useFormCtx } from './FormContext';
-import { BasicInfoSchema } from '../../../../utils/validationSchemas';
+import {colors} from '../../../../utils/styles/theme';
+import {useFormCtx} from './FormContext';
+import {BasicInfoSchema} from '../../../../utils/validationSchemas';
 import useAxiosHook from '../../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../../utils/network/urls';
+import {APP_URLS} from '../../../../utils/network/urls';
 import ShowLoader from '../../../../components/ShowLoder';
+import {translate} from '../../../../utils/languageUtils/I18n';
 
 const STEP = 1;
 
-const GENDER_OPTIONS = ['Male', 'Female', 'Other'];
-const BLOOD_GROUP_OPTIONS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', "Don't Know"];
-const RELIGION_OPTIONS = ['Hinduism', 'Islam', 'Christianity', 'Sikhism', 'Buddhism', 'Jainism'];
-const MARITAL_STATUS_OPTIONS = ['Single', 'Married'];
-const OPTIONAL_DOC_OPTIONS = ['Ration Card', 'Driving License', 'Voter ID', 'Passport'];
+const GENDER_OPTIONS = [
+  translate('Male'),
+  translate('Female'),
+  translate('Other'),
+];
+const BLOOD_GROUP_OPTIONS = [
+  'A+',
+  'A-',
+  'B+',
+  'B-',
+  'AB+',
+  'AB-',
+  'O+',
+  'O-',
+  "Don't Know",
+];
+const RELIGION_OPTIONS = [
+  translate('Hinduism'),
+  translate('Islam'),
+  translate('Christianity'),
+  translate('Sikhism'),
+  translate('Buddhism'),
+  translate('Jainism'),
+];
+const MARITAL_STATUS_OPTIONS = [translate('Single'), translate('Married')];
+const OPTIONAL_DOC_OPTIONS = [
+  translate('Ration Card'),
+  translate('Driving License'),
+  translate('Voter ID'),
+  translate('Passport'),
+];
 
-const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
-  const { post } = useAxiosHook();
-  const { formData, updateStep, nextStep } = useFormCtx();
+const BasicInfoScreen = ({onNext}: {onNext: () => void}) => {
+  const {post} = useAxiosHook();
+  const {formData, updateStep, nextStep} = useFormCtx();
   const stepColor = getStepColor(STEP);
   const formatToYYYYMMDD = (dateStr: string) => {
-    if (!dateStr) return '';
+    if (!dateStr) {
+      return '';
+    }
 
     try {
       // DD/MM/YYYY
       if (dateStr.includes('/')) {
         const [dd, mm, yyyy] = dateStr.split('/');
-        if (!dd || !mm || !yyyy) return '';
+        if (!dd || !mm || !yyyy) {
+          return '';
+        }
         return `${yyyy}-${mm.padStart(2, '0')}-${dd.padStart(2, '0')}`;
       }
 
@@ -50,14 +80,16 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
 
       return '';
     } catch (e) {
-      console.log("❌ Date convert error:", e);
+      console.log('❌ Date convert error:', e);
       return '';
     }
   };
 
   const isAgeValid = (dateStr: string) => {
     const formatted = formatToYYYYMMDD(dateStr);
-    if (!formatted) return false;
+    if (!formatted) {
+      return false;
+    }
 
     const dob = new Date(formatted);
     const today = new Date();
@@ -98,21 +130,20 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
     validateOnBlur: true,
     validateOnChange: false,
 
-    onSubmit: async (values) => {
-
+    onSubmit: async values => {
       try {
         const formattedDOB = formatToYYYYMMDD(values.dob);
 
-        console.log("📅 Original:", values.dob);
-        console.log("✅ Converted:", formattedDOB);
+        console.log('📅 Original:', values.dob);
+        console.log('✅ Converted:', formattedDOB);
 
         if (!formattedDOB) {
-          showToast("Invalid DOB format");
+          showToast(translate('Invalid DOB format'));
           return;
         }
 
         if (!isAgeValid(values.dob)) {
-          showToast("Minimum age should be 18");
+          showToast(translate('Minimum age should be 18'));
           return;
         }
 
@@ -135,7 +166,7 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
           OptionalDocID: values.optionalDocId,
         };
 
-        console.log("📦 FINAL PAYLOAD:", payload);
+        console.log('📦 FINAL PAYLOAD:', payload);
 
         const res = await post({
           url: APP_URLS.InsertForm1UpdateJson,
@@ -147,22 +178,28 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
         console.log('📥 InsertForm1 RESPONSE:', JSON.stringify(res, null, 2));
 
         if (res?.StatusCode === 200) {
-          showToast('Basic info saved!');
-          updateStep('basicInfo', values);
+          showToast(translate('Basic info saved!'));
+          updateStep(translate('basicInfo'), values);
           nextStep();
           onNext();
         } else {
-          showToast('Submit failed');
+          showToast(translate('Submit failed'));
         }
-
       } catch (err) {
-        console.log("❌ ERROR:", err);
-        showToast('Something went wrong');
+        console.log('❌ ERROR:', err);
+        showToast(translate('Something went wrong'));
       }
-    }
+    },
   });
 
-  const { values, errors, touched, handleSubmit, setFieldValue, setFieldTouched } = formik;
+  const {
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    setFieldValue,
+    setFieldTouched,
+  } = formik;
 
   const f = (name: keyof typeof values) => ({
     value: values[name],
@@ -172,7 +209,9 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
     onChangeText: (t: string) => setFieldValue(name, t),
   });
   const formatApiDOB = (dob: string) => {
-    if (!dob) return '';
+    if (!dob) {
+      return '';
+    }
 
     try {
       // 👉 "12-10-1979 12:00:00 AM" → "12-10-1979"
@@ -193,7 +232,7 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
 
       return '';
     } catch (e) {
-      console.log("❌ DOB error:", e);
+      console.log('❌ DOB error:', e);
       return '';
     }
   };
@@ -202,7 +241,7 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
     const fetchData = async () => {
       try {
         console.log('📡 ShowForm1 URL:', APP_URLS.ShowForm1);
-        const res = await post({ url: APP_URLS.ShowForm1 });
+        const res = await post({url: APP_URLS.ShowForm1});
         console.log('✅ ShowForm1 RESPONSE:', JSON.stringify(res, null, 2));
 
         if (res?.StatusCode === 200) {
@@ -211,26 +250,29 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
           const c = res.Content;
 
           // ✅ Pehle prefill karo — isvalid pe auto-navigate NAHI
-          formik.setValues({
-            fullName: c.FullName ?? '',
-            dob: formatApiDOB(c.DOB), age: '',
-            gender: c.Gender ?? '',
-            alternateNo: c.AlternativeMobile ?? '',
-            religion: c.Religion ?? '',
-            bloodGroup: c.BloodGroup ?? '',
-            maritalStatus: c.MaritalStatus ?? '',
-            noOfChildren: c.NoofChildren != null ? String(c.NoofChildren) : '',
-            fatherName: c.Fathername ?? '',
-            fatherOccupation: c.FatherOccupation ?? '',
-            motherName: c.Mothername ?? '',
-            motherOccupation: c.MotherOccupation ?? '',
-            spouseName: c.Spousename ?? '',
-            spouseOccupation: c.SpouseOccupation ?? '',
-            optionalDoc: c.OptionalDoc ?? '',
-            optionalDocId: c.OptionalDocID ?? '',
-          }, false); // false = validation trigger mat karo prefill pe
-
-
+          formik.setValues(
+            {
+              fullName: c.FullName ?? '',
+              dob: formatApiDOB(c.DOB),
+              age: '',
+              gender: c.Gender ?? '',
+              alternateNo: c.AlternativeMobile ?? '',
+              religion: c.Religion ?? '',
+              bloodGroup: c.BloodGroup ?? '',
+              maritalStatus: c.MaritalStatus ?? '',
+              noOfChildren:
+                c.NoofChildren != null ? String(c.NoofChildren) : '',
+              fatherName: c.Fathername ?? '',
+              fatherOccupation: c.FatherOccupation ?? '',
+              motherName: c.Mothername ?? '',
+              motherOccupation: c.MotherOccupation ?? '',
+              spouseName: c.Spousename ?? '',
+              spouseOccupation: c.SpouseOccupation ?? '',
+              optionalDoc: c.OptionalDoc ?? '',
+              optionalDocId: c.OptionalDocID ?? '',
+            },
+            false,
+          ); // false = validation trigger mat karo prefill pe
         }
       } catch (e) {
         console.log('❌ ShowForm1 ERROR:', e);
@@ -252,15 +294,24 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
 
   return (
     <View style={s.screen}>
-
-      <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={s.scroll}
+        keyboardShouldPersistTaps="handled">
         {loading && <ShowLoader />}
 
         {/* Personal Details */}
-        <SectionCard title="Personal Details" icon="account" iconColor={stepColor}>
-          <AppInput label="Full Name" placeholder="Enter full name"   {...f('fullName')} editable={false} />
+        <SectionCard
+          title={translate('Personal Details')}
+          icon="account"
+          iconColor={stepColor}>
           <AppInput
-            label="Date of Birth"
+            label={translate('Full Name')}
+            placeholder={translate('Enter full name')}
+            {...f('fullName')}
+            editable={false}
+          />
+          <AppInput
+            label={translate('Date of Birth')}
             placeholder="DD/MM/YYYY or YYYY-MM-DD"
             {...f('dob')}
             editable={false}
@@ -276,49 +327,52 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
 
           /> */}
           <AppInput
-            label="Gender"
-            placeholder="Gender"
+            label={translate('Gender')}
+            placeholder={translate('Gender')}
             {...f('gender')}
             editable={false}
           />
 
           <AppInput
-            label="Alternate Mobile"
-            placeholder="Enter alternate number"
+            label={translate('Alternate Mobile')}
+            placeholder={translate('Enter alternate number')}
             keyboardType="phone-pad"
             maxLength={10}
             {...f('alternateNo')}
           />
           <SelectPicker
-            label="Religion"
+            label={translate('Religion')}
             options={RELIGION_OPTIONS}
             value={values.religion}
-            onChange={(v) => setFieldValue('religion', v)}
+            onChange={v => setFieldValue('religion', v)}
             error={errors.religion}
             touched={!!touched.religion}
           />
           <SelectPicker
-            label="Blood Group"
+            label={translate('Blood Group')}
             options={BLOOD_GROUP_OPTIONS}
             value={values.bloodGroup}
-            onChange={(v) => setFieldValue('bloodGroup', v)}
+            onChange={v => setFieldValue('bloodGroup', v)}
             error={errors.bloodGroup}
             touched={!!touched.bloodGroup}
           />
         </SectionCard>
 
         {/* Marital Details */}
-        <SectionCard title="Marital Details" icon="heart-outline" iconColor={stepColor}>
+        <SectionCard
+          title={translate('Marital Details')}
+          icon="heart-outline"
+          iconColor={stepColor}>
           <SelectPicker
-            label="Marital Status"
+            label={translate('Marital Status')}
             options={MARITAL_STATUS_OPTIONS}
             value={values.maritalStatus}
-            onChange={(v) => {
-              setFieldValue('maritalStatus', v);
-              if (v === 'Single') {
-                setFieldValue('spouseName', '');
-                setFieldValue('spouseOccupation', '');
-                setFieldValue('noOfChildren', '');
+            onChange={v => {
+              setFieldValue(translate('maritalStatus'), v);
+              if (v === translate('Single')) {
+                setFieldValue(translate('spouseName'), '');
+                setFieldValue(translate('spouseOccupation'), '');
+                setFieldValue(translate('noOfChildren'), '');
               }
             }}
             error={errors.maritalStatus}
@@ -326,11 +380,19 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
           />
           {values.maritalStatus === 'Married' && (
             <>
-              <AppInput label="Spouse Name" placeholder="Enter spouse name"       {...f('spouseName')} />
-              <AppInput label="Spouse Occupation" placeholder="Enter spouse occupation" {...f('spouseOccupation')} />
               <AppInput
-                label="No. of Children"
-                placeholder="Enter number"
+                label={translate('Spouse Name')}
+                placeholder={translate('Enter spouse name')}
+                {...f('spouseName')}
+              />
+              <AppInput
+                label={translate('Spouse Occupation')}
+                placeholder={translate('Enter spouse occupation')}
+                {...f('spouseOccupation')}
+              />
+              <AppInput
+                label={translate('No. of Children')}
+                placeholder={translate('Enter number')}
                 keyboardType="numeric"
                 {...f('noOfChildren')}
               />
@@ -339,20 +401,42 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
         </SectionCard>
 
         {/* Family Details */}
-        <SectionCard title="Family Details" icon="account-group-outline" iconColor={stepColor}>
-          <AppInput label="Father's Name" placeholder="Enter father's name"       {...f('fatherName')} />
-          <AppInput label="Father's Occupation" placeholder="Enter father's occupation" {...f('fatherOccupation')} />
-          <AppInput label="Mother's Name" placeholder="Enter mother's name"       {...f('motherName')} />
-          <AppInput label="Mother's Occupation" placeholder="Enter mother's occupation" {...f('motherOccupation')} />
+        <SectionCard
+          title={translate('Family Details')}
+          icon="account-group-outline"
+          iconColor={stepColor}>
+          <AppInput
+            label={translate('Father Name')}
+            placeholder={translate('Enter father name')}
+            {...f('fatherName')}
+          />
+          <AppInput
+            label={translate('Father Occupation')}
+            placeholder={translate('Enter fathers occupation')}
+            {...f('fatherOccupation')}
+          />
+          <AppInput
+            label={translate('Mother Name')}
+            placeholder={translate('Enter mother name')}
+            {...f('motherName')}
+          />
+          <AppInput
+            label={translate('Mother Occupation')}
+            placeholder={translate('Enter mother occupation')}
+            {...f('motherOccupation')}
+          />
         </SectionCard>
 
         {/* Optional Document */}
-        <SectionCard title="Optional Document" icon="file-document-outline" iconColor={stepColor}>
+        <SectionCard
+          title={translate('Optional Document')}
+          icon="file-document-outline"
+          iconColor={stepColor}>
           <SelectPicker
-            label="Document Type"
+            label={translate('Document Type')}
             options={OPTIONAL_DOC_OPTIONS}
             value={values.optionalDoc}
-            onChange={(v) => {
+            onChange={v => {
               setFieldValue('optionalDoc', v);
               setFieldValue('optionalDocId', ''); // clear ID when doc type changes
             }}
@@ -361,8 +445,8 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
           />
           {!!values.optionalDoc && (
             <AppInput
-              label={`${values.optionalDoc} Number`}
-              placeholder={`Enter ${values.optionalDoc} number`}
+              label={`${values.optionalDoc} ${translate('Number')}`}
+              placeholder={`Enter ${values.optionalDoc} ${translate('Number')}`}
               {...f('optionalDocId')}
             />
           )}
@@ -377,6 +461,6 @@ const BasicInfoScreen = ({ onNext }: { onNext: () => void }) => {
 export default BasicInfoScreen;
 
 const s = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.light_blue },
-  scroll: { padding: 16, paddingBottom: 40 },
+  screen: {flex: 1, backgroundColor: colors.light_blue},
+  scroll: {padding: 16, paddingBottom: 40},
 });

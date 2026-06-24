@@ -1,50 +1,58 @@
-import { translate } from "../../../utils/languageUtils/I18n";
+/* eslint-disable react/no-unstable-nested-components */
+import {translate} from '../../../utils/languageUtils/I18n';
 import React from 'react';
-import { Image, Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
-import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
+import {Linking, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {FlashList} from '@shopify/flash-list';
 import DynamicButton from '../../drawer/button/DynamicButton';
-import { useNavigation } from '@react-navigation/native';
-import CheckSvg from '../../drawer/svgimgcomponents/CheckSvg';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import BackSvg from '../../drawer/svgimgcomponents/BackSvg';
-import { Button } from 'react-native-paper';
-import FastImage from "react-native-fast-image";
-import { getAssetSource } from "../../../utils/network/NetWorkImages";
-import { APP_URLS } from "../../../utils/network/urls";
+import {Button} from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
+import {getAssetSource} from '../../../utils/network/NetWorkImages';
+import {APP_URLS} from '../../../utils/network/urls';
 
 const Requirementscms = () => {
-  const { colorConfig, userId } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, userId} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const color1 = `${colorConfig.secondaryColor}100`;
   const navigation = useNavigation<any>();
 
   const requirementtext = [
-    'The place you live has a population of more than 10,000.',
-    'You can take a fixed time to collect the money from any store or office authorized by the company within a radius of 5 km and you can transfer the collected amount to the company through deposit or online mode within a fixed time. If yes, you can do so.',
-    'If you or any other member of the blood relation have any criminal record in the past, convicted for any crime including moral turpitude, have police history sheet, then you will not be considered eligible for this service.',
-    'You need to keep your financial credit score (civil score) above about 670. If you don\'t have this or more financial credit score then you are not eligible.',
-    'If you are physically able to travel and have a vehicle available.',
-    'You are a native Indian citizen and you have all the KYC documents along with a bank account and a checkbook available.'
-
+    translate('The place you live has a population of more than 10,000.'),
+    translate(
+      'You can take a fixed time to collect the money from any store or office authorized by the company within a radius of 5 km and you can transfer the collected amount to the company through deposit or online mode within a fixed time. If yes, you can do so.',
+    ),
+    translate(
+      'If you or any other member of the blood relation have any criminal record in the past, convicted for any crime including moral turpitude, have police history sheet, then you will not be considered eligible for this service.',
+    ),
+    translate(
+      'You need to keep your financial credit score (civil score) above about 670. If you do not have this or more financial credit score then you are not eligible.',
+    ),
+    translate(
+      'If you are physically able to travel and have a vehicle available.',
+    ),
+    translate(
+      'You are a native Indian citizen and you have all the KYC documents along with a bank account and a checkbook available.',
+    ),
   ];
   const handleWebsiteLink = () => {
-
     Linking.openURL('https://www.radiantcashservices.com/');
   };
 
-
   const handleGoBack = () => {
-    navigation.goBack()
+    navigation.goBack();
   };
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}) => (
     <View style={styles.paragraphContainer}>
       {/* <Text style={styles.number}>
         {`${index + 1}  `}
       </Text> */}
-      <View style={[styles.number, { backgroundColor: colorConfig.secondaryColor }]}>
-
+      <View
+        style={[styles.number, {backgroundColor: colorConfig.secondaryColor}]}>
         {/* <CheckSvg size={15} /> */}
       </View>
 
@@ -53,46 +61,62 @@ const Requirementscms = () => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={[styles.topcontainer,]}>
-        <FastImage 
-        
-                source={getAssetSource(`${APP_URLS.cms_logo}`)}
+    <View style={{flex: 1}}>
+      <View style={[styles.topcontainer]}>
+        <FastImage
+          source={getAssetSource(`${APP_URLS.cms_logo}`)}
           style={styles.imgstyle}
-          resizeMode="contain" />
+          resizeMode="contain"
+        />
         <View style={styles.column}>
-          <Text style={styles.title}>{translate("Radiant")}</Text>
-          <Text style={styles.title2}>{translate("Cash_Management_Services")}</Text>
+          <Text style={styles.title}>{translate('Radiant')}</Text>
+          <Text style={styles.title2}>
+            {translate('Cash_Management_Services')}
+          </Text>
         </View>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.header}>{translate("The_requirements_must_be_met")}</Text>
+        <Text style={styles.header}>
+          {translate('The_requirements_must_be_met')}
+        </Text>
         <FlashList
           data={requirementtext}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-          ListFooterComponent={<View style={styles.footer}>
-            <DynamicButton
-              title={'Next'}
-              onPress={() => { navigation.navigate('CmsShowPayoutStructure'); }}
-            />
-          </View>}
+          ListFooterComponent={
+            <View style={styles.footer}>
+              <DynamicButton
+                title={'Next'}
+                onPress={() => {
+                  navigation.navigate('CmsShowPayoutStructure');
+                }}
+              />
+            </View>
+          }
         />
 
         <View style={styles.linksContainer}>
           <Button
             mode="text"
             onPress={handleGoBack}
-            icon={() => <BackSvg size={15} color={colorConfig.primaryColor} />}
-          >
-            <Text style={[styles.goBackText, { color: colorConfig.primaryColor, }]}>{'Go Back'}</Text>
+            icon={() => <BackSvg size={15} color={colorConfig.primaryColor} />}>
+            <Text
+              style={[styles.goBackText, {color: colorConfig.primaryColor}]}>
+              {translate('Go Back')}
+            </Text>
           </Button>
 
-          <Button
-            mode="text"
-            onPress={handleWebsiteLink}
-          >
-            <Text style={[styles.websiteLinkText, { color: colorConfig.secondaryColor, textDecorationColor: colorConfig.secondaryColor }]}>{translate("Company_Website_Link")}</Text>
+          <Button mode="text" onPress={handleWebsiteLink}>
+            <Text
+              style={[
+                styles.websiteLinkText,
+                {
+                  color: colorConfig.secondaryColor,
+                  textDecorationColor: colorConfig.secondaryColor,
+                },
+              ]}>
+              {translate('Company_Website_Link')}
+            </Text>
           </Button>
         </View>
       </ScrollView>
@@ -122,7 +146,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
     marginTop: hScale(4),
-    alignItems: 'center'
+    alignItems: 'center',
   },
   paragraph: {
     marginBottom: 0,
@@ -138,8 +162,8 @@ const styles = StyleSheet.create({
     fontSize: wScale(20),
     fontWeight: 'bold',
     color: '#322254',
-    textTransform: 'uppercase',   
-    marginBottom: hScale(8)
+    textTransform: 'uppercase',
+    marginBottom: hScale(8),
   },
   topcontainer: {
     flexDirection: 'row',
@@ -150,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 4,
     backgroundColor: '#ffe066',
-    borderColor: '#fccb0a'
+    borderColor: '#fccb0a',
   },
   imgstyle: {
     width: wScale(90),
@@ -161,7 +185,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     paddingLeft: wScale(5),
-
   },
   title: {
     fontSize: wScale(55),
@@ -193,7 +216,6 @@ const styles = StyleSheet.create({
     fontSize: wScale(16),
     textDecorationLine: 'underline',
   },
-
 });
 
 export default Requirementscms;

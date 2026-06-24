@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable quotes */
+/* eslint-disable dot-notation */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,46 +10,39 @@ import {
   Image,
   ActivityIndicator,
   Alert,
-  Modal,
   TextInput,
-  Button
 } from 'react-native';
-import { colors } from '../../utils/styles/theme';
-import { hScale, wScale } from '../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { APP_URLS } from '../../utils/network/urls';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { BottomSheet, Card, Input } from '@rneui/base';
-import { translate } from '../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
+import {BottomSheet} from '@rneui/base';
+import {translate} from '../../utils/languageUtils/I18n';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import DynamicButton from '../drawer/button/DynamicButton';
-import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
-import { useNavigation } from '@react-navigation/native';
-import ClosseModalSvg from '../drawer/svgimgcomponents/ClosseModal';
-import DropdownSvg from '../../utils/svgUtils/DropdownSvg';
+import {useNavigation} from '@react-navigation/native';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
 import OperatorBottomSheet from '../../components/OperatorBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 import RecentText from '../../components/RecentText';
 import ClosseModalSvg2 from '../drawer/svgimgcomponents/ClosseModal2';
 import ShowLoader from '../../components/ShowLoder';
-import { useLocationHook } from '../../hooks/useLocationHook';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useLocationHook} from '../../hooks/useLocationHook';
 
 const DthScreen = () => {
-  const { colorConfig  ,Loc_Data} = useSelector((state: RootState) => state.userInfo);
-  const color1 = `${colorConfig.secondaryColor}20`
+  const {colorConfig, Loc_Data} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
+  const color1 = `${colorConfig.secondaryColor}20`;
   const [showLoader, setShowLoader] = useState(false);
 
   const [showLoader2, setShowLoader2] = useState(false);
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [textInput1, setTextInput1] = useState('');
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [insuranceOptList, setInsuranceOptList] = useState([]);
@@ -98,9 +93,9 @@ const DthScreen = () => {
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [path, setpath] = useState('');
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [historylist, setHistorylist] = useState([]);
-  const [isrecent, setIsrecent] = useState(false)
+  const [isrecent, setIsrecent] = useState(false);
 
   const navigation = useNavigation<any>();
 
@@ -114,54 +109,53 @@ const DthScreen = () => {
     ViewbillInfoStatus();
     setIsOperatorList(false);
     setOptimg('selectOperatorImage');
-
   };
   useEffect(() => {
     recenttransactions();
-
   }, []);
 
   const heavyrequest = async () => {
-    if(!consumerNo){
-
-      ToastAndroid.show('Enter consumerNo',ToastAndroid.BOTTOM)
+    if (!consumerNo) {
+      ToastAndroid.show(translate('Enter consumer No'), ToastAndroid.BOTTOM);
       return;
-    }  
-    if(!selectedOpt){
-      ToastAndroid.show(`Please ${selectedOpt}`,ToastAndroid.BOTTOM)
+    }
+    if (!selectedOpt) {
+      ToastAndroid.show(
+        `${translate('Please')} ${selectedOpt}`,
+        ToastAndroid.BOTTOM,
+      );
       return;
     }
     try {
-      const url = `${APP_URLS.heavyrequest}optname=${selectedOpt}&mobileno=${consumerNo}`
+      const url = `${APP_URLS.heavyrequest}optname=${selectedOpt}&mobileno=${consumerNo}`;
       console.log(url);
-      const response = await post({ url: url })
-      console.log("#########", response);
-      if (response === "NOTOK") {
-        Alert.alert("Heavy Request failed!!", response, [{ text: 'ok', onPress: () => { } }])
+      const response = await post({url: url});
+      console.log('#########', response);
+      if (response === 'NOTOK') {
+        Alert.alert(translate('Heavy Request failed!!'), response, [
+          {text: translate('ok'), onPress: () => {}},
+        ]);
       } else {
-        Alert.alert("Heavy Request Success!!", response, [{ text: 'ok', onPress: () => { } }])
+        Alert.alert(translate('Heavy Request Success!!'), response, [
+          {text: translate('ok'), onPress: () => {}},
+        ]);
       }
-
-    } catch {
-
-    }
-  }
+    } catch {}
+  };
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
+      const response = await get({url: url});
       console.log('-*************************************', response);
 
       setHistorylist(response);
       setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqId(response[0]['Request_ID']);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -170,11 +164,10 @@ const DthScreen = () => {
 
   const formattedDate = `${year}-${month}-${day}`;
 
-
   const handleItemPress = item => {
     setselectedOpt(item['Operatorname']);
     setOptCode(item['OPtCode']);
-    setpath(item['path'])
+    setpath(item['path']);
 
     setAccntvisivility(false);
     setAccntvisivility2(false);
@@ -194,7 +187,7 @@ const DthScreen = () => {
       //clearState();
     } else {
       const custparam = item.customerparams;
-console.log(custparam)
+      console.log(custparam);
       setDataType(custparam[0]['dataType']);
       setMaxLength(custparam[0]['maxLength']);
       setMinLength(custparam[0]['minLength']);
@@ -267,7 +260,7 @@ console.log(custparam)
       const res = await get({
         url: url,
       });
-      setpath(res['path'])
+      setpath(res['path']);
 
       console.log(res['myprop2Items']);
       setInsuranceOptList(res['myprop2Items']);
@@ -276,40 +269,37 @@ console.log(custparam)
     }
   }
 
-
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId } = useSelector((state: RootState) => state.userInfo);
-  const { latitude , longitude } = useLocationHook();
-
+  const {userId} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
   const onRechargePress = useCallback(async () => {
-
     console.log([
-
-      latitude,longitude,
+      latitude,
+      longitude,
       userId,
       consumerNo,
       optcode,
       Amount,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data['latitude'],
+      Loc_Data['longitude'],
 
       'city',
       'address',
       'postcode',
       'mobileNetwork',
-      "ip",
+      'ip',
       '57bea5094fd9082d',
     ]);
-console.log(Loc_Data)
-    ;
+    console.log(Loc_Data);
 
     setBottomSheetVisible(false);
     setBottomSheetVisible2(false);
     setShowLoader(true);
     let status, Message;
-     Message='';
-     status="";
+    Message = '';
+    status = '';
     const mobileNetwork = await getNetworkCarrier();
     const ip = await getMobileIp();
     const encryption = await encrypt([
@@ -317,7 +307,8 @@ console.log(Loc_Data)
       consumerNo,
       optcode,
       Amount,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data['latitude'],
+      Loc_Data['longitude'],
 
       'city',
       'address',
@@ -331,8 +322,8 @@ console.log(Loc_Data)
       consumerNo,
       optcode,
       Amount,
-      latitude ??'0.000',
-    longitude??'0.111',
+      latitude ?? '0.000',
+      longitude ?? '0.111',
       'city',
       'address',
       'postcode',
@@ -367,46 +358,42 @@ console.log(Loc_Data)
       const res = await post({
         url: url,
       });
-      console.log(res,'******************123');
-        if(res.status == 'False'){
-              ToastAndroid.showWithGravity(
-                res.message,
-                ToastAndroid.SHORT,
-                ToastAndroid.BOTTOM
-              );
-              setShowLoader(false);
-              return;
-            }
+      console.log(res, '******************123');
+      if (res.status === 'False') {
+        ToastAndroid.showWithGravity(
+          res.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+        setShowLoader(false);
+        return;
+      }
       status = res.Response;
       Message = res.Message;
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     navigation.navigate('Rechargedetails', {
-      mobileNumber: consumerNo ?? '',        // Default to an empty string if null or undefined
-      Amount: Amount ?? 0,                   // Default to 0 if Amount is null or undefined
-      operator: selectedOpt ?? 'N/A',        // Default to 'N/A' if selectedOpt is null or undefined
-      status: status ?? 'Unknown',          // Default to 'Unknown' if status is null or undefined
-      id: reqId ?? '',                       // Default to an empty string if reqId is null or undefined
-      reqTime: reqTime ?? new Date().toISOString(),  // Default to current time if reqTime is null or undefined
-      Message: Message ?? 'No message available'     // Default to 'No message available' if Message is null or undefined
+      mobileNumber: consumerNo ?? '', // Default to an empty string if null or undefined
+      Amount: Amount ?? 0, // Default to 0 if Amount is null or undefined
+      operator: selectedOpt ?? 'N/A', // Default to 'N/A' if selectedOpt is null or undefined
+      status: status ?? 'Unknown', // Default to 'Unknown' if status is null or undefined
+      id: reqId ?? '', // Default to an empty string if reqId is null or undefined
+      reqTime: reqTime ?? new Date().toISOString(), // Default to current time if reqTime is null or undefined
+      Message: Message ?? translate('No message available'), // Default to 'No message available' if Message is null or undefined
     });
-    
 
-    
-
-
-    navigation.navigate("Rechargedetails", {
+    navigation.navigate('Rechargedetails', {
       Amount,
-      operator:selectedOpt,
-      mobileNumber:consumerNo,
+      operator: selectedOpt,
+      mobileNumber: consumerNo,
       status: status || 'Unknown',
       reqTime: reqTime || 'N/A',
-      Message: Message || 'No message',
+      Message: Message || translate('No message'),
       reqId: reqId || 'N/A',
     });
     // if (!res.ok) {
@@ -414,56 +401,67 @@ console.log(Loc_Data)
 
     // }
     setconsumerNo('');
-    setselectedOpt('Select Your Operator');
+    setselectedOpt(translate('Select Your Operator'));
     setAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
-    Message()
-
+    Message();
   }, [
-    Amount,
-    getMobileIp,
-    getNetworkCarrier,
     latitude,
     longitude,
+    userId,
     consumerNo,
     optcode,
+    Amount,
+    Loc_Data,
+    getNetworkCarrier,
+    getMobileIp,
+    accnumhint,
+    accnumhint2,
+    navigation,
+    selectedOpt,
+    reqId,
+    reqTime,
     post,
-    userId,
+    recenttransactions,
   ]);
   const [modalVisible, setModalVisible] = useState(false);
   const [billDetails, setBillDetails] = useState([]);
   const [monthlyRecharge, setMonthlyRecharge] = useState('');
   const [status, setstatus] = useState();
   async function billInfo() {
-    setStatus("");
+    setStatus('');
     console.log(selectedOpt, consumerNo);
 
     try {
       // Construct the URL for the API request
       const url = `${APP_URLS.getdthCustomerInfo}optname=${selectedOpt}&mobileno=${consumerNo}`;
-      const res = await post({ url: url });
+      const res = await post({url: url});
 
       setStatus(res['status']);
       console.log('Request URL:', url);
       console.log('res URL:', res);
-      setShowLoader2(false)
-      if(res.status ==='Failed'){
-        ToastAndroid.show('try after sometime !!!' ,ToastAndroid.BOTTOM);
+      setShowLoader2(false);
+      if (res.status === 'Failed') {
+        ToastAndroid.show(
+          translate('try after sometime !!!'),
+          ToastAndroid.BOTTOM,
+        );
         setShowLoader2(false);
-return;
+        return;
       }
-if(res.Message =='An error has occurred.'){
-ToastAndroid.show(res.Message,ToastAndroid.BOTTOM)
-setShowLoader2(false)
-
-}
+      if (res.Message === translate('An error has occurred.')) {
+        ToastAndroid.show(res.Message, ToastAndroid.BOTTOM);
+        setShowLoader2(false);
+      }
       if (APP_URLS.AppName === 'Recharge Drishti') {
         if (res && res['status'] === 'SUCCESS') {
           // If successful, set the customer data
 
           // Check if res.Response.packages is defined and is an array
-          const packages = Array.isArray(res.Response.packages) ? res.Response.packages.join(", ") : "No packages available";
+          const packages = Array.isArray(res.Response.packages)
+            ? res.Response.packages.join(', ')
+            : 'No packages available';
 
           const message = `
           Name:   ${res.Response.name}
@@ -476,7 +474,7 @@ setShowLoader2(false)
           Packages:   ${packages}
           Status:   ${res.Response.status ? 'Active' : 'Inactive'}
         `;
-          console.log(res.Response.monthlyRecharge, '**********************')
+          console.log(res.Response.monthlyRecharge, '**********************');
           // Set monthlyRecharge value from the response
           setMonthlyRecharge(res.Response.monthlyRecharge.toString());
           setAmount(res.Response.monthlyRecharge.toString());
@@ -485,16 +483,13 @@ setShowLoader2(false)
           setBillDetails(res?.Response);
 
           setShowLoader2(false);
-
-
-
         } else {
           // Handle failure scenario
           setStatus('Failed');
           setShowLoader2(false);
 
           const response = res.Response ? JSON.parse(res.Response) : res; // Handle case where Response might be stringified
-          console.log(response)
+          console.log(response);
           ToastAndroid.showWithGravity(
             response.message || response.status,
             ToastAndroid.SHORT,
@@ -509,7 +504,7 @@ setShowLoader2(false)
           setmonthrecharge(res['monthlyRecharge']);
           setStatus(res['customerStatus'] || res['customerStatus']);
           console.log('Balance:', res['balance']);
-          setDueDate(res['rechargedueDate']||'')
+          setDueDate(res['rechargedueDate'] || '');
 
           setBottomSheetVisible(true);
           setShowLoader2(false);
@@ -518,26 +513,23 @@ setShowLoader2(false)
           setShowLoader2(false);
 
           ToastAndroid.showWithGravity(
-            res['Response'].Response || res['Response'] ,
+            res['Response'].Response || res['Response'],
             ToastAndroid.SHORT,
             ToastAndroid.BOTTOM,
           );
         }
       }
-      setShowLoader(false)
-
-    } catch (error) {
+      setShowLoader(false);
+    } catch (error: any) {
       console.error('Error fetching bill info:', error);
       setShowLoader2(false); // Hide loader in case of error
       ToastAndroid.showWithGravity(
-        error.message || 'Something went wrong.',
+        error.message || translate('Something went wrong.'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     }
   }
-
-
 
   async function ViewbillInfoStatus() {
     console.log(optcode);
@@ -547,49 +539,50 @@ setShowLoader2(false)
         Operatorcode: optcode,
       };
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
-      const res = await post({ url: url, });
+      const res = await post({url: url});
       console.log(':', url);
       const billSts = res['RESULT'];
       if (billSts === 'Y') {
         setIsinfo(true);
-
       } else {
         // setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const validateFields = () => {
     if (!paramname) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-
     } else if (selectedOpt === 'Select Your Operator') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!Amount || Amount === 'Enter Amount' || parseFloat(Amount) <= 0) {
+    } else if (
+      !Amount ||
+      Amount === 'Enter Amount' ||
+      parseFloat(Amount) <= 0
+    ) {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else {
       setBottomSheetVisible(true);
       // billInfo();
-
     }
   };
   return (
     <View style={styles.main}>
       <AppBarSecond
-        title='Dth Recharge'
+        title="Dth Recharge"
         onActionPress={undefined}
         actionButton={undefined}
         onPressBack={undefined}
@@ -602,61 +595,57 @@ setShowLoader2(false)
           //   color={colors.black}
           //   style={styles.loaderStyle}
           // />
-          <ShowLoader/>
+          <ShowLoader />
         )}
         <TouchableOpacity onPress={() => setIsOperatorList(true)}>
-
-          <FlotingInput label={selectedOpt}
+          <FlotingInput
+            label={selectedOpt}
             editable={false}
             onChangeTextCallback={text => setTextInput1(text)}
-          // value={selectedOpt}
+            inputstyle={undefined}
+            labelinputstyle={undefined} // value={selectedOpt}
           />
-          <View style={[styles.righticon2,]}>
+          <View style={[styles.righticon2]}>
             {selectedOpt === 'Select Your Operator' ? (
               <OnelineDropdownSvg />
+            ) : path === null ? (
+              <OnelineDropdownSvg />
             ) : (
-              path === null ? (
-                <OnelineDropdownSvg />
-
-              ) : (
-
-                <Image style={styles.rightimg} source={{ uri: optimg }} />
-
-              )
+              <Image style={styles.rightimg} source={{uri: optimg}} />
             )}
-
           </View>
         </TouchableOpacity>
         <View>
-          <FlotingInput label={paramname}
-             maxLength={12}
-            autoCapitalize='characters'
-
+          <FlotingInput
+            label={paramname}
+            maxLength={12}
+            autoCapitalize="characters"
             onChangeTextCallback={text => {
-              setconsumerNo(text)
+              setconsumerNo(text);
               if (text.length >= 5) {
-                setIsinfo(true)
+                setIsinfo(true);
               } else {
-                setIsinfo(false)
+                setIsinfo(false);
               }
-
-            }
-            }
+            }}
             value={consumerNo}
-
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
-          <View style={[styles.righticon2,]}>
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
                 onPress={() => {
                   ViewbillInfoStatus();
                   setShowLoader2(true);
-                  billInfo()
+                  billInfo();
                 }}>
-                {
-                  showLoader2 ? <ActivityIndicator size={'large'} /> : <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
-                }
+                {showLoader2 ? (
+                  <ActivityIndicator size={'large'} />
+                ) : (
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
+                )}
               </TouchableOpacity>
             )}
           </View>
@@ -666,54 +655,84 @@ setShowLoader2(false)
           isModalVisible={isOperatorList}
           operatorData={insuranceOptList}
           // stateData={stateList}
-          selectedOperator={() => { selectedOpt; setIsOperatorList(false) }}
+          selectedOperator={() => {
+            selectedOpt;
+            setIsOperatorList(false);
+          }}
           setModalVisible={setIsOperatorList}
           selectOperator={selectOperator}
           setOperatorcode={setOptCode}
           showState={false}
           selectOperatorImage={setOptimg}
-          handleItemPress={(item) => { handleItemPress(item) }}
+          handleItemPress={item => {
+            handleItemPress(item);
+          }}
         />
 
-        <FlotingInput label={'Enter Amount'}
-             maxLength={5}
-             
+        <FlotingInput
+          label={translate('Enter Amount')}
+          maxLength={5}
           keyboardType="number-pad"
           value={Amount}
-          onChangeTextCallback={text =>
-
-            setAmount(text)}
-
+          onChangeTextCallback={text => setAmount(text)}
+          inputstyle={undefined}
+          labelinputstyle={undefined}
         />
-        <DynamicButton title={'Procced'} onPress={() => {
+        <DynamicButton
+          title={'Procced'}
+          onPress={() => {
+            validateFields();
+          }}
+        />
 
-          validateFields()
-
-        }} />
-
-        <View >
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
-            onBackdropPress={() => setIsrecent(false)} />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+            onBackdropPress={() => setIsrecent(false)}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
             <RecentText />
-
           </TouchableOpacity>
         </View>
-          {APP_URLS.AppName =='Recharge Drishti'&&<View style={{ backgroundColor: 'white', alignItems: 'center', marginTop: 10 }}>
-          <View style={{ backgroundColor: 'lightblue', alignItems: 'center', height: 50, width: 120, justifyContent: 'center', }}>
-            <TouchableOpacity onPress={() => { heavyrequest() }}>
-              <Text style={{ color: 'black', alignItems: 'center', fontWeight: 'bold' }}>{translate("Heavy_Request")}</Text>
-            </TouchableOpacity>
+        {APP_URLS.AppName === 'Recharge Drishti' && (
+          <View
+            style={{
+              backgroundColor: 'white',
+              alignItems: 'center',
+              marginTop: 10,
+            }}>
+            <View
+              style={{
+                backgroundColor: 'lightblue',
+                alignItems: 'center',
+                height: 50,
+                width: 120,
+                justifyContent: 'center',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  heavyrequest();
+                }}>
+                <Text
+                  style={{
+                    color: 'black',
+                    alignItems: 'center',
+                    fontWeight: 'bold',
+                  }}>
+                  {translate('Heavy_Request')}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>}
+        )}
         <Rechargeconfirm
-        setAmount={(t)=>console.log(t)}
+          setAmount={t => console.log(t)}
           isModalVisible={bottomSheetVisible}
           onBackdropPress={() => setBottomSheetVisible(false)}
           status={Status}
@@ -722,37 +741,46 @@ setShowLoader2(false)
           //   setmonthrecharge(text); // ✅
           // }}
           details={[
-            { label: 'User Name', value2: CustomerName === '' ? 'N/A' : CustomerName },
-            { label: 'Customer ID', value: consumerNo },
-            { label: 'Due Date', value2: dueDate === '' ? 'N/A' : dueDate },
+            {
+              label: translate('User Name'),
+              value2: CustomerName === '' ? 'N/A' : CustomerName,
+            },
+            {label: translate('Customer ID'), value: consumerNo},
+            {
+              label: translate('Due Date'),
+              value2: dueDate === '' ? 'N/A' : dueDate,
+            },
 
-            { label: 'Operator Name', value2: selectedOpt },
-            { label: 'Customer Status', value2: Status === '' ? 'N/A' : Status },
-            { label: 'Balance', value2: custBal === 0 ? 'N/A' : custBal },
+            {label: translate('Operator Name'), value2: selectedOpt},
+            {
+              label: translate('Customer Status'),
+              value2: Status === '' ? 'N/A' : Status,
+            },
+            {
+              label: translate('Balance'),
+              value2: custBal === 0 ? 'N/A' : custBal,
+            },
           ]}
-
-          lastlabel={'Transaction Amount'}
-          lastvalue={ Amount || monthrecharghe }
+          lastlabel={translate('Transaction Amount')}
+          lastvalue={Amount || monthrecharghe}
           onRechargedetails={() => {
-
             if (monthrecharghe === '0' && Amount === '0') {
               console.log(Amount, '**********', monthrecharghe);
-            
+
               ToastAndroid.showWithGravity(
-                'Please Enter Amount',
+                translate('Please Enter Amount'),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
             } else {
               onRechargePress();
             }
-          }
-          }
+          }}
           Lottieimg={require('../../utils/lottieIcons/satellite.json')}
 
-        // isLoading2={isLoading2}
+          // isLoading2={isLoading2}
         />
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <View style={{flex: 1, backgroundColor: '#fff'}}>
           {/* <BillInfoBottomSheet
             visible={bottomSheetVisible2}
             onClose={() => setBottomSheetVisible2(false)} // Close the BottomSheet
@@ -760,120 +788,162 @@ setShowLoader2(false)
             setMonthlyRecharge={setMonthlyRecharge}
             billDetails={billDetails}
           /> */}
-          <BottomSheet animationType="none"  
-            onBackdropPress={() => { setBottomSheetVisible2(false) }}
+          <BottomSheet
+            animationType="none"
+            onBackdropPress={() => {
+              setBottomSheetVisible2(false);
+            }}
             isVisible={bottomSheetVisible2}
-            containerStyle={{ paddingHorizontal: wScale(5) }}
-          >
-
-            <View style={{
-              backgroundColor: '#fff', flex: 1, borderTopRightRadius: 5,
-              borderTopStartRadius: 5
-            }}>
-              <View style={[styles.header, { backgroundColor: color1 }]}>
-                <Text style={styles.title}>{selectedOpt}{translate('bill info')}</Text>
+            containerStyle={{paddingHorizontal: wScale(5)}}>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                flex: 1,
+                borderTopRightRadius: 5,
+                borderTopStartRadius: 5,
+              }}>
+              <View style={[styles.header, {backgroundColor: color1}]}>
+                <Text style={styles.title}>
+                  {selectedOpt}
+                  {translate('bill info')}
+                </Text>
                 <TouchableOpacity onPress={() => setBottomSheetVisible2(false)}>
-
                   <ClosseModalSvg2 size={40} />
                 </TouchableOpacity>
-
               </View>
-              <View style={{ padding: hScale(6) }}>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ color: 'black', fontWeight: 'bold', width: '40%' }}>{translate("Name")}</Text>
-                  <Text style={{ color: 'black', width: '60%' }}>{billDetails.name}</Text>
+              <View style={{padding: hScale(6)}}>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                  <Text
+                    style={{color: 'black', fontWeight: 'bold', width: '40%'}}>
+                    {translate('Name')}
+                  </Text>
+                  <Text style={{color: 'black', width: '60%'}}>
+                    {billDetails.name}
+                  </Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ color: 'black', fontWeight: 'bold', width: '40%' }}>{translate("RMN")}</Text>
-                  <Text style={{ color: 'black', width: '60%' }}>{billDetails.RMN}</Text>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                  <Text
+                    style={{color: 'black', fontWeight: 'bold', width: '40%'}}>
+                    {translate('RMN')}
+                  </Text>
+                  <Text style={{color: 'black', width: '60%'}}>
+                    {billDetails.RMN}
+                  </Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ color: 'black', fontWeight: 'bold', width: '40%' }}>{translate("Balance")}</Text>
-                  <Text style={{ color: 'black', width: '60%' }}>₹{billDetails.balance}</Text>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                  <Text
+                    style={{color: 'black', fontWeight: 'bold', width: '40%'}}>
+                    {translate('Balance')}
+                  </Text>
+                  <Text style={{color: 'black', width: '60%'}}>
+                    ₹{billDetails.balance}
+                  </Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ color: 'black', fontWeight: 'bold', width: '40%' }}>{translate("Last_Recharge_Amount")}</Text>
-                  <Text style={{ color: 'black', width: '60%' }}>₹{billDetails.lastRechargeAmount}</Text>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                  <Text
+                    style={{color: 'black', fontWeight: 'bold', width: '40%'}}>
+                    {translate('Last_Recharge_Amount')}
+                  </Text>
+                  <Text style={{color: 'black', width: '60%'}}>
+                    ₹{billDetails.lastRechargeAmount}
+                  </Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ color: 'black', fontWeight: 'bold', width: '40%' }}>{translate("Last_Recharge_Date")}</Text>
-                  <Text style={{ color: 'black', width: '60%' }}>{billDetails.lastRechargeDate}</Text>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                  <Text
+                    style={{color: 'black', fontWeight: 'bold', width: '40%'}}>
+                    {translate('Last_Recharge_Date')}
+                  </Text>
+                  <Text style={{color: 'black', width: '60%'}}>
+                    {billDetails.lastRechargeDate}
+                  </Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ color: 'black', fontWeight: 'bold', width: '40%' }}>{translate("Next_Recharge_Date")}</Text>
-                  <Text style={{ color: 'black', width: '60%' }}>{billDetails.nextRechargeDate}</Text>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                  <Text
+                    style={{color: 'black', fontWeight: 'bold', width: '40%'}}>
+                    {translate('Next_Recharge_Date')}
+                  </Text>
+                  <Text style={{color: 'black', width: '60%'}}>
+                    {billDetails.nextRechargeDate}
+                  </Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ color: 'black', fontWeight: 'bold', width: '40%' }}>{translate("Packages")}</Text>
-                  <Text style={{ color: 'black', width: '60%' }}>{billDetails.packages}</Text>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                  <Text
+                    style={{color: 'black', fontWeight: 'bold', width: '40%'}}>
+                    {translate('Packages')}
+                  </Text>
+                  <Text style={{color: 'black', width: '60%'}}>
+                    {billDetails.packages}
+                  </Text>
                 </View>
-                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ color: 'black', fontWeight: 'bold', width: '40%' }}>{translate("Status")}</Text>
-                  <Text style={{ color: 'black', width: '60%' }}>{billDetails.status ? 'Active' : ' Inactive'}</Text>
+                <View style={{flexDirection: 'row', marginBottom: 10}}>
+                  <Text
+                    style={{color: 'black', fontWeight: 'bold', width: '40%'}}>
+                    {translate('Status')}
+                  </Text>
+                  <Text style={{color: 'black', width: '60%'}}>
+                    {billDetails.status ? 'Active' : ' Inactive'}
+                  </Text>
                 </View>
 
                 <TextInput
                   value={monthlyRecharge}
-                  onChangeText={(text) => {
+                  onChangeText={text => {
                     setMonthlyRecharge(text);
                     setAmount(text);
-                  }} keyboardType="number-pad"
-                  containerStyle={{ marginBottom: 20 }}
-                  label={"Amount"}
+                  }}
+                  keyboardType="number-pad"
+                  containerStyle={{marginBottom: 20}}
+                  label={translate('Amount')}
                   style={{
                     borderColor: colorConfig.primaryColor,
-                    borderWidth: 1,  // You need to specify borderWidth to make the border visible
+                    borderWidth: 1, // You need to specify borderWidth to make the border visible
                     borderRadius: 5, // More typical for rounded corners
                     paddingLeft: 10, // Optional, adds space inside the TextInput
                     height: 40, // Optional, adjusts height for better visibility
                   }}
-
                 />
               </View>
 
               <TouchableOpacity
                 style={{
                   marginBottom: 10,
-                  backgroundColor: colorConfig.primaryColor,  // Green background color
-                  paddingVertical: 10,          // Vertical padding for height
-                  paddingHorizontal: 30,        // Horizontal padding for width
-                  borderRadius: 10,             // Rounded corners for smooth edges
-                  alignItems: 'center',         // Center the text horizontally
-                  justifyContent: 'center',     // Center the text vertically
-                  shadowColor: '#000',          // Shadow color for iOS
-                  shadowOffset: { width: 0, height: 4 },  // Shadow direction for iOS
-                  shadowOpacity: 0.1,           // Shadow transparency for iOS
-                  shadowRadius: 4,              // Shadow radius for iOS
-                  elevation: 5,                 // Shadow for Android
+                  backgroundColor: colorConfig.primaryColor, // Green background color
+                  paddingVertical: 10, // Vertical padding for height
+                  paddingHorizontal: 30, // Horizontal padding for width
+                  borderRadius: 10, // Rounded corners for smooth edges
+                  alignItems: 'center', // Center the text horizontally
+                  justifyContent: 'center', // Center the text vertically
+                  shadowColor: '#000', // Shadow color for iOS
+                  shadowOffset: {width: 0, height: 4}, // Shadow direction for iOS
+                  shadowOpacity: 0.1, // Shadow transparency for iOS
+                  shadowRadius: 4, // Shadow radius for iOS
+                  elevation: 5, // Shadow for Android
                 }}
                 onPress={() => {
-
                   if (Amount === '0' || monthlyRecharge === '') {
-
-                    console.log(Amount)
+                    console.log(Amount);
                     ToastAndroid.showWithGravity(
-                      `Please Enter Amount`,
+                      translate(`Please Enter Amount`),
                       ToastAndroid.SHORT,
                       ToastAndroid.BOTTOM,
                     );
-                  } else { onRechargePress() } console.log('Confirm and Pay pressed');
-                }}
-              >
-                <Text style={{
-                  color: '#fff',                // White text color
-                  fontSize: 18,                 // Font size for the text
-                  fontWeight: 'bold',           // Bold text for emphasis
+                  } else {
+                    onRechargePress();
+                  }
+                  console.log('Confirm and Pay pressed');
                 }}>
+                <Text
+                  style={{
+                    color: '#fff', // White text color
+                    fontSize: 18, // Font size for the text
+                    fontWeight: 'bold', // Bold text for emphasis
+                  }}>
                   {translate('Confirm and Pay')}
                 </Text>
               </TouchableOpacity>
-
             </View>
           </BottomSheet>
         </View>
-
-
-
       </View>
     </View>
   );
@@ -882,12 +952,12 @@ setShowLoader2(false)
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     flex: 1,
-    paddingTop: hScale(30)
+    paddingTop: hScale(30),
   },
 
   righticon2: {
@@ -903,7 +973,7 @@ const styles = StyleSheet.create({
   },
   infobtn: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   infobtntex: {
     fontSize: wScale(18),
@@ -913,16 +983,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
     borderRadius: 5,
-
   },
 
   rightimg: {
     height: wScale(45),
-    width: wScale(45)
+    width: wScale(45),
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   modalOverlay: {
     flex: 1,
@@ -945,7 +1014,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingHorizontal: 10,
   },
-  loaderStyle: { position: "absolute", top: 0, bottom: 0, left: 0, right: 0, zIndex: 999 },
+  loaderStyle: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 999,
+  },
   recent: {
     color: '#000',
     textAlign: 'right',
@@ -956,7 +1032,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     borderTopStartRadius: 5,
     paddingHorizontal: wScale(5),
-    paddingVertical: hScale(2)
+    paddingVertical: hScale(2),
   },
   title: {
     color: '#000',
@@ -964,10 +1040,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: wScale(20),
     fontWeight: 'bold',
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
-
-
 });
 
 export default DthScreen;

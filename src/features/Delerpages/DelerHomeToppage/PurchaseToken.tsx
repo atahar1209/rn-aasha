@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { translate } from '../../../utils/languageUtils/I18n';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {translate} from '../../../utils/languageUtils/I18n';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { colors } from '../../../utils/styles/theme';
-import { RootState } from '../../../reduxUtils/store';
-import { useSelector } from 'react-redux';
-import { FlashList } from '@shopify/flash-list';
-import { DotLoader } from '../../../components/DotLoader ';
+import {APP_URLS} from '../../../utils/network/urls';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {colors} from '../../../utils/styles/theme';
+import {RootState} from '../../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {FlashList} from '@shopify/flash-list';
+import {DotLoader} from '../../../components/DotLoader ';
 
 const PurchaseToken = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const color1 = `${colorConfig.secondaryColor}20`;
-  const { get } = useAxiosHook();
+  const {get} = useAxiosHook();
   const [purchaseData, setPurchaseData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPurchaseData() {
-      const response = await get({ url: APP_URLS.tokenPurchaseHistory });
+      const response = await get({url: APP_URLS.tokenPurchaseHistory});
       console.log(response, '************');
       if (response && response.Report) {
         setPurchaseData(response.Report);
@@ -33,7 +33,7 @@ const PurchaseToken = () => {
     return <DotLoader />;
   }
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     const {
       Tokens,
       TotalTokenValue,
@@ -44,7 +44,7 @@ const PurchaseToken = () => {
     } = item;
 
     return (
-      <View style={[styles.card, { backgroundColor: color1 }]}>
+      <View style={[styles.card, {backgroundColor: color1}]}>
         <View style={styles.row}>
           <View style={styles.column}>
             <View style={styles.row2}>
@@ -98,7 +98,7 @@ const PurchaseToken = () => {
     <FlashList
       data={purchaseData}
       renderItem={renderItem}
-      keyExtractor={(item) => item.Idno.toString()}
+      keyExtractor={item => item.Idno.toString()}
       estimatedItemSize={100} // Adjust this based on your item size
       contentContainerStyle={styles.container}
     />

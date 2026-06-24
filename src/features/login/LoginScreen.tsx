@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-unreachable */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -7,19 +8,16 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Image,
   ActivityIndicator,
   ScrollView,
   NativeModules,
   Alert,
   ToastAndroid,
-  Modal,
   Linking,
-  Button,
   Animated,
-  Easing,
   Platform,
   Keyboard,
+  Image,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../reduxUtils/store';
@@ -79,7 +77,7 @@ const LoginScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [userEmail, setUserEmail] = useState(signUpId || '');
   const [userPassword, setUserPassword] = useState(signUpPassword || '');
-  const [mobileNumber, setMobileNumber] = useState('7414088555');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [uniqueId, setUniqueId] = useState('');
   const [modelNumber, setModelNumber] = useState('');
   const [androidVersion, setCurrentAndroidVersion] = useState('');
@@ -1055,15 +1053,15 @@ const LoginScreen = () => {
         style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Animated.View
           style={{transform: [{scale: logoAnim}], alignItems: 'center'}}>
-          <FastImage
-            source={{
-              priority: FastImage.priority.high,
-              uri: logoUrl,
-            }}
-            // source={require('../../.
-            // ./assets/images/app_logo.png')}
-
-            style={{width: wScale(110), height: wScale(110)}}
+          <Image
+            source={require('../../../assets/images/app_logo.png')}
+            style={[
+              styles.imgstyle,
+              {
+                width: wScale(100),
+                height: wScale(100),
+              },
+            ]}
             resizeMode="contain"
           />
         </Animated.View>
@@ -1120,13 +1118,19 @@ const LoginScreen = () => {
             <LinearGradient
               colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
               style={styles.logoGlass}>
-              <FastImage
+              {/* <FastImage
                 source={{
                   priority: FastImage.priority.high,
                   uri: logoUrl,
                 }}
                 style={styles.logoImg}
                 resizeMode={FastImage.resizeMode.contain}
+              /> */}
+
+              <Image
+                source={require('../../../assets/images/app_logo.png')}
+                style={styles.imgstyle}
+                resizeMode="contain"
               />
             </LinearGradient>
             <Text style={styles.appName}>{APP_URLS.AppName}</Text>
@@ -1462,6 +1466,10 @@ const styles = StyleSheet.create({
     fontSize: wScale(17),
     fontWeight: '700',
     letterSpacing: 0.5,
+  },
+
+  imgstyle: {
+    flex: 1,
   },
 
   // Divider

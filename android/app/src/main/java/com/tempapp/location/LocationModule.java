@@ -1,4 +1,4 @@
-package com.mobykwik.location;
+package com.digitalindiapay.location;
 
 import android.Manifest;
 import android.app.Activity;

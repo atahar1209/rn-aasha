@@ -8,21 +8,20 @@ import {
   TouchableOpacity,
   ToastAndroid,
   Alert,
-  
 } from 'react-native';
 import {colors} from './../../utils/styles/theme';
 import {SCREEN_HEIGHT, hScale, wScale} from './../../utils/styles/dimensions';
 import {APP_URLS} from './../../utils/network/urls';
 import useAxiosHook from './../../utils/network/AxiosClient';
 import {translate} from './../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
-import { useLocationHook } from '../../utils/hooks/useLocationHook';
-import { Card } from 'react-native-paper';
-import { BottomSheet } from "@rneui/themed";
-import { FlashList } from '@shopify/flash-list';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
+import {useLocationHook} from '../../utils/hooks/useLocationHook';
+import {Card} from 'react-native-paper';
+import {BottomSheet} from '@rneui/themed';
+import {FlashList} from '@shopify/flash-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PrepaidGasScreen = () => {
@@ -92,43 +91,43 @@ const PrepaidGasScreen = () => {
     //  setParamName('Customer ID');
     setValues('');
     setRegx('');
-    console.log(item['OPtCode']);
+    console.log(item.OPtCode);
     setVisibility(false);
     if (!item.customerparams || item.customerparams.length === 0) {
       //clearState();
     } else {
       const custparam = item.customerparams;
 
-      setDataType(custparam[0]['dataType']);
-      setMaxLength(custparam[0]['maxLength']);
-      setMinLength(custparam[0]['minLength']);
-      setVisibility(custparam[0]['visibility']);
-      setOptional(custparam[0]['optional']);
-      setParamName(custparam[0]['paramName']);
-      setRegx(custparam[0]['regex']);
-      setValues(custparam[0]['values']);
+      setDataType(custparam[0].dataType);
+      setMaxLength(custparam[0].maxLength);
+      setMinLength(custparam[0].minLength);
+      setVisibility(custparam[0].visibility);
+      setOptional(custparam[0].optional);
+      setParamName(custparam[0].paramName);
+      setRegx(custparam[0].regex);
+      setValues(custparam[0].values);
 
       if (custparam.length === 2) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setKey2(custparam[1]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setKey2(custparam[1].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
         //  setAccntvisivility2(true);
       } else if (custparam.length === 3) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setAccnumhint2(custparam[2]['paramName']);
-        setAccmaxlength2(custparam[2]['maxLength']);
-        setKey2(custparam[1]['dataType']);
-        setKey3(custparam[2]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setAccnumhint2(custparam[2].paramName);
+        setAccmaxlength2(custparam[2].maxLength);
+        setKey2(custparam[1].dataType);
+        setKey3(custparam[2].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setKeyType3(
-          custparam[2]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[2].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
 
@@ -142,105 +141,102 @@ const PrepaidGasScreen = () => {
     console.log(item);
   };
   const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
-  useDeviceInfoHook();
-const {userId} = useSelector((state: RootState) => state.userInfo);
-const {latitude, longitude} = useLocationHook();
-const readLatLongFromStorage = async () => {
-  try {
-    const locationData = await AsyncStorage.getItem('locationData');
-    
-    if (locationData !== null) {
-      const { latitude, longitude } = JSON.parse(locationData);
-      console.log('Latitude:', latitude, 'Longitude:', longitude);
-      return { latitude, longitude };
-    } else {
-      console.log('No location data found');
+    useDeviceInfoHook();
+  const {userId} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
+  const readLatLongFromStorage = async () => {
+    try {
+      const locationData = await AsyncStorage.getItem('locationData');
+
+      if (locationData !== null) {
+        const {latitude, longitude} = JSON.parse(locationData);
+        console.log('Latitude:', latitude, 'Longitude:', longitude);
+        return {latitude, longitude};
+      } else {
+        console.log('No location data found');
+        return null;
+      }
+    } catch (error) {
+      console.error('Failed to read location data from AsyncStorage:', error);
       return null;
     }
-  } catch (error) {
-    console.error('Failed to read location data from AsyncStorage:', error);
-    return null; 
-  }
-};
-const onRechargePress = useCallback(async () => {
+  };
+  const onRechargePress = useCallback(async () => {
+    const mobileNetwork = await getNetworkCarrier();
+    const ip = await getMobileIp();
+    const encryption = await encrypt([
+      userId,
+      consumerNo,
+      optcode,
+      amount,
+      latitude ?? '0.000',
+      longitude ?? '0.111',
+      'city',
+      'address',
+      'postcode',
+      mobileNetwork,
+      ip,
+      '57bea5094fd9082d',
+    ]);
+    console.log(encryption.encryptedData);
 
+    const rd = encodeURIComponent(encryption.encryptedData[0]);
+    const n1 = encodeURIComponent(encryption.encryptedData[1]);
+    const ok1 = encodeURIComponent(encryption.encryptedData[2]);
+    const amn = amount;
+    const ip1 = encodeURIComponent(encryption.encryptedData[10]);
+    const em = '57bea5094fd9082d';
+    const devtoken = encodeURIComponent(encryption.encryptedData[6]);
 
+    const Latitude = encodeURIComponent(encryption.encryptedData[4]);
+    const Longitude = encodeURIComponent(encryption.encryptedData[5]);
+    const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
+    const City = devtoken;
 
+    const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
+    const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
+    const Addresss = encodeURIComponent(encryption.encryptedData[7]);
 
-  
-  const mobileNetwork = await getNetworkCarrier();
-  const ip = await getMobileIp();
-  const encryption = await encrypt([
+    const value1 = encodeURIComponent(encryption.keyEncode);
+    const value2 = encodeURIComponent(encryption.ivEncode);
+
+    const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}`;
+
+    const res = await post({
+      url: url,
+    });
+    if (res.status === 'False') {
+      Alert.alert(res.message);
+
+      return;
+    }
+    if (!res.ok) {
+      if (res.Response === 'Success') {
+        Alert.alert(res.Response, res.Message, [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
+      } else {
+        Alert.alert(res.Response, res.message, [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
+      }
+    } else {
+    }
+
+    console.log('onRechargePress', res);
+  }, [
+    getNetworkCarrier,
+    getMobileIp,
     userId,
     consumerNo,
     optcode,
     amount,
-    latitude ??'0.000',
-    longitude??'0.111',
-    'city',
-    'address',
-    'postcode',
-    mobileNetwork,
-    ip,
-    '57bea5094fd9082d',
+    latitude,
+    longitude,
+    accnumhint,
+    accnumhint2,
+    post,
   ]);
-  console.log(encryption.encryptedData);
-
-  const rd = encodeURIComponent(encryption.encryptedData[0]);
-  const n1 = encodeURIComponent(encryption.encryptedData[1]);
-  const ok1 = encodeURIComponent(encryption.encryptedData[2]);
-  const amn = amount;
-  const ip1 = encodeURIComponent(encryption.encryptedData[10]);
-  const em = '57bea5094fd9082d';
-  const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
-  const Latitude = encodeURIComponent(encryption.encryptedData[4]);
-  const Longitude = encodeURIComponent(encryption.encryptedData[5]);
-  const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
-  const City = devtoken;
-
-  const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
-  const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
-  const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
-  const value1 = encodeURIComponent(encryption.keyEncode);
-  const value2 = encodeURIComponent(encryption.ivEncode);
-
-  const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}`;
-
-  const res = await post({
-    url: url,
-
-  });
-  if(res.status ==='False'){
-    alert(res.message);
-
-    return
-  }
-  if(!res.ok){
-    if(res['Response'] === 'Success'){
-      Alert.alert(res['Response'],res['Message'] ,  [{ text: 'OK', onPress: () => {} }]);
-  
-    }else{  Alert.alert(res['Response'],res['message'] ,  [{ text: 'OK', onPress: () => {} }]);
-  }
-  
-  }else{
-  
-  }
-
-console.log('onRechargePress',res);
-
-}, [
-  amount,
-  getMobileIp,
-  getNetworkCarrier,
-  latitude,
-  longitude,
-  consumerNo,
-  optcode,
-  post,
-  userId,
-]);
 
   const clearState = () => {
     setDataType('');
@@ -271,8 +267,8 @@ console.log('onRechargePress',res);
       const res = await get({
         url: url,
       });
-      console.log(res['myprop2Items']);
-      setInsuranceOptList(res['myprop2Items']);
+      console.log(res.myprop2Items);
+      setInsuranceOptList(res.myprop2Items);
     } catch (error) {
       console.error(error);
     }
@@ -294,14 +290,14 @@ console.log('onRechargePress',res);
                 <TouchableWithoutFeedback
                   onPress={async () => {
                     handleItemPress(item);
-                    setOptCode(item['OPtCode']);
-                    setselectedOpt(item['Operatorname']);
+                    setOptCode(item.OPtCode);
+                    setselectedOpt(item.Operatorname);
                     setIsOperatorList(false);
                     ViewbillInfoStatus();
-                    console.log(item['OPtCode']);
+                    console.log(item.OPtCode);
                   }}>
                   <Text style={{color: '#ff4670', fontSize: 18}}>
-                    {item['Operatorname']}
+                    {item.Operatorname}
                   </Text>
                 </TouchableWithoutFeedback>
               </View>
@@ -316,17 +312,17 @@ console.log('onRechargePress',res);
     try {
       const config = {
         headers: {
-          Authorization: `Bearer`,
+          Authorization: 'Bearer',
         },
       };
-    
+
       const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit&ProcessingCycle&acno&lt&ViewBill=Y`;
       const res = await get({url: url});
       console.log(url);
-        setDueDate(res["rechargedueDate"]);
-        setAmount(res["monthlyRecharge"]);
-        setCustomerName(res["customerName"]);
-        setCustBal(res["balance"]);
+      setDueDate(res.rechargedueDate);
+      setAmount(res.monthlyRecharge);
+      setCustomerName(res.customerName);
+      setCustBal(res.balance);
       //setstatus(res["customerStatus"])
 
       // console.log(":", res);
@@ -337,7 +333,7 @@ console.log('onRechargePress',res);
     try {
       const config = {
         headers: {
-          Authorization: `Bearer`,
+          Authorization: 'Bearer',
         },
       };
       const data = {
@@ -347,7 +343,7 @@ console.log('onRechargePress',res);
       const res = await post({url: url, data, config: config});
 
       console.log(':', url);
-      const billSts = res['RESULT'];
+      const billSts = res.RESULT;
       if (billSts === 'Y') {
         setIsinfo(true);
       } else {
@@ -360,19 +356,19 @@ console.log('onRechargePress',res);
   const validateFields = () => {
     if (!paramname) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (selectedOpt === 'Select Your Operator') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (!amount || amount === 'Enter Amount') {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -385,7 +381,7 @@ console.log('onRechargePress',res);
       <TouchableOpacity onPress={() => setIsOperatorList(true)}>
         <TextInput
           style={styles.DetailButton}
-          placeholder={'Select Operator'}
+          placeholder={translate('Select Operator')}
           onChangeText={text => setTextInput1(text)}
           editable={false}
           value={selectedOpt}
@@ -409,7 +405,7 @@ console.log('onRechargePress',res);
             //   onChangeText={(text) => setAgencyCode(text)}
           />
           <TouchableOpacity>
-            <Text style={{}}></Text>
+            <Text style={{}} />
           </TouchableOpacity>
         </View>
       )}
@@ -437,7 +433,7 @@ console.log('onRechargePress',res);
         <TextInput
           placeholder={paramname}
           value={consumerNo}
-          // 
+          //
           onChangeText={text => setconsumerNo(text)}
         />
 
@@ -473,12 +469,13 @@ console.log('onRechargePress',res);
               fontSize: 18,
               alignItems: 'center',
             }}>
-            Proceed{' '}
+            {translate('Proceed')}{' '}
           </Text>
         </View>
       </TouchableOpacity>
 
-      <BottomSheet animationType="none"  
+      <BottomSheet
+        animationType="none"
         isVisible={isOperatorList}
         onBackdropPress={() => {
           setIsOperatorList(false);
@@ -488,19 +485,26 @@ console.log('onRechargePress',res);
             height: SCREEN_HEIGHT / 1.5,
             flex: 1,
             marginBottom: wScale(40),
-          }}></View>
+          }}
+        />
         {showBottomSheetList()}
       </BottomSheet>
 
-      <BottomSheet animationType="none"  
+      <BottomSheet
+        animationType="none"
         isVisible={bottomSheetVisible}
         onBackdropPress={() => setBottomSheetVisible(false)}>
         <View style={{bottom: hScale(10)}}>
           <Card>
-            <Text> Operator: {selectedOpt}</Text>
+            <Text>
+              {' '}
+              {translate('Operator')}: {selectedOpt}
+            </Text>
           </Card>
           <Card>
-            <Text>Due Date: {dueDate}</Text>
+            <Text>
+              {translate('Due Date')}: {dueDate}
+            </Text>
           </Card>
           <Card>
             <Text>
@@ -513,7 +517,9 @@ console.log('onRechargePress',res);
             </Text>
           </Card>
           <Card>
-            <Text>Recharge Amount: {amount}</Text>
+            <Text>
+              {translate('Recharge Amount')}: {amount}
+            </Text>
           </Card>
           <TouchableOpacity
             onPress={() => {

@@ -1,11 +1,10 @@
-import React from "react";
-import { View } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
+import React from 'react';
+import {View} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
 
-const ClosseModalSvg2=({size=wScale(44)})=>{
-const closse=
-`
+const ClosseModalSvg2 = ({size = wScale(44)}) => {
+  const closse = `
 
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
@@ -54,13 +53,12 @@ const closse=
 </g>
 <g>
 </g>
-</svg>`
-return(
+</svg>`;
+  return (
     <View>
-        <SvgXml xml={closse} width={size} height={size}/>
+      <SvgXml xml={closse} width={size} height={size} />
     </View>
-);
-
-}
+  );
+};
 
 export default ClosseModalSvg2;

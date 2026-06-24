@@ -1,53 +1,50 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable comma-dangle */
+/* eslint-disable quotes */
+/* eslint-disable semi */
+/* eslint-disable dot-notation */
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
-  TextInput,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
   Text,
   TouchableOpacity,
   ToastAndroid,
   Alert,
 } from 'react-native';
-import { colors } from '../../utils/styles/theme';
-import { SCREEN_HEIGHT, hScale, wScale } from '../../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
-import { APP_URLS } from '../../utils/network/urls';
+import {SCREEN_HEIGHT, hScale, wScale} from '../../utils/styles/dimensions';
+import {FlashList} from '@shopify/flash-list';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { BottomSheet, Card } from '@rneui/base';
-import { translate } from '../../utils/languageUtils/I18n';
-import { setTSpan } from 'react-native-svg/lib/typescript/lib/extract/extractText';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
+import {BottomSheet} from '@rneui/base';
+import {translate} from '../../utils/languageUtils/I18n';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import ShowLoader from '../../components/ShowLoder';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
 import DynamicButton from '../drawer/button/DynamicButton';
 import RecentHistory from '../../components/RecentHistoryBottomSheet';
-import OperatorBottomSheet from '../../components/OperatorBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
-import { useNavigation } from '@react-navigation/native';
-import ElectricityOperatorBottomSheet from '../../components/ElectricityOperatorBottomSheet';
+import {useNavigation} from '@react-navigation/native';
 import ClosseModalSvg2 from '../drawer/svgimgcomponents/ClosseModal2';
 import RecentText from '../../components/RecentText';
-import { useLocationHook } from '../../hooks/useLocationHook';
+import {useLocationHook} from '../../hooks/useLocationHook';
 
 const EducationFeeScreen = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const color1 = `${colorConfig.secondaryColor}20`;
 
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [insuranceOptList, setInsuranceOptList] = useState([]);
   const [isOperatorList, setIsOperatorList] = useState(false);
   const [selectbool, setSelectbool] = useState(true);
 
-  const [selectedOpt, setselectedOpt] = useState(
-    'Select State & City'
-  );
+  const [selectedOpt, setselectedOpt] = useState('Select State & City');
   const [CustomerID, setCustomerID] = useState('');
   const [amount, setAmount] = useState('');
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
@@ -83,10 +80,10 @@ const EducationFeeScreen = () => {
   const [citylist, setCitylist] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
-  const [agencyCode, setAgencyCode] = useState('')
+  const [agencyCode, setAgencyCode] = useState('');
   useEffect(() => {
     EduStateList('');
   }, []);
@@ -94,7 +91,7 @@ const EducationFeeScreen = () => {
   const GetDist = async id => {
     try {
       const ur = `${APP_URLS.geteduCityByStateID}${id}`;
-      const response = await get({ url: ur });
+      const response = await get({url: ur});
       setCitylist(response['RESULT']);
       console.log(response);
     } catch (error) {
@@ -107,24 +104,21 @@ const EducationFeeScreen = () => {
 
   useEffect(() => {
     recenttransactions();
-
   }, []);
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
+      const response = await get({url: url});
       console.log('-*************************************', response);
 
       setHistorylist(response);
       setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqId(response[0]['Request_ID']);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -133,8 +127,7 @@ const EducationFeeScreen = () => {
 
   const formattedDate = `${year}-${month}-${day}`;
   const handleItemPress = item => {
-
-    console.log('-*-*-*/-/*-*/-*/-/*-/*', item)
+    console.log('-*-*-*/-/*-*/-*/-/*-/*', item);
     GetDist(item['stateid']);
     // setIsOperatorList(false);
     setAccntvisivility(false);
@@ -155,7 +148,7 @@ const EducationFeeScreen = () => {
       //clearState();
     } else {
       const custparam = item.customerparams;
-      console.log('-------*--**--**--', custparam)
+      console.log('-------*--**--**--', custparam);
       setDataType(custparam[0]['dataType']);
       setMaxLength(custparam[0]['maxLength']);
       setMinLength(custparam[0]['minLength']);
@@ -241,7 +234,7 @@ const EducationFeeScreen = () => {
       const res = await get({
         url: url,
       });
-      console.log('GetALLEduInsitutelist',res);
+      console.log('GetALLEduInsitutelist', res);
     } catch (error) {
       console.error(error);
     }
@@ -249,16 +242,13 @@ const EducationFeeScreen = () => {
   const showBottomSheetList = () => {
     return (
       <FlashList
-        style={{ marginBottom: wScale(50), marginHorizontal: wScale(24) }}
+        style={{marginBottom: wScale(50), marginHorizontal: wScale(24)}}
         data={selectbool ? insuranceOptList : citylist}
-
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           return (
-            <View
-            >
+            <View>
               <TouchableOpacity
                 style={[styles.operatorview]}
-
                 // onPress={async () => {
                 //   handleItemPress(item);
                 //   setStateid(item['stateid']);
@@ -268,16 +258,12 @@ const EducationFeeScreen = () => {
 
                   if (selectbool) {
                     handleItemPress(item);
-                    setSelectbool(false)
+                    setSelectbool(false);
                     setStateid(item['stateid']);
-
-
                   } else {
                     if (insuranceOptList.length === 0) {
                       setSelectbool(true);
-                    }
-
-                    else {
+                    } else {
                       setSelectbool(true);
                       // handleItemPress(item);
                       // // setOperatorcode(item['OPtCode'])
@@ -285,10 +271,9 @@ const EducationFeeScreen = () => {
                       setIsOperatorList(false);
                       EduInstitute(stateid, item['CityID']);
                       setCity(item['CityName']);
-
                     }
                   }
-                }} >
+                }}>
                 <Text style={[styles.operatornametext]}>
                   {selectbool ? item['statelist'] : item['CityName']}
                 </Text>
@@ -300,13 +285,12 @@ const EducationFeeScreen = () => {
       />
     );
   };
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId ,Loc_Data} = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
   const onRechargePress = useCallback(async () => {
-    ;
     setShowLoader(true);
 
     const mobileNetwork = await getNetworkCarrier();
@@ -316,7 +300,8 @@ const EducationFeeScreen = () => {
       consumerNo,
       optcode,
       amount,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data['latitude'],
+      Loc_Data['longitude'],
 
       'city',
       'address',
@@ -353,48 +338,52 @@ const EducationFeeScreen = () => {
       });
       console.log(res);
       console.log(status);
-      if(res.status ==='False'){
-        alert(res.message);
+      if (res.status === 'False') {
+        Alert.alert(res.message);
         setShowLoader(false);
 
-        return
+        return;
       }
       status = res.Response;
       Message = res.Message;
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     setconsumerNo('');
-    setselectedOpt('Select State & City');
-    setCity('')
+    setselectedOpt(translate('Select State & City'));
+    setCity('');
     setAmount('');
-    setIsinfo(false)
+    setIsinfo(false);
     setShowLoader(false);
     navigation.navigate('Rechargedetails', {
-      mobileNumber: consumerNo ?? '',    // Default to an empty string if null or undefined
-      Amount: amount ?? 0,               // Default to 0 if null or undefined
-      operator: selectedOpt ?? 'N/A',    // Default to 'N/A' if null or undefined
-      status: status ?? 'Unknown',      // Default to 'Unknown' if null or undefined
-      reqId: reqId ?? '',               // Default to an empty string if null or undefined
-      reqTime: reqTime ?? new Date().toISOString(),  // Default to current time if null or undefined
-      Message: Message ?? 'No message available'   // Default to 'No message available' if null or undefined
+      mobileNumber: consumerNo ?? '', // Default to an empty string if null or undefined
+      Amount: amount ?? 0, // Default to 0 if null or undefined
+      operator: selectedOpt ?? 'N/A', // Default to 'N/A' if null or undefined
+      status: status ?? 'Unknown', // Default to 'Unknown' if null or undefined
+      reqId: reqId ?? '', // Default to an empty string if null or undefined
+      reqTime: reqTime ?? new Date().toISOString(), // Default to current time if null or undefined
+      Message: Message ?? translate('No message available'), // Default to 'No message available' if null or undefined
     });
-    
-
   }, [
-    amount,
-    getMobileIp,
     getNetworkCarrier,
-    latitude,
-    longitude,
+    getMobileIp,
+    userId,
     consumerNo,
     optcode,
+    amount,
+    Loc_Data,
+    agencyCode,
+    accnumhint2,
+    navigation,
+    selectedOpt,
+    reqId,
+    reqTime,
     post,
-    userId,
+    recenttransactions,
   ]);
   const [stateid, setStateid] = useState();
   async function billInfo() {
@@ -415,23 +404,22 @@ const EducationFeeScreen = () => {
       };
 
       const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=&ProcessingCycle=''&acno=''&lt=""&ViewBill="Y"`;
-      const res = await get({ url: url });
+      const res = await get({url: url});
       console.log(data.Operator);
       console.log(url);
       if (res['RESULT'] === 0) {
-        const addinfo = res['ADDINFO']
+        const addinfo = res['ADDINFO'];
         const billinfoo = addinfo['BillInfo'];
-        setDueDate(billinfoo["billDueDate"]);
-        setAmount(billinfoo["billAmount"]);
-        setCustomerName(billinfoo["customerName"]);
-        setCustBal(billinfoo["balance"]);
-        setAmount(billinfoo["billAmount"]);
+        setDueDate(billinfoo['billDueDate']);
+        setAmount(billinfoo['billAmount']);
+        setCustomerName(billinfoo['customerName']);
+        setCustBal(billinfoo['balance']);
+        setAmount(billinfoo['billAmount']);
         //setstatus(res["customerStatus"])
       } else {
         // Alert.alert(res['ADDINFO'], res['Message'], [{ text: 'OK', onPress: () => { } }]);
       }
-
-    } catch (error) { }
+    } catch (error) {}
   }
   async function ViewbillInfoStatus() {
     console.log(optcode);
@@ -445,7 +433,7 @@ const EducationFeeScreen = () => {
         Operatorcode: optcode,
       };
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
-      const res = await post({ url: url, data, config: config });
+      const res = await post({url: url, data, config: config});
 
       console.log(':', url);
       const billSts = res['RESULT'];
@@ -455,26 +443,26 @@ const EducationFeeScreen = () => {
         setIsinfo(false);
       }
       console.log(':', res);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const [city, setCity] = useState('Select City');
   const validateFields = () => {
-    if (paramname == 'Consumer Number') {
+    if (paramname === 'Consumer Number') {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (selectedOpt === 'Select Your Operator') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (!amount || amount === 'Enter Amount') {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -484,141 +472,162 @@ const EducationFeeScreen = () => {
   };
 
   // Title text ko memoize karein
-const headerTitle = useMemo(() => {
-  return selectbool ? "Select Your State" : "Select Your City";
-}, [selectbool]);
+  const headerTitle = useMemo(() => {
+    return selectbool
+      ? translate('Select Your State')
+      : translate('Select Your City');
+  }, [selectbool]);
 
-// Close button ka logic memoize karein taaki har render pe calculation na ho
-const renderCloseButton = useMemo(() => {
-  // Case 1: Agar State selection hai, toh hamesha dikhao
-  if (selectbool) {
-    return (
-      <TouchableOpacity
-        onPress={() => setIsOperatorList(false)}
-        activeOpacity={0.7}
-      >
-        <ClosseModalSvg2 />
-      </TouchableOpacity>
-    );
-  }
+  // Close button ka logic memoize karein taaki har render pe calculation na ho
+  const renderCloseButton = useMemo(() => {
+    // Case 1: Agar State selection hai, toh hamesha dikhao
+    if (selectbool) {
+      return (
+        <TouchableOpacity
+          onPress={() => setIsOperatorList(false)}
+          activeOpacity={0.7}>
+          <ClosseModalSvg2 />
+        </TouchableOpacity>
+      );
+    }
 
-  // Case 2: Agar City selection hai aur list khali hai
-  if (!selectbool && insuranceOptList.length === 0) {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          setIsOperatorList(false);
-          setSelectbool(true);
-        }}
-        activeOpacity={0.7}
-      >
-        <ClosseModalSvg2 />
-      </TouchableOpacity>
-    );
-  }
+    // Case 2: Agar City selection hai aur list khali hai
+    if (!selectbool && insuranceOptList.length === 0) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setIsOperatorList(false);
+            setSelectbool(true);
+          }}
+          activeOpacity={0.7}>
+          <ClosseModalSvg2 />
+        </TouchableOpacity>
+      );
+    }
 
-  return null;
-}, [selectbool, insuranceOptList.length]); // List ki length change hone par hi update hoga
+    return null;
+  }, [selectbool, insuranceOptList.length]); // List ki length change hone par hi update hoga
   return (
     <View style={styles.main}>
-      <AppBarSecond title={'Education Screen'} actionButton={undefined} onActionPress={undefined} onPressBack={undefined} />
+      <AppBarSecond
+        title={'Education Screen'}
+        actionButton={undefined}
+        onActionPress={undefined}
+        onPressBack={undefined}
+      />
 
       <View style={styles.container}>
-
-        {showLoader && (
-          <ShowLoader />
-        )}
+        {showLoader && <ShowLoader />}
         <TouchableOpacity onPress={() => setIsOperatorList(true)}>
-          <FlotingInput label={selectedOpt} editable={false} inputstyle={undefined} onChangeTextCallback={undefined}
+          <FlotingInput
+            label={selectedOpt}
+            editable={false}
+            inputstyle={undefined}
+            onChangeTextCallback={undefined}
             labelinputstyle={[
-              selectedOpt === "Select State & City"
+              selectedOpt === translate('Select State & City')
                 ? null
                 : styles.labelinputstyle,
             ]}
           />
-          {selectedOpt === "Select State & City"
-            ? null : (
-              <Text style={[styles.circletext, { color: colorConfig.primaryColor }]}>
-                {city}
-              </Text>
-
-            )}
+          {selectedOpt === translate('Select State & City') ? null : (
+            <Text
+              style={[styles.circletext, {color: colorConfig.primaryColor}]}>
+              {city}
+            </Text>
+          )}
           <View style={[styles.righticon2]}>
-
             <OnelineDropdownSvg />
           </View>
         </TouchableOpacity>
 
         {accntvisivility && (
           <View>
-            <FlotingInput label={accnumhint} onChangeTextCallback={(text) => setAgencyCode(text)} inputstyle={undefined}
+            <FlotingInput
+              label={accnumhint}
+              onChangeTextCallback={text => setAgencyCode(text)}
+              inputstyle={undefined}
               labelinputstyle={undefined}
-              value={agencyCode}  />
+              value={agencyCode}
+            />
             <TouchableOpacity>
               <Text style={{}}></Text>
             </TouchableOpacity>
           </View>
         )}
         {accntvisivility2 && (
-          <View >
-            <FlotingInput label={accnumhint2} onChangeTextCallback={(text) => setAccnumhint2(text)}
-              value={accnumhint2}  />
+          <View>
+            <FlotingInput
+              label={accnumhint2}
+              onChangeTextCallback={text => setAccnumhint2(text)}
+              value={accnumhint2}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
+            />
             <View style={[styles.righticon2]}>
               <TouchableOpacity>
-
-                <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
+                <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
               </TouchableOpacity>
-
             </View>
-
           </View>
         )}
         <View>
-          <FlotingInput label={paramname} value={consumerNo} 
-            
+          <FlotingInput
+            label={paramname}
+            value={consumerNo}
             onChangeTextCallback={text => {
-              setconsumerNo(text); setconsumerNo(text.replace(/\D/g, ""));
+              setconsumerNo(text);
+              setconsumerNo(text.replace(/\D/g, ''));
               if (text.length >= 5) {
-                setIsinfo(true)
+                setIsinfo(true);
               } else {
-                setIsinfo(false)
+                setIsinfo(false);
               }
             }}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
-          <View style={[styles.righticon2,]}>
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
-              
                 onPress={() => {
                   billInfo();
                   setBottomSheetVisible(true);
-                }}              >
-
-                <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
-
+                }}>
+                <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
               </TouchableOpacity>
             )}
           </View>
         </View>
-        <FlotingInput label={'Enter Amount'}
-             maxLength={5}
-              value={amount} onChangeTextCallback={text => setAmount(text)}
-          keyboardType="number-pad" />
-        <DynamicButton title={'Next'} onPress={() => {
-          validateFields();
-        }} />
-        <View >
+        <FlotingInput
+          label={translate('Enter Amount')}
+          maxLength={5}
+          value={amount}
+          onChangeTextCallback={text => setAmount(text)}
+          keyboardType="number-pad"
+          inputstyle={undefined}
+          labelinputstyle={undefined}
+        />
+        <DynamicButton
+          title={'Next'}
+          onPress={() => {
+            validateFields();
+          }}
+        />
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
-            onBackdropPress={() => setIsrecent(false)} />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+            onBackdropPress={() => setIsrecent(false)}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
-           <RecentText/>
+            <RecentText />
           </TouchableOpacity>
         </View>
 
@@ -628,21 +637,29 @@ const renderCloseButton = useMemo(() => {
           onBackdropPress={() => setBottomSheetVisible(false)}
           status={Status}
           details={[
-            { label: 'User Name', value2: CustomerName === '' ? 'N/A' : CustomerName },
-            { label: 'Customer ID', value: consumerNo },
-            { label: 'Due Date', value2: dueDate === '' ? 'N/A' : dueDate },
-            { label: 'Operator Name', value2: selectedOpt },
-            { label: 'Customer Status', value2: Status === '' ? 'N/A' : Status },
+            {
+              label: translate('User Name'),
+              value2: CustomerName === '' ? translate('N/A') : CustomerName,
+            },
+            {label: translate('Customer ID'), value: consumerNo},
+            {
+              label: translate('Due Date'),
+              value2: dueDate === '' ? translate('N/A') : dueDate,
+            },
+            {label: translate('Operator Name'), value2: selectedOpt},
+            {
+              label: translate('Customer Status'),
+              value2: Status === '' ? translate('N/A') : Status,
+            },
             // { label: 'BillAmount', value2: billAmount },
             // { label: 'Balance', value2: custBal === 0 ? 'N/A' : custBal },
-
           ]}
-          lastlabel={'Transaction Amount'}
+          lastlabel={translate('Transaction Amount')}
           lastvalue={amount}
           onRechargedetails={() => {
             if (amount === '0' || amount === '') {
               ToastAndroid.showWithGravity(
-                `Please Enter Amount`,
+                translate(`Please Enter Amount`),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
@@ -651,28 +668,25 @@ const renderCloseButton = useMemo(() => {
               setBottomSheetVisible(false);
               setProceedSheetVisible(true);
             }
-          }
-          }
+          }}
         />
-      <BottomSheet animationType="none"   isVisible={isOperatorList}>
-  <View style={styles.bottomsheetview}>
-    <View style={[styles.StateTitle, { backgroundColor: color1 }]}>
-      <View style={styles.titleview}>
-        <View>
-          <Text style={styles.stateTitletext}>
-            {headerTitle}
-          </Text>
-        </View>
-      </View>
-      
-      {/* Memoized Close Button */}
-      {renderCloseButton}
-    </View>
+        <BottomSheet animationType="none" isVisible={isOperatorList}>
+          <View style={styles.bottomsheetview}>
+            <View style={[styles.StateTitle, {backgroundColor: color1}]}>
+              <View style={styles.titleview}>
+                <View>
+                  <Text style={styles.stateTitletext}>{headerTitle}</Text>
+                </View>
+              </View>
 
-    {/* List Section */}
-    {showBottomSheetList()}
-  </View>
-</BottomSheet>
+              {/* Memoized Close Button */}
+              {renderCloseButton}
+            </View>
+
+            {/* List Section */}
+            {showBottomSheetList()}
+          </View>
+        </BottomSheet>
       </View>
     </View>
   );
@@ -680,21 +694,21 @@ const renderCloseButton = useMemo(() => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: wScale(30),
-    flex: 1
+    flex: 1,
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -707,11 +721,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',
@@ -722,28 +736,28 @@ const styles = StyleSheet.create({
     marginTop: hScale(-7),
   },
   circletext: {
-    position: "absolute",
+    position: 'absolute',
     top: hScale(30),
     paddingLeft: wScale(15),
     fontSize: wScale(12),
   },
   operatorview: {
-    flexDirection: "row-reverse",
-    alignItems: "center",
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
     paddingHorizontal: wScale(10),
   },
   operatornametext: {
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
     fontSize: wScale(20),
-    color: "#000",
+    color: '#000',
     flex: 1,
-    borderBottomColor: "#000",
+    borderBottomColor: '#000',
     borderBottomWidth: wScale(0.5),
-    alignSelf: "center",
+    alignSelf: 'center',
     paddingVertical: hScale(30),
   },
   bottomsheetview: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     height: SCREEN_HEIGHT / 1.3,
 
     borderTopLeftRadius: 15,
@@ -751,25 +765,25 @@ const styles = StyleSheet.create({
   },
   titleview: {
     flex: 1,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   StateTitle: {
     paddingVertical: hScale(10),
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
     paddingHorizontal: wScale(10),
     marginBottom: hScale(10),
   },
   stateTitletext: {
     fontSize: wScale(22),
-    color: "#000",
-    fontWeight: "bold",
-    textTransform: "uppercase",
+    color: '#000',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
 });
 export default EducationFeeScreen;

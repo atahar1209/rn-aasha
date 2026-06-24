@@ -1,56 +1,47 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   ActivityIndicator,
-  TextInput,
-  Button,
   TouchableOpacity,
   ScrollView,
   Alert,
   ToastAndroid,
-  Linking,
-} from "react-native";
-import { APP_URLS } from "../../utils/network/urls";
-import useAxiosHook from "../../utils/network/AxiosClient";
-
-import FlotingInput from "../drawer/securityPages/FlotingInput";
-import { colors, FontFamily, FontSize } from "../../utils/styles/theme";
-import { hScale, wScale } from "../../utils/styles/dimensions";
-import DynamicButton from "../drawer/button/DynamicButton";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { decryptData, encrypt } from "../../utils/encryptionUtils";
-import AppBarSecond from "../drawer/headerAppbar/AppBarSecond";
-import WalletSvg from "../drawer/svgimgcomponents/Walletsvg";
-import Walletansvg from "../drawer/svgimgcomponents/Walletansvg";
-import OnelineDropdownSvg from "../drawer/svgimgcomponents/simpledropdown";
-import { useSelector } from "react-redux";
-import { RootState } from "../../reduxUtils/store";
-import { fonts } from "@rneui/base";
+} from 'react-native';
+import {APP_URLS} from '../../utils/network/urls';
+import useAxiosHook from '../../utils/network/AxiosClient';
+import FlotingInput from '../drawer/securityPages/FlotingInput';
+import {colors, FontFamily, FontSize} from '../../utils/styles/theme';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import DynamicButton from '../drawer/button/DynamicButton';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {decryptData, encrypt} from '../../utils/encryptionUtils';
+import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
+import WalletSvg from '../drawer/svgimgcomponents/Walletsvg';
+import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
 import {
   getDeviceInfo,
   captureFinger,
-} from "react-native-rdservice-fingerprintscanner";
-import { FlashList } from "@shopify/flash-list";
-import AmountDropdown from "./walletnewdropdown";
-import uuid from "react-native-uuid";
-
-import { useDeviceInfoHook } from "../../utils/hooks/useDeviceInfoHook";
-import { translate } from "../../utils/languageUtils/I18n";
+} from 'react-native-rdservice-fingerprintscanner';
+import {FlashList} from '@shopify/flash-list';
+import AmountDropdown from './walletnewdropdown';
+import uuid from 'react-native-uuid';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {translate} from '../../utils/languageUtils/I18n';
 const WalletScreen = () => {
-  const { colorConfig, IsDealer, Loc_Data } = useSelector(
+  const {colorConfig, IsDealer, Loc_Data} = useSelector(
     (state: RootState) => state.userInfo,
   );
   const color1 = `${colorConfig.secondaryColor}20`;
   const [balanceInfo, setBalanceInfo] = useState();
-  const [amount, setAmount] = useState("");
-  const [Mode, setMode] = useState("");
+  const [amount, setAmount] = useState('');
+  const [Mode, setMode] = useState('');
   const [editMode, seteditMode] = useState(false);
-
-  const { get } = useAxiosHook();
-  const { post } = useAxiosHook();
+  const {get} = useAxiosHook();
+  const {post} = useAxiosHook();
   const [charges, setCharges] = useState([]);
   const [isload, setisload] = useState(false);
   const [upich, setupichs] = useState(null);
@@ -58,21 +49,19 @@ const WalletScreen = () => {
   const [height, setHeight] = useState(false);
   const navigation = useNavigation<any>();
   const [decryptedWalletCharges, setDecryptedWalletCharges] = useState(null);
-
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-
-  const { latitude, longitude } = Loc_Data;
+  const {latitude, longitude} = Loc_Data;
   console.warn(latitude, longitude);
   const handlePress = () => {
     setHeight(!height);
   };
   const getData2 = useCallback(async () => {
     try {
-      const userInfo = await get({ url: APP_URLS.getUserInfo });
+      const userInfo = await get({url: APP_URLS.getUserInfo});
       const data = userInfo.data;
       if (!IsDealer) {
-        const response = await get({ url: APP_URLS.balanceInfo });
+        const response = await get({url: APP_URLS.balanceInfo});
         setBalanceInfo(response.data[0]);
       } else {
         const decryptedData = {
@@ -81,9 +70,7 @@ const WalletScreen = () => {
           remainbal: decryptData(data.kkkk, data.vvvv, data.remainbal),
           frmanems: decryptData(data.kkkk, data.vvvv, data.frmanems),
         };
-
-        console.log("Decrypted Data:", decryptedData);
-
+        console.log('Decrypted Data:', decryptedData);
         setBalanceInfo(decryptedData);
       }
 
@@ -93,37 +80,37 @@ const WalletScreen = () => {
         data.adminfarmname,
       );
     } catch (error) {
-      if (error.message === "Network Error") {
+      if (error.message === 'Network Error') {
       } else {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
         Alert.alert(
-          translate("Error"),
-          translate("Something went wrong. Please try again."),
+          translate('Error'),
+          translate('Something went wrong. Please try again.'),
         );
       }
     }
-  }, [get]);
+  }, [IsDealer, get]);
 
   useFocusEffect(
     useCallback(() => {
-      setAmount("");
-      setMode("");
+      setAmount('');
+      setMode('');
     }, []),
   );
 
   const gatewaytype = useCallback(
-    async (type) => {
-      console.log("type", type);
+    async type => {
+      console.log('type', type);
       //  setIsLoading(true)
 
       try {
-        const data = await post({ url: `${APP_URLS.Chkpayu}type=${type}` });
+        const data = await post({url: `${APP_URLS.Chkpayu}type=${type}`});
         //setPayUParams(data);
         console.log(data);
         console.log(`${APP_URLS.Chkpayu}type=${type}`);
-        var resp = data["Response"];
-        var msz = data["Message"];
-        if (resp == "Success") {
+        var resp = data.Response;
+        var msz = data.Message;
+        if (resp == 'Success') {
           //setMerchantkey(data["Merchantkey"]);
           //setMerchantid(data["Merchantid"]);
           //setMarsalt(data["MerchantSalt"]);
@@ -155,23 +142,23 @@ const WalletScreen = () => {
           // }
 
           ToastAndroid.showWithGravity(
-            msz || ` ${type} status is  OK.`,
+            msz || ` ${type} ${translate('status is  OK.')}`,
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
           );
-          Alert.alert(msz ? ` ${type} status is  OK.` : "");
+          Alert.alert(msz ? `${type} ${translate('status is OK.')}` : '');
           seteditMode(true);
         } else {
           Alert.alert(
-            translate("Warning"),
+            translate('Warning'),
             ` ${msz} +!!!`,
             [
               {
-                text: translate("OK"),
-                onPress: () => console.log("OK Pressed"),
+                text: translate('OK'),
+                onPress: () => console.log('OK Pressed'),
               },
             ],
-            { cancelable: false },
+            {cancelable: false},
           );
           seteditMode(false);
         }
@@ -201,11 +188,11 @@ const WalletScreen = () => {
           latitude || 0, // Latitude
           longitude || 0, // Longitude
           model, // Device Model (again)
-          "city", // City (example, should be dynamic if needed)
-          "postcode", // Postal Code (example, should be dynamic if needed)
+          'city', // City (example, should be dynamic if needed)
+          'postcode', // Postal Code (example, should be dynamic if needed)
           mobileNetwork, // Mobile Network Carrier
           ip, // IP Address
-          "Address", //
+          'Address', //
         ]);
 
         const [
@@ -224,50 +211,73 @@ const WalletScreen = () => {
         const key = encryption.keyEncode;
         const vv = encryption.ivEncode;
 
-        const url = `${APP_URLS.sendgatewayReq}txtamt=${encodeURIComponent(amount)}&txnid=${encodeURIComponent(id)}&ddltypes=${encodeURIComponent(typee)}&Devicetoken=${encodeURIComponent(ip2)}&Latitude=${encodeURIComponent(lat)}&Longitude=${encodeURIComponent(long)}&ModelNo=${encodeURIComponent(Model2)}&City=${encodeURIComponent(city)}&PostalCode=${encodeURIComponent(postcode)}&InternetTYPE=${encodeURIComponent(mobileNetwork2)}&IP=${encodeURIComponent(ip2)}&Addresss=${encodeURIComponent(address)}&value1=${encodeURIComponent(key)}&value2=${encodeURIComponent(vv)}`;
+        const url = `${APP_URLS.sendgatewayReq}txtamt=${encodeURIComponent(
+          amount,
+        )}&txnid=${encodeURIComponent(id)}&ddltypes=${encodeURIComponent(
+          typee,
+        )}&Devicetoken=${encodeURIComponent(ip2)}&Latitude=${encodeURIComponent(
+          lat,
+        )}&Longitude=${encodeURIComponent(long)}&ModelNo=${encodeURIComponent(
+          Model2,
+        )}&City=${encodeURIComponent(city)}&PostalCode=${encodeURIComponent(
+          postcode,
+        )}&InternetTYPE=${encodeURIComponent(
+          mobileNetwork2,
+        )}&IP=${encodeURIComponent(ip2)}&Addresss=${encodeURIComponent(
+          address,
+        )}&value1=${encodeURIComponent(key)}&value2=${encodeURIComponent(vv)}`;
 
-        console.log("Request URL:", url);
+        console.log('Request URL:', url);
 
         // API Call to Fetch Data
-        const data = await post({ url });
+        const data = await post({url});
 
-        console.log("API Response:", data);
+        console.log('API Response:', data);
 
-        const resp = data["Status"];
+        const resp = data.Status;
 
-        const payUParam = await Object.assign({}, data, data1, { amount });
+        const payUParam = await Object.assign({}, data, data1, {amount});
         // savePayUParam(payUParam);
-        if (resp === "Success") {
-          console.log("Navigating with payUParam:", payUParam);
-          navigation.navigate("SeamlessScreen", { payUParam });
+        if (resp === 'Success') {
+          console.log('Navigating with payUParam:', payUParam);
+          navigation.navigate('SeamlessScreen', {payUParam});
         } else {
-          const errorMsg = data["message"] || data["txnid"];
+          const errorMsg = data.message || data.txnid;
           Alert.alert(
-            translate("Payment Failed"),
+            translate('Payment Failed'),
             translate(`Transaction failed. Reason: ${errorMsg}`),
             [
               {
-                text: translate("OK"),
-                onPress: () => console.log("OK Pressed"),
+                text: translate('OK'),
+                onPress: () => console.log('OK Pressed'),
               },
             ],
-            { cancelable: false },
+            {cancelable: false},
           );
         }
         // setIsLoading(false)
       } catch (error) {
         // Global error handling
-        console.error("Error in Apitransitionsencrypt:", error.message);
+        console.error('Error in Apitransitionsencrypt:', error.message);
         Alert.alert(
-          translate("Error"),
+          translate('Error'),
           translate(`Something went wrong: ${error.message}`),
-          [{ text: translate("OK"), onPress: () => console.log("OK Pressed") }],
-          { cancelable: false },
+          [{text: translate('OK'), onPress: () => console.log('OK Pressed')}],
+          {cancelable: false},
         );
       }
       // setIsLoading(false)
     },
-    [amount, navigation, latitude, longitude],
+    [
+      getNetworkCarrier,
+      getMobileIp,
+      getMobileDeviceId,
+      latitude,
+      longitude,
+      amount,
+      post,
+      navigation,
+    ],
   );
 
   //  const Qrcodestatus = useCallback(async (amnt) => {
@@ -310,40 +320,43 @@ const WalletScreen = () => {
   //       );
   //   };
 
-  const Qrcodestatus = useCallback(async (amnt) => {
-    try {
-      const response = await post({ url: `${APP_URLS.UPIQR}?amount=${amnt}` });
-      console.log(
-        "=============================================================================",
-      );
-      console.log(response);
+  const Qrcodestatus = useCallback(
+    async amnt => {
+      try {
+        const response = await post({url: `${APP_URLS.UPIQR}?amount=${amnt}`});
+        console.log(
+          '=============================================================================',
+        );
+        console.log(response);
 
-      // 🟢 SUCCESS CASE
-      if (response?.status === true && response?.qrstatus === "OK") {
-        seteditMode(true);
-        Alert.alert(response?.msg || translate("QR is Valid"));
-        return;
+        // 🟢 SUCCESS CASE
+        if (response?.status === true && response?.qrstatus === 'OK') {
+          seteditMode(true);
+          Alert.alert(response?.msg || translate('QR is Valid'));
+          return;
+        }
+
+        // 🔴 FAIL CASE
+        seteditMode(false);
+        Alert.alert(
+          response?.msg || translate('QR status is not OK, try again.'),
+        );
+        console.log('QR status is NOT OK.');
+      } catch (error) {
+        console.error('Error fetching QR status:', error);
+        seteditMode(false);
+        Alert.alert(translate('Something went wrong!'));
       }
-
-      // 🔴 FAIL CASE
-      seteditMode(false);
-      Alert.alert(
-        response?.msg || translate("QR status is not OK, try again."),
-      );
-      console.log("QR status is NOT OK.");
-    } catch (error) {
-      console.error("Error fetching QR status:", error);
-      seteditMode(false);
-      Alert.alert(translate("Something went wrong!"));
-    }
-  }, []);
+    },
+    [post],
+  );
 
   const getData = useCallback(async () => {
     try {
       // const userInfo = await get({ url: APP_URLS.getUserInfo });
 
       const wallet = await get({
-        url: "Common/api/data/Wallet_ALL_Charges_Show",
+        url: 'Common/api/data/Wallet_ALL_Charges_Show',
       });
       const walletCharges = JSON.parse(
         decryptData(wallet.kkkk, wallet.vvvv, wallet.WalletCharges),
@@ -360,52 +373,52 @@ const WalletScreen = () => {
       // }
 
       if (!IsDealer) {
-        const response = await get({ url: APP_URLS.balanceInfo });
+        const response = await get({url: APP_URLS.balanceInfo});
         setBalanceInfo(response.data[0]);
         console.log(response.data);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   }, [get]);
   const onpressbtn = () => {
     if (amount.length === 0) {
       ToastAndroid.show(
-        translate("Please enter an amount"),
+        translate('Please enter an amount'),
         ToastAndroid.SHORT,
       ); // Show a toast message
     } else {
-      navigation.navigate("AddMoneyOptions", {
+      navigation.navigate('AddMoneyOptions', {
         amount,
         jsonData: charges,
-        from: "PrePay",
+        from: 'PrePay',
       });
-      setAmount("");
+      setAmount('');
     }
   };
 
   const getCharges = useCallback(
-    async (amount) => {
+    async amount => {
       try {
-        const userInfo = await get({ url: `${APP_URLS.addmoneyChg}${amount}` });
+        const userInfo = await get({url: `${APP_URLS.addmoneyChg}${amount}`});
         setCharges(Object.entries(userInfo.WalletChargesenc));
         console.log(userInfo);
-        console.log(userInfo.WalletChargesenc, "**/*/*/");
+        console.log(userInfo.WalletChargesenc, '**/*/*/');
         setisload(false);
       } catch (error) {
-        console.error("Error fetching charges:", error);
+        console.error('Error fetching charges:', error);
       }
     },
-    [get, amount],
+    [get],
   );
 
   const upiCharges = useCallback(async () => {
     try {
-      const userInfo = await get({ url: `${APP_URLS.upicharges}` });
+      const userInfo = await get({url: `${APP_URLS.upicharges}`});
       setupichs(userInfo);
-      console.log("upichargesssss", userInfo);
+      console.log('upichargesssss', userInfo);
     } catch (error) {
-      console.error("Error fetching charges--:", error);
+      console.error('Error fetching charges--:', error);
     }
   }, [get]);
   useEffect(() => {
@@ -416,26 +429,26 @@ const WalletScreen = () => {
     getData();
   }, []);
 
-  const handleModeChange = (mode) => {
+  const handleModeChange = mode => {
     setTexterror(false);
 
-    console.log("Selected Mode:", mode);
+    console.log('Selected Mode:', mode);
 
-    if (mode === "UPI") {
-      console.log("gjfjgfjg");
+    if (mode === 'UPI') {
+      console.log('gjfjgfjg');
 
       Qrcodestatus(amount);
       console.log(amount);
-    } else if (mode === "Manual Request") {
+    } else if (mode === translate('Manual Request')) {
       //WalletStatus(amount);
-    } else if (mode === "Net Banking") {
-      gatewaytype("NB");
-    } else if (mode === "Debit Card") {
-      gatewaytype("DC");
-    } else if (mode === "Credit Card") {
-      gatewaytype("CC");
+    } else if (mode === translate('Net Banking')) {
+      gatewaytype('NB');
+    } else if (mode === translate('Debit Card')) {
+      gatewaytype('DC');
+    } else if (mode === translate('Credit Card')) {
+      gatewaytype('CC');
     } else {
-      console.log("Unknown Mode Selected");
+      console.log('Unknown Mode Selected');
     }
   };
 
@@ -443,64 +456,64 @@ const WalletScreen = () => {
     try {
       const d = JSON.stringify(getDeviceInfo());
 
-      Alert.alert(translate("Device Info"), d);
+      Alert.alert(translate('Device Info'), d);
 
       console.log(d);
     } catch (error) {
-      console.error("Error fetching device info:", error);
+      console.error('Error fetching device info:', error);
 
       // त्रुटि संदेश को अलर्ट में दिखाएं
       Alert.alert(
-        translate("Error"),
-        translate("Failed to fetch device information."),
+        translate('Error'),
+        translate('Failed to fetch device information.'),
       );
     }
   }, []);
   const amountOptions = [
-    "UPI",
-    "Credit Card",
-    "Debit Card",
-    "Net Banking",
-    "Manual Request",
+    'UPI',
+    'Credit Card',
+    'Debit Card',
+    'Net Banking',
+    'Manual Request',
   ];
 
   const chargeData = decryptedWalletCharges
     ? [
         {
-          title: translate("Self UPI"),
+          title: translate('Self UPI'),
           value: `${decryptedWalletCharges.data.UPI}%`,
         },
         {
-          title: translate("UPI Charge in ₹"),
+          title: translate('UPI Charge in ₹'),
           value: `₹ ${decryptedWalletCharges.data.UPI}`,
         },
         {
-          title: translate("Credit Card"),
+          title: translate('Credit Card'),
           value: `${decryptedWalletCharges.data.creditcard}%`,
         },
         {
-          title: translate("Debit Up to 2000"),
+          title: translate('Debit Up to 2000'),
           value: `${decryptedWalletCharges.data.debitupto2000}%`,
         },
         {
-          title: translate("Debit Above 2000"),
+          title: translate('Debit Above 2000'),
           value: `${decryptedWalletCharges.data.debitabove2000}%`,
         },
-        { title: translate("Rupay Debit Card"), value: "Free" },
+        {title: translate('Rupay Debit Card'), value: 'Free'},
         {
-          title: translate("Net Banking (HDFC/ICIC)"),
+          title: translate('Net Banking (HDFC/ICIC)'),
           value: `${decryptedWalletCharges.data.netbanking}%`,
         },
         {
-          title: translate("Net Banking (AXIS/SBI/KOTAK)"),
+          title: translate('Net Banking (AXIS/SBI/KOTAK)'),
           value: `${decryptedWalletCharges.data.axis}%`,
         },
         {
-          title: translate("Net Banking (Others Bank)"),
+          title: translate('Net Banking (Others Bank)'),
           value: `${decryptedWalletCharges.data.others}%`,
         },
         {
-          title: translate("Wallet"),
+          title: translate('Wallet'),
           value: `${decryptedWalletCharges.data.wallet}%`,
         },
       ]
@@ -508,24 +521,23 @@ const WalletScreen = () => {
 
   return (
     <View style={styles.main}>
-      <AppBarSecond title={""} />
-      <View style={[styles.headerview, { backgroundColor: color1 }]}>
+      <AppBarSecond title={''} />
+      <View style={[styles.headerview, {backgroundColor: color1}]}>
         <View style={styles.headertop}>
           <View style={styles.imgview}>
             <WalletSvg size={wScale(30)} />
           </View>
-          <View style={{ paddingTop: 8, flex: 1 }}>
+          <View style={{paddingTop: 8, flex: 1}}>
             <View style={styles.headertop}>
               <Text style={styles.balanceValue}>
-                {translate("Wallet Balance")}
+                {translate('Wallet Balance')}
               </Text>
               <TouchableOpacity
                 style={[
                   styles.dropbtn,
-                  height ? { transform: [{ rotate: "180deg" }] } : null,
+                  height ? {transform: [{rotate: '180deg'}]} : null,
                 ]}
-                onPress={() => handlePress()}
-              >
+                onPress={() => handlePress()}>
                 <OnelineDropdownSvg />
               </TouchableOpacity>
               <Text style={styles.total}>
@@ -536,14 +548,16 @@ const WalletScreen = () => {
               <View>
                 <View style={styles.balanceCard}>
                   <Text style={styles.balanceTitle}>
-                    {translate("Pos Balance")}
+                    {translate('Pos Balance')}
                   </Text>
                   <Text style={styles.balanceValue}>
                     ₹{balanceInfo?.posremain}
                   </Text>
                 </View>
                 <View style={styles.balanceCard}>
-                  <Text style={styles.balanceTitle}>{"Main Wallet"}</Text>
+                  <Text style={styles.balanceTitle}>
+                    {translate('Main Wallet')}
+                  </Text>
                   <Text style={styles.balanceValue}>
                     ₹{balanceInfo?.remainbal}
                   </Text>
@@ -560,7 +574,7 @@ const WalletScreen = () => {
             label=""
             value={Mode}
             options={amountOptions}
-            onSelect={(val) => {
+            onSelect={val => {
               setMode(val);
               handleModeChange(val);
             }}
@@ -569,15 +583,15 @@ const WalletScreen = () => {
           <FlotingInput
             keyboardType="number-pad"
             maxLength={6}
-            label={"Enter Amount"}
+            label={translate('Enter Amount')}
             value={amount}
             editable={editMode}
             // disable={Mode==="Mode Of Payment" ? true : false}
-            onChangeTextCallback={(text) => {
+            onChangeTextCallback={text => {
               setAmount(String(text));
               setTexterror(true);
 
-              if (text !== "") {
+              if (text !== '') {
                 getCharges(text);
               }
               if (amount.length === 0) {
@@ -587,16 +601,18 @@ const WalletScreen = () => {
               }
             }}
             autoFocus={texterror}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
 
           {texterror ? (
             <Text style={styles.errortext}>
-              {translate("key_pleaseent_69")}
+              {translate('key_pleaseent_69')}
             </Text>
           ) : null}
           <View>
             <DynamicButton
-              styleoveride={{ marginTop: hScale(8) }}
+              styleoveride={{marginTop: hScale(8)}}
               onPress={() => {
                 //   upiCharges();
                 onpressbtn();
@@ -605,18 +621,18 @@ const WalletScreen = () => {
                 //   'Please Enter Amount'
                 // } else { onpressbtn() }
               }}
-              title={translate("Add Money")}
+              title={translate('Add Money')}
             />
           </View>
         </View>
         <View>
           <Text style={styles.chargesTitle}>
-            {translate("Charges Information")}
+            {translate('Charges Information')}
           </Text>
         </View>
         <ScrollView>
           {isload ? (
-            <ActivityIndicator size={"large"} />
+            <ActivityIndicator size={'large'} />
           ) : (
             <View style={styles.chargesContainer}>
               {/* <View>
@@ -640,14 +656,14 @@ const WalletScreen = () => {
               />
             </View> */}
 
-              <View style={[{ backgroundColor: color1 }]}>
+              <View style={[{backgroundColor: color1}]}>
                 {upich && (
                   <View style={[styles.chargeItemrow]}>
                     <Text style={styles.chargeTitle}>
-                      {translate("Upi Charge in (%)")}
+                      {translate('Upi Charge in (%)')}
                     </Text>
                     <Text style={styles.chargeValue}>
-                      % {upich["Charge %"]}
+                      % {upich['Charge %']}
                     </Text>
                   </View>
                 )}
@@ -655,9 +671,11 @@ const WalletScreen = () => {
                   <FlashList
                     data={chargeData}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
+                    renderItem={({item}) => (
                       <View style={[styles.chargeItemrow]}>
-                        <Text style={styles.chargeTitle}>{item.title}</Text>
+                        <Text style={styles.chargeTitle}>
+                          {translate(item.title)}
+                        </Text>
                         <Text style={styles.chargeValue}>{item.value}</Text>
                       </View>
                     )}
@@ -685,10 +703,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   balanceCard: {
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: hScale(5),
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   balanceTitle: {
     fontSize: wScale(16),
@@ -697,22 +715,22 @@ const styles = StyleSheet.create({
   },
   balanceValue: {
     fontSize: wScale(20),
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors.black,
   },
   total: {
     fontSize: wScale(22),
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors.black,
     flex: 1,
-    textAlign: "right",
+    textAlign: 'right',
   },
   chargesContainer: {
     borderRadius: 5,
   },
   chargesTitle: {
     fontSize: FontSize.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors.black_primary_blur,
     paddingTop: hScale(10),
     paddingBottom: wScale(10),
@@ -722,8 +740,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: wScale(10),
     borderRadius: 5,
     paddingVertical: hScale(5),
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   chargeText: {
     fontSize: FontSize.xSmall,
@@ -732,9 +750,9 @@ const styles = StyleSheet.create({
   chargevalue: {
     fontSize: FontSize.xSmall,
     color: colors.black,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingBottom: hScale(8),
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   errortext: {
     color: colors.red_deactivated,
@@ -752,7 +770,7 @@ const styles = StyleSheet.create({
     paddingBottom: hScale(20),
   },
   headertop: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   imgview: {
     borderWidth: wScale(1),
@@ -761,25 +779,25 @@ const styles = StyleSheet.create({
     borderColor: colors.black75,
     height: wScale(45),
     width: wScale(45),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dropbtn: {
     marginLeft: wScale(5),
     paddingHorizontal: 10,
   },
   rightcontainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 
   chargeItemrow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingVertical: hScale(5),
     borderBottomWidth: 1,
     borderBottomColor: colors.black75,
     paddingHorizontal: wScale(10),
-    borderStyle: "dotted",
+    borderStyle: 'dotted',
     marginHorizontal: wScale(8),
   },
 
@@ -790,7 +808,7 @@ const styles = StyleSheet.create({
   chargeValue: {
     fontSize: FontSize.regular,
     color: colors.black,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

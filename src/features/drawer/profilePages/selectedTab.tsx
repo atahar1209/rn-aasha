@@ -1,56 +1,55 @@
-import React, { useState } from "react";
-import { Tab, TabView, Text } from "@rneui/themed";
-import { StyleSheet, ScrollView } from "react-native";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../reduxUtils/store";
-import BackArrow from "../MenuPage/drawerbacksvg";
-import { wScale } from "../../../utils/styles/dimensions";
-import FlotingInput from "../securityPages/FlotingInput";
-import { translate } from "../../../utils/languageUtils/I18n";
+import React from 'react';
+import {Tab, TabView} from '@rneui/themed';
+import {StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import BackArrow from '../MenuPage/drawerbacksvg';
+import {wScale} from '../../../utils/styles/dimensions';
+import FlotingInput from '../securityPages/FlotingInput';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 const SelectedTad = () => {
   const [index, setIndex] = React.useState(0);
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
   return (
     <>
       <Tab
         style={styles.tab}
         value={index}
-        onChange={(e) => setIndex(e)}
+        onChange={e => setIndex(e)}
         indicatorStyle={{
           height: 0,
         }}
         iconPosition="right"
         variant="primary"
         scrollable="false"
-        titleStyle={[styles.title, { color: colorConfig.primaryButtonColor }]}
-      >
+        titleStyle={[styles.title, {color: colorConfig.primaryButtonColor}]}>
         <Tab.Item
-          containerStyle={(active) => ({
+          containerStyle={active => ({
             backgroundColor: active ? colorConfig.secondaryColor : undefined,
             borderWidth: 1,
             borderRadius: 5,
             borderColor: colorConfig.secondaryColor,
             height: 55,
-            justifyContent: "center",
+            justifyContent: 'center',
             marginRight: 10,
-            scrollable: "false",
+            scrollable: 'false',
           })}
-          title={translate("Your Name")}
+          title={translate('Your Name')}
           icon={() => <BackArrow />}
         />
         <Tab.Item
-          containerStyle={(active) => ({
+          containerStyle={active => ({
             backgroundColor: active ? colorConfig.secondaryColor : undefined,
             borderWidth: 0.5,
             borderColor: colorConfig.secondaryColor,
             borderRadius: 5,
             height: 55,
-            justifyContent: "center",
+            justifyContent: 'center',
             marginLeft: 10,
           })}
-          title={translate("Firm Name")}
+          title={translate('Firm Name')}
           icon={() => <BackArrow />}
         />
       </Tab>
@@ -58,13 +57,22 @@ const SelectedTad = () => {
         value={index}
         onChange={setIndex}
         style={styles.TabViewitem}
-        scrollable="false"
-      >
-        <TabView.Item style={styles.tabContent} scrollable="false" s>
-          <FlotingInput label={translate("Your Name")} />
+        scrollable="false">
+        <TabView.Item style={styles.tabContent} scrollable="false">
+          <FlotingInput
+            label={translate('Your Name')}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+            onChangeTextCallback={undefined}
+          />
         </TabView.Item>
         <TabView.Item style={styles.tabContent}>
-          <FlotingInput label={translate("Your Password")} />
+          <FlotingInput
+            label={translate('Your Password')}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+            onChangeTextCallback={undefined}
+          />
         </TabView.Item>
       </TabView>
     </>
@@ -76,23 +84,23 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   tab: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingHorizontal: wScale(10),
     marginHorizontal: wScale(10),
   },
   title: {
-    color: "#000",
+    color: '#000',
   },
   TabViewitem: {
-    backgroundColor: "#fff",
-    width: "100%",
+    backgroundColor: '#fff',
+    width: '100%',
     paddingHorizontal: wScale(10),
     marginHorizontal: wScale(10),
   },
   tabContent: {
     paddingHorizontal: wScale(10),
-    backgroundColor: "#fff",
-    width: "100%",
+    backgroundColor: '#fff',
+    width: '100%',
     marginHorizontal: wScale(10),
     paddingTop: 20,
   },

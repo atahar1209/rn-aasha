@@ -1,17 +1,20 @@
 // src/screens/profile/components/DocCard.tsx
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import LottieView from 'lottie-react-native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { translate } from '../../../utils/languageUtils/I18n';
-import { DocStatus } from '../hooks/useProfileData';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
+import {DocStatus} from '../hooks/useProfileData';
 
 // ── Status config ─────────────────────────────────────────────────────────────
-const STATUS_META: Record<DocStatus, { color: string; bg: string; label: string }> = {
-  verified: { color: '#16a34a', bg: '#dcfce7', label: 'Verified' },
-  pending:  { color: '#d97706', bg: '#fef3c7', label: 'Under Review' },
-  upload:   { color: '#dc2626', bg: '#fee2e2', label: 'Upload Required' },
+const STATUS_META: Record<
+  DocStatus,
+  {color: string; bg: string; label: string}
+> = {
+  verified: {color: '#16a34a', bg: '#dcfce7', label: 'Verified'},
+  pending: {color: '#d97706', bg: '#fef3c7', label: 'Under Review'},
+  upload: {color: '#dc2626', bg: '#fee2e2', label: 'Upload Required'},
 };
 
 // ── Props ─────────────────────────────────────────────────────────────────────
@@ -24,22 +27,30 @@ interface DocCardProps {
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
-const DocCard: React.FC<DocCardProps> = ({ label, value, status, lottieSource, onPress }) => {
+const DocCard: React.FC<DocCardProps> = ({
+  label,
+  value,
+  status,
+  lottieSource,
+  onPress,
+}) => {
   const meta = STATUS_META[status];
 
   return (
     <View style={s.card}>
       {/* Left status bar */}
-      <View style={[s.statusBar, { backgroundColor: meta.color }]} />
+      <View style={[s.statusBar, {backgroundColor: meta.color}]} />
 
       {/* Content */}
       <View style={s.body}>
         <Text style={s.label}>{label}</Text>
         {!!value && (
-          <Text style={s.value} numberOfLines={1}>{value}</Text>
+          <Text style={s.value} numberOfLines={1}>
+            {value}
+          </Text>
         )}
-        <View style={[s.badge, { backgroundColor: meta.bg }]}>
-          <Text style={[s.badgeText, { color: meta.color }]}>
+        <View style={[s.badge, {backgroundColor: meta.bg}]}>
+          <Text style={[s.badgeText, {color: meta.color}]}>
             {translate(meta.label)}
           </Text>
         </View>
@@ -48,12 +59,11 @@ const DocCard: React.FC<DocCardProps> = ({ label, value, status, lottieSource, o
       {/* Lottie action button */}
       <TouchableOpacity
         onPress={onPress}
-        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-      >
+        hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
         <LottieView
           autoPlay
           loop
-          style={{ height: hScale(46), width: wScale(46) }}
+          style={{height: hScale(46), width: wScale(46)}}
           source={lottieSource}
         />
       </TouchableOpacity>

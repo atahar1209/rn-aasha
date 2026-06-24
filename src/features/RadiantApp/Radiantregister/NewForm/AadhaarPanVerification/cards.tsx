@@ -1,40 +1,53 @@
 // cards.tsx
 
-import React from "react";
+import React from 'react';
 import {
-  View, Text, StyleSheet,
-  TextInput, TouchableOpacity,
-} from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { AadhaarState, PanState, MobileState, EmailState } from "./types";
-import { hScale, wScale } from "../../../../../utils/styles/dimensions";
-import ShowLoaderBtn from "../../../../../components/ShowLoaderBtn";
-import { useColorsOfApi } from "../../../../../utils/styles/theme";
+import {AadhaarState, PanState, MobileState, EmailState} from './types';
+import {hScale, wScale} from '../../../../../utils/styles/dimensions';
+import ShowLoaderBtn from '../../../../../components/ShowLoaderBtn';
+import {useColorsOfApi} from '../../../../../utils/styles/theme';
+import {translate} from '../../../../../utils/languageUtils/I18n';
 
 // ─── CardHeader ───────────────────────────────────────────────────────────────
 export const CardHeader = ({
-  subtitle, title, iconName, iconBg, iconColor, verified,
+  subtitle,
+  title,
+  iconName,
+  iconBg,
+  iconColor,
+  verified,
 }: {
-  subtitle: string; title: string; iconName: string;
-  iconBg: string; iconColor: string; verified: boolean;
+  subtitle: string;
+  title: string;
+  iconName: string;
+  iconBg: string;
+  iconColor: string;
+  verified: boolean;
 }) => (
   <View style={s.cardHeader}>
-    <View style={[s.iconBox, { backgroundColor: iconBg }]}>
+    <View style={[s.iconBox, {backgroundColor: iconBg}]}>
       <MaterialCommunityIcons name={iconName} size={20} color={iconColor} />
     </View>
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Text style={s.cardSubtitle}>{subtitle}</Text>
       <Text style={s.cardTitle}>{title}</Text>
     </View>
     <View style={[s.badge, verified ? s.badgeVerified : s.badgePending]}>
       <MaterialCommunityIcons
-        name={verified ? "check-circle" : "clock-outline"}
+        name={verified ? 'check-circle' : 'clock-outline'}
         size={11}
-        color={verified ? "#166534" : "#854d0e"}
+        color={verified ? '#166534' : '#854d0e'}
       />
-      <Text style={[s.badgeText, { color: verified ? "#166534" : "#854d0e" }]}>
-        {verified ? "Verified" : "Pending"}
+      <Text style={[s.badgeText, {color: verified ? '#166534' : '#854d0e'}]}>
+        {verified ? translate('Verified') : translate('Pending')}
       </Text>
     </View>
   </View>
@@ -42,28 +55,42 @@ export const CardHeader = ({
 
 // ─── OtpInputBlock ────────────────────────────────────────────────────────────
 export const OtpInputBlock = ({
-  otpValue, otpError, loading, accentColor,
-  onOtpChange, onVerify, onReset, resetLabel,
+  otpValue,
+  otpError,
+  loading,
+  accentColor,
+  onOtpChange,
+  onVerify,
+  onReset,
+  resetLabel,
 }: {
-  otpValue: string; otpError: string; loading: boolean; accentColor: string;
-  onOtpChange: (t: string) => void; onVerify: () => void;
-  onReset: () => void; resetLabel: string;
+  otpValue: string;
+  otpError: string;
+  loading: boolean;
+  accentColor: string;
+  onOtpChange: (t: string) => void;
+  onVerify: () => void;
+  onReset: () => void;
+  resetLabel: string;
 }) => {
-  const { primary } = useColorsOfApi();
+  const {primary} = useColorsOfApi();
   const isReady = otpValue.length >= 4 && !loading;
-  const otpBorder = otpError ? "#EF4444"
-    : otpValue.length >= 4 ? "#10B981" : "#E5E7EB";
+  const otpBorder = otpError
+    ? '#EF4444'
+    : otpValue.length >= 4
+    ? '#10B981'
+    : '#E5E7EB';
 
   return (
     <>
       <View style={s.inputWrap}>
-        <Text style={s.inputLabel}>Enter OTP</Text>
-        <View style={[s.inputBox, { borderColor: otpBorder }]}>
+        <Text style={s.inputLabel}>{translate('Enter OTP')}</Text>
+        <View style={[s.inputBox, {borderColor: otpBorder}]}>
           <TextInput
             style={s.textInput}
             value={otpValue}
             onChangeText={onOtpChange}
-            placeholder="Enter OTP"
+            placeholder={translate('Enter OTP')}
             placeholderTextColor="#9CA3AF"
             keyboardType="number-pad"
           />
@@ -71,33 +98,44 @@ export const OtpInputBlock = ({
         </View>
         {!!otpError && (
           <View style={s.hintRow}>
-            <MaterialCommunityIcons name="alert-circle" size={12} color="#EF4444" />
-            <Text style={[s.hintText, { color: "#EF4444" }]}>{otpError}</Text>
+            <MaterialCommunityIcons
+              name="alert-circle"
+              size={12}
+              color="#EF4444"
+            />
+            <Text style={[s.hintText, {color: '#EF4444'}]}>{otpError}</Text>
           </View>
         )}
       </View>
 
       <TouchableOpacity
-        style={[s.verifyBtn, isReady ? { backgroundColor: accentColor } : s.verifyBtnOff]}
+        style={[
+          s.verifyBtn,
+          isReady ? {backgroundColor: accentColor} : s.verifyBtnOff,
+        ]}
         onPress={onVerify}
         disabled={!isReady}
-        activeOpacity={0.85}
-      >
-        {loading
-          ? <ShowLoaderBtn color={primary} size="small" />
-          : <>
+        activeOpacity={0.85}>
+        {loading ? (
+          <ShowLoaderBtn color={primary} size="small" />
+        ) : (
+          <>
             <MaterialCommunityIcons
-              name="shield-check-outline" size={16}
-              color={isReady ? "#fff" : "#9CA3AF"}
+              name="shield-check-outline"
+              size={16}
+              color={isReady ? '#fff' : '#9CA3AF'}
             />
-            <Text style={[s.verifyBtnText, { color: isReady ? "#fff" : "#9CA3AF" }]}>
-              Verify OTP
+            <Text
+              style={[s.verifyBtnText, {color: isReady ? '#fff' : '#9CA3AF'}]}>
+              {translate('Verify OTP')}
             </Text>
           </>
-        }
+        )}
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={onReset} style={{ alignSelf: "center", marginTop: hScale(8) }}>
+      <TouchableOpacity
+        onPress={onReset}
+        style={{alignSelf: 'center', marginTop: hScale(8)}}>
         <Text style={s.resetText}>{resetLabel}</Text>
       </TouchableOpacity>
     </>
@@ -106,23 +144,32 @@ export const OtpInputBlock = ({
 
 // ─── VerifiedStrip ────────────────────────────────────────────────────────────
 const VerifiedStrip = ({
-  label, sub, accentColor, onReset, locked = false,
+  label,
+  sub,
+  accentColor,
+  onReset,
+  locked = false,
 }: {
-  label: string; sub: string; accentColor: string;
-  onReset?: () => void; locked?: boolean;  // ← optional
+  label: string;
+  sub: string;
+  accentColor: string;
+  onReset?: () => void;
+  locked?: boolean; // ← optional
 }) => (
   <View style={s.verifiedStrip}>
     <View style={s.verifiedCheck}>
       <MaterialCommunityIcons name="check" size={14} color="#fff" />
     </View>
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Text style={s.verifiedLabel}>{label}</Text>
       <Text style={s.verifiedSub}>{sub}</Text>
     </View>
     {/* locked ho to Re-verify nahi dikhega */}
     {!locked && onReset && (
       <TouchableOpacity onPress={onReset}>
-        <Text style={[s.reVerify, { color: accentColor }]}>Re-verify</Text>
+        <Text style={[s.reVerify, {color: accentColor}]}>
+          {translate('Re-verify')}
+        </Text>
       </TouchableOpacity>
     )}
   </View>
@@ -130,38 +177,64 @@ const VerifiedStrip = ({
 
 // ─── OtpSentStrip ─────────────────────────────────────────────────────────────
 const OtpSentStrip = ({
-  label, sub, accentColor, bgColor, borderColor,
+  label,
+  sub,
+  accentColor,
+  bgColor,
+  borderColor,
 }: {
-  label: string; sub: string;
-  accentColor: string; bgColor: string; borderColor: string;
+  label: string;
+  sub: string;
+  accentColor: string;
+  bgColor: string;
+  borderColor: string;
 }) => (
-  <View style={[s.verifiedStrip, { backgroundColor: bgColor, borderColor }]}>
-    <MaterialCommunityIcons name="message-arrow-right-outline" size={20} color={accentColor} />
-    <View style={{ flex: 1, marginLeft: wScale(8) }}>
-      <Text style={[s.verifiedLabel, { color: accentColor }]}>{label}</Text>
-      <Text style={[s.verifiedSub, { color: accentColor }]}>{sub}</Text>
+  <View style={[s.verifiedStrip, {backgroundColor: bgColor, borderColor}]}>
+    <MaterialCommunityIcons
+      name="message-arrow-right-outline"
+      size={20}
+      color={accentColor}
+    />
+    <View style={{flex: 1, marginLeft: wScale(8)}}>
+      <Text style={[s.verifiedLabel, {color: accentColor}]}>{label}</Text>
+      <Text style={[s.verifiedSub, {color: accentColor}]}>{sub}</Text>
     </View>
   </View>
 );
 
 // ─── AadhaarCard ──────────────────────────────────────────────────────────────
 export const AadhaarCard = ({
-  aadhaar, isValid, onChange, onSendOtp, onOtpChange, onVerifyOtp, onReset,
+  aadhaar,
+  isValid,
+  onChange,
+  onSendOtp,
+  onOtpChange,
+  onVerifyOtp,
+  onReset,
 }: {
-  aadhaar: AadhaarState; isValid: boolean;
-  onChange: (t: string) => void; onSendOtp: () => void;
-  onOtpChange: (t: string) => void; onVerifyOtp: () => void; onReset: () => void;
+  aadhaar: AadhaarState;
+  isValid: boolean;
+  onChange: (t: string) => void;
+  onSendOtp: () => void;
+  onOtpChange: (t: string) => void;
+  onVerifyOtp: () => void;
+  onReset: () => void;
 }) => {
-  const { primary } = useColorsOfApi();
-  const ACCENT = "#1a56db";
-  const borderColor = aadhaar.error ? "#EF4444"
-    : aadhaar.value.length > 0 && isValid ? "#10B981" : "#E5E7EB";
+  const {primary} = useColorsOfApi();
+  const ACCENT = '#1a56db';
+  const borderColor = aadhaar.error
+    ? '#EF4444'
+    : aadhaar.value.length > 0 && isValid
+    ? '#10B981'
+    : '#E5E7EB';
 
   const header = (
     <CardHeader
-      subtitle="IDENTITY PROOF" title="Aadhaar Verification"
+      subtitle={translate('IDENTITY PROOF')}
+      title={translate('Aadhaar Verification')}
       iconName="card-account-details-outline"
-      iconBg="#EBF3FF" iconColor={ACCENT}
+      iconBg="#EBF3FF"
+      iconColor={ACCENT}
       verified={aadhaar.verified}
     />
   );
@@ -171,11 +244,12 @@ export const AadhaarCard = ({
       <View style={s.card}>
         {header}
         <VerifiedStrip
-          label="Aadhaar Verified Successfully"
+          label={translate('Aadhaar Verified Successfully')}
           sub={`XXXX XXXX ${aadhaar.value.slice(8)}`}
           accentColor={ACCENT}
-          onReset={undefined}   // ← Re-verify button nahi dikhega
-          locked={true} />
+          onReset={undefined} // ← Re-verify button nahi dikhega
+          locked={true}
+        />
       </View>
     );
   }
@@ -185,13 +259,13 @@ export const AadhaarCard = ({
       <View style={s.card}>
         {header}
         <OtpSentStrip
-          label="OTP sent to registered mobile"
+          label={translate('OTP sent to registered mobile')}
           sub={`Aadhaar: XXXX XXXX ${aadhaar.value.slice(8)}`}
           accentColor="#1e40af"
           bgColor="#EBF3FF"
           borderColor="#93C5FD"
         />
-        <View style={{ marginTop: hScale(12) }}>
+        <View style={{marginTop: hScale(12)}}>
           <OtpInputBlock
             otpValue={aadhaar.otpValue}
             otpError={aadhaar.otpError}
@@ -200,7 +274,7 @@ export const AadhaarCard = ({
             onOtpChange={onOtpChange}
             onVerify={onVerifyOtp}
             onReset={onReset}
-            resetLabel="Wrong Aadhaar? Start again"
+            resetLabel={translate('Wrong Aadhaar? Start again')}
           />
         </View>
       </View>
@@ -211,18 +285,21 @@ export const AadhaarCard = ({
     <View style={s.card}>
       {header}
       <View style={s.inputWrap}>
-        <Text style={s.inputLabel}>Aadhaar Number</Text>
+        <Text style={s.inputLabel}>{translate('Aadhaar Number')}</Text>
 
-        <View style={[s.inputBox, {
-          borderColor,
-          backgroundColor: aadhaar.prefilled ? "#F3F4F6" : "#F9FAFB"  // ← grey = locked
-        }]}>
-
+        <View
+          style={[
+            s.inputBox,
+            {
+              borderColor,
+              backgroundColor: aadhaar.prefilled ? '#F3F4F6' : '#F9FAFB', // ← grey = locked
+            },
+          ]}>
           <TextInput
-            style={[s.textInput, aadhaar.prefilled ? { color: "#6B7280" } : {}]}
+            style={[s.textInput, aadhaar.prefilled ? {color: '#6B7280'} : {}]}
             value={aadhaar.value}
             onChangeText={onChange}
-            placeholder="Aadhaar Number"
+            placeholder={translate('Aadhaar Number')}
             placeholderTextColor="#9CA3AF"
             keyboardType="number-pad"
             maxLength={12}
@@ -233,34 +310,46 @@ export const AadhaarCard = ({
         {aadhaar.value.length > 0 && (
           <View style={s.hintRow}>
             <MaterialCommunityIcons
-              name={isValid && !aadhaar.error ? "check-circle" : "alert-circle"}
-              size={12} color={isValid && !aadhaar.error ? "#10B981" : "#EF4444"}
+              name={isValid && !aadhaar.error ? 'check-circle' : 'alert-circle'}
+              size={12}
+              color={isValid && !aadhaar.error ? '#10B981' : '#EF4444'}
             />
-            <Text style={[s.hintText, { color: isValid && !aadhaar.error ? "#10B981" : "#EF4444" }]}>
-              {aadhaar.error || "Valid 12-digit Aadhaar number"}
+            <Text
+              style={[
+                s.hintText,
+                {color: isValid && !aadhaar.error ? '#10B981' : '#EF4444'},
+              ]}>
+              {aadhaar.error || translate('Valid 12-digit Aadhaar number')}
             </Text>
           </View>
         )}
       </View>
 
       <TouchableOpacity
-        style={[s.verifyBtn, isValid && !aadhaar.loading ? { backgroundColor: ACCENT } : s.verifyBtnOff]}
+        style={[
+          s.verifyBtn,
+          isValid && !aadhaar.loading
+            ? {backgroundColor: ACCENT}
+            : s.verifyBtnOff,
+        ]}
         onPress={onSendOtp}
         disabled={!isValid || aadhaar.loading}
-        activeOpacity={0.85}
-      >
-        {aadhaar.loading
-          ? <ShowLoaderBtn color={primary} size="small" />
-          : <>
+        activeOpacity={0.85}>
+        {aadhaar.loading ? (
+          <ShowLoaderBtn color={primary} size="small" />
+        ) : (
+          <>
             <MaterialCommunityIcons
-              name="message-arrow-right-outline" size={16}
-              color={isValid ? "#fff" : "#9CA3AF"}
+              name="message-arrow-right-outline"
+              size={16}
+              color={isValid ? '#fff' : '#9CA3AF'}
             />
-            <Text style={[s.verifyBtnText, { color: isValid ? "#fff" : "#9CA3AF" }]}>
-              Send OTP
+            <Text
+              style={[s.verifyBtnText, {color: isValid ? '#fff' : '#9CA3AF'}]}>
+              {translate('Send OTP')}
             </Text>
           </>
-        }
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -268,21 +357,31 @@ export const AadhaarCard = ({
 
 // ─── PanCard ──────────────────────────────────────────────────────────────────
 export const PanCard = ({
-  pan, isValid, onChange, onVerify,
+  pan,
+  isValid,
+  onChange,
+  onVerify,
 }: {
-  pan: PanState; isValid: boolean;
-  onChange: (t: string) => void; onVerify: () => void;
+  pan: PanState;
+  isValid: boolean;
+  onChange: (t: string) => void;
+  onVerify: () => void;
 }) => {
-  const { primary } = useColorsOfApi();
-  const ACCENT = "#10B981";
-  const borderColor = pan.error ? "#EF4444"
-    : pan.value.length > 0 && isValid ? "#10B981" : "#E5E7EB";
+  const {primary} = useColorsOfApi();
+  const ACCENT = '#10B981';
+  const borderColor = pan.error
+    ? '#EF4444'
+    : pan.value.length > 0 && isValid
+    ? '#10B981'
+    : '#E5E7EB';
 
   const header = (
     <CardHeader
-      subtitle="TAX PROOF" title="PAN Verification"
+      subtitle={translate('TAX PROOF')}
+      title={translate('PAN Verification')}
       iconName="file-document-outline"
-      iconBg="#ECFDF5" iconColor={ACCENT}
+      iconBg="#ECFDF5"
+      iconColor={ACCENT}
       verified={pan.verified}
     />
   );
@@ -292,11 +391,12 @@ export const PanCard = ({
       <View style={s.card}>
         {header}
         <VerifiedStrip
-          label="PAN Verified Successfully"
+          label={translate('PAN Verified Successfully')}
           sub={`${pan.value.slice(0, 5)}XXXXX`}
           accentColor={ACCENT}
-          onReset={pan.prefilled ? undefined : () => onChange("")}
-          locked={pan.prefilled} />
+          onReset={pan.prefilled ? undefined : () => onChange('')}
+          locked={pan.prefilled}
+        />
       </View>
     );
   }
@@ -305,52 +405,61 @@ export const PanCard = ({
     <View style={s.card}>
       {header}
       <View style={s.inputWrap}>
-        <Text style={s.inputLabel}>PAN Number</Text>
-        <View style={[s.inputBox, { borderColor }]}>
+        <Text style={s.inputLabel}>{translate('PAN Number')}</Text>
+        <View style={[s.inputBox, {borderColor}]}>
           <TextInput
             style={s.textInput}
             value={pan.value}
             onChangeText={onChange}
-            placeholder="PAN Number"
+            placeholder={translate('PAN Number')}
             placeholderTextColor="#9CA3AF"
             autoCapitalize="characters"
             maxLength={10}
             editable={!pan.prefilled}
-
           />
           <Text style={s.counter}>{pan.value.length}/10</Text>
         </View>
         {pan.value.length > 0 && (
           <View style={s.hintRow}>
             <MaterialCommunityIcons
-              name={isValid && !pan.error ? "check-circle" : "alert-circle"}
-              size={12} color={isValid && !pan.error ? "#10B981" : "#EF4444"}
+              name={isValid && !pan.error ? 'check-circle' : 'alert-circle'}
+              size={12}
+              color={isValid && !pan.error ? '#10B981' : '#EF4444'}
             />
-            <Text style={[s.hintText, { color: isValid && !pan.error ? "#10B981" : "#EF4444" }]}>
-              {pan.error || "Valid format: ABCDE1234F"}
+            <Text
+              style={[
+                s.hintText,
+                {color: isValid && !pan.error ? '#10B981' : '#EF4444'},
+              ]}>
+              {pan.error || translate('Valid format: ABCDE1234F')}
             </Text>
           </View>
         )}
       </View>
 
       <TouchableOpacity
-        style={[s.verifyBtn, isValid && !pan.loading ? { backgroundColor: ACCENT } : s.verifyBtnOff]}
+        style={[
+          s.verifyBtn,
+          isValid && !pan.loading ? {backgroundColor: ACCENT} : s.verifyBtnOff,
+        ]}
         onPress={onVerify}
         disabled={!isValid || pan.loading}
-        activeOpacity={0.85}
-      >
-        {pan.loading
-          ? <ShowLoaderBtn color={primary} size="small" />
-          : <>
+        activeOpacity={0.85}>
+        {pan.loading ? (
+          <ShowLoaderBtn color={primary} size="small" />
+        ) : (
+          <>
             <MaterialCommunityIcons
-              name="shield-check-outline" size={16}
-              color={isValid ? "#fff" : "#9CA3AF"}
+              name="shield-check-outline"
+              size={16}
+              color={isValid ? '#fff' : '#9CA3AF'}
             />
-            <Text style={[s.verifyBtnText, { color: isValid ? "#fff" : "#9CA3AF" }]}>
-              Verify PAN
+            <Text
+              style={[s.verifyBtnText, {color: isValid ? '#fff' : '#9CA3AF'}]}>
+              {translate('Verify PAN')}
             </Text>
           </>
-        }
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -358,23 +467,39 @@ export const PanCard = ({
 
 // ─── MobileCard ───────────────────────────────────────────────────────────────
 export const MobileCard = ({
-  mobile, isValid, onChange, onSendOtp, onOtpChange, onVerifyOtp, onReset,  editable = true,  
+  mobile,
+  isValid,
+  onChange,
+  onSendOtp,
+  onOtpChange,
+  onVerifyOtp,
+  onReset,
+  editable = true,
 }: {
-  mobile: MobileState; isValid: boolean;
-  onChange: (t: string) => void; onSendOtp: () => void;
-  onOtpChange: (t: string) => void; onVerifyOtp: () => void; onReset: () => void;
-    editable?: boolean;
+  mobile: MobileState;
+  isValid: boolean;
+  onChange: (t: string) => void;
+  onSendOtp: () => void;
+  onOtpChange: (t: string) => void;
+  onVerifyOtp: () => void;
+  onReset: () => void;
+  editable?: boolean;
 }) => {
-  const { primary } = useColorsOfApi();
-  const ACCENT = "#F59E0B";
-  const borderColor = mobile.error ? "#EF4444"
-    : mobile.value.length > 0 && isValid ? "#10B981" : "#E5E7EB";
+  const {primary} = useColorsOfApi();
+  const ACCENT = '#F59E0B';
+  const borderColor = mobile.error
+    ? '#EF4444'
+    : mobile.value.length > 0 && isValid
+    ? '#10B981'
+    : '#E5E7EB';
 
   const header = (
     <CardHeader
-      subtitle="CONTACT INFO" title="Mobile Number"
+      subtitle={translate('CONTACT INFO')}
+      title={translate('Mobile Number')}
       iconName="cellphone"
-      iconBg="#FFF7ED" iconColor={ACCENT}
+      iconBg="#FFF7ED"
+      iconColor={ACCENT}
       verified={mobile.verified}
     />
   );
@@ -384,10 +509,11 @@ export const MobileCard = ({
       <View style={s.card}>
         {header}
         <VerifiedStrip
-          label="Mobile Verified Successfully"
+          label={translate('Mobile Verified Successfully')}
           sub={`+91 XXXXXX${mobile.value.slice(6)}`}
           onReset={undefined}
           locked={true}
+          accentColor={''}
         />
       </View>
     );
@@ -398,13 +524,13 @@ export const MobileCard = ({
       <View style={s.card}>
         {header}
         <OtpSentStrip
-          label="OTP sent to mobile"
+          label={translate('OTP sent to mobile')}
           sub={`+91 XXXXXX${mobile.value.slice(6)}`}
           accentColor="#92400e"
           bgColor="#FFF7ED"
           borderColor="#FCD34D"
         />
-        <View style={{ marginTop: hScale(12) }}>
+        <View style={{marginTop: hScale(12)}}>
           <OtpInputBlock
             otpValue={mobile.otpValue}
             otpError={mobile.otpError}
@@ -413,7 +539,7 @@ export const MobileCard = ({
             onOtpChange={onOtpChange}
             onVerify={onVerifyOtp}
             onReset={onReset}
-            resetLabel="Wrong number? Start again"
+            resetLabel={translate('Wrong number? Start again')}
           />
         </View>
       </View>
@@ -424,51 +550,63 @@ export const MobileCard = ({
     <View style={s.card}>
       {header}
       <View style={s.inputWrap}>
-        <Text style={s.inputLabel}>Mobile Number</Text>
-        <View style={[s.inputBox, { borderColor }]}>
+        <Text style={s.inputLabel}>{translate('Mobile Number')}</Text>
+        <View style={[s.inputBox, {borderColor}]}>
           <TextInput
             style={s.textInput}
             value={mobile.value}
             onChangeText={onChange}
-            placeholder="Mobile Number"
+            placeholder={translate('Mobile Number')}
             placeholderTextColor="#9CA3AF"
             keyboardType="number-pad"
             maxLength={10}
-            editable={editable}  
+            editable={editable}
           />
           <Text style={s.counter}>{mobile.value.length}/10</Text>
         </View>
         {mobile.value.length > 0 && (
           <View style={s.hintRow}>
             <MaterialCommunityIcons
-              name={isValid && !mobile.error ? "check-circle" : "alert-circle"}
-              size={12} color={isValid && !mobile.error ? "#10B981" : "#EF4444"}
+              name={isValid && !mobile.error ? 'check-circle' : 'alert-circle'}
+              size={12}
+              color={isValid && !mobile.error ? '#10B981' : '#EF4444'}
             />
-            <Text style={[s.hintText, { color: isValid && !mobile.error ? "#10B981" : "#EF4444" }]}>
-              {mobile.error || "Valid 10-digit Indian mobile"}
+            <Text
+              style={[
+                s.hintText,
+                {color: isValid && !mobile.error ? '#10B981' : '#EF4444'},
+              ]}>
+              {mobile.error || translate('Valid 10-digit Indian mobile')}
             </Text>
           </View>
         )}
       </View>
 
       <TouchableOpacity
-        style={[s.verifyBtn, isValid && !mobile.loading ? { backgroundColor: ACCENT } : s.verifyBtnOff]}
+        style={[
+          s.verifyBtn,
+          isValid && !mobile.loading
+            ? {backgroundColor: ACCENT}
+            : s.verifyBtnOff,
+        ]}
         onPress={onSendOtp}
         disabled={!isValid || mobile.loading}
-        activeOpacity={0.85}
-      >
-        {mobile.loading
-          ? <ShowLoaderBtn color={primary} size="small" />
-          : <>
+        activeOpacity={0.85}>
+        {mobile.loading ? (
+          <ShowLoaderBtn color={primary} size="small" />
+        ) : (
+          <>
             <MaterialCommunityIcons
-              name="cellphone-message" size={16}
-              color={isValid ? "#fff" : "#9CA3AF"}
+              name={translate('cellphone-message')}
+              size={16}
+              color={isValid ? '#fff' : '#9CA3AF'}
             />
-            <Text style={[s.verifyBtnText, { color: isValid ? "#fff" : "#9CA3AF" }]}>
-              Send OTP
+            <Text
+              style={[s.verifyBtnText, {color: isValid ? '#fff' : '#9CA3AF'}]}>
+              {translate('Send OTP')}
             </Text>
           </>
-        }
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -476,22 +614,37 @@ export const MobileCard = ({
 
 // ─── EmailCard ────────────────────────────────────────────────────────────────
 export const EmailCard = ({
-  email, isValid, onChange, onSendOtp, onOtpChange, onVerifyOtp, onReset,
+  email,
+  isValid,
+  onChange,
+  onSendOtp,
+  onOtpChange,
+  onVerifyOtp,
+  onReset,
 }: {
-  email: EmailState; isValid: boolean;
-  onChange: (t: string) => void; onSendOtp: () => void;
-  onOtpChange: (t: string) => void; onVerifyOtp: () => void; onReset: () => void;
+  email: EmailState;
+  isValid: boolean;
+  onChange: (t: string) => void;
+  onSendOtp: () => void;
+  onOtpChange: (t: string) => void;
+  onVerifyOtp: () => void;
+  onReset: () => void;
 }) => {
-  const { primary } = useColorsOfApi();
-  const ACCENT = "#8B5CF6";
-  const borderColor = email.error ? "#EF4444"
-    : email.value.length > 0 && isValid ? "#10B981" : "#E5E7EB";
+  const {primary} = useColorsOfApi();
+  const ACCENT = '#8B5CF6';
+  const borderColor = email.error
+    ? '#EF4444'
+    : email.value.length > 0 && isValid
+    ? '#10B981'
+    : '#E5E7EB';
 
   const header = (
     <CardHeader
-      subtitle="CONTACT INFO" title="Email Address"
+      subtitle={translate('CONTACT INFO')}
+      title={translate('Email Address')}
       iconName="email-outline"
-      iconBg="#FAF5FF" iconColor={ACCENT}
+      iconBg="#FAF5FF"
+      iconColor={ACCENT}
       verified={email.verified}
     />
   );
@@ -501,7 +654,7 @@ export const EmailCard = ({
       <View style={s.card}>
         {header}
         <VerifiedStrip
-          label="Email Verified Successfully"
+          label={translate('Email Verified Successfully')}
           sub={email.value}
           accentColor={ACCENT}
           onReset={onReset}
@@ -515,13 +668,13 @@ export const EmailCard = ({
       <View style={s.card}>
         {header}
         <OtpSentStrip
-          label="OTP sent to email"
+          label={translate('OTP sent to email')}
           sub={email.value}
           accentColor="#5B21B6"
           bgColor="#FAF5FF"
           borderColor="#C4B5FD"
         />
-        <View style={{ marginTop: hScale(12) }}>
+        <View style={{marginTop: hScale(12)}}>
           <OtpInputBlock
             otpValue={email.otpValue}
             otpError={email.otpError}
@@ -530,7 +683,7 @@ export const EmailCard = ({
             onOtpChange={onOtpChange}
             onVerify={onVerifyOtp}
             onReset={onReset}
-            resetLabel="Wrong email? Start again"
+            resetLabel={translate('Wrong email? Start again')}
           />
         </View>
       </View>
@@ -541,83 +694,182 @@ export const EmailCard = ({
     <View style={s.card}>
       {header}
       <View style={s.inputWrap}>
-        <Text style={s.inputLabel}>Email Address</Text>
-        <View style={[s.inputBox, { borderColor }]}>
+        <Text style={s.inputLabel}>{translate('Email Address')}</Text>
+        <View style={[s.inputBox, {borderColor}]}>
           <TextInput
-            style={[s.textInput, { color: "#6B7280" }]}
+            style={[s.textInput, {color: '#6B7280'}]}
             value={email.value}
             onChangeText={onChange}
-            placeholder="Email Address"
+            placeholder={translate('Email Address')}
             placeholderTextColor="#9CA3AF"
             keyboardType="email-address"
             autoCapitalize="none"
             editable={false}
-
           />
           {isValid && !email.error && email.value.length > 0 && (
-            <MaterialCommunityIcons name="check-circle" size={18} color="#10B981" />
+            <MaterialCommunityIcons
+              name="check-circle"
+              size={18}
+              color="#10B981"
+            />
           )}
         </View>
         {email.value.length > 0 && (
           <View style={s.hintRow}>
             <MaterialCommunityIcons
-              name={isValid && !email.error ? "check-circle" : "alert-circle"}
-              size={12} color={isValid && !email.error ? "#10B981" : "#EF4444"}
+              name={isValid && !email.error ? 'check-circle' : 'alert-circle'}
+              size={12}
+              color={isValid && !email.error ? '#10B981' : '#EF4444'}
             />
-            <Text style={[s.hintText, { color: isValid && !email.error ? "#10B981" : "#EF4444" }]}>
-              {email.error || "Valid email address"}
+            <Text
+              style={[
+                s.hintText,
+                {color: isValid && !email.error ? '#10B981' : '#EF4444'},
+              ]}>
+              {email.error || translate('Valid email address')}
             </Text>
           </View>
         )}
       </View>
 
       <TouchableOpacity
-        style={[s.verifyBtn, isValid && !email.loading ? { backgroundColor: ACCENT } : s.verifyBtnOff]}
+        style={[
+          s.verifyBtn,
+          isValid && !email.loading
+            ? {backgroundColor: ACCENT}
+            : s.verifyBtnOff,
+        ]}
         onPress={onSendOtp}
         disabled={!isValid || email.loading}
-        activeOpacity={0.85}
-      >
-        {email.loading
-          ? <ShowLoaderBtn color={primary} size="small" />
-          : <>
+        activeOpacity={0.85}>
+        {email.loading ? (
+          <ShowLoaderBtn color={primary} size="small" />
+        ) : (
+          <>
             <MaterialCommunityIcons
-              name="message-arrow-left-outline" size={16}
-              color={isValid ? "#fff" : "#9CA3AF"}
+              name="message-arrow-left-outline"
+              size={16}
+              color={isValid ? '#fff' : '#9CA3AF'}
             />
-            <Text style={[s.verifyBtnText, { color: isValid ? "#fff" : "#9CA3AF" }]}>
-              Send OTP
+            <Text
+              style={[s.verifyBtnText, {color: isValid ? '#fff' : '#9CA3AF'}]}>
+              {translate('Send OTP')}
             </Text>
           </>
-        }
+        )}
       </TouchableOpacity>
     </View>
   );
 };
 
 const s = StyleSheet.create({
-  card: { backgroundColor: "#fff", borderRadius: wScale(16), padding: wScale(14), marginBottom: hScale(14), elevation: 2, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 6 },
-  cardHeader: { flexDirection: "row", alignItems: "center", gap: wScale(10), marginBottom: hScale(14) },
-  iconBox: { width: wScale(38), height: wScale(38), borderRadius: wScale(10), alignItems: "center", justifyContent: "center" },
-  cardSubtitle: { fontSize: wScale(9), color: "#9CA3AF", letterSpacing: 0.8, marginBottom: hScale(1) },
-  cardTitle: { fontSize: wScale(14), fontWeight: "600", color: "#111827" },
-  badge: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: wScale(8), paddingVertical: hScale(4), borderRadius: 20 },
-  badgePending: { backgroundColor: "#FEF9C3" },
-  badgeVerified: { backgroundColor: "#DCFCE7" },
-  badgeText: { fontSize: wScale(10), fontWeight: "600" },
-  verifiedStrip: { flexDirection: "row", alignItems: "center", gap: wScale(10), backgroundColor: "#F0FDF4", borderWidth: 0.5, borderColor: "#86EFAC", borderRadius: wScale(10), padding: wScale(10) },
-  verifiedCheck: { width: wScale(26), height: wScale(26), borderRadius: 50, backgroundColor: "#10B981", alignItems: "center", justifyContent: "center" },
-  verifiedLabel: { fontSize: wScale(13), fontWeight: "600", color: "#166534" },
-  verifiedSub: { fontSize: wScale(11), color: "#4ADE80", marginTop: hScale(1) },
-  reVerify: { fontSize: wScale(12), fontWeight: "500" },
-  inputWrap: { marginBottom: hScale(10) },
-  inputLabel: { fontSize: wScale(11), color: "#6B7280", marginBottom: hScale(5), letterSpacing: 0.3 },
-  inputBox: { flexDirection: "row", alignItems: "center", borderWidth: 1, borderRadius: wScale(10), backgroundColor: "#F9FAFB", paddingHorizontal: wScale(12), height: hScale(46) },
-  textInput: { flex: 1, fontSize: wScale(14), color: "#111827", paddingVertical: 0 },
-  counter: { fontSize: wScale(11), color: "#9CA3AF" },
-  hintRow: { flexDirection: "row", alignItems: "center", gap: 4, marginTop: hScale(4) },
-  hintText: { fontSize: wScale(11) },
-  verifyBtn: { height: hScale(42), borderRadius: wScale(10), flexDirection: "row", alignItems: "center", justifyContent: "center", gap: wScale(6), marginTop: hScale(4) },
-  verifyBtnOff: { backgroundColor: "#F3F4F6", borderWidth: 0.5, borderColor: "#E5E7EB" },
-  verifyBtnText: { fontSize: wScale(14), fontWeight: "600" },
-  resetText: { fontSize: wScale(12), color: "#6B7280", textAlign: "center" },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: wScale(16),
+    padding: wScale(14),
+    marginBottom: hScale(14),
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wScale(10),
+    marginBottom: hScale(14),
+  },
+  iconBox: {
+    width: wScale(38),
+    height: wScale(38),
+    borderRadius: wScale(10),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardSubtitle: {
+    fontSize: wScale(9),
+    color: '#9CA3AF',
+    letterSpacing: 0.8,
+    marginBottom: hScale(1),
+  },
+  cardTitle: {fontSize: wScale(14), fontWeight: '600', color: '#111827'},
+  badge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: wScale(8),
+    paddingVertical: hScale(4),
+    borderRadius: 20,
+  },
+  badgePending: {backgroundColor: '#FEF9C3'},
+  badgeVerified: {backgroundColor: '#DCFCE7'},
+  badgeText: {fontSize: wScale(10), fontWeight: '600'},
+  verifiedStrip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wScale(10),
+    backgroundColor: '#F0FDF4',
+    borderWidth: 0.5,
+    borderColor: '#86EFAC',
+    borderRadius: wScale(10),
+    padding: wScale(10),
+  },
+  verifiedCheck: {
+    width: wScale(26),
+    height: wScale(26),
+    borderRadius: 50,
+    backgroundColor: '#10B981',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  verifiedLabel: {fontSize: wScale(13), fontWeight: '600', color: '#166534'},
+  verifiedSub: {fontSize: wScale(11), color: '#4ADE80', marginTop: hScale(1)},
+  reVerify: {fontSize: wScale(12), fontWeight: '500'},
+  inputWrap: {marginBottom: hScale(10)},
+  inputLabel: {
+    fontSize: wScale(11),
+    color: '#6B7280',
+    marginBottom: hScale(5),
+    letterSpacing: 0.3,
+  },
+  inputBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: wScale(10),
+    backgroundColor: '#F9FAFB',
+    paddingHorizontal: wScale(12),
+    height: hScale(46),
+  },
+  textInput: {
+    flex: 1,
+    fontSize: wScale(14),
+    color: '#111827',
+    paddingVertical: 0,
+  },
+  counter: {fontSize: wScale(11), color: '#9CA3AF'},
+  hintRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: hScale(4),
+  },
+  hintText: {fontSize: wScale(11)},
+  verifyBtn: {
+    height: hScale(42),
+    borderRadius: wScale(10),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: wScale(6),
+    marginTop: hScale(4),
+  },
+  verifyBtnOff: {
+    backgroundColor: '#F3F4F6',
+    borderWidth: 0.5,
+    borderColor: '#E5E7EB',
+  },
+  verifyBtnText: {fontSize: wScale(14), fontWeight: '600'},
+  resetText: {fontSize: wScale(12), color: '#6B7280', textAlign: 'center'},
 });

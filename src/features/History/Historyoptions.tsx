@@ -1,11 +1,11 @@
-import { translate } from "../../utils/languageUtils/I18n";
+import {translate} from '../../utils/languageUtils/I18n';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 const ReportScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>{translate("Report_Screen")}</Text>
+      <Text>{translate('Report_Screen')}</Text>
     </View>
   );
 };

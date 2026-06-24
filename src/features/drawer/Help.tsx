@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import AppBar from './headerAppbar/AppBar';
+import {View} from 'react-native';
 import HelpAndSupport from './help&support/helpandsupport';
 
 const Help_And = () => {

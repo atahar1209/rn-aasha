@@ -1,4 +1,4 @@
-package com.mobykwik.ContactPicker;
+package com.digitalindiapay.ContactPicker;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

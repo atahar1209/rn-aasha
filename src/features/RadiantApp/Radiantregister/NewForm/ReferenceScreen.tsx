@@ -1,17 +1,28 @@
 // screens/ReferenceScreen.tsx
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, ToastAndroid, Text, TouchableOpacity } from 'react-native';
-import { useFormik } from 'formik';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
 
 import {
-  StepBanner, AppInput, SectionCard, NavRow, getStepColor,
+  AppInput,
+  SectionCard,
+  NavRow,
+  getStepColor,
 } from '../../components/FormUI';
-import { colors } from '../../../../utils/styles/theme';
-import { useFormCtx } from './FormContext';
-import { APP_URLS } from '../../../../utils/network/urls';
+import {colors} from '../../../../utils/styles/theme';
+import {useFormCtx} from './FormContext';
+import {APP_URLS} from '../../../../utils/network/urls';
 import useAxiosHook from '../../../../utils/network/AxiosClient';
 import ShowLoader from '../../../../components/ShowLoder';
+import {translate} from '../../../../utils/languageUtils/I18n';
 
 const STEP = 4;
 
@@ -24,24 +35,24 @@ const MOBILE_REGEX = /^[6-9]\d{9}$/;
 
 const ReferenceSchema = Yup.object({
   reference: Yup.object({
-    name: Yup.string().required('Reference name required'),
-    designation: Yup.string().required('Designation required'),
+    name: Yup.string().required(translate('Reference name required')),
+    designation: Yup.string().required(translate('Designation required')),
     mobile: Yup.string()
-      .matches(MOBILE_REGEX, 'Enter valid 10-digit mobile')
-      .required('Mobile required'),
+      .matches(MOBILE_REGEX, translate('Enter valid 10-digit mobile'))
+      .required(translate('Mobile required')),
   }),
   closeRelative: Yup.object({
-    name: Yup.string().required('Name required'),
+    name: Yup.string().required(translate('Name required')),
     mobile: Yup.string()
-      .matches(MOBILE_REGEX, 'Enter valid 10-digit mobile')
-      .required('Mobile required'),
+      .matches(MOBILE_REGEX, translate('Enter valid 10-digit mobile'))
+      .required(translate('Mobile required')),
   }),
   emergency: Yup.object({
-    name: Yup.string().required('Name required'),
+    name: Yup.string().required(translate('Name required')),
     mobile: Yup.string()
-      .matches(MOBILE_REGEX, 'Enter valid 10-digit mobile')
-      .required('Mobile required'),
-    relationship: Yup.string().required('Relationship required'),
+      .matches(MOBILE_REGEX, translate('Enter valid 10-digit mobile'))
+      .required(translate('Mobile required')),
+    relationship: Yup.string().required(translate('Relationship required')),
   }),
 });
 
@@ -81,10 +92,10 @@ const initialValues: FormValues = {
 };
 
 // ── Component ─────────────────────────────────────────────────────────────────
-const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
-  const { formData, updateStep, nextStep } = useFormCtx();
+const ReferenceScreen = ({onNext}: {onNext: () => void}) => {
+  const {formData, updateStep, nextStep} = useFormCtx();
   const stepColor = getStepColor(STEP);
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   const [otpSent, setOtpSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [otpValue, setOtpValue] = useState('');
@@ -97,7 +108,7 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
   //   try {
   //     console.log(`${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`)
   //     const res = await get({
-  //       url: `${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`, 
+  //       url: `${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`,
   //     });
   // console.log(res)
 
@@ -118,7 +129,7 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
   //   try {
   //     console.log(`${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`)
   //     const res = await get({
-  //       url: `${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`, 
+  //       url: `${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`,
   //     });
   // console.log(res)
 
@@ -139,7 +150,7 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
   //   try {
   //     console.log(`${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`)
   //     const res = await get({
-  //       url: `${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`, 
+  //       url: `${APP_URLS.SendOTPMobile}?Mobile=${mobile}&Type=Reference`,
   //     });
   // console.log(res)
 
@@ -161,7 +172,7 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
   //   try {
   //     console.log(`${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`)
   //     const res = await get({
-  //       url: `${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`, 
+  //       url: `${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`,
   //     });
   // console.log(res)
 
@@ -182,7 +193,7 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
   //   try {
   //     console.log(`${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`)
   //     const res = await get({
-  //       url: `${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`, 
+  //       url: `${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`,
   //     });
   // console.log(res)
 
@@ -203,7 +214,7 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
   //   try {
   //     console.log(`${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`)
   //     const res = await get({
-  //       url: `${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`, 
+  //       url: `${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=Reference&OTP=${otpValue}`,
   //     });
   // console.log(res)
 
@@ -218,22 +229,22 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
   //   }
   // };
 
-
-
   // 1. Send OTP Logic
 
   const [vState, setVState] = useState({
-    ref: { loading: false, sent: false, verified: false, otp: '' },
-    rel: { loading: false, sent: false, verified: false, otp: '' },
-    emg: { loading: false, sent: false, verified: false, otp: '' },
+    ref: {loading: false, sent: false, verified: false, otp: ''},
+    rel: {loading: false, sent: false, verified: false, otp: ''},
+    emg: {loading: false, sent: false, verified: false, otp: ''},
   });
   const updateVState = (key, data) => {
-    setVState(prev => ({ ...prev, [key]: { ...prev[key], ...data } }));
+    setVState(prev => ({...prev, [key]: {...prev[key], ...data}}));
   };
 
   // Duplicate Mobile Check Function
   const isDuplicateMobile = (mobile, currentKey) => {
-    if (!mobile || mobile.length < 10) return false;
+    if (!mobile || mobile.length < 10) {
+      return false;
+    }
 
     // Formik values se baaki teeno numbers lein
     const allNumbers = {
@@ -243,73 +254,78 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
     };
 
     // Check karein ki kya ye number kisi aur key mein pehle se hai
-    return Object.keys(allNumbers).some(key =>
-      key !== currentKey && allNumbers[key] === mobile
+    return Object.keys(allNumbers).some(
+      key => key !== currentKey && allNumbers[key] === mobile,
     );
   };
 
-
-
   const handleSendOTP = async (mobile, sectionKey, apiType) => {
-    if (mobile?.length !== 10) return showToast("Enter 10-digit mobile");
+    if (mobile?.length !== 10) {
+      return showToast(translate('Enter 10-digit mobile'));
+    }
 
     // DUPLICATE CHECK: Agar number kahin aur use hua hai toh yahi rok do
     if (isDuplicateMobile(mobile, sectionKey)) {
-      showToast(`This number is already used in another contact!`);
+      showToast(translate('This number is already used in another contact!'));
       return;
     }
 
-    updateVState(sectionKey, { loading: true });
+    updateVState(sectionKey, {loading: true});
 
     try {
       const res = await post({
         url: `${APP_URLS.SendOTPMobile}Mobile=${mobile}&Type=${apiType}`,
       });
-      console.log(`${APP_URLS.SendOTPMobile}Mobile=${mobile}&Type=${apiType}`)
-      console.log(`${apiType} Send OTP RESPONSE:`, res);
+      console.log(`${APP_URLS.SendOTPMobile}Mobile=${mobile}&Type=${apiType}`);
+      console.log(`${apiType} ${translate('Send OTP RESPONSE')}:`, res);
       if (res?.StatusCode === 200) {
-        updateVState(sectionKey, { sent: true });
-        showToast(`${apiType} OTP Sent Successfully`);
+        updateVState(sectionKey, {sent: true});
+        showToast(`${apiType} ${translate('OTP Sent Successfully')}`);
       } else {
-        showToast(res?.Message || "Failed to send OTP");
+        showToast(res?.Message || translate('Failed to send OTP'));
       }
     } catch (err) {
-      showToast("Network Error: Failed to send OTP");
+      showToast(translate('Network Error: Failed to send OTP'));
     } finally {
-      updateVState(sectionKey, { loading: false });
+      updateVState(sectionKey, {loading: false});
     }
   };
 
   // 2. Verify OTP Logic
   const handleVerifyOTP = async (mobile, sectionKey, apiType) => {
-
-    console.log(`Verifying OTP for ${apiType}: Mobile=${mobile}, OTP=${vState[sectionKey].otp}`)
+    console.log(
+      `${translate('Verifying OTP for')} ${apiType}: Mobile=${mobile}, OTP=${
+        vState[sectionKey].otp
+      }`,
+    );
     const currentOtp = vState[sectionKey].otp;
-    if (!currentOtp || currentOtp.length < 4) return showToast("Enter valid OTP");
+    if (!currentOtp || currentOtp.length < 4) {
+      return showToast(translate('Enter valid OTP'));
+    }
 
-    updateVState(sectionKey, { loading: true });
+    updateVState(sectionKey, {loading: true});
 
     try {
       const res = await post({
         url: `${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=${apiType}&OTP=${currentOtp}`,
       });
 
-      console.log(`${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=${apiType}&OTP=${currentOtp}`)
-      console.log(`${apiType} Verify OTP RESPONSE:`, res);
-      if (res?.StatusCode === 200 && res?.Content?.ADDINFO === "DONE") {
-        updateVState(sectionKey, { verified: true, sent: false });
-        showToast(`${apiType} Verified!`);
+      console.log(
+        `${APP_URLS.VerifyOTtPMobile}?Mobile=${mobile}&Type=${apiType}&OTP=${currentOtp}`,
+      );
+      console.log(`${apiType} ${translate('Verify OTP RESPONSE')}:`, res);
+      if (res?.StatusCode === 200 && res?.Content?.ADDINFO === 'DONE') {
+        updateVState(sectionKey, {verified: true, sent: false});
+        showToast(`${apiType} ${translate('Verified!')}`);
       } else {
-        showToast("Invalid OTP, please try again");
+        showToast(translate('Invalid OTP, please try again'));
       }
     } catch (err) {
-      showToast("Verification failed");
+      showToast(translate('Verification failed'));
     } finally {
-      updateVState(sectionKey, { loading: false });
+      updateVState(sectionKey, {loading: false});
     }
   };
-
-
 
   const formik = useFormik<FormValues>({
     initialValues,
@@ -317,13 +333,17 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
     validateOnBlur: true,
     validateOnChange: false,
 
-    onSubmit: async (values) => {
-
-      if (!vState.ref.verified || !vState.rel.verified || !vState.emg.verified) {
-        showToast("Please verify all mobile numbers with OTP first!");
+    onSubmit: async values => {
+      if (
+        !vState.ref.verified ||
+        !vState.rel.verified ||
+        !vState.emg.verified
+      ) {
+        showToast(
+          translate('Please verify all mobile numbers with OTP first!'),
+        );
         return; // Agar ek bhi verify nahi hai toh API hit nahi hogi
       }
-
 
       const payload = {
         ReferenceName: values.reference.name,
@@ -344,7 +364,7 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
       try {
         const res = await post({
           url: APP_URLS.InsertForm4Update,
-          data: payload
+          data: payload,
         });
 
         console.log('📥 RESPONSE:', JSON.stringify(res, null, 2));
@@ -355,30 +375,35 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
           updateStep('reference', values);
           onNext(4); // ya nextStep()
         } else {
-          showToast(res?.Content?.Message || 'Submit failed');
+          showToast(res?.Content?.Message || translate('Submit failed'));
         }
-
       } catch (err) {
         console.log('❌ ERROR:', err);
-        showToast('Something went wrong');
+        showToast(translate('Something went wrong'));
       }
     },
   });
 
-  const { values, errors, touched, handleSubmit, setFieldValue, setFieldTouched } = formik;
+  const {
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    setFieldValue,
+    setFieldTouched,
+  } = formik;
 
   useEffect(() => {
-              setLoading(true);
+    setLoading(true);
 
     const fetchForm4Data = async () => {
       try {
-        const res = await post({ url: APP_URLS.ShowForm4 });
+        const res = await post({url: APP_URLS.ShowForm4});
 
         console.log('📥 Form4 Data:', JSON.stringify(res, null, 2));
 
-
         if (res?.StatusCode === 200) {
-                    setLoading(false);
+          setLoading(false);
 
           const c = res.Content;
 
@@ -392,14 +417,32 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
 
           setFieldValue('emergency.name', c.EMERGENCYName ?? '');
           setFieldValue('emergency.mobile', c.EMERGENCYMobilenumber ?? '');
-          setFieldValue('emergency.relationship', c.EMERGENCYRelationship ?? '');
+          setFieldValue(
+            'emergency.relationship',
+            c.EMERGENCYRelationship ?? '',
+          );
 
           // 2. Verification State Update Karein (VState)
           // API se status true/false aa raha hai, use verified key mein daalein
           setVState({
-            ref: { loading: false, sent: false, verified: Boolean(c.ReferenceMobileStaus), otp: '' },
-            rel: { loading: false, sent: false, verified: Boolean(c.CloseRelativeMobileStatus), otp: '' },
-            emg: { loading: false, sent: false, verified: Boolean(c.EMERGENCYMobilenumberStatus), otp: '' },
+            ref: {
+              loading: false,
+              sent: false,
+              verified: Boolean(c.ReferenceMobileStaus),
+              otp: '',
+            },
+            rel: {
+              loading: false,
+              sent: false,
+              verified: Boolean(c.CloseRelativeMobileStatus),
+              otp: '',
+            },
+            emg: {
+              loading: false,
+              sent: false,
+              verified: Boolean(c.EMERGENCYMobilenumberStatus),
+              otp: '',
+            },
           });
         }
       } catch (err) {
@@ -414,8 +457,10 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
   const fp = (path: string) => {
     const keys = path.split('.');
     const val = keys.reduce((o: any, k) => o?.[k], values);
-    const err = keys.reduce((o: any, k) => o?.[k], errors) as string | undefined;
-    const tch = !!(keys.reduce((o: any, k) => o?.[k], touched));
+    const err = keys.reduce((o: any, k) => o?.[k], errors) as
+      | string
+      | undefined;
+    const tch = !!keys.reduce((o: any, k) => o?.[k], touched);
     return {
       value: val ?? '',
       error: err,
@@ -429,47 +474,67 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
     <View style={s.screen}>
       {/* <StepBanner currentStep={STEP} /> */}
 
-      <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
-              {loading&&<ShowLoader/>}
+      <ScrollView
+        contentContainerStyle={s.scroll}
+        keyboardShouldPersistTaps="handled">
+        {loading && <ShowLoader />}
 
-        <SectionCard title="Reference" icon="account-tie" iconColor={stepColor}>
+        <SectionCard
+          title={translate('Reference')}
+          icon="account-tie"
+          iconColor={stepColor}>
           <AppInput
-            label="Reference Name"
-            placeholder="Enter name"
+            label={translate('Reference Name')}
+            placeholder={translate('Enter name')}
             {...fp('reference.name')}
           />
           <AppInput
-            label="Designation"
-            placeholder="Enter designation"
+            label={translate('Designation')}
+            placeholder={translate('Enter designation')}
             {...fp('reference.designation')}
           />
           <AppInput
-            label="Mobile Number"
+            label={translate('Mobile Number')}
             keyboardType="phone-pad"
             maxLength={10}
             {...fp('reference.mobile')}
             editable={!vState.ref.verified}
             renderRight={() => (
               <TouchableOpacity
-                onPress={() => handleSendOTP(values.reference.mobile, 'ref', 'Reference')}
-                disabled={vState.ref.loading || vState.ref.verified}
-              >
-                <Text style={{ color: vState.ref.verified ? 'green' : 'blue', fontWeight: 'bold', padding: 5 }}>
-                  {vState.ref.loading ? '...' : vState.ref.verified ? 'Verified' : 'Send OTP'}
+                onPress={() =>
+                  handleSendOTP(values.reference.mobile, 'ref', 'Reference')
+                }
+                disabled={vState.ref.loading || vState.ref.verified}>
+                <Text
+                  style={{
+                    color: vState.ref.verified ? 'green' : 'blue',
+                    fontWeight: 'bold',
+                    padding: 5,
+                  }}>
+                  {vState.ref.loading
+                    ? '...'
+                    : vState.ref.verified
+                    ? translate('Verified')
+                    : translate('Send OTP')}
                 </Text>
               </TouchableOpacity>
             )}
           />
           {vState.ref.sent && !vState.ref.verified && (
             <AppInput
-              label="Enter OTP"
-              placeholder="OTP"
+              label={translate('Enter OTP')}
+              placeholder={translate('OTP')}
               keyboardType="numeric"
               value={vState.ref.otp}
-              onChangeText={(t) => updateVState('ref', { otp: t })}
+              onChangeText={t => updateVState('ref', {otp: t})}
               renderRight={() => (
-                <TouchableOpacity onPress={() => handleVerifyOTP(values.reference.mobile, 'ref', 'Reference')}>
-                  <Text style={{ color: 'blue', fontWeight: 'bold', padding: 5 }}>Verify</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    handleVerifyOTP(values.reference.mobile, 'ref', 'Reference')
+                  }>
+                  <Text style={{color: 'blue', fontWeight: 'bold', padding: 5}}>
+                    Verify
+                  </Text>
                 </TouchableOpacity>
               )}
             />
@@ -477,39 +542,61 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
         </SectionCard>
 
         {/* Close Relative */}
-        <SectionCard title="Close Relative" icon="account-heart" iconColor={stepColor}>
+        <SectionCard
+          title={translate('Close Relative')}
+          icon="account-heart"
+          iconColor={stepColor}>
           <AppInput
-            label="Name"
-            placeholder="Enter name"
+            label={translate('Name')}
+            placeholder={translate('Enter name')}
             {...fp('closeRelative.name')}
           />
           <AppInput
-            label="Mobile Number"
+            label={translate('Mobile Number')}
             keyboardType="phone-pad"
             maxLength={10}
             {...fp('closeRelative.mobile')} // Path changed
             editable={!vState.rel.verified}
             renderRight={() => (
               <TouchableOpacity
-                onPress={() => handleSendOTP(values.closeRelative.mobile, 'rel', 'Relative')} // Key & Type changed
-                disabled={vState.rel.loading || vState.rel.verified}
-              >
-                <Text style={{ color: vState.rel.verified ? 'green' : 'blue', fontWeight: 'bold', padding: 5 }}>
-                  {vState.rel.loading ? '...' : vState.rel.verified ? 'Verified' : 'Send OTP'}
+                onPress={() =>
+                  handleSendOTP(values.closeRelative.mobile, 'rel', 'Relative')
+                } // Key & Type changed
+                disabled={vState.rel.loading || vState.rel.verified}>
+                <Text
+                  style={{
+                    color: vState.rel.verified ? 'green' : 'blue',
+                    fontWeight: 'bold',
+                    padding: 5,
+                  }}>
+                  {vState.rel.loading
+                    ? '...'
+                    : vState.rel.verified
+                    ? translate('Verified')
+                    : translate('Send OTP')}
                 </Text>
               </TouchableOpacity>
             )}
           />
           {vState.rel.sent && !vState.rel.verified && (
             <AppInput
-              label="Enter OTP"
-              placeholder="OTP"
+              label={translate('Enter OTP')}
+              placeholder={translate('OTP')}
               keyboardType="numeric"
               value={vState.rel.otp}
-              onChangeText={(t) => updateVState('rel', { otp: t })}
+              onChangeText={t => updateVState('rel', {otp: t})}
               renderRight={() => (
-                <TouchableOpacity onPress={() => handleVerifyOTP(values.closeRelative.mobile, 'rel', 'Relative')}>
-                  <Text style={{ color: 'blue', fontWeight: 'bold', padding: 5 }}>Verify</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    handleVerifyOTP(
+                      values.closeRelative.mobile,
+                      'rel',
+                      'Relative',
+                    )
+                  }>
+                  <Text style={{color: 'blue', fontWeight: 'bold', padding: 5}}>
+                    {translate('Verify')}
+                  </Text>
                 </TouchableOpacity>
               )}
             />
@@ -519,44 +606,62 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
         </SectionCard>
 
         {/* Emergency Contact */}
-        <SectionCard title="Emergency Contact" icon="phone-alert" iconColor={stepColor}>
+        <SectionCard
+          title={translate('Emergency Contact')}
+          icon="phone-alert"
+          iconColor={stepColor}>
           <AppInput
-            label="Name"
-            placeholder="Enter name"
+            label={translate('Name')}
+            placeholder={translate('Enter name')}
             {...fp('emergency.name')}
           />
           <AppInput
-            label="Relationship"
-            placeholder="Enter relationship"
+            label={translate('Relationship')}
+            placeholder={translate('Enter relationship')}
             {...fp('emergency.relationship')}
           />
           <AppInput
-            label="Mobile Number"
+            label={translate('Mobile Number')}
             keyboardType="phone-pad"
             maxLength={10}
             {...fp('emergency.mobile')} // Path changed
             editable={!vState.emg.verified}
             renderRight={() => (
               <TouchableOpacity
-                onPress={() => handleSendOTP(values.emergency.mobile, 'emg', 'Emergency')} // Key & Type changed
-                disabled={vState.emg.loading || vState.emg.verified}
-              >
-                <Text style={{ color: vState.emg.verified ? 'green' : 'blue', fontWeight: 'bold', padding: 5 }}>
-                  {vState.emg.loading ? '...' : vState.emg.verified ? 'Verified' : 'Send OTP'}
+                onPress={() =>
+                  handleSendOTP(values.emergency.mobile, 'emg', 'Emergency')
+                } // Key & Type changed
+                disabled={vState.emg.loading || vState.emg.verified}>
+                <Text
+                  style={{
+                    color: vState.emg.verified ? 'green' : 'blue',
+                    fontWeight: 'bold',
+                    padding: 5,
+                  }}>
+                  {vState.emg.loading
+                    ? '...'
+                    : vState.emg.verified
+                    ? translate('Verified')
+                    : translate('Send OTP')}
                 </Text>
               </TouchableOpacity>
             )}
           />
           {vState.emg.sent && !vState.emg.verified && (
             <AppInput
-              label="Enter OTP"
-              placeholder="OTP"
+              label={translate('Enter OTP')}
+              placeholder={translate('OTP')}
               keyboardType="numeric"
               value={vState.emg.otp}
-              onChangeText={(t) => updateVState('emg', { otp: t })}
+              onChangeText={t => updateVState('emg', {otp: t})}
               renderRight={() => (
-                <TouchableOpacity onPress={() => handleVerifyOTP(values.emergency.mobile, 'emg', 'Emergency')}>
-                  <Text style={{ color: 'blue', fontWeight: 'bold', padding: 5 }}>Verify</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    handleVerifyOTP(values.emergency.mobile, 'emg', 'Emergency')
+                  }>
+                  <Text style={{color: 'blue', fontWeight: 'bold', padding: 5}}>
+                    {translate('Verify')}
+                  </Text>
                 </TouchableOpacity>
               )}
             />
@@ -582,7 +687,6 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
           }}
           stepColor={stepColor}
         />
-
       </ScrollView>
     </View>
   );
@@ -591,6 +695,6 @@ const ReferenceScreen = ({ onNext }: { onNext: () => void }) => {
 export default ReferenceScreen;
 
 const s = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.light_blue },
-  scroll: { padding: 16, paddingBottom: 40 },
+  screen: {flex: 1, backgroundColor: colors.light_blue},
+  scroll: {padding: 16, paddingBottom: 40},
 });

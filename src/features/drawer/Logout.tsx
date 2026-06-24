@@ -1,33 +1,28 @@
 import React from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from 'react-native';
-import { reset } from '../../reduxUtils/store/userInfoSlice';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { hScale, wScale } from '../../utils/styles/dimensions';
+import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {reset} from '../../reduxUtils/store/userInfoSlice';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {hScale, wScale} from '../../utils/styles/dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { translate } from '../../utils/languageUtils/I18n';
+import {translate} from '../../utils/languageUtils/I18n';
 
-const Logout = ({ onClose }: { onClose?: () => void }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+const Logout = ({onClose}: {onClose?: () => void}) => {
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
 
   const PRIMARY = colorConfig?.primaryColor || '#6366F1';
 
- const handleBack = () => {
-    onClose?.();  // ← modal band karega
+  const handleBack = () => {
+    onClose?.(); // ← modal band karega
   };
- const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       await AsyncStorage.clear();
       dispatch(reset());
-      onClose?.();  // ← logout ke baad bhi band karo
+      onClose?.(); // ← logout ke baad bhi band karo
     } catch (error) {
       console.error('Failed to clear AsyncStorage:', error);
     }
@@ -36,7 +31,6 @@ const Logout = ({ onClose }: { onClose?: () => void }) => {
   return (
     <View style={s.overlay}>
       <View style={s.sheet}>
-
         {/* Top bar */}
         <View style={s.topBar}>
           <View style={s.pill} />
@@ -49,29 +43,31 @@ const Logout = ({ onClose }: { onClose?: () => void }) => {
 
         {/* Text */}
         <Text style={s.title}>{translate('Logout?')}</Text>
-        <Text style={s.subtitle}>{translate('Are you sure you want to log out?')}</Text>
+        <Text style={s.subtitle}>
+          {translate('Are you sure you want to log out?')}
+        </Text>
 
         {/* Divider */}
         <View style={s.divider} />
 
         {/* Buttons */}
         <TouchableOpacity
-          style={[s.btnLogout, { backgroundColor: PRIMARY }]}
+          style={[s.btnLogout, {backgroundColor: PRIMARY}]}
           onPress={handleLogout}
-          activeOpacity={0.85}
-        >
-          <Text style={s.btnLogoutText}>Yes, Logout</Text>
+          activeOpacity={0.85}>
+          <Text style={s.btnLogoutText}>
+            {translate('Yes')}, {translate('Logout')}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={s.btnCancel}
           onPress={handleBack}
-          activeOpacity={0.85}
-        >
-          <Text style={s.btnCancelText}>Cancel</Text>
+          activeOpacity={0.85}>
+          <Text style={s.btnCancelText}>{translate('Cancel')}</Text>
         </TouchableOpacity>
 
-        <View style={{ height: hScale(30) }} />
+        <View style={{height: hScale(30)}} />
       </View>
     </View>
   );

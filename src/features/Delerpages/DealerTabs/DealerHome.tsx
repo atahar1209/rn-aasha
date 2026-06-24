@@ -1,32 +1,35 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, StatusBar, Alert, Image } from 'react-native';
-import { useSelector } from 'react-redux';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { useDispatch } from 'react-redux';
-import { reset } from '../../../reduxUtils/store/userInfoSlice';
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  Alert,
+} from 'react-native';
+import {useSelector} from 'react-redux';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
+import {useDispatch} from 'react-redux';
+import {reset} from '../../../reduxUtils/store/userInfoSlice';
 import LinearGradient from 'react-native-linear-gradient';
-import MenuIcon from '../../dashboard/components/MenuIcon';
 import AddTokenSvg from '../../drawer/svgimgcomponents/AddTokenSvg';
 import UserDelerSvg from '../../drawer/svgimgcomponents/UserDelerSvg';
 import TransferDelerSvg from '../../drawer/svgimgcomponents/TransferDelerSvg';
-import { useFocusEffect } from '@react-navigation/native';
-import { decryptData } from '../../../utils/encryptionUtils';
-import { APP_URLS } from '../../../utils/network/urls';
+import {decryptData} from '../../../utils/encryptionUtils';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { BalanceType } from '../../dashboard/utils';
+import {BalanceType} from '../../dashboard/utils';
 import DashboardHeader from '../../dashboard/components/DashboardHeader';
 import DealerRecentTra from '../DelerHomeToppage/DealerRecentTra';
-import Feather from 'react-native-vector-icons/Feather';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { SvgUri } from 'react-native-svg';
-import BackArrow from '../../../utils/svgUtils/BackArrow';
-import FastImage from "react-native-fast-image";
-import { getAssetSource } from "../../../utils/network/NetWorkImages";
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import FastImage from 'react-native-fast-image';
+import {getAssetSource} from '../../../utils/network/NetWorkImages';
 
 const DealerHome = () => {
-  const { colorConfig } = useSelector((state) => state.userInfo);
-  const { get } = useAxiosHook();
+  const {colorConfig} = useSelector(state => state.userInfo);
+  const {get} = useAxiosHook();
   const navigation = useNavigation();
   const [balanceInfo, setBalanceInfo] = useState<BalanceType | undefined>();
   const [firmname, setfirmName] = useState<any>();
@@ -38,19 +41,23 @@ const DealerHome = () => {
 
   const handleLogout = () => {
     Alert.alert(
-      'Confirm Logout',
-      'Are you sure you want to logout?',
+      translate('Confirm Logout'),
+      translate('Are you sure you want to logout?'),
       [
-        { text: 'Cancel', onPress: () => console.log('Logout Cancelled'), style: 'cancel' },
-        { text: 'OK', onPress: () => handleLogout2() },
+        {
+          text: translate('Cancel'),
+          onPress: () => console.log('Logout Cancelled'),
+          style: 'cancel',
+        },
+        {text: translate('OK'), onPress: () => handleLogout2()},
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
   const getData = async () => {
     try {
-      const userInfo = await get({ url: APP_URLS.getUserInfo });
+      const userInfo = await get({url: APP_URLS.getUserInfo});
       const data = userInfo.data;
 
       const decryptedData = {
@@ -64,90 +71,96 @@ const DealerHome = () => {
 
       setfirmName(decryptedData.adminFarmName);
       setBalanceInfo(decryptedData);
-
     } catch (error) {
       if (error.message === 'Network Error') {
         console.error('Network error occurred');
       } else {
         console.error('Error fetching data:', error);
-        Alert.alert('Error', 'Something went wrong. Please try again.');
+        Alert.alert(
+          translate('Error'),
+          translate('Something went wrong. Please try again.'),
+        );
       }
     }
   };
-const {post}= useAxiosHook();
-const [cmsImage , setCmsData]= useState([])
-useEffect(() => {
-  const getdata = async () => {
-    const res = await post({ url: APP_URLS.getFinanceSectionImages });
-    console.log("Full Response:", res);
+  const {post} = useAxiosHook();
+  const [cmsImage, setCmsData] = useState([]);
+  useEffect(() => {
+    const getdata = async () => {
+      const res = await post({url: APP_URLS.getFinanceSectionImages});
+      console.log('Full Response:', res);
 
-    const cmsObj = res.find(item => item.name === "CMS");
-    console.log("CMS Object:", cmsObj);
-    setCmsData(cmsObj)
-  };
+      const cmsObj = res.find(item => item.name === 'CMS');
+      console.log('CMS Object:', cmsObj);
+      setCmsData(cmsObj);
+    };
 
-  getdata();
-}, []);
+    getdata();
+  }, []);
 
   return (
     <LinearGradient
-      style={{ flex: 1 }}
-      colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-    >
+      style={{flex: 1}}
+      colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}>
       <StatusBar backgroundColor={colorConfig.primaryColor} />
 
-      <View style={[styles.Headers, 
-        // { backgroundColor: 'rgba(0, 0, 0, 0.2)' }
+      <View
+        style={[
+          styles.Headers,
+          // { backgroundColor: 'rgba(0, 0, 0, 0.2)' }
         ]}>
-          <DashboardHeader refreshPress={true} />
+        <DashboardHeader refreshPress={true} />
         {/* <TouchableOpacity onPress={handleLogout}>
           <Feather name="power" size={30} color={"#fff"} />
         </TouchableOpacity> */}
       </View>
 
       <ScrollView style={styles.container}>
-
         <View style={styles.iconButtonContainer}>
           <View style={styles.iconButtonContainer}>
-            <View style={[styles.row,]}>
+            <View style={[styles.row]}>
               <TouchableOpacity
                 style={styles.iconButton}
-                onPress={() => navigation.navigate('DealerToken')}
-              >
+                onPress={() => navigation.navigate('DealerToken')}>
                 <AddTokenSvg color1={'#34EFDF'} color2={'#A870B7'} />
-                <Text style={styles.iconText}>{'Retail Token'}</Text>
+                <Text style={styles.iconText}>{translate('Retail Token')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.iconButton}
-                onPress={() => navigation.navigate('DealerUser')}
-              >
+                onPress={() => navigation.navigate('DealerUser')}>
                 <UserDelerSvg color1={'#34EFDF'} color2={'#A870B7'} />
-                <Text style={styles.iconText}>{'Users'}</Text>
+                <Text style={styles.iconText}>{translate('Users')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.iconButton}
-                onPress={() => navigation.navigate('FundTransferUser')}
-              >
+                onPress={() => navigation.navigate('FundTransferUser')}>
                 <TransferDelerSvg color1={'#34EFDF'} color2={'#A870B7'} />
-                <Text style={styles.iconText}>{'Wallet Transfer'}</Text>
+                <Text style={styles.iconText}>
+                  {translate('Wallet Transfer')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.iconButton}
-                onPress={() => navigation.navigate('CmsScreen')}
-              >
-             
-             <FastImage   
-             style={{height:hScale(35),width:wScale(40)}}
-             source={getAssetSource(`${APP_URLS.cms_logo}`)}/>
-                <Text style={styles.iconText}>{'Cms'}</Text>
+                onPress={() => navigation.navigate('CmsScreen')}>
+                <FastImage
+                  style={{height: hScale(35), width: wScale(40)}}
+                  source={getAssetSource(`${APP_URLS.cms_logo}`)}
+                />
+                <Text style={styles.iconText}>{translate('Cms')}</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
         <View>
-          <Text style={[styles.recent, { backgroundColor: colorConfig.secondaryColor }]}>{translate("Recent_Transactions")}</Text>
+          <Text
+            style={[
+              styles.recent,
+              {backgroundColor: colorConfig.secondaryColor},
+            ]}>
+            {translate('Recent_Transactions')}
+          </Text>
           <DealerRecentTra />
         </View>
       </ScrollView>
@@ -158,19 +171,18 @@ useEffect(() => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgba(255,255,255,0.5)',
-    flex: 1
+    flex: 1,
   },
   marqueeContainer: {
     height: 35,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  iconButtonContainer: {
-  },
+  iconButtonContainer: {},
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   iconButton: {
     flex: 1,
@@ -192,7 +204,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 10,
-  
   },
   MenuLogo: {},
 
@@ -202,7 +213,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     flex: 1,
-    paddingVertical: hScale(10)
+    paddingVertical: hScale(10),
   },
 });
 

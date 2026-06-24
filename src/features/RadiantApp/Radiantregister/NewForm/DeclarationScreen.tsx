@@ -1,23 +1,14 @@
 // screens/DeclarationScreen.tsx
 
 import React from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {
-  StepBanner,
-  SectionCard,
-  NavRow,
-  getStepColor,
-} from '../../components/FormUI';
-import { colors } from '../../../../utils/styles/theme';
-import { useFormCtx } from './FormContext';
-import { hScale, wScale } from '../../../../utils/styles/dimensions';
+import {SectionCard, NavRow, getStepColor} from '../../components/FormUI';
+import {colors} from '../../../../utils/styles/theme';
+import {useFormCtx} from './FormContext';
+import {hScale, wScale} from '../../../../utils/styles/dimensions';
+import {translate} from '../../../../utils/languageUtils/I18n';
 
 const STEP = 6;
 
@@ -25,42 +16,58 @@ const STEP = 6;
 const SECTIONS = [
   {
     id: 'A',
-    title: 'Self-Declaration',
+    title: translate('Self-Declaration'),
     icon: 'file-account-outline',
     content: [
-      'I acknowledge that I am being onboarded as an independent service provider and not as an employee of the Company and I shall carry out services in accordance with the terms of the separate service agreement and operational guidelines issued by the Company from time to time.',
-      'I further declare that I have not been convicted of any criminal offence and no criminal proceedings are pending against me. I am not a wilful defaulter in repaying any borrowings (loans/credit cards) and have not been involved in any fraud or financial misconduct.',
-      'I confirm that the information provided by me is true and complete. I understand that any misrepresentation or concealment may result in rejection of my onboarding or termination of my engagement, without prejudice to any legal action.',
+      translate(
+        'I acknowledge that I am being onboarded as an independent service provider and not as an employee of the Company and I shall carry out services in accordance with the terms of the separate service agreement and operational guidelines issued by the Company from time to time.',
+      ),
+      translate(
+        'I further declare that I have not been convicted of any criminal offence and no criminal proceedings are pending against me. I am not a wilful defaulter in repaying any borrowings (loans/credit cards) and have not been involved in any fraud or financial misconduct.',
+      ),
+      translate(
+        'I confirm that the information provided by me is true and complete. I understand that any misrepresentation or concealment may result in rejection of my onboarding or termination of my engagement, without prejudice to any legal action.',
+      ),
     ],
   },
   {
     id: 'B',
-    title: 'Code of Conduct',
+    title: translate('Code of Conduct'),
     icon: 'scale-balance',
     content: [
-      'I agree to act honestly, ethically, and in compliance with applicable laws.',
-      'I shall maintain confidentiality of customer and Company information and adhere to data protection and security practices.',
-      'I shall avoid any conflict of interest that may adversely affect my engagement.',
+      translate(
+        'I agree to act honestly, ethically, and in compliance with applicable laws.',
+      ),
+      translate(
+        'I shall maintain confidentiality of customer and Company information and adhere to data protection and security practices.',
+      ),
+      translate(
+        'I shall avoid any conflict of interest that may adversely affect my engagement.',
+      ),
     ],
   },
   {
     id: 'C',
-    title: 'Data Privacy Consent',
+    title: translate('Data Privacy Consent'),
     icon: 'shield-lock-outline',
     content: [
-      'I hereby acknowledge and confirm that I have read and understood the Data Privacy Notice and Consent Form (Annexure I) provided by the Company.',
-      'I agree to provide my free, informed, and explicit consent to the collection, use, processing, storage, and sharing of my personal data in accordance with the said Annexure I and applicable laws.',
+      translate(
+        'I hereby acknowledge and confirm that I have read and understood the Data Privacy Notice and Consent Form (Annexure I) provided by the Company.',
+      ),
+      translate(
+        'I agree to provide my free, informed, and explicit consent to the collection, use, processing, storage, and sharing of my personal data in accordance with the said Annexure I and applicable laws.',
+      ),
     ],
   },
 ];
 
 // ─── Declaration Card ─────────────────────────────────────
-const DeclCard = ({ section, color }: any) => (
-  <View style={[dc.card, ]}>
+const DeclCard = ({section, color}: any) => (
+  <View style={[dc.card]}>
     <View style={dc.body}>
       {section.content.map((para: string, idx: number) => (
         <View key={idx} style={dc.paraRow}>
-          <View style={[dc.bullet, { backgroundColor: color }]} />
+          <View style={[dc.bullet, {backgroundColor: color}]} />
           <Text style={dc.paraText}>{para}</Text>
         </View>
       ))}
@@ -105,14 +112,14 @@ const dc = StyleSheet.create({
 });
 
 // ─── Main Screen ──────────────────────────────────────────
-const DeclarationScreen =({ onNext }: { onNext: () => void }) => {
-  const { nextStep, updateStep } = useFormCtx();
+const DeclarationScreen = ({onNext}: {onNext: () => void}) => {
+  const {nextStep, updateStep} = useFormCtx();
   const stepColor = getStepColor(STEP);
 
   const handleNext = () => {
-    updateStep('declaration', { agreed: true });
+    updateStep('declaration', {agreed: true});
     nextStep();
-                onNext(7);
+    onNext(7);
   };
 
   return (
@@ -121,20 +128,15 @@ const DeclarationScreen =({ onNext }: { onNext: () => void }) => {
 
       <ScrollView
         contentContainerStyle={s.scroll}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         {/* Sections */}
         {SECTIONS.map(section => (
           <SectionCard
             key={section.id}
             title={`Section ${section.id} — ${section.title}`}
             icon={section.icon}
-            iconColor={stepColor}
-          >
-            <DeclCard
-              section={section}
-              color={stepColor}
-            />
+            iconColor={stepColor}>
+            <DeclCard section={section} color={stepColor} />
           </SectionCard>
         ))}
 
@@ -146,14 +148,15 @@ const DeclarationScreen =({ onNext }: { onNext: () => void }) => {
             color="#92400E"
           />
           <Text style={s.noteText}>
-            By tapping <Text style={s.noteBold}>Next</Text>, you confirm your agreement to all declarations above. This is legally binding.
+            {translate('By tapping')}{' '}
+            <Text style={s.noteBold}>{translate('Next')}</Text>,{' '}
+            {translate(
+              'you confirm your agreement to all declarations above. This is legally binding.',
+            )}
           </Text>
         </View>
 
-        <NavRow
-          onNext={handleNext}
-          stepColor={stepColor}
-        />
+        <NavRow onNext={handleNext} stepColor={stepColor} />
       </ScrollView>
     </View>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Modal,
   TouchableWithoutFeedback,
@@ -10,9 +10,10 @@ import {
 } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ClosseModalSvg from '../../drawer/svgimgcomponents/ClosseModal';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 interface ImagePreviewModalProps {
   visible: boolean;
@@ -33,7 +34,7 @@ const MultiImageModal: React.FC<ImagePreviewModalProps> = ({
   onDone,
   onDeleteImage,
 }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const secondaryColorWithOpacity = `${colorConfig.secondaryColor}40`;
   const primaryColorWithOpacity = `${colorConfig.primaryColor}40`;
 
@@ -43,7 +44,9 @@ const MultiImageModal: React.FC<ImagePreviewModalProps> = ({
 
   // Reset index on modal close
   useEffect(() => {
-    if (!visible) setCurrentIndex(0);
+    if (!visible) {
+      setCurrentIndex(0);
+    }
   }, [visible]);
 
   return (
@@ -51,23 +54,35 @@ const MultiImageModal: React.FC<ImagePreviewModalProps> = ({
       <TouchableWithoutFeedback>
         <View style={styles.imageModalBackdrop}>
           <View style={styles.imageModalContainer}>
-            <View style={[styles.actionBar, { backgroundColor: secondaryColorWithOpacity }]}>
+            <View
+              style={[
+                styles.actionBar,
+                {backgroundColor: secondaryColorWithOpacity},
+              ]}>
               <View style={styles.leftActions}>
                 <TouchableOpacity
-                  style={[styles.actionButton, { backgroundColor: primaryColorWithOpacity }]}
-                  onPress={reUpload}
-                >
+                  style={[
+                    styles.actionButton,
+                    {backgroundColor: primaryColorWithOpacity},
+                  ]}
+                  onPress={reUpload}>
                   <Text style={styles.buttonText}>
-                    {isCameraSession ? 'Add More' : 'Re-upload'}
+                    {isCameraSession
+                      ? translate('Add More')
+                      : translate('Re-upload')}
                   </Text>
                 </TouchableOpacity>
 
                 {onDeleteImage && imagesToDisplay.length > 0 && (
                   <TouchableOpacity
-                    style={[styles.actionButton, { backgroundColor: '#ff444440', marginLeft: 10 }]}
-                    onPress={() => onDeleteImage(imagesToDisplay[currentIndex])}
-                  >
-                    <Text style={styles.buttonText}>Delete</Text>
+                    style={[
+                      styles.actionButton,
+                      {backgroundColor: '#ff444440', marginLeft: 10},
+                    ]}
+                    onPress={() =>
+                      onDeleteImage(imagesToDisplay[currentIndex])
+                    }>
+                    <Text style={styles.buttonText}>{translate('Delete')}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -75,10 +90,12 @@ const MultiImageModal: React.FC<ImagePreviewModalProps> = ({
               <View style={styles.rightActions}>
                 {isCameraSession && (
                   <TouchableOpacity
-                    style={[styles.actionButton, { backgroundColor: '#00C85140', marginRight: 10 }]}
-                    onPress={onDone}
-                  >
-                    <Text style={styles.buttonText}>Done</Text>
+                    style={[
+                      styles.actionButton,
+                      {backgroundColor: '#00C85140', marginRight: 10},
+                    ]}
+                    onPress={onDone}>
+                    <Text style={styles.buttonText}>{translate('Done')}</Text>
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity onPress={onClose}>
@@ -97,12 +114,14 @@ const MultiImageModal: React.FC<ImagePreviewModalProps> = ({
 
             <View style={styles.imageViewerContainer}>
               <ImageViewer
-                imageUrls={imagesToDisplay.map(uri => ({ url: uri }))}
+                imageUrls={imagesToDisplay.map(uri => ({url: uri}))}
                 enableSwipeDown={true}
                 onSwipeDown={onClose}
                 enableImageZoom={true}
-                onChange={(index) => {
-                  if (typeof index === 'number') setCurrentIndex(index);
+                onChange={index => {
+                  if (typeof index === 'number') {
+                    setCurrentIndex(index);
+                  }
                 }}
                 renderIndicator={() => null}
               />

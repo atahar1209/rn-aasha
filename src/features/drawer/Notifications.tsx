@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,16 +9,17 @@ import {
   Animated,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import LinearGradient from "react-native-linear-gradient";
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { hScale, wScale } from '../../utils/styles/dimensions';
+import LinearGradient from 'react-native-linear-gradient';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {translate} from '../../utils/languageUtils/I18n';
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -28,7 +29,7 @@ const Notifications = () => {
           setNotifications(JSON.parse(stored));
         }
       } catch (error) {
-        console.error("Error loading notifications:", error);
+        console.error('Error loading notifications:', error);
       } finally {
         setLoading(false);
       }
@@ -43,7 +44,7 @@ const Notifications = () => {
   };
 
   // 🔥 Animated Card
-  const renderNotificationItem = ({ item, index }: any) => {
+  const renderNotificationItem = ({item, index}: any) => {
     const fadeAnim = new Animated.Value(0);
 
     Animated.timing(fadeAnim, {
@@ -54,26 +55,33 @@ const Notifications = () => {
     }).start();
 
     return (
-      <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: fadeAnim.interpolate({
-        inputRange: [0,1],
-        outputRange: [30,0]
-      })}] }}>
+      <Animated.View
+        style={{
+          opacity: fadeAnim,
+          transform: [
+            {
+              translateY: fadeAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [30, 0],
+              }),
+            },
+          ],
+        }}>
         <LinearGradient
           colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-          style={styles.card}
-        >
+          style={styles.card}>
           {/* Top Row */}
           <View style={styles.row}>
             <Text style={styles.icon}>🔔</Text>
 
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.body}>{item.body}</Text>
             </View>
 
             {/* Badge */}
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>NEW</Text>
+              <Text style={styles.badgeText}>{translate('NEW')}</Text>
             </View>
           </View>
 
@@ -88,17 +96,17 @@ const Notifications = () => {
 
   return (
     <View style={styles.screen}>
-
       {/* 🔥 Premium Header */}
       <LinearGradient
         colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-        style={styles.header}
-      >
-        <Text style={styles.headerTitle}>🔔 Notifications</Text>
+        style={styles.header}>
+        <Text style={styles.headerTitle}>🔔 {translate('Notifications')}</Text>
 
         {notifications.length > 0 && (
-          <TouchableOpacity onPress={clearNotifications} style={styles.clearBox}>
-            <Text style={styles.clearText}>Clear All</Text>
+          <TouchableOpacity
+            onPress={clearNotifications}
+            style={styles.clearBox}>
+            <Text style={styles.clearText}>{translate('Clear All')}</Text>
           </TouchableOpacity>
         )}
       </LinearGradient>
@@ -117,14 +125,15 @@ const Notifications = () => {
         ) : (
           <View style={styles.emptyBox}>
             <Text style={styles.emptyIcon}>📭</Text>
-            <Text style={styles.emptyTitle}>No Notifications</Text>
+            <Text style={styles.emptyTitle}>
+              {translate('No Notifications')}
+            </Text>
             <Text style={styles.emptySub}>
-              You're all caught up!
+              {translate('You are all caught up!')}
             </Text>
           </View>
         )}
       </View>
-
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, {useRef, useCallback} from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -6,12 +6,12 @@ import {
   StyleSheet,
   Animated,
   Platform,
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../reduxUtils/store";
-import { hScale, wScale } from "../../../utils/styles/dimensions";
-import { translate } from "../../../utils/languageUtils/I18n";
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ interface DynamicButtonProps {
   onlong?: () => void;
   styleoveride?: object;
   disabled?: boolean;
-  variant?: "solid" | "outline" | "ghost";
+  variant?: 'solid' | 'outline' | 'ghost';
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -32,9 +32,9 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   onlong,
   styleoveride,
   disabled = false,
-  variant = "solid",
+  variant = 'solid',
 }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
   // Press scale animation
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -80,21 +80,20 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
     if (!disabled) onlong?.();
   }, [disabled, onlong]);
 
-  const primaryColor = colorConfig?.primaryButtonColor || "#0A84FF";
-  const secondaryColor = colorConfig?.secondaryButtonColor || "#0055FF";
-  const labelColor = colorConfig?.labelColor || "#FFFFFF";
+  const primaryColor = colorConfig?.primaryButtonColor || '#0A84FF';
+  const secondaryColor = colorConfig?.secondaryButtonColor || '#0055FF';
+  const labelColor = colorConfig?.labelColor || '#FFFFFF';
 
   // ─── Outline / Ghost Variants ─────────────────────────────────────────────
 
-  if (variant === "outline") {
+  if (variant === 'outline') {
     return (
       <Animated.View
         style={[
           styles.wrapper,
           styleoveride,
-          { transform: [{ scale: scaleAnim }], opacity: opacityAnim },
-        ]}
-      >
+          {transform: [{scale: scaleAnim}], opacity: opacityAnim},
+        ]}>
         <TouchableOpacity
           activeOpacity={1}
           onPressIn={animateIn}
@@ -104,27 +103,25 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
           disabled={disabled}
           style={[
             styles.outlineBtn,
-            { borderColor: primaryColor },
+            {borderColor: primaryColor},
             disabled && styles.disabledOverlay,
-          ]}
-        >
-          <Text style={[styles.outlineText, { color: primaryColor }]}>
-            {typeof title === "string" ? translate(title) : title}
+          ]}>
+          <Text style={[styles.outlineText, {color: primaryColor}]}>
+            {typeof title === 'string' ? translate(title) : translate(title)}
           </Text>
         </TouchableOpacity>
       </Animated.View>
     );
   }
 
-  if (variant === "ghost") {
+  if (variant === 'ghost') {
     return (
       <Animated.View
         style={[
           styles.wrapper,
           styleoveride,
-          { transform: [{ scale: scaleAnim }], opacity: opacityAnim },
-        ]}
-      >
+          {transform: [{scale: scaleAnim}], opacity: opacityAnim},
+        ]}>
         <TouchableOpacity
           activeOpacity={1}
           onPressIn={animateIn}
@@ -132,10 +129,9 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
           onPress={handlePress}
           onLongPress={handleLongPress}
           disabled={disabled}
-          style={[styles.ghostBtn, disabled && styles.disabledOverlay]}
-        >
-          <Text style={[styles.ghostText, { color: primaryColor }]}>
-            {typeof title === "string" ? translate(title) : title}
+          style={[styles.ghostBtn, disabled && styles.disabledOverlay]}>
+          <Text style={[styles.ghostText, {color: primaryColor}]}>
+            {typeof title === 'string' ? translate(title) : title}
           </Text>
         </TouchableOpacity>
       </Animated.View>
@@ -149,31 +145,23 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
       style={[
         styles.wrapper,
         styleoveride,
-        { transform: [{ scale: scaleAnim }], opacity: disabled ? 0.5 : opacityAnim },
-      ]}
-    >
+        {
+          transform: [{scale: scaleAnim}],
+          opacity: disabled ? 0.5 : opacityAnim,
+        },
+      ]}>
       {/* Soft shadow glow layer */}
-      <View
-        style={[
-          styles.glowLayer,
-          { backgroundColor: primaryColor },
-        ]}
-      />
+      <View style={[styles.glowLayer, {backgroundColor: primaryColor}]} />
 
       <LinearGradient
         style={styles.gradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
         colors={
-          disabled
-            ? ["#C7C7CC", "#AEAEB2"]
-            : [primaryColor, secondaryColor]
-        }
-      >
+          disabled ? ['#C7C7CC', '#AEAEB2'] : [primaryColor, secondaryColor]
+        }>
         {/* Top shine streak */}
-        {!disabled && (
-          <View style={styles.shineStreak} pointerEvents="none" />
-        )}
+        {!disabled && <View style={styles.shineStreak} pointerEvents="none" />}
 
         <TouchableOpacity
           activeOpacity={1}
@@ -182,10 +170,10 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
           onPress={handlePress}
           onLongPress={handleLongPress}
           disabled={disabled}
-          style={styles.touchArea}
-        >
-          {typeof title === "string" ? (
-            <Text style={[styles.label, { color: disabled ? "#FFF" : labelColor }]}>
+          style={styles.touchArea}>
+          {typeof title === 'string' ? (
+            <Text
+              style={[styles.label, {color: disabled ? '#FFF' : labelColor}]}>
               {translate(title)}
             </Text>
           ) : (
@@ -203,13 +191,13 @@ export default React.memo(DynamicButton);
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: "100%",
-    position: "relative",
+    width: '100%',
+    position: 'relative',
   },
 
   // Glow shadow beneath button
   glowLayer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: -hScale(5),
     left: wScale(20),
     right: wScale(20),
@@ -218,8 +206,8 @@ const styles = StyleSheet.create({
     opacity: 0.25,
     ...Platform.select({
       ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 6 },
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 6},
         shadowOpacity: 0.3,
         shadowRadius: 10,
       },
@@ -228,14 +216,14 @@ const styles = StyleSheet.create({
   },
 
   gradient: {
-    width: "100%",
+    width: '100%',
     borderRadius: wScale(14),
-    overflow: "hidden",
+    overflow: 'hidden',
     ...Platform.select({
-      android: { elevation: 6 },
+      android: {elevation: 6},
       ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.18,
         shadowRadius: 10,
       },
@@ -244,12 +232,12 @@ const styles = StyleSheet.create({
 
   // Subtle top shine to give depth
   shineStreak: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: wScale(16),
     right: wScale(16),
     height: hScale(1.5),
-    backgroundColor: "rgba(255,255,255,0.35)",
+    backgroundColor: 'rgba(255,255,255,0.35)',
     borderBottomLeftRadius: wScale(4),
     borderBottomRightRadius: wScale(4),
     zIndex: 1,
@@ -257,19 +245,19 @@ const styles = StyleSheet.create({
 
   touchArea: {
     height: hScale(54),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: wScale(24),
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: wScale(8),
   },
 
   label: {
     fontSize: wScale(15),
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: wScale(1.2),
-    textTransform: "uppercase",
-    color: "#FFF",
+    textTransform: 'uppercase',
+    color: '#FFF',
   },
 
   // Outline variant
@@ -277,32 +265,32 @@ const styles = StyleSheet.create({
     height: hScale(54),
     borderRadius: wScale(14),
     borderWidth: wScale(1.5),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: wScale(24),
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   outlineText: {
     fontSize: wScale(15),
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: wScale(1.2),
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
 
   // Ghost variant
   ghostBtn: {
     height: hScale(54),
     borderRadius: wScale(14),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: wScale(24),
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   ghostText: {
     fontSize: wScale(15),
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: wScale(0.5),
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
 
   // Disabled state

@@ -1,38 +1,37 @@
-import React, { useEffect, useRef } from "react";
-import { View, StyleSheet, Animated, Easing } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../reduxUtils/store";
+import React, {useEffect, useRef} from 'react';
+import {View, StyleSheet, Animated, Easing} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 
-const UpdateSvg = ({ 
-    size = wScale(120), 
-    color = "#fff", 
-    color2 = "#fff", 
-    progress = 0 // 0 to 100
+const UpdateSvg = ({
+  size = wScale(120),
+  color = '#fff',
+  color2 = '#fff',
+  progress = 0, // 0 to 100
 }) => {
-    // Animation value for height
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  // Animation value for height
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
+  const animatedValue = useRef(new Animated.Value(0)).current;
 
-    const animatedValue = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: progress,
+      duration: 500, // Smooth transition
+      easing: Easing.linear,
+      useNativeDriver: false, // Height ke liye false rakhna padega
+    }).start();
+  }, [progress]);
 
-    useEffect(() => {
-        Animated.timing(animatedValue, {
-            toValue: progress,
-            duration: 500, // Smooth transition
-            easing: Easing.linear,
-            useNativeDriver: false, // Height ke liye false rakhna padega
-        }).start();
-    }, [progress]);
+  // Interpolate progress to height percentage
+  const heightInterpolate = animatedValue.interpolate({
+    inputRange: [0, 100],
+    outputRange: ['0%', '100%'],
+  });
 
-    // Interpolate progress to height percentage
-    const heightInterpolate = animatedValue.interpolate({
-        inputRange: [0, 100],
-        outputRange: ["0%", "100%"],
-    });
-
-    const svgname = `
+  const svgname = `
     <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 68 68">
         <g>
             <path fill="${color2}" d="M61.6 26.78v33.44c0 3.16-2.56 5.73-5.72 5.73H9.91c-2.19 0-4.17-.89-5.6-2.32A7.883 7.883 0 0 1 2 58.04V16.18c0-2.03 1.65-3.68 3.68-3.68h16.05c2.03 0 3.68 1.65 3.68 3.68v4.05c0 1.13.92 2.05 2.05 2.05H57.1c2.49 0 4.5 2.01 4.5 4.5z" opacity="0.4"></path>
@@ -44,41 +43,44 @@ const UpdateSvg = ({
     </svg>
     `;
 
-    return (
-        <View style={[styles.container, { width: size, height: size }]}>
-            <View style={StyleSheet.absoluteFill}>
-                 <Animated.View 
-                    style={[
-                        styles.filler, 
-                        { height: heightInterpolate, backgroundColor: colorConfig.primaryButtonColor }
-                    ]} 
-                />
-            </View>
+  return (
+    <View style={[styles.container, {width: size, height: size}]}>
+      <View style={StyleSheet.absoluteFill}>
+        <Animated.View
+          style={[
+            styles.filler,
+            {
+              height: heightInterpolate,
+              backgroundColor: colorConfig.primaryButtonColor,
+            },
+          ]}
+        />
+      </View>
 
-            {/* SVG Overlay */}
-            <View style={styles.svgWrapper}>
-                <SvgXml xml={svgname} width={size} height={size} />
-            </View>
-        </View>
-    );
+      {/* SVG Overlay */}
+      <View style={styles.svgWrapper}>
+        <SvgXml xml={svgname} width={size} height={size} />
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        overflow: 'hidden',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20, // Optional: thoda round look ke liye
-    },
-    filler: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
-    svgWrapper: {
-        zIndex: 1,
-    }
+  container: {
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20, // Optional: thoda round look ke liye
+  },
+  filler: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  svgWrapper: {
+    zIndex: 1,
+  },
 });
 
 export default UpdateSvg;

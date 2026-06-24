@@ -1,9 +1,9 @@
-import React, { useEffect, useId, useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Modal } from 'react-native';
+/* eslint-disable react/no-unstable-nested-components */
+import React, {useEffect, useState} from 'react';
+import {View, Text, Image, StyleSheet, ScrollView, Modal} from 'react-native';
 // import { createDrawerNavigator } from "@react-navigation-drawer";
 import {
   DrawerContentScrollView,
-  DrawerItem,
   DrawerItemList,
   createDrawerNavigator,
 } from '@react-navigation/drawer';
@@ -13,34 +13,30 @@ import Security from './Security';
 import ReferAndEran from './ReferAndEran';
 import Administrator from './Administrator';
 import Logout from './Logout';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { SvgXml } from 'react-native-svg';
+import {SvgXml} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
 import Setting from './Setting';
-import MenuPage from './MenuPage/Menu';
-
-import { translate } from '../../utils/languageUtils/I18n';
-import { hScale, wScale } from '../../utils/styles/dimensions';
+import {translate} from '../../utils/languageUtils/I18n';
+import {hScale, wScale} from '../../utils/styles/dimensions';
 import DashboardScreen from '../dashboard/DashboardScreen';
 import Privacy from './privacy';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { colors } from '../../utils/styles/theme';
-import LoginScreen from '../login/LoginScreen';
-import { APP_URLS } from '../../utils/network/urls';
-import { url } from 'inspector';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {colors} from '../../utils/styles/theme';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { decryptData } from '../../utils/encryptionUtils';
+import {decryptData} from '../../utils/encryptionUtils';
 import Notifications from './Notifications';
-import Mpin from './securityPages/Mpin';
-import Entypo from 'react-native-vector-icons/Entypo';  // or another icon set like MaterialIcons
+import Entypo from 'react-native-vector-icons/Entypo'; // or another icon set like MaterialIcons
 import LoginReport from './securityPages/LoginReport';
 import BorderLine from '../../components/BorderLine';
 
 const Drawer = createDrawerNavigator();
-const DrawerNavigation = ({ navigation }) => {
-  const { get } = useAxiosHook()
-  const { colorConfig, IsDealer, userId } = useSelector((state: RootState) => state.userInfo)
+const DrawerNavigation = ({navigation}) => {
+  const {get} = useAxiosHook();
+  const {colorConfig, IsDealer, userId} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const Next = `
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" stroke="#000000" stroke-width="30" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M149.3 481c-3 0-6-1.1-8.2-3.4-4.6-4.6-4.6-11.9 0-16.5L346.2 256 141.1 50.9c-4.6-4.6-4.6-11.9 0-16.5s11.9-4.6 16.5 0l213.3 213.3c4.6 4.6 4.6 11.9 0 16.5L157.6 477.6c-2.3 2.3-5.3 3.4-8.3 3.4z" fill="#000000" opacity="1" data-original="#000000" class=""></path></g></svg>
 `;
@@ -79,22 +75,22 @@ const DrawerNavigation = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-
-
-
       if (!IsDealer) {
-        const res = await get({ url: APP_URLS.getProfile })
+        const res = await get({url: APP_URLS.getProfile});
         if (res.data) {
-          setAdminData(JSON.parse(decryptData(res.value1, res.value2, res.data)));
-          console.log(JSON.parse(decryptData(res.value1, res.value2, res.data)))
+          setAdminData(
+            JSON.parse(decryptData(res.value1, res.value2, res.data)),
+          );
+          console.log(
+            JSON.parse(decryptData(res.value1, res.value2, res.data)),
+          );
 
-          const data = JSON.parse(decryptData(res.value1, res.value2, res.data))
-          console.log(data.videokycstatus)
-
+          const data = JSON.parse(
+            decryptData(res.value1, res.value2, res.data),
+          );
+          console.log(data.videokycstatus);
 
           if (data.videokycstatus === 'Y') {
-
-
             // Alert.alert(
             //   'Info',
             //   'Video kyc is pending',
@@ -104,28 +100,25 @@ const DrawerNavigation = ({ navigation }) => {
             //       onPress: () => console.log('OK Pressed'),
             //     },
             //     {
-            //       text: 'Procceed Video Kyc',  
+            //       text: 'Procceed Video Kyc',
             //       onPress: () => {
             //         navigation.navigate('VideoKYC');
-
-
             //       },
             //     },
             //   ],
             //   { cancelable: false }
             // );
-
           }
         }
       } else {
-        const dealer_profile = await get({ url: `${APP_URLS.dealer_profile}dlmid=${userId}` })
+        const dealer_profile = await get({
+          url: `${APP_URLS.dealer_profile}dlmid=${userId}`,
+        });
         setAdminData(dealer_profile);
 
-        console.log(dealer_profile, '******')
+        console.log(dealer_profile, '******');
       }
-
-
-    }
+    };
 
     fetchData();
   }, []);
@@ -135,7 +128,7 @@ const DrawerNavigation = ({ navigation }) => {
   useEffect(() => {
     const fetchVersion = async () => {
       try {
-        const version = await get({ url: APP_URLS.current_version });
+        const version = await get({url: APP_URLS.current_version});
         setLatestVersion(version);
       } catch (error) {
         console.error('Version fetch error:', error);
@@ -151,6 +144,7 @@ const DrawerNavigation = ({ navigation }) => {
         screenOptions={{
           headerShown: false,
         }}
+        // eslint-disable-next-line react/no-unstable-nested-components
         drawerContent={props => {
           <DrawerContentScrollView>
             <DrawerItemList
@@ -160,10 +154,13 @@ const DrawerNavigation = ({ navigation }) => {
           </DrawerContentScrollView>;
 
           return (
-            <View >
-              <LinearGradient colors={[colorConfig.primaryColor, colorConfig.secondaryColor]} style={{
-                marginBottom: hScale(-20), zIndex: 99
-              }}>
+            <View>
+              <LinearGradient
+                colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+                style={{
+                  marginBottom: hScale(-20),
+                  zIndex: 99,
+                }}>
                 <View style={styles.Safearea}>
                   <View style={styles.imgbg2}>
                     <View
@@ -171,45 +168,46 @@ const DrawerNavigation = ({ navigation }) => {
                         styles.imgbg,
                         //  {borderRadius:renderCount === 0?10 :(renderCount=== 0?100:0)}
                       ]}
-                    //  onLeayout={onRender}
+                      //  onLeayout={onRender}
                     >
-
-                      {adminData && adminData.Photo ? <Image
-                        source={{ uri: `http://${APP_URLS.baseWebUrl}${adminData.Photo}` }}
-                        style={styles.userimg}
-                      /> : <Image
-                        source={require('./assets/bussiness-man.png')}
-                        style={styles.userimg}
-                      />}
-
+                      {adminData && adminData.Photo ? (
+                        <Image
+                          source={{
+                            uri: `http://${APP_URLS.baseWebUrl}${adminData.Photo}`,
+                          }}
+                          style={styles.userimg}
+                        />
+                      ) : (
+                        <Image
+                          source={require('./assets/bussiness-man.png')}
+                          style={styles.userimg}
+                        />
+                      )}
                     </View>
                   </View>
                   <Text style={styles.framtext}>
-
-                    {adminData && adminData.firmName ? adminData.firmName : APP_URLS.AppName}
+                    {adminData && adminData.firmName
+                      ? adminData.firmName
+                      : APP_URLS.AppName}
                   </Text>
-
-
                 </View>
               </LinearGradient>
               <ScrollView style={{}}>
-                <View style={{ flex: 1 }}>
+                <View style={{flex: 1}}>
                   <DrawerItemList {...props} />
-                  <View style={{ height: 230, }}>
-                    <View style={styles.packageRow} >
-
+                  <View style={{height: 230}}>
+                    <View style={styles.packageRow}>
                       <Text style={styles.prevText}>
                         {latestVersion.PackageName}
                       </Text>
 
-                      <BorderLine height={'100%'} width={.5} />
+                      <BorderLine height={'100%'} width={0.5} />
                       <Text style={styles.prevText}>
-                        App Version : V{latestVersion.currentversion}
+                        {translate('App Version')} : V
+                        {latestVersion.currentversion}
                       </Text>
                     </View>
                   </View>
-
-
                 </View>
               </ScrollView>
             </View>
@@ -220,7 +218,7 @@ const DrawerNavigation = ({ navigation }) => {
             backgroundColor: 'white',
             width: wScale(340),
           },
-          headerStyle: { backgroundColor: '#fff' },
+          headerStyle: {backgroundColor: '#fff'},
           headerTintColor: '#000',
           drawerActiveTintColor: 'red',
           drawerActiveBackgroundColor: '#fff',
@@ -237,10 +235,7 @@ const DrawerNavigation = ({ navigation }) => {
             fontSize: wScale(16),
             textTransform: 'capitalize',
           },
-        }}
-
-
-      >
+        }}>
         <Drawer.Screen
           name="Dashboard"
           component={DashboardScreen}
@@ -258,11 +253,12 @@ const DrawerNavigation = ({ navigation }) => {
           name="Profile"
           component={Profile}
           options={{
-            title: '', headerShown: false,
+            title: '',
+            headerShown: false,
 
             drawerLabel: translate('profile'),
 
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Profileimg}
@@ -280,10 +276,11 @@ const DrawerNavigation = ({ navigation }) => {
           name="Setting"
           component={Setting}
           options={{
-            title: '', headerShown: false,
+            title: '',
+            headerShown: false,
 
             drawerLabel: translate('settings'),
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Settingimg}
@@ -300,10 +297,11 @@ const DrawerNavigation = ({ navigation }) => {
           name="Help_And"
           component={Help_And}
           options={{
-            title: '', headerShown: false,
+            title: '',
+            headerShown: false,
 
             drawerLabel: translate('help'),
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Help}
@@ -320,10 +318,11 @@ const DrawerNavigation = ({ navigation }) => {
           name="Security"
           component={Security}
           options={{
-            title: '', headerShown: false,
+            title: '',
+            headerShown: false,
 
             drawerLabel: translate('security'),
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Securityimg}
@@ -341,10 +340,11 @@ const DrawerNavigation = ({ navigation }) => {
           name="Login Report"
           component={LoginReport}
           options={{
-            title: '', headerShown: false,
+            title: '',
+            headerShown: false,
 
             drawerLabel: translate('loginInfo'),
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Securityimg}
@@ -361,10 +361,11 @@ const DrawerNavigation = ({ navigation }) => {
           name="ReferAndEran"
           component={ReferAndEran}
           options={{
-            title: '', headerShown: false,
+            title: '',
+            headerShown: false,
 
             drawerLabel: translate('refer'),
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Refer}
@@ -384,7 +385,7 @@ const DrawerNavigation = ({ navigation }) => {
             headerShown: false,
 
             drawerLabel: translate('administrator'),
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Administratorimg}
@@ -398,72 +399,57 @@ const DrawerNavigation = ({ navigation }) => {
           }}
         />
 
-
-        <Drawer.Screen name='Privacy Policy' component={Privacy}
-
-
+        <Drawer.Screen
+          name="Privacy Policy"
+          component={Privacy}
           options={{
             drawerLabel: translate('privacy'),
             headerShown: false,
 
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Privacysvg}
                   width={wScale(25)}
                   height={hScale(25)}
                   style={styles.svgrightmargin}
-
                 />
 
-                <SvgXml
-                  xml={Next}
-
-                  style={[styles.rightimg,]}
-                />
-
+                <SvgXml xml={Next} style={[styles.rightimg]} />
               </>
             ),
-          }} />
+          }}
+        />
 
-
-        <Drawer.Screen name='Notifications' component={Notifications}
-
-
+        <Drawer.Screen
+          name="Notifications"
+          component={Notifications}
           options={{
             headerShown: false,
 
             drawerLabel: translate('Notifications'),
 
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <Entypo
-                  style={{ left: wScale(-5) }}
-                  name={"notification"}
+                  style={{left: wScale(-5)}}
+                  name={'notification'}
                   size={wScale(25)}
                   color={'#000'}
                 />
-                <SvgXml
-                  xml={Next}
-
-                  style={styles.rightimg}
-                />
-
+                <SvgXml xml={Next} style={styles.rightimg} />
               </>
-
-
-
             ),
             drawerItemStyle: {
-              borderWidth: 0
+              borderWidth: 0,
             },
-
-
-
-          }} />
-        <Drawer.Screen name='Logout' component={Logout}
+          }}
+        />
+        <Drawer.Screen
+          name="Logout"
+          component={Logout}
           listeners={{
-            drawerItemPress: (e) => {
+            drawerItemPress: e => {
               e.preventDefault(); // Stop navigation
               setLogoutVisible(true); // Open modal
             },
@@ -473,46 +459,30 @@ const DrawerNavigation = ({ navigation }) => {
 
             drawerLabel: translate('logout'),
 
-            drawerIcon: ({ focused, size }) => (
+            drawerIcon: ({focused, size}) => (
               <>
                 <SvgXml
                   xml={Logoutimg}
                   width={wScale(25)}
                   height={hScale(25)}
                   style={styles.svgrightmargin}
-
                 />
 
-                <SvgXml
-                  xml={Next}
-
-                  style={styles.rightimg}
-                />
-
+                <SvgXml xml={Next} style={styles.rightimg} />
               </>
-
-
-
             ),
             drawerItemStyle: {
-              borderWidth: 0
+              borderWidth: 0,
             },
-
-
-
-          }} />
-
-
+          }}
+        />
       </Drawer.Navigator>
       <Modal
         visible={logoutVisible}
         transparent
         animationType="slide"
-        onRequestClose={() => setLogoutVisible(false)}
-      >
-        <Logout
-          onClose={() => setLogoutVisible(false)}
-        />
+        onRequestClose={() => setLogoutVisible(false)}>
+        <Logout onClose={() => setLogoutVisible(false)} />
       </Modal>
     </>
   );
@@ -530,16 +500,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255, 255, 0.3)',
     padding: wScale(10),
     borderRadius: wScale(19),
-    transform: [{ rotate: '4deg' }],
+    transform: [{rotate: '4deg'}],
   },
   imgbg2: {
     alignItems: 'center',
     backgroundColor: 'rgba(255,255, 255, 0.2)',
     padding: wScale(6),
     borderRadius: wScale(16),
-    transform: [{ rotate: '-4deg' }],
+    transform: [{rotate: '-4deg'}],
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     // shadowOpacity: 0.1,
     // shadowRadius: 16,
     elevation: 0,
@@ -552,9 +522,14 @@ const styles = StyleSheet.create({
     width: wScale(110),
     height: hScale(102),
     //  height:110,
-    transform: [{ rotate: '0deg' }],
+    transform: [{rotate: '0deg'}],
   },
-  framtext: { fontSize: wScale(18.7), color: 'white', bottom: hScale(2), fontWeight: 'bold' },
+  framtext: {
+    fontSize: wScale(18.7),
+    color: 'white',
+    bottom: hScale(2),
+    fontWeight: 'bold',
+  },
   rightimg: {
     marginRight: 8,
     position: 'absolute',
@@ -573,13 +548,14 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     paddingHorizontal: wScale(5),
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
   packageRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center', height: hScale(12), marginTop: hScale(0),
-  }
-
+    alignItems: 'center',
+    height: hScale(12),
+    marginTop: hScale(0),
+  },
 });
 export default DrawerNavigation;

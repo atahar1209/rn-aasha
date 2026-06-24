@@ -1,23 +1,22 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, RefreshControl } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+/* eslint-disable quotes */
+import React, {useState, useCallback, useMemo} from 'react';
+import {View, Text, StyleSheet, RefreshControl} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import { SvgXml } from 'react-native-svg';
-import { BottomSheet } from '@rneui/base';
-import { FlashList } from '@shopify/flash-list';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-
-import { RootState } from '../../reduxUtils/store';
-import { hScale, SCREEN_HEIGHT, wScale } from '../../utils/styles/dimensions';
-import { stateData } from '../../utils/stateData';
-import { translate } from '../../utils/languageUtils/I18n';
-import { APP_URLS } from '../../utils/network/urls';
+import {SvgXml} from 'react-native-svg';
+import {BottomSheet} from '@rneui/base';
+import {FlashList} from '@shopify/flash-list';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {hScale, SCREEN_HEIGHT, wScale} from '../../utils/styles/dimensions';
+import {stateData} from '../../utils/stateData';
+import {translate} from '../../utils/languageUtils/I18n';
 import AppBar from './headerAppbar/AppBar';
 import SelectableButton from './profilePages/selectButton';
 import ImageBottomSheet from '../../components/ImageBottomSheet';
-import { useProfileData } from './profilePages/hokes/useProfileData';
+import {useProfileData} from './profilePages/hokes/useProfileData';
 import ProfileHeader from './profilePages/ProfileHeader';
 import PersonalInfoTab from './profilePages/PersonalInfoTab';
 import BusinessKycTab from './profilePages/BusinessKycTab';
@@ -29,12 +28,12 @@ const makeGenderSVG = (p: string, s: string) =>
 
 const Profile: React.FC = () => {
   const navigation = useNavigation<any>();
-  const { colorConfig, IsDealer } = useSelector((s: RootState) => s.userInfo);
+  const {colorConfig, IsDealer} = useSelector((s: RootState) => s.userInfo);
 
   // ── Local UI state (tab, gender, bottom sheets) ───────────────────────────
-  const [selectedopt, setSelectedOpt]       = useState(true);
+  const [selectedopt, setSelectedOpt] = useState(true);
   const [selectedGender, setSelectedGender] = useState('Male');
-  const [showStateList, setShowStateList]   = useState(false);
+  const [showStateList, setShowStateList] = useState(false);
   const [showDistrictList, setShowDistrictList] = useState(false);
 
   // ── All data/logic from hook ──────────────────────────────────────────────
@@ -46,7 +45,7 @@ const Profile: React.FC = () => {
   );
 
   const handleGenderChange = useCallback(() => {
-    setSelectedGender((prev) =>
+    setSelectedGender(prev =>
       prev === 'Male' ? 'Female' : prev === 'Female' ? 'Other' : 'Male',
     );
   }, []);
@@ -55,21 +54,29 @@ const Profile: React.FC = () => {
   const renderEmptyState = () => (
     <View style={s.emptyState}>
       <Text style={s.emptyTitle}>{translate('Complete Your Profile')}</Text>
-      <Text style={s.emptySub}>{translate('Set up your profile to access all features')}</Text>
+      <Text style={s.emptySub}>
+        {translate('Set up your profile to access all features')}
+      </Text>
       <TouchableOpacity
         activeOpacity={0.85}
-        onPress={() => navigation.navigate('EditProfile', { profileData: p.profileDataToUse })}
-        style={[s.emptyBtn, { backgroundColor: colorConfig.secondaryColor }]}
-      >
-        <Text style={s.emptyBtnText}>{translate('Click to Create Your Profile')}  →</Text>
+        onPress={() =>
+          navigation.navigate('EditProfile', {profileData: p.profileDataToUse})
+        }
+        style={[s.emptyBtn, {backgroundColor: colorConfig.secondaryColor}]}>
+        <Text style={s.emptyBtnText}>
+          {translate('Click to Create Your Profile')} →
+        </Text>
       </TouchableOpacity>
-      <View style={{ height: hScale(10) }} />
+      <View style={{height: hScale(10)}} />
       <TouchableOpacity
         activeOpacity={0.85}
-        onPress={() => navigation.navigate('VideoKYC', { CNTNT: { hindi: '', Eng: '' } })}
-        style={[s.emptyBtn, { backgroundColor: colorConfig.primaryColor }]}
-      >
-        <Text style={s.emptyBtnText}>{translate('Click to Create Video Kyc')}  🎥</Text>
+        onPress={() =>
+          navigation.navigate('VideoKYC', {CNTNT: {hindi: '', Eng: ''}})
+        }
+        style={[s.emptyBtn, {backgroundColor: colorConfig.primaryColor}]}>
+        <Text style={s.emptyBtnText}>
+          {translate('Click to Create Video Kyc')} 🎥
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -77,9 +84,13 @@ const Profile: React.FC = () => {
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <View style={s.root}>
-      <LinearGradient colors={[colorConfig.primaryColor, colorConfig.secondaryColor]} style={{ flex: 1 }}>
-
-        <AppBar title={translate('Manage Profile')} actionButton={<SvgXml xml={DELETE_SVG} />} />
+      <LinearGradient
+        colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+        style={{flex: 1}}>
+        <AppBar
+          title={'Manage Profile'}
+          actionButton={<SvgXml xml={DELETE_SVG} />}
+        />
 
         <ProfileHeader
           profileData={p.profileData}
@@ -94,77 +105,94 @@ const Profile: React.FC = () => {
         </View>
 
         <ScrollView
-          refreshControl={<RefreshControl refreshing={p.refreshing} onRefresh={p.onRefresh} />}
+          refreshControl={
+            <RefreshControl refreshing={p.refreshing} onRefresh={p.onRefresh} />
+          }
           contentContainerStyle={s.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+          showsVerticalScrollIndicator={false}>
           <View style={s.bodyCard}>
-            {!p.hasProfileData
-              ? renderEmptyState()
-              : selectedopt
-                ? (
-                  <PersonalInfoTab
-                    profileData={p.profileData}
-                    nameVal={p.nameVal} setNameVal={p.setNameVal}
-                    selectedGender={selectedGender}
-                    onGenderChange={handleGenderChange}
-                    genderSvg={genderSvg}
-                    stateVal={p.stateVal} districtVal={p.districtVal}
-                    districtData={p.districtData}
-                    onStatePress={() => setShowStateList(true)}
-                    onDistrictPress={() => setShowDistrictList(true)}
-                    hasProfileData={p.hasProfileData}
-                    onKycPress={() => navigation.navigate('VideoKYC', { CNTNT: { hindi: '', Eng: '' } })}
-                  />
-                ) : (
-                  <BusinessKycTab
-                    profileData={p.profileData}
-                    firmNameVal={p.firmNameVal} setFirmNameVal={p.setFirmNameVal}
-                    aadharNo={p.aadharNo} panNo={p.panNo} gst={p.gst}
-                    aadharStatus={p.aadharStatus} panStatus={p.panStatus}
-                    gstStatus={p.gstStatus} serviceStatus={p.serviceStatus}
-                    selfieStatus={p.selfieStatus} addrStatus={p.addrStatus}
-                    showLoader={p.showLoader}
-                    requestCameraPermission={p.requestCameraPermission}
-                    showUploadOptions={p.showUploadOptions}
-                    onViewImage={(path, title) => {
-                      p.setImagePath(path);
-                      p.setImageModalVisible(true);
-                      p.setModalTitle(title);
-                    }}
-                  />
-                )}
+            {!p.hasProfileData ? (
+              renderEmptyState()
+            ) : selectedopt ? (
+              <PersonalInfoTab
+                profileData={p.profileData}
+                nameVal={p.nameVal}
+                setNameVal={p.setNameVal}
+                selectedGender={translate(selectedGender)}
+                onGenderChange={handleGenderChange}
+                genderSvg={genderSvg}
+                stateVal={p.stateVal}
+                districtVal={p.districtVal}
+                districtData={p.districtData}
+                onStatePress={() => setShowStateList(true)}
+                onDistrictPress={() => setShowDistrictList(true)}
+                hasProfileData={p.hasProfileData}
+                onKycPress={() =>
+                  navigation.navigate('VideoKYC', {CNTNT: {hindi: '', Eng: ''}})
+                }
+              />
+            ) : (
+              <BusinessKycTab
+                profileData={p.profileData}
+                firmNameVal={p.firmNameVal}
+                setFirmNameVal={p.setFirmNameVal}
+                aadharNo={p.aadharNo}
+                panNo={p.panNo}
+                gst={p.gst}
+                aadharStatus={p.aadharStatus}
+                panStatus={p.panStatus}
+                gstStatus={p.gstStatus}
+                serviceStatus={p.serviceStatus}
+                selfieStatus={p.selfieStatus}
+                addrStatus={p.addrStatus}
+                showLoader={p.showLoader}
+                requestCameraPermission={p.requestCameraPermission}
+                showUploadOptions={p.showUploadOptions}
+                onViewImage={(path, title) => {
+                  p.setImagePath(path);
+                  p.setImageModalVisible(true);
+                  p.setModalTitle(title);
+                }}
+              />
+            )}
           </View>
 
           {/* State / District bottom sheet */}
           <BottomSheet
             isVisible={showStateList || showDistrictList}
-            onBackdropPress={() => { setShowStateList(false); setShowDistrictList(false); }}
-            containerStyle={{ backgroundColor: 'transparent' }}
-          >
+            onBackdropPress={() => {
+              setShowStateList(false);
+              setShowDistrictList(false);
+            }}
+            containerStyle={{backgroundColor: 'transparent'}}>
             <View style={s.bsContainer}>
-              <View style={[s.bsHeader, { backgroundColor: colorConfig.primaryColor }]}>
+              <View
+                style={[
+                  s.bsHeader,
+                  {backgroundColor: colorConfig.primaryColor},
+                ]}>
                 <Text style={s.bsHeaderText}>
-                  {translate(showStateList ? 'select state' : 'select District')}
+                  {translate(
+                    showStateList ? 'select state' : 'select District',
+                  )}
                 </Text>
               </View>
               <FlashList
-                style={{ marginBottom: wScale(50), marginHorizontal: wScale(16) }}
+                style={{marginBottom: wScale(50), marginHorizontal: wScale(16)}}
                 data={(showStateList ? stateData : p.districtData) as any[]}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <TouchableOpacity
                     style={s.listItem}
                     onPress={async () => {
                       if (showStateList) {
                         setShowStateList(false);
                         p.setStateVal(item.stateName);
-                        await p.getDistricts({ id: item.stateId });
+                        await p.getDistricts({id: item.stateId});
                       } else {
                         setShowDistrictList(false);
                         p.setDistrictVal(item['Dist Name']);
                       }
-                    }}
-                  >
+                    }}>
                     <Text style={s.listItemText}>
                       {showStateList ? item.stateName : item['Dist Name']}
                     </Text>
@@ -180,12 +208,14 @@ const Profile: React.FC = () => {
             imagePath={p.imagePath}
             setModalVisible={p.setImageModalVisible}
             isModalVisible={p.isImageModalVisible}
-            modalTitle={p.modalTitle}
+            modalTitle={translate(p.modalTitle)}
             setImagePath={p.setImagePath}
             isUri
             ReUpload={() => {
               p.setImageModalVisible(false);
-              const isAadhar = p.modalTitle === 'Aadhar Card (Front Side)' || p.modalTitle === 'Address Proof (Back Side)';
+              const isAadhar =
+                p.modalTitle === 'Aadhar Card (Front Side)' ||
+                p.modalTitle === 'Address Proof (Back Side)';
               isAadhar
                 ? p.requestCameraPermission('AA')
                 : p.showUploadOptions(p.modalTitle || p.lastUpload);
@@ -198,31 +228,71 @@ const Profile: React.FC = () => {
 };
 
 const s = StyleSheet.create({
-  root: { flex: 1 },
+  root: {flex: 1},
   tabWrap: {
-    backgroundColor: '#fff', marginHorizontal: wScale(12),
-    borderTopLeftRadius: wScale(12), borderTopRightRadius: wScale(12),
-    paddingHorizontal: wScale(10), paddingTop: hScale(8),
+    backgroundColor: '#fff',
+    marginHorizontal: wScale(12),
+    borderTopLeftRadius: wScale(12),
+    borderTopRightRadius: wScale(12),
+    paddingHorizontal: wScale(10),
+    paddingTop: hScale(8),
   },
-  scrollContent: { paddingBottom: hScale(40) },
+  scrollContent: {paddingBottom: hScale(40)},
   bodyCard: {
-    backgroundColor: '#fff', marginHorizontal: wScale(12),
-    borderBottomLeftRadius: wScale(12), borderBottomRightRadius: wScale(12),
-    paddingHorizontal: wScale(12), paddingTop: hScale(12), paddingBottom: hScale(20),
+    backgroundColor: '#fff',
+    marginHorizontal: wScale(12),
+    borderBottomLeftRadius: wScale(12),
+    borderBottomRightRadius: wScale(12),
+    paddingHorizontal: wScale(12),
+    paddingTop: hScale(12),
+    paddingBottom: hScale(20),
   },
   bsContainer: {
-    backgroundColor: '#fff', height: SCREEN_HEIGHT / 1.5,
-    borderTopLeftRadius: wScale(16), borderTopRightRadius: wScale(16), overflow: 'hidden',
+    backgroundColor: '#fff',
+    height: SCREEN_HEIGHT / 1.5,
+    borderTopLeftRadius: wScale(16),
+    borderTopRightRadius: wScale(16),
+    overflow: 'hidden',
   },
-  bsHeader: { paddingVertical: hScale(14), paddingHorizontal: wScale(16), alignItems: 'center' },
-  bsHeaderText: { fontSize: wScale(16), color: '#fff', fontWeight: '700', textTransform: 'uppercase' },
-  listItem: { paddingVertical: hScale(12), paddingHorizontal: wScale(16), borderBottomWidth: 1, borderBottomColor: '#f1f5f9' },
-  listItemText: { color: '#ef4444', fontSize: wScale(16) },
-  emptyState: { alignItems: 'center', paddingVertical: hScale(24) },
-  emptyTitle: { fontSize: wScale(18), fontWeight: '700', color: '#1e293b', marginBottom: hScale(6) },
-  emptySub: { fontSize: wScale(13), color: '#64748b', textAlign: 'center', marginBottom: hScale(22), lineHeight: hScale(20) },
-  emptyBtn: { width: '100%', paddingVertical: hScale(13), borderRadius: wScale(10), alignItems: 'center' },
-  emptyBtnText: { color: '#fff', fontSize: wScale(15), fontWeight: '600' },
+  bsHeader: {
+    paddingVertical: hScale(14),
+    paddingHorizontal: wScale(16),
+    alignItems: 'center',
+  },
+  bsHeaderText: {
+    fontSize: wScale(16),
+    color: '#fff',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  listItem: {
+    paddingVertical: hScale(12),
+    paddingHorizontal: wScale(16),
+    borderBottomWidth: 1,
+    borderBottomColor: '#f1f5f9',
+  },
+  listItemText: {color: '#ef4444', fontSize: wScale(16)},
+  emptyState: {alignItems: 'center', paddingVertical: hScale(24)},
+  emptyTitle: {
+    fontSize: wScale(18),
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: hScale(6),
+  },
+  emptySub: {
+    fontSize: wScale(13),
+    color: '#64748b',
+    textAlign: 'center',
+    marginBottom: hScale(22),
+    lineHeight: hScale(20),
+  },
+  emptyBtn: {
+    width: '100%',
+    paddingVertical: hScale(13),
+    borderRadius: wScale(10),
+    alignItems: 'center',
+  },
+  emptyBtnText: {color: '#fff', fontSize: wScale(15), fontWeight: '600'},
 });
 
 export default Profile;

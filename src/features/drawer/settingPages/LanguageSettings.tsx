@@ -1,18 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  View, Text, TouchableOpacity, StyleSheet,
-  ScrollView, ActivityIndicator, Animated,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import AppBarSecond from '../headerAppbar/AppBarSecond';
 import LenguageSvg from '../svgimgcomponents/Lenguageimg';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import { Dialog, ALERT_TYPE } from 'react-native-alert-notification';
-import { useDispatch } from 'react-redux';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {Dialog, ALERT_TYPE} from 'react-native-alert-notification';
+import {useDispatch} from 'react-redux';
 import CheckSvg from '../svgimgcomponents/CheckSvg';
-import { setLocale, translate } from '../../../utils/languageUtils/I18n';
-import { setAppLanguage } from '../../../reduxUtils/store/userInfoSlice';
+import {setLocale, translate} from '../../../utils/languageUtils/I18n';
+import {setAppLanguage} from '../../../reduxUtils/store/userInfoSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FLAG_EMOJIS = {
@@ -27,26 +31,23 @@ const FLAG_EMOJIS = {
 };
 
 const LanguageSettings = () => {
-  const { colorConfig, appLanguage } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, appLanguage} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
   const dispatch = useDispatch();
-  const saveRef = useRef(null);
+  const saveRef = useRef<ScrollView>(null);
   const [loading, setLoading] = useState(false);
 
-  // Per-item animated scales
-  const scaleAnims = useRef(
-    Array.from({ length: 8 }, () => new Animated.Value(1))
-  ).current;
-
   const languages = [
-    { title: 'English (India)',    code: 'en' },
-    { title: 'Hindi (हिंदी)',       code: 'hi' },
-    { title: 'Bengali (বাংলা)',     code: 'bn' },
-    { title: 'Gujarati (ગુજરાતી)', code: 'gj' },
-    { title: 'Kannada (ಕನ್ನಡ)',    code: 'kn' },
-    { title: 'Marathi (मराठी)',    code: 'mh' },
-    { title: 'Tamil (தமிழ்)',      code: 'tn' },
-    { title: 'Telugu (తెలుగు)',    code: 'tl' },
+    {title: translate('English (India)'), code: 'en'},
+    {title: translate('Hindi (हिंदी)'), code: 'hi'},
+    {title: translate('Bengali (বাংলা)'), code: 'bn'},
+    {title: translate('Gujarati (ગુજરાતી)'), code: 'gj'},
+    {title: translate('Kannada (ಕನ್ನಡ)'), code: 'kn'},
+    {title: translate('Marathi (मराठी)'), code: 'mh'},
+    {title: translate('Tamil (தமிழ்)'), code: 'tn'},
+    {title: translate('Telugu (తెలుగు)'), code: 'tl'},
   ];
 
   useEffect(() => {
@@ -66,20 +67,20 @@ const LanguageSettings = () => {
 
   useEffect(() => {
     if (appLanguage) {
-      const index = languages.findIndex((language) => language.code === appLanguage);
-      if (index !== -1) setSelectedLanguageIndex(index);
+      const index = languages.findIndex(
+        language => language.code === appLanguage,
+      );
+      if (index !== -1) {
+        setSelectedLanguageIndex(index);
+      }
     }
   }, [appLanguage]);
 
   const changeLanguage = (index: number) => {
-    // Bounce animation on selected item
-    Animated.sequence([
-      Animated.timing(scaleAnims[index], { toValue: 0.93, duration: 80, useNativeDriver: true }),
-      Animated.spring(scaleAnims[index], { toValue: 1, useNativeDriver: true, tension: 200, friction: 8 }),
-    ]).start();
-
     setTimeout(() => {
-      if (saveRef.current) saveRef.current.scrollToEnd({ animated: true });
+      if (saveRef.current) {
+        saveRef.current.scrollToEnd({animated: true});
+      }
     }, 100);
     setSelectedLanguageIndex(index);
   };
@@ -93,18 +94,20 @@ const LanguageSettings = () => {
       dispatch(setAppLanguage(selectedLang));
       Dialog.show({
         type: ALERT_TYPE.SUCCESS,
-        title: 'SUCCESS',
-        textBody: 'Your Language Is Changed Successfully',
-        button: 'OK',
-        onPressButton: () => { Dialog.hide(); },
+        title: translate('SUCCESS'),
+        textBody: translate('Your Language Is Changed Successfully'),
+        button: translate('OK'),
+        onPressButton: () => {
+          Dialog.hide();
+        },
       });
     } catch (error) {
       console.error('Error changing language:', error);
       Dialog.show({
         type: ALERT_TYPE.DANGER,
-        title: 'ERROR',
-        textBody: 'Failed to change language',
-        button: 'OK',
+        title: translate('ERROR'),
+        textBody: translate('Failed to change language'),
+        button: translate('OK'),
       });
     } finally {
       setLoading(false);
@@ -124,20 +127,25 @@ const LanguageSettings = () => {
       <ScrollView
         ref={saveRef}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
+        contentContainerStyle={styles.scrollContent}>
         {/* Header illustration + selected badge */}
         <View style={styles.heroSection}>
-          <View style={[styles.iconCircle, { backgroundColor: `${colorConfig.secondaryColor}18` }]}>
+          <View
+            style={[
+              styles.iconCircle,
+              {backgroundColor: `${colorConfig.secondaryColor}18`},
+            ]}>
             <LenguageSvg />
           </View>
           <Text style={styles.heroTitle}>{translate('Choose Language')}</Text>
-          <Text style={styles.heroSub}>
-            {translate('Selected Language')}
-          </Text>
+          <Text style={styles.heroSub}>{translate('Selected Language')}</Text>
 
           {/* Active language badge */}
-          <View style={[styles.activeBadge, { backgroundColor: colorConfig.secondaryColor }]}>
+          <View
+            style={[
+              styles.activeBadge,
+              {backgroundColor: colorConfig.secondaryColor},
+            ]}>
             <Text style={styles.activeBadgeFlag}>
               {FLAG_EMOJIS[languages[selectedLanguageIndex].code]}
             </Text>
@@ -152,70 +160,85 @@ const LanguageSettings = () => {
           {languages.map((language, index) => {
             const isSelected = index === selectedLanguageIndex;
             return (
-              <Animated.View key={index} style={{ transform: [{ scale: scaleAnims[index] }] }}>
-                <TouchableOpacity
-                  onPress={() => changeLanguage(index)}
-                  activeOpacity={0.75}
-                  style={[
-                    styles.langRow,
-                    isSelected && [styles.langRowActive, { backgroundColor: `${colorConfig.secondaryColor}12`, borderColor: colorConfig.secondaryColor }],
-                    index === languages.length - 1 && { borderBottomWidth: 0 },
-                  ]}
-                >
-                  {/* Flag */}
-                  <View style={styles.flagBox}>
-                    <Text style={styles.flagEmoji}>{FLAG_EMOJIS[language.code]}</Text>
-                  </View>
-
-                  {/* Label */}
-                  <Text style={[
-                    styles.langText,
-                    isSelected && { color: colorConfig.secondaryColor, fontWeight: '700' },
-                  ]}>
-                    {language.title}
+              <TouchableOpacity
+                key={index}
+                onPress={() => changeLanguage(index)}
+                activeOpacity={0.75}
+                style={[
+                  styles.langRow,
+                  isSelected && [
+                    styles.langRowActive,
+                    {
+                      backgroundColor: `${colorConfig.secondaryColor}12`,
+                      borderColor: colorConfig.secondaryColor,
+                    },
+                  ],
+                  index === languages.length - 1 && {borderBottomWidth: 0},
+                ]}>
+                {/* Flag */}
+                <View style={styles.flagBox}>
+                  <Text style={styles.flagEmoji}>
+                    {FLAG_EMOJIS[language.code]}
                   </Text>
+                </View>
 
-                  {/* Check indicator */}
-                  <View style={[
+                {/* Label */}
+                <Text
+                  style={[
+                    styles.langText,
+                    isSelected && {
+                      color: colorConfig.secondaryColor,
+                      fontWeight: '700',
+                    },
+                  ]}>
+                  {language.title}
+                </Text>
+
+                {/* Check indicator */}
+                <View
+                  style={[
                     styles.checkCircle,
                     isSelected
-                      ? { backgroundColor: colorConfig.secondaryColor, borderColor: colorConfig.secondaryColor }
-                      : { borderColor: '#D1D5DB' },
+                      ? {
+                          backgroundColor: colorConfig.secondaryColor,
+                          borderColor: colorConfig.secondaryColor,
+                        }
+                      : {borderColor: '#D1D5DB'},
                   ]}>
-                    {isSelected && <CheckSvg />}
-                  </View>
-                </TouchableOpacity>
-              </Animated.View>
+                  {isSelected && <CheckSvg />}
+                </View>
+              </TouchableOpacity>
             );
           })}
         </View>
 
         {/* Save Button */}
         <TouchableOpacity
-          style={[styles.saveBtn, { backgroundColor: colorConfig.secondaryColor }]}
+          style={[
+            styles.saveBtn,
+            {backgroundColor: colorConfig.secondaryColor},
+          ]}
           onPress={BtnPress}
           activeOpacity={0.85}
-          disabled={loading}
-        >
-          {loading
-            ? <ActivityIndicator size="small" color="#fff" />
-            : (
-              <View style={styles.saveBtnInner}>
-                <Text style={styles.saveBtnText}>{translate('Save')}</Text>
-                <Text style={styles.saveBtnArrow}>→</Text>
-              </View>
-            )
-          }
+          disabled={loading}>
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <View style={styles.saveBtnInner}>
+              <Text style={styles.saveBtnText}>{translate('Save')}</Text>
+              <Text style={styles.saveBtnArrow}>→</Text>
+            </View>
+          )}
         </TouchableOpacity>
 
-        <View style={{ height: hScale(32) }} />
+        <View style={{height: hScale(32)}} />
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main: { flex: 1, backgroundColor: '#F5F6FA' },
+  main: {flex: 1, backgroundColor: '#F5F6FA'},
 
   scrollContent: {
     paddingHorizontal: wScale(16),
@@ -276,7 +299,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.07,
     shadowRadius: 8,
     marginBottom: hScale(20),
@@ -334,7 +357,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.15,
     shadowRadius: 6,
   },

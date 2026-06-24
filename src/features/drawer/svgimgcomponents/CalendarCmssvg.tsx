@@ -1,15 +1,10 @@
-import React from "react";
-import { View } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { wScale } from "../../../utils/styles/dimensions";
+import React from 'react';
+import {View} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
 
-const CalendarCmssvg = ({
-    size = wScale(30),
-    month = "DEC",
-    year = "2025",
-}) => {
-
-    const calendarSvg = `
+const CalendarCmssvg = ({size = wScale(30), month = 'DEC', year = '2025'}) => {
+  const calendarSvg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
 
   <!-- Background -->
@@ -54,11 +49,11 @@ const CalendarCmssvg = ({
 </svg>
 `;
 
-    return (
-        <View>
-            <SvgXml xml={calendarSvg} width={size} height={size} />
-        </View>
-    );
+  return (
+    <View>
+      <SvgXml xml={calendarSvg} width={size} height={size} />
+    </View>
+  );
 };
 
 export default CalendarCmssvg;

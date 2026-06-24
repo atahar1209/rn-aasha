@@ -397,13 +397,13 @@ const VideoKYC = () => {
         } else {
           Alert.alert(
             translate('Upload Failed'),
-            responseData.msg || 'Unknown Error',
+            responseData.msg || translate('Unknown Error'),
           );
         }
       } catch (e) {
         Alert.alert(
           translate('Server Error'),
-          xhr.responseText || 'Invalid Response',
+          xhr.responseText || translate('Invalid Response'),
         );
       }
     };
@@ -455,7 +455,7 @@ const VideoKYC = () => {
             onPress={() => navigation.goBack()}>
             <Text style={s.backArrow}>←</Text>
           </TouchableOpacity>
-          <Text style={s.topTitle}>Video KYC</Text>
+          <Text style={s.topTitle}>{translate('Video KYC')}</Text>
           {name ? <Text style={s.userName}>{name}</Text> : <View />}
         </View>
 
@@ -483,8 +483,9 @@ const VideoKYC = () => {
             <View style={s.recIndicator}>
               <View style={s.recDot} />
               <Text style={s.recText}>
-                REC {String(Math.floor(recordingSeconds / 60)).padStart(2, '0')}
-                :{String(recordingSeconds % 60).padStart(2, '0')} / 00:38
+                {translate('REC')}{' '}
+                {String(Math.floor(recordingSeconds / 60)).padStart(2, '0')}:
+                {String(recordingSeconds % 60).padStart(2, '0')} / 00:38
               </Text>
             </View>
           )}

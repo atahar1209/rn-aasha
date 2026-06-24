@@ -1,4 +1,5 @@
-import { translate } from "../../utils/languageUtils/I18n";
+/* eslint-disable react/no-unstable-nested-components */
+import {translate} from '../../utils/languageUtils/I18n';
 import {BottomSheet, Card, Image} from '@rneui/themed';
 import LottieView from 'lottie-react-native';
 import React, {useEffect, useState} from 'react';
@@ -14,11 +15,9 @@ import {
 } from 'react-native';
 import {APP_URLS} from './../../utils/network/urls';
 import useAxiosHook from './../../utils/network/AxiosClient';
-import {translate} from '../../utils/languageUtils/I18n';
 import {encrypt} from '../../utils/encryptionUtils';
 import {hScale} from '../../utils/styles/dimensions';
 import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
-import TabBar from './TabView/TabBarView';
 const MobileRecharge = () => {
   const [selectedButton, setSelectedButton] = useState('Prepaid');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -62,7 +61,7 @@ const MobileRecharge = () => {
       });
       console.log(response);
 
-      const res = response['myprop2Items'];
+      const res = response.myprop2Items;
       console.log(res);
       setOperatorlist(res);
       // setispost(res['postpaid']);
@@ -90,12 +89,12 @@ const MobileRecharge = () => {
         },
       });
 
-      const res = response['Response'];
+      const res = response.Response;
       console.log(res);
-      setispost(res['postpaid']);
-      setOperator(res['Operator']);
-      checkOperator(res['Operator']);
-      setState(res['Circle']);
+      setispost(res.postpaid);
+      setOperator(res.Operator);
+      checkOperator(res.Operator);
+      setState(res.Circle);
       if (ispost) {
         setSelectedOption('Prepaid');
       } else {
@@ -109,12 +108,11 @@ const MobileRecharge = () => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
         {
-          title: 'Contact Permission',
-          message:
-            'key_thisappn_100',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
+          title: translate('Contact Permission'),
+          message: translate('key_thisappn_100'),
+          buttonNeutral: translate('Ask Me Later'),
+          buttonNegative: translate('Cancel'),
+          buttonPositive: translate('OK'),
         },
       );
 
@@ -147,31 +145,31 @@ const MobileRecharge = () => {
   const validateFields = () => {
     if (!mobileNumber) {
       ToastAndroid.showWithGravity(
-        'Please Enter Mobile Number',
+        translate('Please Enter Mobile Number'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (mobileNumber.length < 10) {
       ToastAndroid.showWithGravity(
-        'Please Enter a 10 Digit Mobile Number',
+        translate('Please Enter a 10 Digit Mobile Number'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (operator === 'Operator') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (state === 'Select Your Circle') {
       ToastAndroid.showWithGravity(
-        'Please Select Your Circle',
+        translate('Please Select Your Circle'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (!Amount || Amount === 'Enter Amount') {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -205,9 +203,9 @@ const MobileRecharge = () => {
     const isValid =
       mobileNumber.length >= 10 &&
       operator !== 'Operator' &&
-      state !== 'Select Your Circle' &&
+      state !== translate('Select Your Circle') &&
       Amount !== '' &&
-      Amount !== 'Enter Amount';
+      Amount !== translate('Enter Amount');
     if (isValid) {
       setisDetailButton(true);
       console.log('y');
@@ -350,7 +348,7 @@ const MobileRecharge = () => {
             onSelect={handleSelect}
           />
         </View>
-        
+
         <View style={{flexDirection: 'row'}}>
           <Card
             containerStyle={{
@@ -369,7 +367,7 @@ const MobileRecharge = () => {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Mobile Number"
+                placeholder={translate('Mobile Number')}
                 placeholderTextColor="black"
                 onChangeText={text => {
                   if (text.length === 10) {
@@ -483,7 +481,7 @@ const MobileRecharge = () => {
                 {isViewPlans && (
                   <TouchableOpacity>
                     <Text style={{width: 50, color: '#ff8985'}}>
-                      View Plans
+                      {translate('View Plans')}
                     </Text>
                   </TouchableOpacity>
                 )}
@@ -514,7 +512,8 @@ const MobileRecharge = () => {
         <ScrollView horizontal contentContainerStyle={styles.container}>
           <></>
         </ScrollView>
-        <BottomSheet animationType="none"  
+        <BottomSheet
+          animationType="none"
           isVisible={isOperatorModalVisible}
           onBackdropPress={() => {
             setOperatorModalVisible(false);
@@ -528,8 +527,8 @@ const MobileRecharge = () => {
               renderItem={({item}) => (
                 <TouchableOpacity
                   onPress={() => {
-                    selectOperator(item['Operatorname']);
-                    setOperatorcode(item['OPtCode']);
+                    selectOperator(item.Operatorname);
+                    setOperatorcode(item.OPtCode);
                   }}
                   style={{flexDirection: 'row', width: '80%'}}>
                   <Card containerStyle={styles.IconCardStyle}>
@@ -547,11 +546,12 @@ const MobileRecharge = () => {
           </View>
         </BottomSheet>
 
-        <BottomSheet animationType="none"  
+        <BottomSheet
+          animationType="none"
           isVisible={isStateModalVisible}
           containerStyle={{backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)'}}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{translate("Select_Circle")}</Text>
+            <Text style={styles.modalTitle}>{translate('Select_Circle')}</Text>
             <FlatList
               data={stateslist}
               style={{width: '100%'}}
@@ -569,7 +569,8 @@ const MobileRecharge = () => {
             />
           </View>
         </BottomSheet>
-        <BottomSheet animationType="none"  
+        <BottomSheet
+          animationType="none"
           onBackdropPress={() => {
             setIsDetail(false);
           }}
@@ -577,32 +578,32 @@ const MobileRecharge = () => {
           containerStyle={{backgroundColor: 'rgba(0.5, 0.25, 0, 0.2)'}}>
           <View>
             <Card containerStyle={{flexDirection: 'row'}}>
-              <Text>{translate("Mobile_Number")}</Text>
+              <Text>{translate('Mobile_Number')}</Text>
               <Text>{mobileNumber} </Text>
             </Card>
 
             <Card containerStyle={{flexDirection: 'row'}}>
-              <Text>{translate("type")}</Text>
+              <Text>{translate('type')}</Text>
               <Text>{rechType} </Text>
             </Card>
 
             <Card containerStyle={{flexDirection: 'row'}}>
-              <Text>{translate("Operator")}</Text>
+              <Text>{translate('Operator')}</Text>
               <Text>{operator} </Text>
             </Card>
 
             <Card containerStyle={{flexDirection: 'row'}}>
-              <Text>{translate("Circle")}</Text>
+              <Text>{translate('Circle')}</Text>
               <Text>{state} </Text>
             </Card>
             <TouchableOpacity
               onPress={() => {}}
               style={{borderRadius: 10, bottom: 10}}>
               <Card containerStyle={{borderRadius: 10}}>
-                <Text>{translate("Confirm_And_Pay")}</Text>
+                <Text>{translate('Confirm_And_Pay')}</Text>
               </Card>
             </TouchableOpacity>
-            <View style={{bottom: 30}}></View>
+            <View style={{bottom: 30}} />
           </View>
         </BottomSheet>
       </View>

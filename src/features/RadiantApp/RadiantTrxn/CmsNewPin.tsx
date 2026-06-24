@@ -1,40 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Modal, Alert, ActivityIndicator, Linking } from 'react-native';
+/* eslint-disable react/no-unstable-nested-components */
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Modal,
+  Linking,
+  Alert,
+} from 'react-native';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import LinearGradient from 'react-native-linear-gradient';
-import Svg, { Path } from 'react-native-svg';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import useRadiantHook from '../../Financial/hook/useRadiantHook';
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import FlotingInput from '../../drawer/securityPages/FlotingInput';
 import DynamicButton from '../../drawer/button/DynamicButton';
-import LocationModal from '../../../components/LocationModal';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { FlashList } from '@shopify/flash-list';
+import {APP_URLS} from '../../../utils/network/urls';
 import ShowLoader from '../../../components/ShowLoder';
 import NoDatafound from '../../drawer/svgimgcomponents/Nodatafound';
-import { ToastAndroid } from 'react-native';
+import {ToastAndroid} from 'react-native';
 import ClosseModalSvg from '../../drawer/svgimgcomponents/ClosseModal';
 import OTPModal from '../../../components/OTPModal';
-import { Button } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import {Button} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import BackSvg from '../../drawer/svgimgcomponents/BackSvg';
+import {translate} from '../../../utils/languageUtils/I18n';
 // import OTPModal from '../../../components/OTPModal';
 
-const CmsNewPin = ({ route }) => {
+const CmsNewPin = ({route}) => {
   const pay = route?.params?.pay ?? null;
   console.log('====================================');
-  console.log( pay);
+  console.log(pay);
   console.log('====================================');
   const navigation = useNavigation<any>();
 
-  const { colorConfig, } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const [modalVisible, setModalVisible] = useState(false);
-  const { post } = useAxiosHook();
+  const {post} = useAxiosHook();
   const [pcode, setPCode] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setisLoading] = useState(true);
@@ -48,61 +54,70 @@ const CmsNewPin = ({ route }) => {
   const [hasData, setHasData] = useState(false);
 
   const handleWebsiteLink = () => {
-
     Linking.openURL('https://www.radiantcashservices.com/');
   };
 
-
   const handleGoBack = () => {
-    navigation.goBack()
+    navigation.goBack();
   };
   const existingPins = [pcode, pin1, pin2, pin3, pin4].filter(Boolean);
 
+  const Insert = async () => {
+    if (!addPin?.trim()) {
+      ToastAndroid.show(
+        translate('Please enter a valid pin code'),
+        ToastAndroid.SHORT,
+      );
+      return;
+    }
 
-const Insert = async () => {
-  if (!addPin?.trim()) {
-    ToastAndroid.show("Please enter a valid pin code", ToastAndroid.SHORT);
-    return;
-  }
+    // ✅ Existing pins array banao
+    const existingPins = [pin1, pin2, pin3, pin4].filter(Boolean);
 
-  // ✅ Existing pins array banao
-  const existingPins = [pin1, pin2, pin3, pin4].filter(Boolean);
+    // ✅ Duplicate check
+    if (existingPins.includes(addPin.trim())) {
+      ToastAndroid.show(
+        translate('This pin code is already added'),
+        ToastAndroid.SHORT,
+      );
+      return;
+    }
 
-  // ✅ Duplicate check
-  if (existingPins.includes(addPin.trim())) {
-    ToastAndroid.show("This pin code is already added", ToastAndroid.SHORT);
-    return;
-  }
+    setisLoading(true);
 
-  setisLoading(true);
+    try {
+      const url = `${APP_URLS.Addpincode}pincode=${addPin}`;
+      const res = await post({url});
+      console.log(
+        translate('Insert APP_URLS:'),
+        res.message,
+        `${APP_URLS.Addpincode}pincode=${addPin}`,
+      );
+      ToastAndroid.show(res.message || '', ToastAndroid.BOTTOM);
 
-  try {
-    const url = `${APP_URLS.Addpincode}pincode=${addPin}`;
-    const res = await post({ url });
-    console.log("Insert APP_URLS:", res.message, `${APP_URLS.Addpincode}pincode=${addPin}`);
-    ToastAndroid.show(res.message || "", ToastAndroid.BOTTOM);
+      setAddPin('');
+      setModalVisible(false);
 
-    setAddPin('');
-    setModalVisible(false);
-
-    fetchData();
-  } catch (error) {
-    console.error("Insert failed:", error);
-    ToastAndroid.show("Failed to add pin code", ToastAndroid.SHORT);
-  } finally {
-    setisLoading(false);
-  }
-};
+      fetchData();
+    } catch (error) {
+      console.error('Insert failed:', error);
+      ToastAndroid.show(
+        translate('Failed to add pin code'),
+        ToastAndroid.SHORT,
+      );
+    } finally {
+      setisLoading(false);
+    }
+  };
 
   useEffect(() => {
-
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
   const fetchData = async () => {
     setisLoading(true);
 
     try {
-      const res = await post({ url: APP_URLS.ViewExtrapin });
+      const res = await post({url: APP_URLS.ViewExtrapin});
       console.log(res, '%%%%%%%%%%%%%%%%%%%%%%%%%%%');
       if (res) {
         setPin1(res.pin1);
@@ -120,46 +135,49 @@ const Insert = async () => {
     }
   };
 
-
-  const handleSendOtp = async (pinType) => {
-
+  const handleSendOtp = async pinType => {
     const url = `${APP_URLS.Deletepincode}pintype=${pinType}&OtpType=SENDOTP&OTP=''`;
     console.log('Sending OTP to:', url);
     setisLoading(true);
 
     try {
-      const res = await post({ url });
+      const res = await post({url});
       console.log('OTP Response:', res);
 
       if (res.resp === true) {
-        ToastAndroid.show(res.message || 'OTP sent successfully', ToastAndroid.SHORT);
+        ToastAndroid.show(
+          res.message || translate('OTP sent successfully'),
+          ToastAndroid.SHORT,
+        );
         setShowModal(true);
         setCurrentPinType(pinType); // Track which pinType is being verified
       } else {
-        alert(`⚠ Failed to send OTP. Status: ${res.message}`);
+        Alert.alert(
+          `${translate('⚠ Failed to send OTP. Status')}: ${res.message}`,
+        );
         ToastAndroid.show(`${res.message}`, ToastAndroid.SHORT);
       }
     } catch (error) {
       console.error('Send OTP Error:', error);
-      alert('❌ Error sending OTP.');
+      Alert.alert(translate('Error sending OTP.'));
     } finally {
       setisLoading(false);
     }
   };
 
-  const handleOtpSubmit = async (mobileOtp) => {
+  const handleOtpSubmit = async mobileOtp => {
     if (!currentPinType) {
-      alert('❌ No pinType selected for deletion.');
+      Alert.alert(translate('No pinType selected for deletion.'));
       return;
     }
 
     const url = `${APP_URLS.Deletepincode}pintype=${currentPinType}&OtpType=VERIFY&OTP=${mobileOtp}`;
-    console.log("DELETE URL:", url);
+    console.log('DELETE URL:', url);
     setisLoading(true);
 
     try {
-      const res = await post({ url });
-      console.log("DELETE response:", res);
+      const res = await post({url});
+      console.log('DELETE response:', res);
 
       const status = res.resp;
 
@@ -170,61 +188,78 @@ const Insert = async () => {
       } else {
         console.warn('❌', res.message);
         ToastAndroid.show(res.message, ToastAndroid.BOTTOM);
-
       }
     } catch (error) {
-      console.error("Delete error:", error);
-      ToastAndroid.show('❌ Something went wrong.', ToastAndroid.BOTTOM);
+      console.error('Delete error:', error);
+      ToastAndroid.show(
+        translate('Something went wrong.'),
+        ToastAndroid.BOTTOM,
+      );
     } finally {
       setisLoading(false);
     }
   };
 
-
-
   return (
     <View style={styles.main}>
       <AppBarSecond title={'Work In Other  Code Area'} />
-      <ScrollView keyboardShouldPersistTaps={"handled"}
+      <ScrollView
+        keyboardShouldPersistTaps={'handled'}
         style={styles.container}>
-        <View style={[styles.infoBox, { backgroundColor: `${colorConfig.secondaryColor}33` }]}>
+        <View
+          style={[
+            styles.infoBox,
+            {backgroundColor: `${colorConfig.secondaryColor}33`},
+          ]}>
           <LinearGradient
             colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
             style={styles.infoHeader}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text style={styles.infoTitle}>My Own Pin Code - {pcode}</Text>
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}>
+            <View style={{flex: 1}}>
+              <Text style={styles.infoTitle}>
+                {translate('My Own Pin Code')} - {pcode}
+              </Text>
               <Text style={styles.disc}>
-                Your own Pin Code as per your documents is given above. {"\n"}
-                If you can work in other Pin Code areas also, please add up to 4 Pin Codes by clicking on "ADD New".
+                {translate(
+                  ' Your own Pin Code as per your documents is given above.',
+                )}{' '}
+                {'\n'}
+                {translate(
+                  'If you can work in other Pin Code areas also, please add up to 4 Pin Codes by clicking on "ADD New".',
+                )}
               </Text>
             </View>
-            <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-              <Text style={styles.addButtonText}>Add New</Text>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => setModalVisible(true)}>
+              <Text style={styles.addButtonText}>{translate('Add New')}</Text>
             </TouchableOpacity>
-
           </LinearGradient>
-
-
         </View>
 
         {hasData ? (
           <>
-
-
             {pin1 && (
               <View style={styles.dataView}>
                 <View>
                   <FlotingInput
-                    label="Additional Pin Code"
+                    label={translate('Additional Pin Code')}
                     value={pin1}
                     onChangeTextCallback={setPin1}
                     editable={false}
+                    inputstyle={undefined}
+                    labelinputstyle={undefined}
                   />
-                  <TouchableOpacity style={styles.righticon2} onPress={() => handleSendOtp('PIN1')}>
-                    <Icon name="delete" size={30} color="#ff4b5c" style={styles.icon} />
+                  <TouchableOpacity
+                    style={styles.righticon2}
+                    onPress={() => handleSendOtp('PIN1')}>
+                    <Icon
+                      name="delete"
+                      size={30}
+                      color="#ff4b5c"
+                      style={styles.icon}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -233,16 +268,24 @@ const Insert = async () => {
             {pin2 && (
               <View style={styles.dataView}>
                 <View>
-
                   <FlotingInput
-                    label="Additional Pin Code"
+                    label={translate('Additional Pin Code')}
                     keyboardType="phone-pad"
                     value={pin2}
                     onChangeTextCallback={setPin2}
                     editable={false}
+                    inputstyle={undefined}
+                    labelinputstyle={undefined}
                   />
-                  <TouchableOpacity style={styles.righticon2} onPress={() => handleSendOtp('PIN2')}>
-                    <Icon name="delete" size={30} color="#ff4b5c" style={styles.icon} />
+                  <TouchableOpacity
+                    style={styles.righticon2}
+                    onPress={() => handleSendOtp('PIN2')}>
+                    <Icon
+                      name="delete"
+                      size={30}
+                      color="#ff4b5c"
+                      style={styles.icon}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -251,16 +294,24 @@ const Insert = async () => {
             {pin3 && (
               <View style={styles.dataView}>
                 <View>
-
                   <FlotingInput
-                    label="Additional Pin Code"
+                    label={translate('Additional Pin Code')}
                     keyboardType="email-address"
                     value={pin3}
                     onChangeTextCallback={setPin3}
                     editable={false}
+                    inputstyle={undefined}
+                    labelinputstyle={undefined}
                   />
-                  <TouchableOpacity style={styles.righticon2} onPress={() => handleSendOtp('PIN3')}>
-                    <Icon name="delete" size={30} color="#ff4b5c" style={styles.icon} />
+                  <TouchableOpacity
+                    style={styles.righticon2}
+                    onPress={() => handleSendOtp('PIN3')}>
+                    <Icon
+                      name="delete"
+                      size={30}
+                      color="#ff4b5c"
+                      style={styles.icon}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -269,14 +320,23 @@ const Insert = async () => {
             {pin4 && (
               <View style={styles.dataView}>
                 <View>
-
                   <FlotingInput
-                    label="Additional Pin Code"
+                    label={translate('Additional Pin Code')}
                     value={pin4}
                     editable={false}
+                    inputstyle={undefined}
+                    labelinputstyle={undefined}
+                    onChangeTextCallback={undefined}
                   />
-                  <TouchableOpacity style={styles.righticon2} onPress={() => handleSendOtp('PIN4')}>
-                    <Icon name="delete" size={30} color="#ff4b5c" style={styles.icon} />
+                  <TouchableOpacity
+                    style={styles.righticon2}
+                    onPress={() => handleSendOtp('PIN4')}>
+                    <Icon
+                      name="delete"
+                      size={30}
+                      color="#ff4b5c"
+                      style={styles.icon}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -289,32 +349,35 @@ const Insert = async () => {
         <Modal visible={modalVisible} transparent animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <Text style={styles.modalTitle}>
+                  {translate('Add New My Own Pin Code')}
+                </Text>
 
-              <View style={{
-                flexDirection: 'row',
-              }}>
-                <Text style={styles.modalTitle}>Add New My Own Pin Code</Text>
-
-                <TouchableOpacity style={{
-                  position: 'absolute',
-                  top: hScale(-30),
-                  right: wScale(-30),
-                  zIndex: 1,
-                }}
-
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    top: hScale(-30),
+                    right: wScale(-30),
+                    zIndex: 1,
+                  }}
                   onPress={() => setModalVisible(false)}>
                   <ClosseModalSvg />
                 </TouchableOpacity>
               </View>
               <View>
                 <FlotingInput
-                  label="Add New Pin Code"
+                  label={translate('Add New Pin Code')}
                   keyboardType="numeric"
                   value={addPin}
                   onChangeTextCallback={setAddPin}
                   maxLength={6}
+                  inputstyle={undefined}
+                  labelinputstyle={undefined}
                 />
-
               </View>
 
               <DynamicButton title={'Submit'} onPress={() => Insert()} />
@@ -334,33 +397,47 @@ const Insert = async () => {
           }}
           inputCount={4}
         />
-        {pay &&
-          <View style={{ paddingHorizontal: wScale(10), paddingTop: hScale(10) }}>
-
+        {pay && (
+          <View style={{paddingHorizontal: wScale(10), paddingTop: hScale(10)}}>
             <DynamicButton
               title={'Next'}
-              onPress={() => { navigation.navigate('Checklistcms'); }}
+              onPress={() => {
+                navigation.navigate('Checklistcms');
+              }}
             />
             <View style={styles.linksContainer}>
               <Button
                 mode="text"
                 onPress={handleGoBack}
-                icon={() => <BackSvg size={15} color={colorConfig.primaryColor} />}
-              >
-                <Text style={[styles.goBackText, { color: colorConfig.primaryColor, }]}>{'Go Back'}</Text>
+                icon={() => (
+                  <BackSvg size={15} color={colorConfig.primaryColor} />
+                )}>
+                <Text
+                  style={[
+                    styles.goBackText,
+                    {color: colorConfig.primaryColor},
+                  ]}>
+                  {translate('Go Back')}
+                </Text>
               </Button>
 
-              <Button
-                mode="text"
-                onPress={handleWebsiteLink}
-              >
-                <Text style={[styles.websiteLinkText, { color: colorConfig.secondaryColor, textDecorationColor: colorConfig.secondaryColor }]}>Company Website Link</Text>
+              <Button mode="text" onPress={handleWebsiteLink}>
+                <Text
+                  style={[
+                    styles.websiteLinkText,
+                    {
+                      color: colorConfig.secondaryColor,
+                      textDecorationColor: colorConfig.secondaryColor,
+                    },
+                  ]}>
+                  {translate('Company Website Link')}
+                </Text>
               </Button>
             </View>
-          </View>}
+          </View>
+        )}
       </ScrollView>
     </View>
-
   );
 };
 
@@ -376,7 +453,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#dcd6f7',
     padding: wScale(15),
     paddingHorizontal: wScale(10),
-    marginBottom: hScale(10)
+    marginBottom: hScale(10),
   },
   infoHeader: {
     flexDirection: 'row',
@@ -412,7 +489,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: hScale(5),
     fontSize: wScale(14),
-    color: '#000'
+    color: '#000',
   },
   value: {
     fontWeight: 'bold',
@@ -421,7 +498,7 @@ const styles = StyleSheet.create({
   },
   contactCard: {
     paddingHorizontal: wScale(10),
-    marginTop: hScale(20)
+    marginTop: hScale(20),
   },
 
   updatedText: {
@@ -432,7 +509,7 @@ const styles = StyleSheet.create({
   contactDetail: {
     fontSize: wScale(16),
     marginBottom: hScale(5),
-    color: '#666'
+    color: '#666',
   },
   bold: {
     fontWeight: 'bold',
@@ -456,9 +533,7 @@ const styles = StyleSheet.create({
     width: wScale(80),
     height: hScale(80),
   },
-  icon: {
-
-  },
+  icon: {},
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -474,21 +549,18 @@ const styles = StyleSheet.create({
     fontSize: wScale(18),
     fontWeight: 'bold',
     marginBottom: hScale(10),
-    color: '#000'
+    color: '#000',
   },
   listCard: {
-    borderWidth: .4,
+    borderWidth: 0.4,
     marginBottom: hScale(10),
     borderRadius: 5,
-
-
   },
 
   listContainer: {
     paddingHorizontal: wScale(10),
 
-    paddingVertical: hScale(10)
-
+    paddingVertical: hScale(10),
   },
   topView: {
     flexDirection: 'row',
@@ -501,7 +573,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     flex: 1, // allows text to take available space
-    color: '#000'
+    color: '#000',
   },
   buttonContainer: {
     backgroundColor: '#EDBDB2',
@@ -518,7 +590,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     borderRadius: 10,
     paddingVertical: 10,
-    elevation: 5
+    elevation: 5,
   },
   option: {
     paddingVertical: 12,
@@ -531,13 +603,13 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   dataView: {
@@ -547,7 +619,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingTop: hScale(10),
     backgroundColor: '#fff',
-    elevation: 5
+    elevation: 5,
   },
   linksContainer: {
     marginTop: hScale(5),
@@ -564,8 +636,6 @@ const styles = StyleSheet.create({
     fontSize: wScale(16),
     textDecorationLine: 'underline',
   },
-
 });
-
 
 export default CmsNewPin;

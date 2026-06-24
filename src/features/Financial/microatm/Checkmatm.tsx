@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
-import { Button, Alert, NativeModules, DeviceEventEmitter } from 'react-native';
+import React, {useEffect} from 'react';
+import {Button, Alert, NativeModules, DeviceEventEmitter} from 'react-native';
+import {translate} from '../../../utils/languageUtils/I18n';
 
-const { BalanceModule } = NativeModules;
+const {BalanceModule} = NativeModules;
 
 const CheckBalance = () => {
   useEffect(() => {
-    const subscription = DeviceEventEmitter.addListener('TransactionStatus', (message) => {
-      Alert.alert('Transaction Status', message);
-    });
+    const subscription = DeviceEventEmitter.addListener(
+      'TransactionStatus',
+      message => {
+        Alert.alert(translate('Transaction Status'), message);
+      },
+    );
 
     return () => {
       subscription.remove();
@@ -16,17 +20,15 @@ const CheckBalance = () => {
 
   const checkBalance = () => {
     BalanceModule.checkBalance('loginId', 'uniqueId', 'password', true)
-      .then((message) => {
+      .then(message => {
         console.log(message); // "Success"
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   };
 
-  return (
-    <Button title="Check Balance" onPress={checkBalance} />
-  );
+  return <Button title="Check Balance" onPress={checkBalance} />;
 };
 
 export default CheckBalance;

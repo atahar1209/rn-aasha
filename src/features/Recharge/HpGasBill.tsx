@@ -1,10 +1,9 @@
-import { translate } from "../../utils/languageUtils/I18n";
-      import React, {useCallback, useEffect, useState} from 'react';
+import {translate} from '../../utils/languageUtils/I18n';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   TextInput,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
   Text,
   TouchableOpacity,
   ToastAndroid,
@@ -16,12 +15,11 @@ import {FlashList} from '@shopify/flash-list';
 import {APP_URLS} from './../../utils/network/urls';
 import useAxiosHook from './../../utils/network/AxiosClient';
 import {BottomSheet, Card} from '@rneui/base';
-import {translate} from './../../utils/languageUtils/I18n';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { useLocationHook } from '../../utils/hooks/useLocationHook';
-import { encrypt } from '../../utils/encryptionUtils';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {useLocationHook} from '../../utils/hooks/useLocationHook';
+import {encrypt} from '../../utils/encryptionUtils';
 
 const HpGasBill = () => {
   const {get, post} = useAxiosHook();
@@ -91,43 +89,43 @@ const HpGasBill = () => {
     //  setParamName('Customer ID');
     setValues('');
     setRegx('');
-    console.log(item['OPtCode']);
+    console.log(item.OPtCode);
     setVisibility(false);
     if (!item.customerparams || item.customerparams.length === 0) {
       //clearState();
     } else {
       const custparam = item.customerparams;
 
-      setDataType(custparam[0]['dataType']);
-      setMaxLength(custparam[0]['maxLength']);
-      setMinLength(custparam[0]['minLength']);
-      setVisibility(custparam[0]['visibility']);
-      setOptional(custparam[0]['optional']);
-      setParamName(custparam[0]['paramName']);
-      setRegx(custparam[0]['regex']);
-      setValues(custparam[0]['values']);
+      setDataType(custparam[0].dataType);
+      setMaxLength(custparam[0].maxLength);
+      setMinLength(custparam[0].minLength);
+      setVisibility(custparam[0].visibility);
+      setOptional(custparam[0].optional);
+      setParamName(custparam[0].paramName);
+      setRegx(custparam[0].regex);
+      setValues(custparam[0].values);
 
       if (custparam.length === 2) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setKey2(custparam[1]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setKey2(custparam[1].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
         //  setAccntvisivility2(true);
       } else if (custparam.length === 3) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setAccnumhint2(custparam[2]['paramName']);
-        setAccmaxlength2(custparam[2]['maxLength']);
-        setKey2(custparam[1]['dataType']);
-        setKey3(custparam[2]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setAccnumhint2(custparam[2].paramName);
+        setAccmaxlength2(custparam[2].maxLength);
+        setKey2(custparam[1].dataType);
+        setKey3(custparam[2].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setKeyType3(
-          custparam[2]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[2].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
 
@@ -142,85 +140,83 @@ const HpGasBill = () => {
   };
 
   const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
-  useDeviceInfoHook();
-const {userId ,Loc_Data} = useSelector((state: RootState) => state.userInfo);
-const {latitude, longitude} = useLocationHook();
+    useDeviceInfoHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
-const onRechargePress = useCallback(async () => {
-  const mobileNetwork = await getNetworkCarrier();
-  const ip = await getMobileIp();
-  const encryption = await encrypt([
+  const onRechargePress = useCallback(async () => {
+    const mobileNetwork = await getNetworkCarrier();
+    const ip = await getMobileIp();
+    const encryption = await encrypt([
+      userId,
+      consumerNo,
+      optcode,
+      amount,
+      Loc_Data.latitude,
+      Loc_Data.longitude,
+
+      'city',
+      'address',
+      'postcode',
+      mobileNetwork,
+      ip,
+      '57bea5094fd9082d',
+    ]);
+    console.log(encryption.encryptedData);
+
+    const rd = encodeURIComponent(encryption.encryptedData[0]);
+    const n1 = encodeURIComponent(encryption.encryptedData[1]);
+    const ok1 = encodeURIComponent(encryption.encryptedData[2]);
+    const amn = amount;
+    const ip1 = encodeURIComponent(encryption.encryptedData[10]);
+    const em = '57bea5094fd9082d';
+    const devtoken = encodeURIComponent(encryption.encryptedData[6]);
+
+    const Latitude = encodeURIComponent(encryption.encryptedData[4]);
+    const Longitude = encodeURIComponent(encryption.encryptedData[5]);
+    const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
+    const City = devtoken;
+
+    const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
+    const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
+    const Addresss = encodeURIComponent(encryption.encryptedData[7]);
+
+    const value1 = encodeURIComponent(encryption.keyEncode);
+    const value2 = encodeURIComponent(encryption.ivEncode);
+
+    const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&circle=Maharashtra`;
+
+    const res = await post({
+      url: url,
+    });
+
+    if (!res.ok) {
+      if (res.Response === 'Success') {
+        Alert.alert(res.Response, res.Message, [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
+      } else {
+        Alert.alert(res.Response, res.message, [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
+      }
+    } else {
+    }
+
+    console.log('onRechargePress', res);
+  }, [
+    getNetworkCarrier,
+    getMobileIp,
     userId,
     consumerNo,
     optcode,
     amount,
-    Loc_Data['latitude'],Loc_Data['longitude'],
-
-    'city',
-    'address',
-    'postcode',
-    mobileNetwork,
-    ip,
-    '57bea5094fd9082d',
+    Loc_Data.latitude,
+    Loc_Data.longitude,
+    accnumhint,
+    accnumhint2,
+    post,
   ]);
-  console.log(encryption.encryptedData);
-
-  const rd = encodeURIComponent(encryption.encryptedData[0]);
-  const n1 = encodeURIComponent(encryption.encryptedData[1]);
-  const ok1 = encodeURIComponent(encryption.encryptedData[2]);
-  const amn = amount;
-  const ip1 = encodeURIComponent(encryption.encryptedData[10]);
-  const em = '57bea5094fd9082d';
-  const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
-  const Latitude = encodeURIComponent(encryption.encryptedData[4]);
-  const Longitude = encodeURIComponent(encryption.encryptedData[5]);
-  const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
-  const City = devtoken;
-
-  const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
-  const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
-  const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
-  const value1 = encodeURIComponent(encryption.keyEncode);
-  const value2 = encodeURIComponent(encryption.ivEncode);
-
-  const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&circle=Maharashtra`;
-
-  const res = await post({
-    url: url,
-
-  });
-
-
-  if(!res.ok){
-
-    if(res['Response'] === 'Success'){
-      Alert.alert(res['Response'],res['Message'] ,  [{ text: 'OK', onPress: () => {} }]);
-  
-    }else{  Alert.alert(res['Response'],res['message'] ,  [{ text: 'OK', onPress: () => {} }]);
-  }
-  
-  }else{
-  
-  }
-
-console.log('onRechargePress',res);
-
-}, [
-  amount,
-  getMobileIp,
-  getNetworkCarrier,
-  latitude,
-  longitude,
-  consumerNo,
-  optcode,
-  post,
-  userId,
-]);
-
-
-
 
   const clearState = () => {
     setDataType('');
@@ -253,7 +249,7 @@ console.log('onRechargePress',res);
       const res = await post({url: url});
       console.log(res);
 
-      setIsagencies(res['data']);
+      setIsagencies(res.data);
     } catch (error) {}
   }
 
@@ -262,7 +258,7 @@ console.log('onRechargePress',res);
     try {
       const url = `${APP_URLS.gasCylinderState}`;
       const res = await post({url: url, config: null});
-      setstatelist(res['data']);
+      setstatelist(res.data);
       console.log(res);
     } catch (error) {}
   }
@@ -277,8 +273,8 @@ console.log('onRechargePress',res);
       const url = await `${APP_URLS.DistrictByState}${state}`;
       const res = await post({url: url, config: null});
 
-      console.log(res['data']);
-      setDistList(res['data']);
+      console.log(res.data);
+      setDistList(res.data);
 
       //  setshowdistrictData(true);
     } catch (error) {}
@@ -304,24 +300,24 @@ console.log('onRechargePress',res);
                   setAccntvisivility(true);
                   setAccntvisivility2(true);
 
-                  setagencies(item['Name']);
+                  setagencies(item.Name);
                   setshowdist(false);
-                  setdistributorId(item['Distcode']);
-                  console.log(item['Name']);
+                  setdistributorId(item.Distcode);
+                  console.log(item.Name);
                 }}>
                 <Text
                   style={{
                     color: '#ff4670',
                     fontSize: 18,
                   }}>
-                  {item['Name']}
+                  {item.Name}
                 </Text>
                 <Text
                   style={{
                     color: '#ff4670',
                     fontSize: 14,
                   }}>
-                  {item['Address']}
+                  {item.Address}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -400,7 +396,7 @@ console.log('onRechargePress',res);
     try {
       const config = {
         headers: {
-          Authorization: `Bearer`,
+          Authorization: 'Bearer',
         },
       };
       const data = {
@@ -418,10 +414,10 @@ console.log('onRechargePress',res);
       const res = await get({url: url});
       console.log(data.Operator);
       console.log(url);
-      setDueDate(res['rechargedueDate']);
-      setAmount(res['monthlyRecharge']);
-      setCustomerName(res['customerName']);
-      setCustBal(res['balance']);
+      setDueDate(res.rechargedueDate);
+      setAmount(res.monthlyRecharge);
+      setCustomerName(res.customerName);
+      setCustBal(res.balance);
       //setstatus(res["customerStatus"])
 
       // console.log(":", res);
@@ -432,7 +428,7 @@ console.log('onRechargePress',res);
     try {
       const config = {
         headers: {
-          Authorization: `Bearer`,
+          Authorization: 'Bearer',
         },
       };
       const data = {
@@ -442,7 +438,7 @@ console.log('onRechargePress',res);
       const res = await post({url: url, data, config: config});
 
       console.log(':', url);
-      const billSts = res['RESULT'];
+      const billSts = res.RESULT;
       if (billSts === 'Y') {
         setIsinfo(true);
       } else {
@@ -456,31 +452,31 @@ console.log('onRechargePress',res);
   const validateFields = () => {
     if (!consumerNo) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (selectedOpt === 'Select Your State') {
       ToastAndroid.showWithGravity(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (!amount || amount === 'Enter Amount') {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (!distributorId) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${distributorId}'`,
+        `${translate('Please Enter')} ${distributorId}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
     } else if (!mobileNumber) {
       ToastAndroid.showWithGravity(
-        `Please Enter Mobile Number`,
+        translate('Please Enter Mobile Number'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -562,7 +558,7 @@ console.log('onRechargePress',res);
           style={styles.DetailButton}
           placeholder={paramname}
           value={consumerNo}
-          // 
+          //
           onChangeText={text => setconsumerNo(text)}
         />
 
@@ -609,12 +605,13 @@ console.log('onRechargePress',res);
               fontSize: 18,
               alignItems: 'center',
             }}>
-            Proceed{' '}
+            {translate('Proceed')}{' '}
           </Text>
         </View>
       </TouchableOpacity>
 
-      <BottomSheet animationType="none"  
+      <BottomSheet
+        animationType="none"
         onBackdropPress={() => {
           setIsOperatorList(false);
         }}
@@ -627,14 +624,15 @@ console.log('onRechargePress',res);
             marginBottom: wScale(40),
           }}>
           <View style={{}}>
-            <Text style={{}}></Text>
+            <Text style={{}} />
           </View>
 
           {showStateListData()}
         </View>
       </BottomSheet>
 
-      <BottomSheet animationType="none"  
+      <BottomSheet
+        animationType="none"
         onBackdropPress={() => {
           setIsisDistList(false);
         }}
@@ -647,25 +645,34 @@ console.log('onRechargePress',res);
             marginBottom: wScale(40),
           }}>
           <View style={{}}>
-            <Text style={{}}></Text>
+            <Text style={{}} />
           </View>
 
           {showdist ? showDistData() : agency()}
         </View>
       </BottomSheet>
 
-      <BottomSheet animationType="none"  
+      <BottomSheet
+        animationType="none"
         isVisible={bottomSheetVisible}
         onBackdropPress={() => setBottomSheetVisible(false)}>
         <View style={{bottom: hScale(10)}}>
           <Card>
-            <Text> Agency : {agencies}</Text>
+            <Text>
+              {' '}
+              {translate('Agency')} : {agencies}
+            </Text>
           </Card>
           <Card>
-            <Text>Due Date: {dueDate}</Text>
+            <Text>
+              {translate('Due Date')}: {dueDate}
+            </Text>
           </Card>
           <Card>
-            <Text> Distributor Id: {distributorId}</Text>
+            <Text>
+              {' '}
+              {translate('Distributor Id')}: {distributorId}
+            </Text>
           </Card>
           <Card>
             <Text>
@@ -673,7 +680,9 @@ console.log('onRechargePress',res);
             </Text>
           </Card>
           <Card>
-            <Text>Recharge Amount: {amount}</Text>
+            <Text>
+              {translate('Recharge Amount')}: {amount}
+            </Text>
           </Card>
           <TouchableOpacity
             onPress={() => {

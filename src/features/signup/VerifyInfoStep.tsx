@@ -15,7 +15,7 @@ import DynamicButton from '../drawer/button/DynamicButton';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ShowLoader from '../../components/ShowLoder';
-import { translate } from '../../utils/languageUtils/I18n';
+import {translate} from '../../utils/languageUtils/I18n';
 
 const VerifyInfoStep = () => {
   const {colorConfig, deviceInfo} = useSelector(
@@ -189,7 +189,9 @@ const VerifyInfoStep = () => {
       if (responseData) {
         Alert.alert(
           translate('Alert'),
-          `${translate('Response')}: ${responseData.Response}\n  ${translate('Message')}: ${responseData.Message}`,
+          `${translate('Response')}: ${responseData.Response}\n  ${translate(
+            'Message',
+          )}: ${responseData.Message}`,
           [
             {
               text:
@@ -207,20 +209,24 @@ const VerifyInfoStep = () => {
       } else {
         setIsLoading(false);
 
-        Alert.alert(translate('Error'), translate('Server side issue occurred.'));
+        Alert.alert(
+          translate('Error'),
+          translate('Server side issue occurred.'),
+        );
       }
     } catch (error) {
       console.error(translate('Error in JoinUs function:'), error);
-      Alert.alert(translate('Error'), translate('Something went wrong. Please try again.)');
+      Alert.alert(
+        translate('Error'),
+        translate('Something went wrong. Please try again.'),
+      );
       setIsLoading(false);
     }
     // Dependency array mein stateId aur baki missing fields add karein
   }, [
-    username,
-    stateId,
-    distid,
+    deviceInfo.address,
     dateOfBirth,
-    district,
+    username,
     pincode,
     businessName,
     mobileNumber,
@@ -231,6 +237,8 @@ const VerifyInfoStep = () => {
     personalAadhar,
     personalPAN,
     gst,
+    stateId,
+    distid,
     navigation,
   ]);
 
@@ -251,7 +259,9 @@ const VerifyInfoStep = () => {
             value={mobileNumber}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri
               height={hScale(48)}
@@ -266,7 +276,9 @@ const VerifyInfoStep = () => {
             value={username}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri
               height={hScale(48)}
@@ -281,7 +293,9 @@ const VerifyInfoStep = () => {
             value={email}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri height={hScale(48)} width={hScale(48)} uri={svg.Email} />
           </View>
@@ -292,7 +306,9 @@ const VerifyInfoStep = () => {
             value={personalAadhar}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri
               height={hScale(48)}
@@ -307,7 +323,9 @@ const VerifyInfoStep = () => {
             value={personalPAN}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri height={hScale(48)} width={hScale(48)} uri={svg.PanCard} />
           </View>
@@ -318,7 +336,9 @@ const VerifyInfoStep = () => {
             value={referralCode}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri
               height={hScale(48)}
@@ -333,7 +353,9 @@ const VerifyInfoStep = () => {
             value={dateOfBirth}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri height={hScale(48)} width={hScale(48)} uri={svg.Calendar} />
           </View>
@@ -344,7 +366,9 @@ const VerifyInfoStep = () => {
             value={addressState}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri height={hScale(48)} width={hScale(48)} uri={svg.State} />
           </View>
@@ -355,7 +379,9 @@ const VerifyInfoStep = () => {
             value={pincode}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri
               height={hScale(48)}
@@ -370,7 +396,9 @@ const VerifyInfoStep = () => {
             value={district}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri height={hScale(48)} width={hScale(48)} uri={svg.District} />
           </View>
@@ -382,7 +410,9 @@ const VerifyInfoStep = () => {
             value={businessType}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri
               height={hScale(48)}
@@ -398,7 +428,9 @@ const VerifyInfoStep = () => {
             value={businessType}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.IconStyle, {}]}>
             <SvgUri
               height={hScale(48)}
@@ -414,7 +446,9 @@ const VerifyInfoStep = () => {
             value={gst}
             editable={false}
             labelinputstyle={styles.labelinputstyle}
-            inputstyle={[styles.inputstyle, { borderRadius: Radius2 }]} onChangeTextCallback={undefined}          />
+            inputstyle={[styles.inputstyle, {borderRadius: Radius2}]}
+            onChangeTextCallback={undefined}
+          />
 
           <View style={[styles.IconStyle, {}]}>
             <SvgUri height={hScale(48)} width={hScale(48)} uri={svg.GST} />

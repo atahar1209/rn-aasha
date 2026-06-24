@@ -1,19 +1,26 @@
+/* eslint-disable curly */
 // screens/ReferenceScreen.tsx
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, ToastAndroid } from 'react-native';
-import { useFormik } from 'formik';
+import React, {useEffect, useState} from 'react';
+import {View, ScrollView, StyleSheet, ToastAndroid} from 'react-native';
+import {useFormik} from 'formik';
 
 import {
-  StepBanner, AppInput, SectionCard, NavRow, getStepColor, AppToggle,
+  StepBanner,
+  AppInput,
+  SectionCard,
+  NavRow,
+  getStepColor,
+  AppToggle,
 } from '../../components/FormUI';
-import { colors } from '../../../../utils/styles/theme';
-import { ReferenceSchema } from '../../../../utils/validationSchemas';
-import { useFormCtx } from './FormContext';
-import { APP_URLS } from '../../../../utils/network/urls';
+import {colors} from '../../../../utils/styles/theme';
+import {ReferenceSchema} from '../../../../utils/validationSchemas';
+import {useFormCtx} from './FormContext';
+import {APP_URLS} from '../../../../utils/network/urls';
 import useAxiosHook from '../../../../utils/network/AxiosClient';
-import { MobileCard } from './AadhaarPanVerification/cards';
-import { initMobile, MOBILE_REGEX, toast } from './AadhaarPanVerification/types';
+import {MobileCard} from './AadhaarPanVerification/cards';
+import {initMobile, MOBILE_REGEX, toast} from './AadhaarPanVerification/types';
 import ShowLoader from '../../../../components/ShowLoder';
+import {translate} from '../../../../utils/languageUtils/I18n';
 
 const STEP = 4;
 
@@ -21,10 +28,10 @@ const showToast = (msg: string) => {
   ToastAndroid.show(msg, ToastAndroid.SHORT);
 };
 
-const ReferenceScreen = ({ navigation }: any) => {
-  const { formData, updateStep, nextStep, prevStep } = useFormCtx();
+const ReferenceScreen = ({navigation}: any) => {
+  const {formData, updateStep, nextStep, prevStep} = useFormCtx();
   const stepColor = getStepColor(STEP);
-  const { post } = useAxiosHook();
+  const {post} = useAxiosHook();
   // const [neighbourMobile, setNeighbourMobile] = useState(initMobile());
   const [neighbourMobile, setNeighbourMobile] = useState({
     ...initMobile(),
@@ -37,19 +44,19 @@ const ReferenceScreen = ({ navigation }: any) => {
     validationSchema: ReferenceSchema,
     validateOnBlur: true,
     validateOnChange: false,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       const payload = {
-        twowheeler: values.operational.hasTwoWheeler ? "Yes" : "No",
+        twowheeler: values.operational.hasTwoWheeler ? 'Yes' : 'No',
         twowheelerNUmber: values.operational.twoWheelerNumber,
 
         NeighbourName: values.neighbour.name,
         NeighbourMobile: neighbourMobile.value,
         // VerifyNeighbourMobile: neighbourMobile.verified ? true : false,
-VerifyNeighbourMobile: true,
+        VerifyNeighbourMobile: true,
         closename: values.relativeRef.name,
         closemobile: relativeMobile.value,
         // Verifyclosemobile: relativeMobile.verified ? true : false,
-Verifyclosemobile: true,
+        Verifyclosemobile: true,
         closeaddress: values.relativeRef.relationship,
         closepincode: values.relativeRef.pincode,
 
@@ -64,44 +71,57 @@ Verifyclosemobile: true,
       console.log('📤 REQUEST BODY:', JSON.stringify(payload, null, 2));
 
       try {
-        const res = await post({ url: APP_URLS.RadiantCandiantForm4, data: payload });
+        const res = await post({
+          url: APP_URLS.RadiantCandiantForm4,
+          data: payload,
+        });
         console.log('📥 RESPONSE:', JSON.stringify(res, null, 2));
 
-        if (res?.status === "Data Insert Successfully") {
-          showToast('Reference saved!');
+        if (res?.status === 'Data Insert Successfully') {
+          showToast(translate('Reference saved!'));
           updateStep('reference', values);
           nextStep();
           navigation.navigate('ReviewScreen');
         } else {
-          showToast('Submit failed');
+          showToast(translate('Submit failed'));
         }
       } catch (err) {
         console.log('❌ ERROR:', err);
-        showToast('Something went wrong');
+        showToast(translate('Something went wrong'));
       }
     },
   });
 
-  const { values, errors, touched, handleSubmit, setFieldValue, setFieldTouched } = formik;
+  const {
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    setFieldValue,
+    setFieldTouched,
+  } = formik;
 
-  const [loading,setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchForm4Data = async () => {
       try {
-        const res = await post({ url: APP_URLS.RadiantForm4Data });
+        const res = await post({url: APP_URLS.RadiantForm4Data});
         console.log('✅ Form4Data RESPONSE:', JSON.stringify(res, null, 2));
 
         if (res?.datastatus === true) {
-                    setLoading(false);
+          setLoading(false);
 
           const d = res;
 
           setFieldValue('operational.hasTwoWheeler', d.iswheeler ?? false);
-          setFieldValue('operational.twoWheelerNumber', d.twowheelerNUmber ?? '');
+          setFieldValue(
+            'operational.twoWheelerNumber',
+            d.twowheelerNUmber ?? '',
+          );
 
           setFieldValue('neighbour.name', d.NeighbourName ?? '');
           setFieldValue('neighbour.mobile', d.NeighbourMobile ?? '');
-          setNeighbourMobile(p => ({ ...p, value: d.NeighbourMobile ?? '' }));
+          setNeighbourMobile(p => ({...p, value: d.NeighbourMobile ?? ''}));
           setFieldValue('relativeRef.mobile', d.closemobile ?? '');
           setRelativeMobile(p => ({
             ...p,
@@ -109,7 +129,10 @@ Verifyclosemobile: true,
           }));
 
           // emergency
-          setFieldValue('emergencyContact.mobile', d.EmergencyMobilenumber ?? '');
+          setFieldValue(
+            'emergencyContact.mobile',
+            d.EmergencyMobilenumber ?? '',
+          );
           setEmergencyMobile(p => ({
             ...p,
             value: d.EmergencyMobilenumber ?? '',
@@ -120,8 +143,14 @@ Verifyclosemobile: true,
           setFieldValue('relativeRef.pincode', d.closepincode ?? '');
 
           setFieldValue('emergencyContact.name', d.EmergencyName ?? '');
-          setFieldValue('emergencyContact.relationship', d.EmergencyRelationship ?? '');
-          setFieldValue('emergencyContact.mobile', d.EmergencyMobilenumber ?? '');
+          setFieldValue(
+            'emergencyContact.relationship',
+            d.EmergencyRelationship ?? '',
+          );
+          setFieldValue(
+            'emergencyContact.mobile',
+            d.EmergencyMobilenumber ?? '',
+          );
         }
       } catch (err) {
         console.log('❌ Form4Data ERROR:', err);
@@ -135,8 +164,10 @@ Verifyclosemobile: true,
   const fp = (path: string) => {
     const keys = path.split('.');
     const val = keys.reduce((o: any, k) => o?.[k], values);
-    const err = keys.reduce((o: any, k) => o?.[k], errors) as string | undefined;
-    const tch = !!(keys.reduce((o: any, k) => o?.[k], touched));
+    const err = keys.reduce((o: any, k) => o?.[k], errors) as
+      | string
+      | undefined;
+    const tch = !!keys.reduce((o: any, k) => o?.[k], touched);
     return {
       value: val ?? '',
       error: err,
@@ -148,49 +179,46 @@ Verifyclosemobile: true,
 
   const isMobileValid = MOBILE_REGEX.test(neighbourMobile.value);
 
-
-  const sendOtp = async (
-    type: 'Neighbor' | 'CloseRelative' | 'Emergency'
-  ) => {
+  const sendOtp = async (type: 'Neighbor' | 'CloseRelative' | 'Emergency') => {
     const isNeighbor = type === 'Neighbor';
     const isRelative = type === 'CloseRelative';
 
     const mobileState = isNeighbor
       ? neighbourMobile
       : isRelative
-        ? relativeMobile
-        : emergencyMobile;
+      ? relativeMobile
+      : emergencyMobile;
 
     const setState = isNeighbor
       ? setNeighbourMobile
       : isRelative
-        ? setRelativeMobile
-        : setEmergencyMobile;
+      ? setRelativeMobile
+      : setEmergencyMobile;
 
     const mobile = mobileState.value;
 
     const refName = isNeighbor
       ? values.neighbour.name
       : isRelative
-        ? values.relativeRef.name
-        : values.emergencyContact.name;
+      ? values.relativeRef.name
+      : values.emergencyContact.name;
 
     const orgName = 'YourCompanyName';
 
     // ✅ loading start
-    setState(p => ({ ...p, loading: true }));
+    setState(p => ({...p, loading: true}));
 
     try {
       const url = `${APP_URLS.SendOTPMobileOther}Mobile=${mobile}&Name=${orgName}&refName=${refName}&Relation=${type}&Type=${type}`;
 
       console.log('📡 OTP URL:', url);
 
-      const res = await post({ url });
+      const res = await post({url});
 
       console.log('📥 OTP RESPONSE:', res);
 
       if (res?.Content?.ADDINFO === 'Send OTP') {
-        showToast(`OTP sent to ${type}`);
+        showToast(`${translate('OTP sent to')} ${type}`);
 
         // ✅ FIXED (for all 3 types)
         setState(p => ({
@@ -201,17 +229,17 @@ Verifyclosemobile: true,
           verified: false, // reset if resend
         }));
       } else {
-        showToast(`OTP failed: ${res?.Content?.ADDINFO}`);
-        setState(p => ({ ...p, loading: false }));
+        showToast(`${translate('OTP failed')}: ${res?.Content?.ADDINFO}`);
+        setState(p => ({...p, loading: false}));
       }
     } catch (err) {
       console.log('❌ OTP ERROR:', err);
-      showToast('Error sending OTP');
-      setState(p => ({ ...p, loading: false }));
+      showToast(translate('Error sending OTP'));
+      setState(p => ({...p, loading: false}));
     }
   };
   const verifyOtp = async (
-    type: 'Neighbor' | 'CloseRelative' | 'Emergency'
+    type: 'Neighbor' | 'CloseRelative' | 'Emergency',
   ) => {
     const isNeighbor = type === 'Neighbor';
     const isRelative = type === 'CloseRelative';
@@ -219,14 +247,14 @@ Verifyclosemobile: true,
     const mobileState = isNeighbor
       ? neighbourMobile
       : isRelative
-        ? relativeMobile
-        : emergencyMobile;
+      ? relativeMobile
+      : emergencyMobile;
 
     const setState = isNeighbor
       ? setNeighbourMobile
       : isRelative
-        ? setRelativeMobile
-        : setEmergencyMobile;
+      ? setRelativeMobile
+      : setEmergencyMobile;
 
     const mobile = mobileState.value;
     const otp = mobileState.otpValue;
@@ -234,31 +262,31 @@ Verifyclosemobile: true,
     const refName = isNeighbor
       ? values.neighbour.name
       : isRelative
-        ? values.relativeRef.name
-        : values.emergencyContact.name;
+      ? values.relativeRef.name
+      : values.emergencyContact.name;
 
     const relation = type;
 
     const orgName = 'YourCompanyName'; // ⚠️ replace with actual
 
     if (!otp || otp.length < 4) {
-      showToast('Enter valid OTP');
+      showToast(translate('Enter valid OTP'));
       return;
     }
 
-    setState(p => ({ ...p, loading: true }));
+    setState(p => ({...p, loading: true}));
 
     try {
       const url = `${APP_URLS.VerifyOTPMobileOther}Mobile=${mobile}&Name=${orgName}&Type=${type}&OTP=${otp}&refName=${refName}&Relation=${relation}`;
 
       console.log('📡 VERIFY URL:', url);
 
-      const res = await post({ url });
+      const res = await post({url});
 
       console.log('📥 VERIFY RESPONSE:', res);
 
       if (res?.Content?.ADDINFO === 'DONE') {
-        showToast(`${type} verified`);
+        showToast(`${type} ${translate('verified')}`);
 
         setState(p => ({
           ...p,
@@ -268,76 +296,109 @@ Verifyclosemobile: true,
         }));
       } else {
         showToast(`Invalid OTP: ${res?.Content?.ADDINFO}`);
-        setState(p => ({ ...p, loading: false }));
+        setState(p => ({...p, loading: false}));
       }
     } catch (err) {
       console.log('❌ VERIFY ERROR:', err);
-      showToast('Verification failed');
-      setState(p => ({ ...p, loading: false }));
+      showToast(translate('Verification failed'));
+      setState(p => ({...p, loading: false}));
     }
   };
-
 
   return (
     <View style={s.screen}>
       <StepBanner currentStep={STEP} />
 
-      <ScrollView contentContainerStyle={s.scroll} keyboardShouldPersistTaps="handled">
-              {loading&&<ShowLoader/>}
+      <ScrollView
+        contentContainerStyle={s.scroll}
+        keyboardShouldPersistTaps="handled">
+        {loading && <ShowLoader />}
 
         {/* Neighbour */}
-        <SectionCard title="Neighbour Reference" icon="account-group" iconColor={stepColor}>
-          <AppInput label="Neighbour Name" placeholder="Enter name" {...fp('neighbour.name')} />
+        <SectionCard
+          title={translate('Neighbour Reference')}
+          icon="account-group"
+          iconColor={stepColor}>
+          <AppInput
+            label={translate('Neighbour Name')}
+            placeholder={translate('Enter name')}
+            {...fp('neighbour.name')}
+          />
           <MobileCard
             mobile={neighbourMobile}
             isValid={MOBILE_REGEX.test(neighbourMobile.value)}
-            onChange={(t) => setNeighbourMobile(p => ({ ...p, value: t }))}
+            onChange={t => setNeighbourMobile(p => ({...p, value: t}))}
             onSendOtp={() => sendOtp('Neighbor')}
-            onOtpChange={(t) => setNeighbourMobile(p => ({ ...p, otpValue: t }))}
+            onOtpChange={t => setNeighbourMobile(p => ({...p, otpValue: t}))}
             onVerifyOtp={() => verifyOtp('Neighbor')}
             onReset={() => setNeighbourMobile(initMobile())}
           />
-
-
         </SectionCard>
 
-
         {/* Close Relative */}
-        <SectionCard title="Close Relative" icon="account-heart" iconColor={stepColor}>
-          <AppInput label="Name" placeholder="Enter name" {...fp('relativeRef.name')} />
-          <AppInput label="Relationship / Address" placeholder="Enter relationship/address" {...fp('relativeRef.relationship')} />
-          <AppInput label="Pincode" placeholder="Enter pincode" {...fp('relativeRef.pincode')} />
+        <SectionCard
+          title={translate('Close Relative')}
+          icon="account-heart"
+          iconColor={stepColor}>
+          <AppInput
+            label={translate('Name')}
+            placeholder={translate('Enter name')}
+            {...fp('relativeRef.name')}
+          />
+          <AppInput
+            label={translate('Relationship / Address')}
+            placeholder={translate('Enter relationship/address')}
+            {...fp('relativeRef.relationship')}
+          />
+          <AppInput
+            label={translate('Pincode')}
+            placeholder={translate('Enter pincode')}
+            {...fp('relativeRef.pincode')}
+          />
           <MobileCard
             mobile={relativeMobile}
             isValid={MOBILE_REGEX.test(relativeMobile.value)}
-            onChange={(t) => setRelativeMobile(p => ({ ...p, value: t }))}
+            onChange={t => setRelativeMobile(p => ({...p, value: t}))}
             onSendOtp={() => sendOtp('CloseRelative')}
-            onOtpChange={(t) => setRelativeMobile(p => ({ ...p, otpValue: t }))}
+            onOtpChange={t => setRelativeMobile(p => ({...p, otpValue: t}))}
             onVerifyOtp={() => verifyOtp('CloseRelative')}
             onReset={() => setRelativeMobile(initMobile())}
           />
         </SectionCard>
 
         {/* Emergency Contact */}
-        <SectionCard title="Emergency Contact" icon="phone-alert" iconColor={stepColor}>
-          <AppInput label="Name" placeholder="Enter name" {...fp('emergencyContact.name')} />
-          <AppInput label="Relationship" placeholder="Enter relationship" {...fp('emergencyContact.relationship')} />
+        <SectionCard
+          title={translate('Emergency Contact')}
+          icon="phone-alert"
+          iconColor={stepColor}>
+          <AppInput
+            label={translate('Name')}
+            placeholder={translate('Enter name')}
+            {...fp('emergencyContact.name')}
+          />
+          <AppInput
+            label={translate('Relationship')}
+            placeholder={translate('Enter relationship')}
+            {...fp('emergencyContact.relationship')}
+          />
           <MobileCard
             mobile={emergencyMobile}
             isValid={MOBILE_REGEX.test(emergencyMobile.value)}
-            onChange={(t) => setEmergencyMobile(p => ({ ...p, value: t }))}
+            onChange={t => setEmergencyMobile(p => ({...p, value: t}))}
             onSendOtp={() => sendOtp('Emergency')}
-            onOtpChange={(t) => setEmergencyMobile(p => ({ ...p, otpValue: t }))}
+            onOtpChange={t => setEmergencyMobile(p => ({...p, otpValue: t}))}
             onVerifyOtp={() => verifyOtp('Emergency')}
             onReset={() => setEmergencyMobile(initMobile())}
           />
         </SectionCard>
 
-
         {/* Operational Details */}
-        <SectionCard title="Operational Details" icon="cog-outline" iconColor={stepColor}>
+        <SectionCard
+          title={translate('Operational Details')}
+          icon="cog-outline"
+          iconColor={stepColor}>
           <AppToggle
-            label="Have Two-Wheeler?"
+            label={translate('Have Two-Wheeler?')}
             value={values.operational.hasTwoWheeler}
             onChange={(v: boolean) => {
               setFieldValue('operational.hasTwoWheeler', v);
@@ -346,15 +407,13 @@ Verifyclosemobile: true,
           />
           {values.operational.hasTwoWheeler && (
             <AppInput
-              label="Two-Wheeler Number"
+              label={translate('Two-Wheeler Number')}
               placeholder="e.g. MH12AB1234"
               {...fp('operational.twoWheelerNumber')}
             />
           )}
         </SectionCard>
 
-        
-        
         <NavRow
           onNext={() => {
             console.log('🔘 Next clicked');
@@ -370,7 +429,6 @@ Verifyclosemobile: true,
           }}
           stepColor={stepColor}
         />
-
       </ScrollView>
     </View>
   );
@@ -379,7 +437,6 @@ Verifyclosemobile: true,
 export default ReferenceScreen;
 
 const s = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.light_blue },
-  scroll: { padding: 16, paddingBottom: 40 },
+  screen: {flex: 1, backgroundColor: colors.light_blue},
+  scroll: {padding: 16, paddingBottom: 40},
 });
-

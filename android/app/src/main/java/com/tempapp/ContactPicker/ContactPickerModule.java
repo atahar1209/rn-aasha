@@ -1,4 +1,4 @@
-package com.mobykwik.ContactPicker;
+package com.digitalindiapay.ContactPicker;
 
 import android.app.Activity;
 import android.content.Intent;

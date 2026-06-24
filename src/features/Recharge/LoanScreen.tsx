@@ -1,28 +1,24 @@
-import LottieView from 'lottie-react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable quotes */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ToastAndroid,
-  FlatList,
-  Alert,
   ActivityIndicator,
-  
+  Alert,
 } from 'react-native';
-import { BottomSheet, Card } from '@rneui/themed';
-import { translate } from '../../utils/languageUtils/I18n';
-import { APP_URLS } from '../../utils/network/urls';
-import { colors } from '../../utils/styles/theme';
+import {translate} from '../../utils/languageUtils/I18n';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { useLocationHook } from '../../utils/hooks/useLocationHook';
-import { encrypt } from '../../utils/encryptionUtils';
-import { hScale, wScale } from '../../utils/styles/dimensions';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {useLocationHook} from '../../utils/hooks/useLocationHook';
+import {encrypt} from '../../utils/encryptionUtils';
+import {hScale, wScale} from '../../utils/styles/dimensions';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import DynamicButton from '../drawer/button/DynamicButton';
@@ -30,7 +26,7 @@ import RecentHistory from '../../components/RecentHistoryBottomSheet';
 import OperatorBottomSheet from '../../components/OperatorBottomSheet';
 import Rechargeconfirm from '../../components/Rechargeconfirm';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ShowLoader from '../../components/ShowLoder';
 import RecentText from '../../components/RecentText';
 const LoanScreen = () => {
@@ -61,13 +57,13 @@ const LoanScreen = () => {
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
-  const [reqId, setReqId] = useState('')
+  const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
-  const { get, post } = useAxiosHook();
+  const {get, post} = useAxiosHook();
   useEffect(() => {
     getLoanBillOperators();
-  }, []);
+  }, [getLoanBillOperators]);
   const navigation = useNavigation<any>();
 
   const selectOperator = selectedOperator => {
@@ -78,24 +74,21 @@ const LoanScreen = () => {
 
   useEffect(() => {
     recenttransactions();
-
   }, []);
   const recenttransactions = async () => {
     try {
-      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`
+      const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
-      const response = await get({ url: url })
+      const response = await get({url: url});
       console.log('-*************************************', response);
 
       setHistorylist(response);
-      setReqTime(response[0]['Reqesttime']);
-      setReqId(response[0]['Request_ID'])
-
+      setReqTime(response[0].Reqesttime);
+      setReqId(response[0].Request_ID);
     } catch (error) {
       console.log(error);
-
     }
-  }
+  };
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -108,24 +101,21 @@ const LoanScreen = () => {
     try {
       const token = await APP_URLS.getToke;
       const url = `${APP_URLS.getDthOperator}Loan`;
-      const response = await get({ url: url });
-      setLoanBillOperators(response['myprop2Items']);
+      const response = await get({url: url});
+      setLoanBillOperators(response.myprop2Items);
       console.log(url);
     } catch (e) {
       console.error(e);
     }
   }
-  const { getNetworkCarrier, getMobileDeviceId, getMobileIp } =
+  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
-  const { userId ,Loc_Data} = useSelector((state: RootState) => state.userInfo);
-  const { latitude, longitude } = useLocationHook();
+  const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude} = useLocationHook();
 
- 
   const onRechargePress = useCallback(async () => {
-
-    
     setProceedSheetVisible(false);
-    setShowLoader(true)
+    setShowLoader(true);
 
     const mobileNetwork = await getNetworkCarrier();
     const ip = await getMobileIp();
@@ -134,7 +124,8 @@ const LoanScreen = () => {
       paramname,
       optcode,
       amount,
-      Loc_Data['latitude'],Loc_Data['longitude'],
+      Loc_Data.latitude,
+      Loc_Data.longitude,
 
       'city',
       'address',
@@ -173,25 +164,25 @@ const LoanScreen = () => {
       });
       console.log(res);
       console.log(status);
-      if(res.status ==='False'){
-        alert(res.message);
+      if (res.status === 'False') {
+        Alert.alert(res.message);
         setShowLoader(false);
 
-        return
+        return;
       }
       status = res.Response;
       Message = res.Message;
       await recenttransactions();
     } catch (error) {
-      console.error("Recharge failed:", error);
-      status = "Failed";
-      Message = "Recharge failed, please try again";
+      console.error('Recharge failed:', error);
+      status = 'Failed';
+      Message = translate('Recharge failed, please try again');
     }
 
     setCustomerID('');
-    setFastagOpt('Select Your Operator');
+    setFastagOpt(translate('Select Your Operator'));
     setAmount('');
-    setIsInfo(false)
+    setIsInfo(false);
     setShowLoader(false);
 
     navigation.navigate('Rechargedetails', {
@@ -201,10 +192,8 @@ const LoanScreen = () => {
       status: status ?? 'Unknown',
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
-      Message: Message ?? 'No message available'
+      Message: Message ?? translate('No message available'),
     });
-    
-
   }, [
     amount,
     getMobileIp,
@@ -219,56 +208,59 @@ const LoanScreen = () => {
   async function billInfo() {
     try {
       const url = `${APP_URLS.rechargeViewBill}billnumber=${CustomerID}&Operator=${optcode}&billunit=&ProcessingCycle=&acno=&lt=&ViewBill=Y`;
-      console.log(url)
-      const res = await get({ url: url });
+      console.log(url);
+      const res = await get({url: url});
       console.log('"""""""""""url', res);
 
-      const result = res["RESULT"];
-      console.log('"""""""""""url',result)
-      const resp = res["ADDINFO"];
-      console.log('"""""""""""url',resp)
+      const result = res.RESULT;
+      console.log('"""""""""""url', result);
+      const resp = res.ADDINFO;
+      console.log('"""""""""""url', resp);
       console.log(res);
       if (result === '0') {
         // if (res['RESULT'] === 0) {
 
-        const billinfo = resp['BillInfo'];
-        setDueDate(billinfo['billDueDate']);
-        setAmount(billinfo['billAmount']);
-        setCustomerName(billinfo['customerName']);
-        setCustBal(billinfo['balance']);
-        setStatus(billinfo['customerStatus']);
+        const billinfo = resp.BillInfo;
+        setDueDate(billinfo.billDueDate);
+        setAmount(billinfo.billAmount);
+        setCustomerName(billinfo.customerName);
+        setCustBal(billinfo.balance);
+        setStatus(billinfo.customerStatus);
         setProceedSheetVisible(true);
-
-      }else{
-        ToastAndroid.show(resp.Message || "No message available", ToastAndroid.CENTER);
+      } else {
+        ToastAndroid.show(
+          resp.Message || translate('No message available'),
+          ToastAndroid.CENTER,
+        );
       }
     } catch (error) {
       console.error(error);
     }
   }
 
-
-
   const handlePayPress = () => {
-    if
-      (FastagOpt === 'Select Your Operator') {
+    if (FastagOpt === 'Select Your Operator') {
       ToastAndroid.show(
-        'Please Select an Operator',
+        translate('Please Select an Operator'),
         ToastAndroid.SHORT,
       );
     } else if (!CustomerID) {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}`,
+        `${translate('Please Enter')} ${paramname}`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount' || amount === '0' || parseFloat(amount) <= 0) {
+    } else if (
+      !amount ||
+      amount === 'Enter Amount' ||
+      amount === '0' ||
+      parseFloat(amount) <= 0
+    ) {
       ToastAndroid.showWithGravity(
-        'Please Enter the Recharge Amount',
+        translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-
     } else {
       billInfo();
       setProceedSheetVisible(true);
@@ -290,9 +282,9 @@ const LoanScreen = () => {
   const handleItemPress = async item => {
     setLandLineOPSheet(false);
 
-    setFastagOpt(item['Operatorname']);
-    setLoanBillOperator(item['Operatorname']);
-    await setOptCode(item['OPtCode']);
+    setFastagOpt(item.Operatorname);
+    setLoanBillOperator(item.Operatorname);
+    await setOptCode(item.OPtCode);
 
     setDataType('');
     setMaxLength(0);
@@ -302,43 +294,43 @@ const LoanScreen = () => {
     setValues('');
     setRegx('');
     setVisibility(false);
-    ViewbillInfoStatus(item['OPtCode']);
+    ViewbillInfoStatus(item.OPtCode);
     if (!item.customerparams || item.customerparams.length === 0) {
       clearState();
     } else {
       const custparam = item.customerparams;
 
-      setDataType(custparam[0]['dataType']);
-      setMaxLength(custparam[0]['maxLength']);
-      setMinLength(custparam[0]['minLength']);
-      setVisibility(custparam[0]['visibility']);
-      setOptional(custparam[0]['optional']);
-      setParamName(custparam[0]['paramName']);
-      setOptCode(item['OPtCode']);
-      setRegx(custparam[0]['regex']);
-      setValues(custparam[0]['values']);
+      setDataType(custparam[0].dataType);
+      setMaxLength(custparam[0].maxLength);
+      setMinLength(custparam[0].minLength);
+      setVisibility(custparam[0].visibility);
+      setOptional(custparam[0].optional);
+      setParamName(custparam[0].paramName);
+      setOptCode(item.OPtCode);
+      setRegx(custparam[0].regex);
+      setValues(custparam[0].values);
 
       if (custparam.length === 2) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setKey2(custparam[1]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setKey2(custparam[1].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
         setAccntvisivility2(false);
       } else if (custparam.length === 3) {
-        setAccnumhint(custparam[1]['paramName']);
-        setAccmaxlength(custparam[1]['maxLength']);
-        setAccnumhint2(custparam[2]['paramName']);
-        setAccmaxlength2(custparam[2]['maxLength']);
-        setKey2(custparam[1]['dataType']);
-        setKey3(custparam[2]['dataType']);
+        setAccnumhint(custparam[1].paramName);
+        setAccmaxlength(custparam[1].maxLength);
+        setAccnumhint2(custparam[2].paramName);
+        setAccmaxlength2(custparam[2].maxLength);
+        setKey2(custparam[1].dataType);
+        setKey3(custparam[2].dataType);
         setKeyType2(
-          custparam[1]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[1].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setKeyType3(
-          custparam[2]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
+          custparam[2].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
         setAccntvisivility2(true);
@@ -381,7 +373,10 @@ const LoanScreen = () => {
   const handleInfoPress = () => {
     billInfo();
     if (!CustomerID) {
-      ToastAndroid.show(`Please enter ${paramname}`, ToastAndroid.SHORT);
+      ToastAndroid.show(
+        `${translate('Please enter')} ${paramname}`,
+        ToastAndroid.SHORT,
+      );
     } else if (viewbillStatus === 'Y') {
       setBottomSheetVisible(true);
       /*  
@@ -391,14 +386,13 @@ const LoanScreen = () => {
     }
   };
 
-  async function ViewbillInfoStatus({ code }) {
+  async function ViewbillInfoStatus({code}) {
     try {
-
       const url = `${APP_URLS.viewbillstatuscheck}${code}`;
-      const res = await post({ url: url, });
-      setviewbillStatus(res['RESULT']);
+      const res = await post({url: url});
+      setviewbillStatus(res.RESULT);
       console.log(':', url);
-    } catch (error) { }
+    } catch (error) {}
   }
   const handleCloseBottomSheet = () => {
     setBottomSheetVisible(false);
@@ -413,9 +407,7 @@ const LoanScreen = () => {
       <AppBarSecond title={'Loan Screen'} />
 
       <View style={styles.container}>
-        {showLoader && (
-          <ShowLoader />
-        )}
+        {showLoader && <ShowLoader />}
         <TouchableOpacity
           style={{}}
           onPress={() => {
@@ -434,35 +426,44 @@ const LoanScreen = () => {
               <Text>{FastagOpt}</Text>
             </View>
           </View> */}
-          <FlotingInput label={FastagOpt} editable={false} />
+          <FlotingInput
+            label={FastagOpt}
+            editable={false}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+            onChangeTextCallback={undefined}
+          />
           <View style={[styles.righticon2]}>
-
             <OnelineDropdownSvg />
-
           </View>
         </TouchableOpacity>
         <View>
-          <FlotingInput label={paramname} value={CustomerID}
-
+          <FlotingInput
+            label={paramname}
+            value={CustomerID}
             onChangeTextCallback={text => {
               setCustomerID(text);
               if (text.length >= 5) {
-                setIsInfo(true)
+                setIsInfo(true);
               } else {
-                setIsInfo(false)
+                setIsInfo(false);
               }
-            }} />
-          <View style={[styles.righticon2,]}>
+            }}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+          />
+          <View style={[styles.righticon2]}>
             {isInfo && (
               <TouchableOpacity
                 style={styles.infobtn}
-
-                onPress={() => { billInfo() }}
-              >
-                {
-                  showLoader2 ? <ActivityIndicator size={'large'} /> : <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
-
-                }
+                onPress={() => {
+                  billInfo();
+                }}>
+                {showLoader2 ? (
+                  <ActivityIndicator size={'large'} />
+                ) : (
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
+                )}
               </TouchableOpacity>
             )}
           </View>
@@ -493,54 +494,63 @@ const LoanScreen = () => {
         </View> */}
 
         {accntvisivility === true ? (
-
-
-          < FlotingInput label={accnumhint} onChangeTextCallback={(text) => console.log(text)}
-            value={accnumhint2} maxLength={accmaxlength} />
+          <FlotingInput
+            label={accnumhint}
+            onChangeTextCallback={text => console.log(text)}
+            value={accnumhint2}
+            maxLength={accmaxlength}
+            inputstyle={undefined}
+            labelinputstyle={undefined}
+          />
         ) : null}
 
         {accntvisivility2 && (
-
-
-          <View >
-
-            <FlotingInput label={accnumhint2} onChangeTextCallback={(text) => setAccnumhint2(text)}
-              value={accnumhint2} maxLength={accmaxlength2}
-
+          <View>
+            <FlotingInput
+              label={accnumhint2}
+              onChangeTextCallback={text => setAccnumhint2(text)}
+              value={accnumhint2}
+              maxLength={accmaxlength2}
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
             <View style={[styles.righticon2]}>
               <TouchableOpacity>
-
-                <Text style={[styles.infobtntex,]}>{translate("Info")}</Text>
+                <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
               </TouchableOpacity>
-
             </View>
-
           </View>
         )}
 
-        <FlotingInput label={'Enter Amount'}
-             maxLength={5}
-              value={amount} keyboardType="number-pad"
+        <FlotingInput
+          label={translate('Enter Amount')}
+          maxLength={5}
+          value={amount}
+          keyboardType="number-pad"
           onChangeTextCallback={text => {
-            setAmount(text); 
-          }} />
+            setAmount(text);
+          }}
+          inputstyle={undefined}
+          labelinputstyle={undefined}
+        />
 
-
-
-        <DynamicButton title={'Next'} onPress={() => { handlePayPress() }} />
-        <View >
-
+        <DynamicButton
+          title={'Next'}
+          onPress={() => {
+            handlePayPress();
+          }}
+        />
+        <View>
           <RecentHistory
             isModalVisible={isrecent}
             setModalVisible={setIsrecent}
             historylistdata={historylist}
             onBackdropPress={() => setIsrecent(false)}
-
           />
-          <TouchableOpacity onPress={() => {
-            setIsrecent(true);
-          }}
+          <TouchableOpacity
+            onPress={() => {
+              setIsrecent(true);
+            }}
             style={styles.recentviewbtn}>
             <RecentText />
           </TouchableOpacity>
@@ -550,14 +560,18 @@ const LoanScreen = () => {
           isModalVisible={LandLineOPSheet}
           operatorData={LoanBillOperators}
           //// stateData={stateList}
-          selectedOperator={() => { FastagOpt; setLandLineOPSheet(false) }}
+          selectedOperator={() => {
+            FastagOpt;
+            setLandLineOPSheet(false);
+          }}
           setModalVisible={setLandLineOPSheet}
           selectOperator={selectOperator}
           setOperatorcode={setOptCode}
           showState={false}
           // selectOperatorImage={setOptimg}
-          handleItemPress={(item) => { handleItemPress(item) }}
-
+          handleItemPress={item => {
+            handleItemPress(item);
+          }}
         />
         <Rechargeconfirm
           Lottieimg={require('../../utils/lottieIcons/loan.json')}
@@ -565,31 +579,27 @@ const LoanScreen = () => {
           onBackdropPress={() => setProceedSheetVisible(false)}
           status={Status}
           details={[
-            { label: 'User Name', value2: CustomerName },
-            { label: 'Customer ID', value: CustomerID },
-            { label: 'Due Date', value2: dueDate },
-            { label: 'Operator Name', value2: FastagOpt },
-            { label: 'Customer Status', value2: Status },
+            {label: translate('User Name'), value2: CustomerName},
+            {label: translate('Customer ID'), value: CustomerID},
+            {label: translate('Due Date'), value2: dueDate},
+            {label: translate('Operator Name'), value2: FastagOpt},
+            {label: translate('Customer Status'), value2: Status},
             // { label: 'BillAmount', value2: billAmount },
-
           ]}
-          lastlabel={'Transaction Amount'}
+          lastlabel={translate('Transaction Amount')}
           lastvalue={amount}
           onRechargedetails={() => {
             if (amount === '0' || amount === '') {
               ToastAndroid.showWithGravity(
-                `Please Enter Amount`,
+                translate(`Please Enter Amount`),
                 ToastAndroid.SHORT,
                 ToastAndroid.BOTTOM,
               );
-            } else { onRechargePress() }
-          }
-          }
+            } else {
+              onRechargePress();
+            }
+          }}
         />
-
-
-
-
       </View>
     </View>
   );
@@ -598,21 +608,21 @@ const LoanScreen = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: wScale(20),
     paddingTop: wScale(30),
-    flex: 1
+    flex: 1,
   },
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "85%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '85%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
   infobtn: {
@@ -625,19 +635,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     paddingHorizontal: wScale(13),
     paddingVertical: hScale(5),
-    borderRadius: 5
+    borderRadius: 5,
   },
   recentviewbtn: {
     alignSelf: 'flex-end',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   recent: {
     color: '#000',
     textAlign: 'right',
     paddingVertical: hScale(10),
   },
-
-
 });
 
 export default LoanScreen;

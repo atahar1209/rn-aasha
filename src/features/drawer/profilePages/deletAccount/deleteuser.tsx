@@ -1,16 +1,14 @@
-import React from "react";
-
-import { View, Text, Image } from "react-native-animatable";
-import LinearGradient from "react-native-linear-gradient";
-import { StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { useNavigation } from "@react-navigation/native";
-import { hScale, wScale } from "../../../../utils/styles/dimensions";
-import DynamicButton from "../../button/DynamicButton";
-import AppBarSecond from "../../headerAppbar/AppBarSecond";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../reduxUtils/store";
-import { translate } from "../../../../utils/languageUtils/I18n";
+import React from 'react';
+import {View, Text, Image} from 'react-native-animatable';
+import {StyleSheet, ScrollView} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {useNavigation} from '@react-navigation/native';
+import {hScale, wScale} from '../../../../utils/styles/dimensions';
+import DynamicButton from '../../button/DynamicButton';
+import AppBarSecond from '../../headerAppbar/AppBarSecond';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../../reduxUtils/store';
+import {translate} from '../../../../utils/languageUtils/I18n';
 
 const DeletUser = () => {
   const userDelete =
@@ -19,7 +17,7 @@ const DeletUser = () => {
   const navigation = useNavigation();
 
   const onPressOtpSumbitDeleteAcc = () => {
-    navigation.navigate("AreYousuareUserDelete");
+    navigation.navigate('AreYousuareUserDelete');
   };
   const handleBackPress = () => {
     navigation.goBack();
@@ -27,13 +25,13 @@ const DeletUser = () => {
 
   const BtnPress = () => {
     // navigation.navigate()
-    console.log("Button pressed!");
+    console.log('Button pressed!');
   };
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
   return (
     <View style={styles.main}>
-      <AppBarSecond title={translate("dlt.Delete Acc & Clear Data")} />
+      <AppBarSecond title={translate('dlt.Delete Acc & Clear Data')} />
       <ScrollView>
         <View style={styles.bodystyle}>
           <View style={styles.bodymarginstyle}>
@@ -44,19 +42,18 @@ const DeletUser = () => {
               allowFontScaling={false}
               style={[
                 styles.pleaseReadCarefully,
-                { color: colorConfig.secondaryColor },
-              ]}
-            >
-              {translate("dlt.Please Read Carefully !")}
+                {color: colorConfig.secondaryColor},
+              ]}>
+              {translate('dlt.Please Read Carefully !')}
             </Text>
 
             <Text style={styles.bodyTextStyle}>
-              {translate("dlt.description")}{" "}
+              {translate('dlt.description')}{' '}
             </Text>
 
             <View style={styles.buttonstyle}>
               <DynamicButton
-                title={translate("dlt.Press me if you agree to the deletion")}
+                title={translate('dlt.Press me if you agree to the deletion')}
                 onPress={onPressOtpSumbitDeleteAcc}
               />
             </View>
@@ -68,54 +65,54 @@ const DeletUser = () => {
 };
 const styles = StyleSheet.create({
   main: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   manage: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     height: wScale(55),
   },
   managetext: {
     fontSize: wScale(25),
-    color: "#fff",
+    color: '#fff',
     flex: 1,
-    textAlign: "center",
-    fontWeight: "bold",
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 
   backbutton: {
     width: wScale(60),
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
   },
 
   bodystyle: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   bodymarginstyle: {
     marginLeft: wScale(20),
     marginRight: wScale(20),
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   userDeletestyle: {
     marginTop: hScale(20),
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   pleaseReadCarefully: {
     fontSize: wScale(32),
-    fontWeight: "bold",
-    alignSelf: "center",
+    fontWeight: 'bold',
+    alignSelf: 'center',
     marginTop: hScale(15),
   },
   bodyTextStyle: {
-    textAlign: "justify",
+    textAlign: 'justify',
     marginTop: hScale(5),
     fontSize: wScale(22),
-    color: "#000",
+    color: '#000',
   },
 
   buttonstyle: {
