@@ -1,5 +1,5 @@
-import { ToastAndroid } from 'react-native';
-import RNFS from 'react-native-fs';
+// import { ToastAndroid } from 'react-native';
+// import RNFS from 'react-native-fs';
 import firestore from '@react-native-firebase/firestore';
 
 // export const appendLog = async (message,name) => {
@@ -11,10 +11,10 @@ import firestore from '@react-native-firebase/firestore';
 
 //   try {
 //     await RNFS.appendFile(LOG_FILE_PATH, logMessage, 'utf8');
-//     //ToastAndroid.show('Log saved successfully', ToastAndroid.SHORT);  
+//     //ToastAndroid.show('Log saved successfully', ToastAndroid.SHORT);
 //   } catch (error) {
 //     console.log('Failed to write to log file:', error);
-//   //  ToastAndroid.show('Failed to save log file', ToastAndroid.LONG); 
+//   //  ToastAndroid.show('Failed to save log file', ToastAndroid.LONG);
 //   }
 // };
 // export const appendLog = async (message, name) => {
@@ -33,36 +33,42 @@ import firestore from '@react-native-firebase/firestore';
 //   }
 // };
 
-export const appendLog = async (isWrite ,message, name) => {
-if(isWrite == false){
-  return
-}
+export const appendLog = async (
+  isWrite: boolean,
+  message: string,
+  name: string,
+) => {
+  if (isWrite === false) {
+    return;
+  }
   const timestamp = new Date().toISOString();
   // Hum 'name' (jo aapne 'OPPO' rakha hai) ko hi doc ID bana lete hain
   // Ya fir date use kar sakte hain: `Login_Log_${name}`
-  const docId = `${name}_Current_Trace`; 
-
+  const docId = `${name}_Current_Trace`;
   try {
     await firestore()
       .collection('debug_logs')
       .doc(docId)
-      .set({
-        user: name,
-        last_updated: timestamp,
-        // arrayUnion har naye message ko purane messages ke niche add karega
-        steps: firestore.FieldValue.arrayUnion({
-          msg: message,
-          time: timestamp
-        })
-      }, { merge: true }); // merge: true se purana data delete nahi hoga
-
+      .set(
+        {
+          user: name,
+          last_updated: timestamp,
+          // arrayUnion har naye message ko purane messages ke niche add karega
+          steps: firestore.FieldValue.arrayUnion({
+            msg: message,
+            time: timestamp,
+          }),
+        },
+        {merge: true},
+      ); // merge: true se purana data delete nahi hoga
   } catch (error) {
-    console.log("Firebase log error:", error);
+    console.log('Firebase log error:', error);
   }
 };
 //export const getLogFilePath = () => LOG_FILE_PATH;
 export const generateUniqueId = (length = 10) => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let randomPart = '';
 
   for (let i = 0; i < length; i++) {
@@ -75,19 +81,19 @@ export const generateUniqueId = (length = 10) => {
 
   return uniqueId; // final ID will be longer than length, but very unique
 };
-const safeValue = (value, fallback = "NOT_AVAILABLE") => {
+const safeValue = (value: any, fallback = 'NOT_AVAILABLE') => {
   try {
     if (
       value === null ||
       value === undefined ||
-      value === "" ||
-      value === "null" ||
-      value === "undefined"
+      value === '' ||
+      value === 'null' ||
+      value === 'undefined'
     ) {
       return fallback;
     }
 
-    if (typeof value === "object") {
+    if (typeof value === 'object') {
       return JSON.stringify(value);
     }
 
@@ -98,45 +104,43 @@ const safeValue = (value, fallback = "NOT_AVAILABLE") => {
 };
 
 export const saveLogToFirestore = async (
-  uniqueId,
-  logType,
-  step,
-  data,
-  deviceInfoRef
+  uniqueId: string,
+  logType: string,
+  step: string,
+  data: any,
+  deviceInfoRef: any,
 ) => {
   try {
-
-    const safeStringify = (obj) => {
+    const safeStringify = (obj: any) => {
       try {
         return JSON.stringify(obj);
       } catch {
-        return "CIRCULAR_DATA";
+        return 'CIRCULAR_DATA';
       }
     };
 
     const payload =
-      typeof data === "object" ? safeStringify(data) : safeValue(data);
+      typeof data === 'object' ? safeStringify(data) : safeValue(data);
 
-    await Firestore()
-      .collection("AppLogs")
-      .doc(uniqueId || "UNKNOWN_USER")
-      .collection("LoginAttempts")
+    await firestore()
+      .collection('AppLogs')
+      .doc(uniqueId || 'UNKNOWN_USER')
+      .collection('LoginAttempts')
       .add({
         logType: safeValue(logType),
         step: safeValue(step),
 
-        timestamp: Firestore.FieldValue.serverTimestamp(),
+        timestamp: firestore.FieldValue.serverTimestamp(),
 
-        payload: payload || "NULL",
+        payload: payload || 'NULL',
 
         deviceInfo: {
-          brand: safeValue(deviceInfoRef?.brand, "UNKNOWN_BRAND"),
-          model: safeValue(deviceInfoRef?.modelNumber, "UNKNOWN_MODEL"),
-          ip: safeValue(deviceInfoRef?.ipAddress, "UNKNOWN_IP"),
+          brand: safeValue(deviceInfoRef?.brand, 'UNKNOWN_BRAND'),
+          model: safeValue(deviceInfoRef?.modelNumber, 'UNKNOWN_MODEL'),
+          ip: safeValue(deviceInfoRef?.ipAddress, 'UNKNOWN_IP'),
         },
       });
-
   } catch (error) {
-    console.error("Firestore Log Error:", error);
+    console.error('Firestore Log Error:', error);
   }
 };

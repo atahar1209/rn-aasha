@@ -1,26 +1,42 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
-import { Card, Text } from 'react-native-paper';
-import { hScale, wScale } from '../utils/styles/dimensions';
+import React, {useEffect, useRef} from 'react';
+import {View, StyleSheet, Animated} from 'react-native';
+import {Card, Text} from 'react-native-paper';
+import {hScale, wScale} from '../utils/styles/dimensions';
 import CloseAadharSvg from '../features/drawer/svgimgcomponents/CloseAadharSvg';
 
-const NotFoundScreen = ({ description, title2 }) => {
+const NotFoundScreen = ({
+  description,
+  title2,
+}: {
+  description: string;
+  title2: string;
+}) => {
   const scaleValue = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     // 0.74 Fix: Store the animation instance
     const animation = Animated.loop(
       Animated.sequence([
-        Animated.timing(scaleValue, { toValue: 1.1, duration: 600, useNativeDriver: true }),
-        Animated.timing(scaleValue, { toValue: 1, duration: 600, useNativeDriver: true }),
-      ])
+        Animated.timing(scaleValue, {
+          toValue: 1.1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleValue, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]),
     );
 
     animation.start();
 
     return () => {
       // Calling stop on the animation instance, not the value
-      if (animation) animation.stop();
+      if (animation) {
+        animation.stop();
+      }
     };
   }, [scaleValue]);
 
@@ -29,7 +45,7 @@ const NotFoundScreen = ({ description, title2 }) => {
       <Card style={styles.card}>
         <View style={styles.headerSection}>
           <View style={styles.iconContainer}>
-            <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+            <Animated.View style={{transform: [{scale: scaleValue}]}}>
               <CloseAadharSvg />
             </Animated.View>
           </View>
@@ -43,9 +59,15 @@ const NotFoundScreen = ({ description, title2 }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: wScale(15), backgroundColor: '#c9c2c1' },
-  card: { flex: 1, backgroundColor: '#fff', borderRadius: 15, alignItems: 'center', padding: 20 },
-  headerSection: { alignItems: 'center', marginTop: hScale(20) },
+  container: {flex: 1, padding: wScale(15), backgroundColor: '#c9c2c1'},
+  card: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    alignItems: 'center',
+    padding: 20,
+  },
+  headerSection: {alignItems: 'center', marginTop: hScale(20)},
   iconContainer: {
     backgroundColor: '#2a3d82',
     width: wScale(180),
@@ -53,16 +75,27 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 2
+    zIndex: 2,
   },
-  title: { fontSize: 28, fontWeight: 'bold', marginTop: hScale(50), textAlign: 'center' },
-  desc: { fontSize: 16, color: '#666', textAlign: 'center', marginTop: 10 },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginTop: hScale(50),
+    textAlign: 'center',
+  },
+  desc: {fontSize: 16, color: '#666', textAlign: 'center', marginTop: 10},
   cutout: {
-    width: 0, height: 0,
-    borderLeftWidth: 40, borderRightWidth: 40, borderTopWidth: 50,
-    borderLeftColor: 'transparent', borderRightColor: 'transparent', borderTopColor: '#2a3d82',
-    marginTop: -10, zIndex: 1
-  }
+    width: 0,
+    height: 0,
+    borderLeftWidth: 40,
+    borderRightWidth: 40,
+    borderTopWidth: 50,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#2a3d82',
+    marginTop: -10,
+    zIndex: 1,
+  },
 });
 
 export default NotFoundScreen;

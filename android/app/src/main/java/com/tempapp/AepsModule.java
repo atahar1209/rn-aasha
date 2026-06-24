@@ -1,4 +1,4 @@
-package com.globalmultisolution;
+package com.mobykwik;
 
 import android.app.Activity;
 import android.content.Intent;

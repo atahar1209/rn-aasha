@@ -17,8 +17,14 @@ interface Props extends TouchableOpacityProps {
   layoutKey?: string;
 }
 
+interface LayoutContextType {
+  overlays: any[];
+  setLayout: (layout: {overlays: any[]}) => void;
+}
+
 class BaseMeasuredView extends React.PureComponent<Props> {
   static contextType = LayoutContext;
+  declare context: LayoutContextType;
   height = 0;
   nodeId: number | null = null;
   ref = createRef<View>();
@@ -117,4 +123,4 @@ const MeasuredView: FC<Props> = ({section, children, ...props}) => {
 
 export default MeasuredView;
 
-const persistedLayout = {};
+const persistedLayout: Record<string, any> = {};

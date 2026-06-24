@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Text, StyleSheet } from "react-native";
-import { translate } from "../../../utils/languageUtils/I18n";
+import React, {useState, useEffect} from 'react';
+import {Text, StyleSheet} from 'react-native';
+import {translate} from '../../../utils/languageUtils/I18n';
 
-const CountdownTimer = ({ initialTime, onComplete }) => {
+const CountdownTimer = ({initialTime, onComplete}) => {
   const [timer, setTimer] = useState(initialTime);
   const [isActive, setIsActive] = useState(true); // New state to control if the timer is active
-
   useEffect(() => {
     if (!isActive) return; // Prevent the timer from starting if not active
 
     const countdown = setInterval(() => {
-      setTimer((prevTimer) => {
+      setTimer(prevTimer => {
         if (prevTimer <= 1) {
           clearInterval(countdown);
           setIsActive(false); // Stop the timer
@@ -43,9 +42,9 @@ const CountdownTimer = ({ initialTime, onComplete }) => {
 const styles = StyleSheet.create({
   timerText: {
     fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "white", // Adjust according to your theme
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'white', // Adjust according to your theme
   },
 });
 

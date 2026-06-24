@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import CalendarCmssvg from "../../features/drawer/svgimgcomponents/CalendarCmssvg";
-import { hScale, wScale } from "../../utils/styles/dimensions";
-import { MonthItem } from "./MonthItem";
-import { getReverseMonthsWithYear, MONTHS } from "../../utils/dateUtils";
-import OnelineDropdownSvg from "../../features/drawer/svgimgcomponents/simpledropdown";
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import CalendarCmssvg from '../../features/drawer/svgimgcomponents/CalendarCmssvg';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {MonthItem} from './MonthItem';
+import {getReverseMonthsWithYear, MONTHS} from '../../utils/dateUtils';
+import OnelineDropdownSvg from '../../features/drawer/svgimgcomponents/simpledropdown';
 
 interface CalendarDropdownProps {
   year?: number;
   onChange?: (month: number, year: number) => void;
 }
 
-export const CalendarDropdown = ({ year, onChange }: CalendarDropdownProps) => {
+export const CalendarDropdown = ({year, onChange}: CalendarDropdownProps) => {
   const today = new Date();
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
@@ -41,12 +40,16 @@ export const CalendarDropdown = ({ year, onChange }: CalendarDropdownProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={() => setOpen(!open)}>
-        <CalendarCmssvg size={35} month={MONTHS[selectedMonth]} year={selectedYear} />
+        <CalendarCmssvg
+          size={35}
+          month={MONTHS[selectedMonth]}
+          year={selectedYear}
+        />
         <Text style={styles.buttonText}>
           {MONTHS[selectedMonth]} {selectedYear}
         </Text>
         {/* <AntDesign name={open ? "up" : "down"} size={24} /> */}
-        <OnelineDropdownSvg/>
+        <OnelineDropdownSvg />
       </TouchableOpacity>
 
       {open && (
@@ -65,23 +68,23 @@ export const CalendarDropdown = ({ year, onChange }: CalendarDropdownProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: { width: "100%" },
+  container: {width: '100%'},
   button: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: hScale(10),
     // backgroundColor: "#fff",
   },
   buttonText: {
     fontSize: wScale(22),
-    fontWeight: "bold",
-    color:'#000',
-    textTransform:'uppercase'
+    fontWeight: 'bold',
+    color: '#000',
+    textTransform: 'uppercase',
   },
   dropdown: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    backgroundColor: "#fff",
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
   },
 });

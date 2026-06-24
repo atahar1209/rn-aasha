@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Text, ViewStyle, TextStyle } from 'react-native';
-import { hScale, wScale } from '../../utils/styles/dimensions';
+import {View, StyleSheet, Text, ViewStyle, TextStyle} from 'react-native';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {translate} from '../../utils/languageUtils/I18n';
 
 interface TableRowData {
   label1: string;
@@ -33,13 +34,21 @@ const Table: React.FC<TableProps> = ({
       {data.map((row, index) => (
         <View key={index} style={[styles.row, rowStyle]}>
           <View style={[styles.col, colStyle]}>
-            <Text style={[styles.label, labelStyle]}>{row.label1}</Text>
-            <Text style={[styles.value, valueStyle, row.valueStyle1]}>{row.value1}</Text>
+            <Text style={[styles.label, labelStyle]}>
+              {translate(row.label1)}
+            </Text>
+            <Text style={[styles.value, valueStyle, row.valueStyle1]}>
+              {row.value1}
+            </Text>
           </View>
           {row.label2 && (
             <View style={[styles.col, styles.rightCol, colStyle]}>
-              <Text style={[styles.label, labelStyle]}>{row.label2}</Text>
-              <Text style={[styles.value, valueStyle, row.valueStyle2]}>{row.value2}</Text>
+              <Text style={[styles.label, labelStyle]}>
+                {translate(row.label2)}
+              </Text>
+              <Text style={[styles.value, valueStyle, row.valueStyle2]}>
+                {row.value2}
+              </Text>
             </View>
           )}
         </View>
@@ -52,8 +61,8 @@ export default Table;
 
 const styles = StyleSheet.create({
   table: {
-      overflow: 'hidden',
-    backgroundColor:'#fff'
+    overflow: 'hidden',
+    backgroundColor: '#fff',
   },
   row: {
     flexDirection: 'row',

@@ -1,22 +1,22 @@
 export const APP_URLS = {
   playUrl: 'http://play.google.com/store/apps/details?id=',
   RCEID: 'api/Radiant/RCEID',
-  appPackage: 'com.rechargedrishti',
+  appPackage: 'com.mobykwik',
   retailerlist: 'api/data/retailer_list',
   LoginDetailsRetailer: 'Retailer/api/data/LoginDetailsRetailer',
   LoginDetailsDealer: 'api/data/LoginDetails',
-  baseapiurl: 'http://native.rechargedrishti.com/',
+  baseapiurl: 'http://native.paypointsindia.com/',
   // baseWebUrl: 'vastwebindia.com/',
-  baseWebUrl: 'rechargedrishti.com/',
+  baseWebUrl: 'paypointsindia.com/',
 
-  AppName: 'Recharge Drishti',
-  app_logo: 'sonicswipe.png',
+  AppName: 'Pay Points India',
+  app_logo: 'paypointsindia.png',
   cms_logo: 'radiant.png',
   DownloadAPK: '/Home/DownloadAPK',
   recentTx: 'Retailer/api/data/_Recent_Transaction?topentry=',
   // baseWebUrl:'http://divyanshipay.co.in/',
   current_version: 'Common/api/data/Check_Android_Current_Version?vs_no=7',
-  version: '13.0.3',
+  version: '3.0.3',
   AepsBankInfo: 'AEPS/api/data/AepsBankInfo',
   daywisecommsofuser: 'Money/api/Money/daywisecommsofuser',
   ExtracommReport: 'Money/api/Money/ExtracommReport',
@@ -65,7 +65,8 @@ export const APP_URLS = {
   balanceInfo: 'Retailer/api/data/Show_ALL_balanceremRem',
   recharge: 'Recharge/api/data/hkhk2?',
   statelist: 'Common/api/data/statelist',
-  electricity_opt_Via_StateId: 'Recharge/api/data/Stateopearotorcodelist?Stateid=',
+  electricity_opt_Via_StateId:
+    'Recharge/api/data/Stateopearotorcodelist?Stateid=',
   viewbillstatuscheck: 'Recharge/api/data/viewbillstatuscheck?Operatorcode=',
   rechargeViewBill: 'Recharge/api/Data/viewbill?',
   getDthOperator: 'Recharge/api/data/Optcodelist?opttype=',
@@ -130,7 +131,8 @@ export const APP_URLS = {
   getupiList: 'UPI/api/UPI/GetBeneficiaryList?sender_number=',
   ccBanks: 'Money/api/Money/CCBankDetails',
   ccbenifeciary: 'Money/api/Money/CCRemiterDetails?mobile=',
-  addmoneyChg: 'Common/api/data/GetFinalChargeAmountWallet_ALL_Charges_Show?amount=',
+  addmoneyChg:
+    'Common/api/data/GetFinalChargeAmountWallet_ALL_Charges_Show?amount=',
   upicharges: 'UPI/api/data/PayBYUPICHECKSTATUS',
   upistatus: 'UPI/api/data/PayBYUPICHECKSTATUS',
   Chkpayu: 'Common/api/data/GatewayAuth?',
@@ -193,14 +195,20 @@ export const APP_URLS = {
   miniStatement: 'AEPS/api/app/AEPS/MiniStatement',
   PancardManual: 'PAN/api/PAN/PancardMenual?',
   getMandatorySimStatus: 'Retailer/api/data/RegisterMobileStatus',
-  sendMandatorySimOTP: 'Retailer/api/data/RegisterMobileStatusChange?Type=SENDOTP&OTP=""',
-  verifyMandatorySimOTP: 'Retailer/api/data/RegisterMobileStatusChange?Type=VERIFYOTP&OTP=',
+  sendMandatorySimOTP:
+    'Retailer/api/data/RegisterMobileStatusChange?Type=SENDOTP&OTP=""',
+  verifyMandatorySimOTP:
+    'Retailer/api/data/RegisterMobileStatusChange?Type=VERIFYOTP&OTP=',
   getLoginPlatformStatus: 'Retailer/api/data/AppWebloginstatus',
-  sendLoginPlatformOtp: 'Retailer/api/data/UpdateAppWebloginstatus?LoginType={TYPE}&Type=SENDOTP&OTP=""',
-  verifyUpdateLoginPlatformOtp: 'Retailer/api/data/UpdateAppWebloginstatus?LoginType={TYPE}&Type=VERIFYOTP&OTP=',
+  sendLoginPlatformOtp:
+    'Retailer/api/data/UpdateAppWebloginstatus?LoginType={TYPE}&Type=SENDOTP&OTP=""',
+  verifyUpdateLoginPlatformOtp:
+    'Retailer/api/data/UpdateAppWebloginstatus?LoginType={TYPE}&Type=VERIFYOTP&OTP=',
   getRegistrationDevices: 'Retailer/api/data/AppLoginDevicewise',
-  registerDevice: 'Retailer/api/data/RegisterImei?imeino={uniqueId}&Type=SENDOTP&OTP={otp}&commandtype=',
-  registerDeviceVerifyOTP: 'Retailer/api/data/RegisterImei?imeino={uniqueId}&Type=VERIFYOTP&OTP={otp}&commandtype=',
+  registerDevice:
+    'Retailer/api/data/RegisterImei?imeino={uniqueId}&Type=SENDOTP&OTP={otp}&commandtype=',
+  registerDeviceVerifyOTP:
+    'Retailer/api/data/RegisterImei?imeino={uniqueId}&Type=VERIFYOTP&OTP={otp}&commandtype=',
   HoldAndCreditReport: '/MICROATM/api/data/Micro_Atm_hold_Rem_Report',
   NewsNotifaction: '/Retailer/api/data/AppNotifications',
   getCashPickupTransactionList: 'api/RadiantCash/CashPickUpList',
@@ -226,7 +234,8 @@ export const APP_URLS = {
   token_Purchase_Dealer: 'api/Dealer/token_Purchase_Dealer?tokenCount=',
   _Recent_Dealer_Transaction: 'api/data/_Recent_Dealer_Transaction?topentry=10',
   createUser: 'api/data/Retailer_create',
-  PancardCardValidationCheck: 'Common/api/data/PancardCardValidationCheck?pannumber=',
+  PancardCardValidationCheck:
+    'Common/api/data/PancardCardValidationCheck?pannumber=',
   dealer_rem_rch_report: 'api/data/dealer_rem_rch_report?',
   dealer_Rem_AepsReport: 'api/data/dealer_Rem_AepsReport?',
   ShowActualIncome: 'api/Dealer/ShowActualIncome?from=',
@@ -237,8 +246,10 @@ export const APP_URLS = {
   ReceiveFund_by_admin: 'api/Dealer/ReceiveFund_by_admin?',
   dealer_fund_trans_history: 'api/data/dealer_fund_trans_history?',
   dealeropcomn: 'api/data/DealerOpertorByCommission?',
-  Show_Retailer_outstandingreport: 'api/Dealer/Show_Retailer_outstandingreport?',
-  ChkbalanceRetailerOuts: 'api/Dealer/ChkbalanceRetailerOutstandingAndMyCredit?',
+  Show_Retailer_outstandingreport:
+    'api/Dealer/Show_Retailer_outstandingreport?',
+  ChkbalanceRetailerOuts:
+    'api/Dealer/ChkbalanceRetailerOutstandingAndMyCredit?',
   ShowCreditReportByAdmin: 'api/Dealer/ShowCreditReportByAdmin?',
   CreditReportByMaster: 'api/Dealer/CreditReportByMaster',
   UpdateRetailerProfile: 'Retailer/api/data/UpdateRetailerProfile',
@@ -301,7 +312,7 @@ export const APP_URLS = {
   SendOTPMobileOther: 'api/Radiant/SendOTPMobileOther?',
   VerifyOTPMobileOther: 'api/Radiant/VerifyOTPMobileOther?',
   CashpickupRemainBal: 'api/Radiant/CashpickupRemainBal',
-  VerifyOTtPMobile: "api/Radiant/VerifyOTPMobile",
+  VerifyOTtPMobile: 'api/Radiant/VerifyOTPMobile',
   Checkaadharverify: 'api/Radiant/Checkaadharverify?',
   Checkpancardverify: 'api/Radiant/Checkpancardverify?',
   CheckPendingForm: 'api/Radiant/CheckPendingForm',
@@ -331,14 +342,16 @@ export const APP_URLS = {
   LoiListReport: 'api/Radiant/LoiListReport',
   InsertLOIList: 'api/Radiant/InsertLOIList',
   ThemeChangeTime: 'api/SVG/ThemeChangeTime',
-  RadiantClientInformationReport_BYShopid: 'api/Radiant/RadiantClientInformationReport_BYShopid?',
-  InsertRadiantClientInformation_BYShopid: 'api/Radiant/InsertRadiantClientInformation_BYShopid?',
+  RadiantClientInformationReport_BYShopid:
+    'api/Radiant/RadiantClientInformationReport_BYShopid?',
+  InsertRadiantClientInformation_BYShopid:
+    'api/Radiant/InsertRadiantClientInformation_BYShopid?',
   PartialCashPickupsubmitlist: 'api/RadiantCash/PartialCashPickupsubmitlist?',
   getcmsSectionImages: 'api/SVG/CmsServices',
   HolidayRequest: 'api/Radiant/HolidayRequest',
   AadhaarPanCheck: 'api/Radiant/Aadharpancheck',
-  VerifyAadhaar: 'api/Radiant/verifyaadhar',       // ?AadharCard= GET param
-  VerifyAadhaarOTP: 'api/Radiant/verifyaadharOTP',    // ?Clientid=&TXNID=&OTP=&AadharCard=
+  VerifyAadhaar: 'api/Radiant/verifyaadhar', // ?AadharCard= GET param
+  VerifyAadhaarOTP: 'api/Radiant/verifyaadharOTP', // ?Clientid=&TXNID=&OTP=&AadharCard=
   EmailVerify: 'api/Radiant/EmailVerify',
   EmailVerifyOTP: 'api/Radiant/EmailVerifyOTP',
   VerifyPanCard: 'api/Radiant/VerifyPanCard?',
@@ -361,10 +374,10 @@ export const APP_URLS = {
   ShowForm9: 'api/Radiant/ShowForm9',
   InsertForm9Update: 'api/Radiant/InsertForm9Update',
   AccountVerify: 'api/Radiant/AccountVerify',
-  RadiantFormALLStatus: 'api/Radiant/RadiantFormALLStatus'
+  RadiantFormALLStatus: 'api/Radiant/RadiantFormALLStatus',
 };
-export const IMAGE_BASE_URL = 'https://cdn.jsdelivr.net/gh/Vwi-app/vwiImages@main/';
+export const IMAGE_BASE_URL =
+  'https://cdn.jsdelivr.net/gh/Vwi-app/vwiImages@main/';
 
 const formatted = APP_URLS.AppName.toLowerCase().replace(/\s+/g, '');
 export const logoUrl = `${IMAGE_BASE_URL}${formatted}.png`;
-

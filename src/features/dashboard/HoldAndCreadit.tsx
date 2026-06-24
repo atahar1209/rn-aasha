@@ -1,109 +1,98 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { colors } from "../../utils/styles/theme";
-import { hScale, wScale } from "../../utils/styles/dimensions";
-import LinearGradient from "react-native-linear-gradient";
-import DashboardHeader from "./components/DashboardHeader";
-import { useSelector } from "react-redux";
-import { RootState } from "../../reduxUtils/store";
-import StatementSvg from "../../utils/svgUtils/StatementSvg";
-import { FlashList } from "@shopify/flash-list";
-import CheckBlance from "../../utils/svgUtils/CheckBlance";
-import DayEarningReport from "../Acount/DayEarning";
-import DayEarnsvg from "../drawer/svgimgcomponents/DayEarnsvg";
-import DayLedgerSvg from "../drawer/svgimgcomponents/DayLedgerSvg";
-import AddedMoneySvg from "../drawer/svgimgcomponents/AddedMoneySvg";
-import RToRSvg from "../drawer/svgimgcomponents/RToRSvg";
-import FundReceivedSvg from "../drawer/svgimgcomponents/FundReceivedSvg";
-import OperatorCommissionSvg from "../drawer/svgimgcomponents/OperatorCommissionSvg";
-import ManageAccountSvg from "../drawer/svgimgcomponents/ManageAccountSvg";
-import PurchaseOrderSvg from "../drawer/svgimgcomponents/PurchaseOrderSvg";
-import DisputeSvg from "../drawer/svgimgcomponents/DisputeSvg";
-import OtherLinksSvg from "../drawer/svgimgcomponents/OtherLinksSvg";
-import DayBookSvg from "../drawer/svgimgcomponents/DayBookSvg";
-import RToRiportSvg from "../drawer/svgimgcomponents/RToRiportSvg";
-import { translate } from "../../utils/languageUtils/I18n";
+import React from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import LinearGradient from 'react-native-linear-gradient';
+import DashboardHeader from './components/DashboardHeader';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {FlashList} from '@shopify/flash-list';
+import DayEarnsvg from '../drawer/svgimgcomponents/DayEarnsvg';
+import DayLedgerSvg from '../drawer/svgimgcomponents/DayLedgerSvg';
+import AddedMoneySvg from '../drawer/svgimgcomponents/AddedMoneySvg';
+import RToRSvg from '../drawer/svgimgcomponents/RToRSvg';
+import FundReceivedSvg from '../drawer/svgimgcomponents/FundReceivedSvg';
+import OperatorCommissionSvg from '../drawer/svgimgcomponents/OperatorCommissionSvg';
+import ManageAccountSvg from '../drawer/svgimgcomponents/ManageAccountSvg';
+import PurchaseOrderSvg from '../drawer/svgimgcomponents/PurchaseOrderSvg';
+import DisputeSvg from '../drawer/svgimgcomponents/DisputeSvg';
+import OtherLinksSvg from '../drawer/svgimgcomponents/OtherLinksSvg';
+import DayBookSvg from '../drawer/svgimgcomponents/DayBookSvg';
+import RToRiportSvg from '../drawer/svgimgcomponents/RToRiportSvg';
+import {translate} from '../../utils/languageUtils/I18n';
 
 const AccReportScreen = () => {
   const navigation = useNavigation<any>();
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
-  const getSvgComponent = (item) => {
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
+  const getSvgComponent = item => {
     switch (item) {
-      case "Day Earning":
+      case 'Day Earning':
         return <DayEarnsvg />;
-      case "Day Ledger":
+      case 'Day Ledger':
         return <DayLedgerSvg />;
-      case "Day Book":
+      case 'Day Book':
         return <DayBookSvg />;
-      case "Added Money":
+      case 'Added Money':
         return <AddedMoneySvg />;
-      case "R TO R":
+      case 'R TO R':
         return <RToRSvg />;
-      case "R TO R Report":
+      case 'R TO R Report':
         return <RToRiportSvg />;
-      case "Fund Receive Report":
+      case 'Fund Receive Report':
         return <FundReceivedSvg />;
-      case "Operator Commission":
+      case 'Operator Commission':
         return <OperatorCommissionSvg />;
-      case "Manage A/C":
+      case 'Manage A/C':
         return <ManageAccountSvg />;
-      case "Purchase order Report":
+      case 'Purchase order Report':
         return <PurchaseOrderSvg />;
-      case "Dispute Report":
+      case 'Dispute Report':
         return <DisputeSvg />;
-      case "Other Links":
+      case 'Other Links':
         return <OtherLinksSvg />;
       default:
         return null;
     }
   };
 
-  const handleItemClick = (item) => {
+  const handleItemClick = item => {
     switch (item) {
-      case "Day Earning":
-        navigation.navigate("DayEarningReport");
+      case 'Day Earning':
+        navigation.navigate('DayEarningReport');
         break;
-      case "Day Ledger":
-        navigation.navigate("DayLedgerReport");
+      case 'Day Ledger':
+        navigation.navigate('DayLedgerReport');
         break;
-      case "Day Book":
-        navigation.navigate("DayBookReport");
+      case 'Day Book':
+        navigation.navigate('DayBookReport');
         break;
-      case "Added Money":
-        navigation.navigate("AddedMoneyROTRReport");
+      case 'Added Money':
+        navigation.navigate('AddedMoneyROTRReport');
         break;
-      case "R TO R":
-        navigation.navigate("RtorScreen");
+      case 'R TO R':
+        navigation.navigate('RtorScreen');
         break;
-      case "R TO R Report":
-        navigation.navigate("RToRReport");
+      case 'R TO R Report':
+        navigation.navigate('RToRReport');
         break;
-      case "Fund Receive Report":
-        navigation.navigate("FundReceivedReport");
+      case 'Fund Receive Report':
+        navigation.navigate('FundReceivedReport');
         break;
-      case "Operator Commission":
-        navigation.navigate("OperatorCommissionReport");
+      case 'Operator Commission':
+        navigation.navigate('OperatorCommissionReport');
         break;
-      case "Manage A/C":
-        navigation.navigate("ManageAccount");
+      case 'Manage A/C':
+        navigation.navigate('ManageAccount');
         break;
-      case "Purchase order Report":
-        navigation.navigate("PurchaseOrderReport");
+      case 'Purchase order Report':
+        navigation.navigate('PurchaseOrderReport');
         break;
-      case "Dispute Report":
-        navigation.navigate("DisputeReport");
+      case 'Dispute Report':
+        navigation.navigate('DisputeReport');
         break;
 
-      case "Other Links":
-        navigation.navigate("OtherLinks");
+      case 'Other Links':
+        navigation.navigate('OtherLinks');
         break;
       default:
         break;
@@ -111,27 +100,26 @@ const AccReportScreen = () => {
   };
 
   const gridItems = [
-    "Day Earning",
-    "Day Ledger",
-    "Day Book",
-    "Added Money",
-    "R TO R",
-    "R TO R Report",
-    "Fund Receive Report",
-    "Operator Commission",
-    "Manage A/C",
-    "Purchase order Report",
-    "Dispute Report",
-    "Other Links",
+    translate('Day Earning'),
+    translate('Day Ledger'),
+    translate('Day Book'),
+    translate('Added Money'),
+    translate('R TO R'),
+    translate('R TO R Report'),
+    translate('Fund Receive Report'),
+    translate('Operator Commission'),
+    translate('Manage A/C'),
+    translate('Purchase order Report'),
+    translate('Dispute Report'),
+    translate('Other Links'),
   ];
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <View style={styles.item}>
       <TouchableOpacity
         style={styles.imgview}
-        onPress={() => handleItemClick(item)}
-      >
+        onPress={() => handleItemClick(item)}>
         <View>{getSvgComponent(item)}</View>
-        <Text style={[styles.itemText, { color: colorConfig.secondaryColor }]}>
+        <Text style={[styles.itemText, {color: colorConfig.secondaryColor}]}>
           {translate(item)}
         </Text>
       </TouchableOpacity>
@@ -140,9 +128,8 @@ const AccReportScreen = () => {
   return (
     <View style={styles.main}>
       <LinearGradient
-        style={{ paddingBottom: wScale(5) }}
-        colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-      >
+        style={{paddingBottom: wScale(5)}}
+        colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}>
         <DashboardHeader />
       </LinearGradient>
       <View style={styles.container}>
@@ -158,7 +145,7 @@ const AccReportScreen = () => {
   );
 };
 const styles = StyleSheet.create({
-  main: { flex: 1 },
+  main: {flex: 1},
   container: {
     // paddingHorizontal: wScale(10),
     paddingVertical: hScale(10),
@@ -167,27 +154,27 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: hScale(20),
     flex: 1,
   },
   itemText: {
     fontSize: wScale(14),
-    textAlign: "center",
+    textAlign: 'center',
     paddingTop: hScale(10),
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 
   imgview: {
     borderRadius: 10,
-    width: "80%",
-    justifyContent: "center",
+    width: '80%',
+    justifyContent: 'center',
     height: hScale(105),
-    alignItems: "center",
+    alignItems: 'center',
     // borderWidth: wScale(1),
     marginBottom: hScale(5),
     elevation: 5,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
 });
 

@@ -1,4 +1,4 @@
-package com.globalmultisolution.ContactPicker;
+package com.mobykwik.ContactPicker;
 
 import android.app.Activity;
 import android.content.Intent;

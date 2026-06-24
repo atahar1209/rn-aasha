@@ -1,15 +1,7 @@
 import React from 'react';
-
-import {
-  LayoutChangeEvent,
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-} from 'react-native';
-
+import {StatusBar, StyleSheet, View, Text} from 'react-native';
 import {APP_BAR_HEIGHT, wScale} from '../utils/styles/dimensions';
-import {FontSize, SPACING, SPACING_24, colors} from '../utils/styles/theme';
+import {SPACING, SPACING_24, colors} from '../utils/styles/theme';
 import LayoutContext from './LayoutContext';
 import LeftButton from './LeftButton';
 
@@ -18,10 +10,8 @@ export type HeaderProps = Partial<any> & {
   HeaderContent?: string | React.ReactElement;
   LeftAction?: 'none' | (() => void) | React.ReactElement;
 };
-
 class Header extends React.PureComponent<HeaderProps> {
   static contextType = LayoutContext;
-
   // onHeaderLayout = (e: LayoutChangeEvent) => {
   //   const {headerHeight, setLayout} = this.context;
   //   const newHeight = e.nativeEvent.layout.height + APP_BAR_HEIGHT;
@@ -29,10 +19,8 @@ class Header extends React.PureComponent<HeaderProps> {
   //     setLayout({headerHeight: newHeight});
   //   }
   // };
-
   render() {
     const {title, HeaderContent, LeftAction} = this.props;
-
     return (
       <View style={styles.header}>
         <StatusBar

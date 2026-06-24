@@ -1,26 +1,24 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
   Alert,
   SafeAreaView,
   ActivityIndicator,
   Platform,
   StatusBar,
 } from 'react-native';
-import { BottomSheet } from '@rneui/themed';
-import { FlashList } from '@shopify/flash-list';
-import { TabView, TabBar } from 'react-native-tab-view';
-import { useSelector } from 'react-redux';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import {BottomSheet} from '@rneui/themed';
+import {FlashList} from '@shopify/flash-list';
+import {TabView, TabBar} from 'react-native-tab-view';
+import {useSelector} from 'react-redux';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { decryptData } from '../../utils/encryptionUtils';
-import { SCREEN_WIDTH, hScale, wScale } from '../../utils/styles/dimensions';
-import { translate } from '../../utils/languageUtils/I18n';
+import {decryptData} from '../../utils/encryptionUtils';
+import {SCREEN_WIDTH, hScale, wScale} from '../../utils/styles/dimensions';
+import {translate} from '../../utils/languageUtils/I18n';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
@@ -28,20 +26,16 @@ import DynamicButton from '../drawer/button/DynamicButton';
 import ShowLoader from '../../components/ShowLoder';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-
 type SheetType = 'method' | 'account' | null;
-
 interface Balance {
   posremain: string;
   remainbal: string;
 }
-
 interface BankItem {
   BankAccountNo: string;
   AcconutHolderName: string;
   BankName: string;
 }
-
 interface FormData {
   amount: string;
   paymentMethod: string;
@@ -50,9 +44,7 @@ interface FormData {
 }
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-
 const PAYMENT_METHODS = ['IMPS', 'NEFT'];
-
 const INITIAL_FORM: FormData = {
   amount: '',
   paymentMethod: 'IMPS',
@@ -62,25 +54,22 @@ const INITIAL_FORM: FormData = {
 
 // ─── Sub-components (defined outside to prevent re-render) ───────────────────
 
-const BalanceCard = ({ label, amount }: { label: string; amount: string }) => (
+const BalanceCard = ({label, amount}: {label: string; amount: string}) => (
   <View style={styles.balItem}>
     <Text style={styles.balLabel}>{label}</Text>
     <Text style={styles.balAmount}>₹{amount}</Text>
   </View>
 );
 
-const SectionLabel = ({ text }: { text: string }) => (
+const SectionLabel = ({text}: {text: string}) => (
   <Text style={styles.sectionLabel}>{text}</Text>
 );
 
-const Selector = ({
-  value,
-  onPress,
-}: {
-  value: string;
-  onPress: () => void;
-}) => (
-  <TouchableOpacity style={styles.selector} onPress={onPress} activeOpacity={0.7}>
+const Selector = ({value, onPress}: {value: string; onPress: () => void}) => (
+  <TouchableOpacity
+    style={styles.selector}
+    onPress={onPress}
+    activeOpacity={0.7}>
     <Text style={styles.selectorText}>{value}</Text>
     <OnelineDropdownSvg />
   </TouchableOpacity>
@@ -89,22 +78,23 @@ const Selector = ({
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 const PostoMain = () => {
-  const { colorConfig } = useSelector((s: any) => s.userInfo);
+  const {colorConfig} = useSelector((s: any) => s.userInfo);
   const themeColor: string = colorConfig?.primaryColor || '#0A84FF';
-  const { get, post } = useAxiosHook();
-
+  const {get, post} = useAxiosHook();
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [sheetType, setSheetType] = useState<SheetType>(null);
   const [bankList, setBankList] = useState<BankItem[]>([]);
-  const [balance, setBalance] = useState<Balance>({ posremain: '0', remainbal: '0.00' });
+  const [balance, setBalance] = useState<Balance>({
+    posremain: '0',
+    remainbal: '0.00',
+  });
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM);
-
   const routes = useMemo(
     () => [
-      { key: 'bank', title: 'To Bank' },
-      { key: 'mainWallet', title: 'Wallet' },
-      { key: 'distributor', title: 'Distributor' },
+      {key: 'bank', title: translate('To Bank')},
+      {key: 'mainWallet', title: translate('Wallet')},
+      {key: 'distributor', title: translate('Distributor')},
     ],
     [],
   );
@@ -114,10 +104,12 @@ const PostoMain = () => {
   const loadInitialData = useCallback(async () => {
     try {
       const [bankRes, balRes] = await Promise.all([
-        get({ url: 'WalletUnload/api/data/ShowbankdetailsforWalletToBank' }),
-        get({ url: 'Retailer/api/data/Show_ALL_balanceremRem' }),
+        get({url: 'WalletUnload/api/data/ShowbankdetailsforWalletToBank'}),
+        get({url: 'Retailer/api/data/Show_ALL_balanceremRem'}),
       ]);
-      if (balRes?.data?.[0]) setBalance(balRes.data[0]);
+      if (balRes?.data?.[0]) {
+        setBalance(balRes.data[0]);
+      }
       if (bankRes?.vvvv) {
         const decrypted = JSON.parse(
           decryptData(bankRes.vvvv, bankRes.kkkk, bankRes.bankdetails),
@@ -127,7 +119,7 @@ const PostoMain = () => {
     } catch (err) {
       console.error('Data Load Error:', err);
     }
-  }, []);
+  }, [get]);
 
   useEffect(() => {
     loadInitialData();
@@ -135,12 +127,15 @@ const PostoMain = () => {
 
   // ─── Form Helpers ────────────────────────────────────────────────────────────
 
-  const updateForm = useCallback(<K extends keyof FormData>(key: K, value: FormData[K]) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
-  }, []);
+  const updateForm = useCallback(
+    <K extends keyof FormData>(key: K, value: FormData[K]) => {
+      setFormData(prev => ({...prev, [key]: value}));
+    },
+    [],
+  );
 
   const resetPostTransfer = useCallback(() => {
-    setFormData(prev => ({ ...prev, amount: '', transactionPin: '' }));
+    setFormData(prev => ({...prev, amount: '', transactionPin: ''}));
   }, []);
 
   const closeSheet = useCallback(() => setSheetType(null), []);
@@ -148,14 +143,20 @@ const PostoMain = () => {
   // ─── Transfer Logic ───────────────────────────────────────────────────────────
 
   const handleTransfer = useCallback(async () => {
-    const { amount, paymentMethod, selectedAccNo, transactionPin } = formData;
+    const {amount, paymentMethod, selectedAccNo, transactionPin} = formData;
     const currentKey = routes[index].key;
 
     if (!amount || parseFloat(amount) <= 0) {
-      return Alert.alert('Invalid Amount', 'Please enter a valid amount.');
+      return Alert.alert(
+        translate('Invalid Amount'),
+        translate('Please enter a valid amount.'),
+      );
     }
     if (currentKey === 'bank' && (!selectedAccNo || !transactionPin)) {
-      return Alert.alert('Missing Info', 'Please select a bank account and enter your PIN.');
+      return Alert.alert(
+        translate('Missing_Info'),
+        translate('Please_select_a_bank_account_and_enter_your_PIN.'),
+      );
     }
 
     setLoading(true);
@@ -168,39 +169,58 @@ const PostoMain = () => {
           const finalRes = await post({
             url: `WalletUnload/api/data/AddWalletToBankRequest?Amount=${amount}&Type=${paymentMethod}&transid=${initRes.transferid}&dmtpin=${transactionPin}&BankAccountNo=${selectedAccNo}`,
           });
-          Alert.alert('Status', finalRes?.Message || 'Request Processed');
+          Alert.alert(
+            'Status',
+            finalRes?.Message || translate('Request Processed'),
+          );
           resetPostTransfer();
         } else {
-          Alert.alert('Process Failed', initRes?.msg || 'Could not initiate transfer.');
+          Alert.alert(
+            translate('Process_Failed'),
+            initRes?.msg || translate('Could_not_initiate_transfer'),
+          );
         }
       } else {
         const url =
           currentKey === 'mainWallet'
             ? `MPOS/api/mPos/pos_to_Wallet_TransferAmount?amount=${amount}`
             : `MPOS/api/mPos/pos_to_Distributor_TransferAmount?amount=${amount}`;
-        const res = await post({ url });
-        Alert.alert(res?.Status || 'Success', res?.msg || 'Transfer request submitted');
+        const res = await post({url});
+        Alert.alert(
+          res?.Status || translate('Success'),
+          res?.msg || translate('Transfer_request_submitted'),
+        );
         updateForm('amount', '');
       }
       loadInitialData();
     } catch {
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      Alert.alert(
+        translate('Error'),
+        translate('Something went wrong. Please try again.'),
+      );
     } finally {
       setLoading(false);
     }
-  }, [formData, index, routes, loadInitialData, resetPostTransfer, updateForm]);
+  }, [
+    formData,
+    routes,
+    index,
+    loadInitialData,
+    post,
+    resetPostTransfer,
+    updateForm,
+  ]);
 
   // ─── Tab Scene ────────────────────────────────────────────────────────────────
 
   const renderScene = useCallback(
-    ({ route }: { route: { key: string } }) => (
+    ({route}: {route: {key: string}}) => (
       <KeyboardAwareScrollView
         contentContainerStyle={styles.sceneContent}
         showsVerticalScrollIndicator={false}
         enableOnAndroid
         extraScrollHeight={20}
-        keyboardShouldPersistTaps="handled"
-      >
+        keyboardShouldPersistTaps="handled">
         {/* Amount Card */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
@@ -208,10 +228,12 @@ const PostoMain = () => {
             <Text style={styles.cardTitle}>{translate('Enter_Amount')}</Text>
           </View>
           <FlotingInput
-            label="₹ Enter amount"
+            label={translate('Enter_amount')}
             value={formData.amount}
             onChangeTextCallback={(v: string) => updateForm('amount', v)}
             keyboardType="number-pad"
+            inputstyle={undefined}
+            labelinputstyle={undefined}
           />
         </View>
 
@@ -220,7 +242,7 @@ const PostoMain = () => {
           <View style={[styles.card, styles.cardSpaced]}>
             <View style={styles.cardHeader}>
               <Text style={styles.cardIcon}>🏦</Text>
-              <Text style={styles.cardTitle}>Bank Details</Text>
+              <Text style={styles.cardTitle}>{translate('Bank_Details')}</Text>
             </View>
 
             <SectionLabel text={translate('Payment_Method')} />
@@ -234,7 +256,7 @@ const PostoMain = () => {
               value={
                 formData.selectedAccNo
                   ? `**** ${formData.selectedAccNo.slice(-4)}`
-                  : 'Choose Account'
+                  : translate('Choose Account')
               }
               onPress={() => setSheetType('account')}
             />
@@ -243,14 +265,17 @@ const PostoMain = () => {
             <FlotingInput
               label="Security PIN"
               value={formData.transactionPin}
-              onChangeTextCallback={(v: string) => updateForm('transactionPin', v)}
+              onChangeTextCallback={(v: string) =>
+                updateForm('transactionPin', v)
+              }
               secureTextEntry
               keyboardType="number-pad"
+              inputstyle={undefined}
+              labelinputstyle={undefined}
             />
-
           </View>
         )}
-{loading && <ShowLoader/>}
+        {loading && <ShowLoader />}
         {/* Proceed Button */}
         {/* <TouchableOpacity
           activeOpacity={0.85}
@@ -271,12 +296,12 @@ const PostoMain = () => {
         </TouchableOpacity> */}
 
         <DynamicButton
-        title={loading ? <ActivityIndicator size={30} />:"Next"}
-        onPress={()=>handleTransfer()}
+          title={loading ? <ActivityIndicator size={30} /> : 'Next'}
+          onPress={() => handleTransfer()}
         />
       </KeyboardAwareScrollView>
     ),
-    [formData, loading, themeColor, handleTransfer, updateForm],
+    [formData, loading, handleTransfer, updateForm],
   );
 
   // ─── Render ───────────────────────────────────────────────────────────────────
@@ -286,25 +311,34 @@ const PostoMain = () => {
       <StatusBar barStyle="light-content" />
 
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: themeColor }]}>
+      <View style={[styles.header, {backgroundColor: themeColor}]}>
         <AppBarSecond title="Money Transfer" titlestyle={styles.headerTitle} />
         <View style={styles.balanceRow}>
-          <BalanceCard label="POS BALANCE" amount={balance.posremain} />
+          <BalanceCard
+            label={translate('POS BALANCE ')}
+            amount={balance.posremain}
+          />
           <View style={styles.balDivider} />
-          <BalanceCard label="MAIN WALLET" amount={balance.remainbal} />
+          <BalanceCard
+            label={translate('MAIN WALLET')}
+            amount={balance.remainbal}
+          />
         </View>
       </View>
 
       {/* Tabs */}
       <TabView
-        navigationState={{ index, routes }}
+        navigationState={{index, routes}}
         renderScene={renderScene}
         onIndexChange={setIndex}
-        initialLayout={{ width: SCREEN_WIDTH }}
+        initialLayout={{width: SCREEN_WIDTH}}
         renderTabBar={props => (
           <TabBar
             {...props}
-            indicatorStyle={[styles.tabIndicator, { backgroundColor: themeColor }]}
+            indicatorStyle={[
+              styles.tabIndicator,
+              {backgroundColor: themeColor},
+            ]}
             style={styles.tabBar}
             activeColor={themeColor}
             inactiveColor="#8E8E93"
@@ -318,12 +352,13 @@ const PostoMain = () => {
         animationType="none"
         isVisible={!!sheetType}
         onBackdropPress={closeSheet}
-        containerStyle={styles.sheetOverlay}
-      >
+        containerStyle={styles.sheetOverlay}>
         <View style={styles.sheet}>
           <View style={styles.sheetHandle} />
           <Text style={styles.sheetTitle}>
-            {sheetType === 'method' ? translate('Select Method') : translate('Select Bank Account')}
+            {sheetType === 'method'
+              ? translate('Select Method')
+              : translate('Select Bank Account')}
           </Text>
 
           {sheetType === 'method' ? (
@@ -335,12 +370,13 @@ const PostoMain = () => {
                 onPress={() => {
                   updateForm('paymentMethod', method);
                   closeSheet();
-                }}
-              >
+                }}>
                 <View style={styles.sheetItemInner}>
                   <Text style={styles.sheetItemText}>{method}</Text>
                   {formData.paymentMethod === method && (
-                    <Text style={[styles.sheetCheck, { color: themeColor }]}>✓</Text>
+                    <Text style={[styles.sheetCheck, {color: themeColor}]}>
+                      ✓
+                    </Text>
                   )}
                 </View>
               </TouchableOpacity>
@@ -351,16 +387,17 @@ const PostoMain = () => {
                 data={bankList}
                 estimatedItemSize={70}
                 keyExtractor={item => item.BankAccountNo}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <TouchableOpacity
                     style={styles.sheetItem}
                     activeOpacity={0.7}
                     onPress={() => {
                       updateForm('selectedAccNo', item.BankAccountNo);
                       closeSheet();
-                    }}
-                  >
-                    <Text style={styles.sheetItemText}>{item.AcconutHolderName}</Text>
+                    }}>
+                    <Text style={styles.sheetItemText}>
+                      {item.AcconutHolderName}
+                    </Text>
                     <Text style={styles.sheetSubText}>
                       {item.BankName} • {item.BankAccountNo}
                     </Text>
@@ -374,11 +411,9 @@ const PostoMain = () => {
     </SafeAreaView>
   );
 };
-
 export default React.memo(PostoMain);
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -391,8 +426,13 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: wScale(28),
     borderBottomRightRadius: wScale(28),
     ...Platform.select({
-      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.15, shadowRadius: 12 },
-      android: { elevation: 6 },
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 6},
+        shadowOpacity: 0.15,
+        shadowRadius: 12,
+      },
+      android: {elevation: 6},
     }),
   },
   headerTitle: {
@@ -410,7 +450,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.25)',
   },
-  balItem: { flex: 1, alignItems: 'center' },
+  balItem: {flex: 1, alignItems: 'center'},
   balLabel: {
     color: 'rgba(255,255,255,0.75)',
     fontSize: wScale(9),
@@ -455,13 +495,18 @@ const styles = StyleSheet.create({
 
   // Cards
   card: {
-    bottom:hScale(10),
+    bottom: hScale(10),
     backgroundColor: '#FFF',
     borderRadius: wScale(20),
     padding: wScale(18),
     ...Platform.select({
-      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8 },
-      android: { elevation: 2 },
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.06,
+        shadowRadius: 8,
+      },
+      android: {elevation: 2},
     }),
   },
   cardSpaced: {
@@ -520,8 +565,13 @@ const styles = StyleSheet.create({
     marginTop: hScale(24),
     gap: wScale(8),
     ...Platform.select({
-      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 8 },
-      android: { elevation: 3 },
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 4},
+        shadowOpacity: 0.12,
+        shadowRadius: 8,
+      },
+      android: {elevation: 3},
     }),
   },
   btnText: {

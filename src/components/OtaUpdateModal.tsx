@@ -1,32 +1,39 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { hScale, wScale } from '../utils/styles/dimensions';
-import FastImage from 'react-native-fast-image';
-import { RootState } from '../reduxUtils/store';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import {View, Text, StyleSheet, Image} from 'react-native';
+import {hScale, wScale} from '../utils/styles/dimensions';
+import {RootState} from '../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {translate} from '../utils/languageUtils/I18n';
 
-const OtaUpdateModal = ({ status, progress }: {
+const OtaUpdateModal = ({
+  status,
+  progress,
+}: {
   status: 'idle' | 'downloading' | 'installing' | 'success' | 'failed';
-  progress: number
+  progress: number;
 }) => {
-    const { logoUrl } = useSelector((state: RootState) => state.userInfo);
+  const {logoUrl} = useSelector((state: RootState) => state.userInfo);
 
-  if (status === 'idle') return null;
+  if (status === 'idle') {
+    return null;
+  }
 
   return (
     <View style={ota.overlay}>
       <View style={ota.card}>
-
         {status === 'downloading' && (
           <>
             <Image
-              source={{ uri: logoUrl }}
-             style={ota.logo}
+              source={{uri: logoUrl}}
+              style={ota.logo}
               resizeMode="contain"
             />
-            <Text style={ota.title}>Downloading Update...</Text>
-            <Text style={ota.subtitle}>Please wait, do not close the app</Text>
+            <Text style={ota.title}>{translate('Downloading Update')}</Text>
+            <Text style={ota.subtitle}>
+              {translate('Please wait, do not close the app')}
+            </Text>
             <View style={ota.progressBg}>
-              <View style={[ota.progressFill, { width: `${progress}%` }]} />
+              <View style={[ota.progressFill, {width: `${progress}%`}]} />
             </View>
             <Text style={ota.percent}>{progress}%</Text>
           </>
@@ -34,43 +41,48 @@ const OtaUpdateModal = ({ status, progress }: {
 
         {status === 'installing' && (
           <>
-             <Image
-              source={{ uri: logoUrl }}
-             style={ota.logo}
+            <Image
+              source={{uri: logoUrl}}
+              style={ota.logo}
               resizeMode="contain"
             />
-            <Text style={ota.title}>Installing Update...</Text>
-            <Text style={ota.subtitle}>Almost done, app will restart shortly</Text>
+            <Text style={ota.title}>{translate('Installing Update...')}</Text>
+            <Text style={ota.subtitle}>
+              {translate('Almost done, app will restart shortly')}
+            </Text>
             <View style={ota.progressBg}>
-              <View style={[ota.progressFill, { width: '100%' }]} />
+              <View style={[ota.progressFill, {width: '100%'}]} />
             </View>
           </>
         )}
 
         {status === 'success' && (
           <>
-             <Image
-              source={{ uri: logoUrl }}
-             style={ota.logo}
+            <Image
+              source={{uri: logoUrl}}
+              style={ota.logo}
               resizeMode="contain"
             />
-            <Text style={ota.title}>Update Complete!</Text>
-            <Text style={ota.subtitle}>Restarting app...</Text>
+            <Text style={ota.title}>{translate('Update Complete!')}</Text>
+            <Text style={ota.subtitle}>{translate('Restarting app...')}</Text>
           </>
         )}
 
         {status === 'failed' && (
           <>
-             <Image
-              source={{ uri: logoUrl }}
-             style={ota.logo}
+            <Image
+              source={{uri: logoUrl}}
+              style={ota.logo}
               resizeMode="contain"
             />
-            <Text style={[ota.title, { color: '#EF4444' }]}>Update Failed</Text>
-            <Text style={ota.subtitle}>Something went wrong. Try again later.</Text>
+            <Text style={[ota.title, {color: '#EF4444'}]}>
+              {translate('Update Failed')}
+            </Text>
+            <Text style={ota.subtitle}>
+              {translate('Something went wrong. Try again later.')}
+            </Text>
           </>
         )}
-
       </View>
     </View>
   );
@@ -81,7 +93,10 @@ export default OtaUpdateModal;
 const ota = StyleSheet.create({
   overlay: {
     position: 'absolute',
-    top: 0, left: 0, right: 0, bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center',
     alignItems: 'center',

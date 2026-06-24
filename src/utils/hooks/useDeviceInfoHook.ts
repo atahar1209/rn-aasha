@@ -31,8 +31,8 @@ export const useDeviceInfoHook = () => {
   const getNetworkCarrier = useCallback(async () => {
     const networkCarrier = await getCarrier();
     return networkCarrier;
-  }, []);  
-  
+  }, []);
+
   const getMobileIp = useCallback(async () => {
     const ip = await getIpAddress();
     return ip;

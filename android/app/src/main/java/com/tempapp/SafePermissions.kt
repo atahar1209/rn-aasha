@@ -1,4 +1,4 @@
-package com.globalmultisolution   // ✅ was com.worldpayone
+package com.mobykwik   // ✅ was com.worldpayone
 
 import android.Manifest
 import android.app.Activity

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -9,50 +9,40 @@ import {
   Alert,
   Platform,
   ToastAndroid,
-} from "react-native";
-
-import { launchCamera } from "react-native-image-picker";
-import { useDispatch, useSelector } from "react-redux";
-import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
+} from 'react-native';
+import {launchCamera} from 'react-native-image-picker';
+import {useSelector} from 'react-redux';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 import {
   check,
   openSettings,
   PERMISSIONS,
   request,
   RESULTS,
-} from "react-native-permissions";
-
-import { Video } from "react-native-compressor";
-import RNFS from "react-native-fs";
-
-import { useNavigation, useRoute } from "@react-navigation/native";
-
-import useAxiosHook from "../../utils/network/AxiosClient";
-import { APP_URLS } from "../../utils/network/urls";
-import ShowLoader from "../../components/ShowLoder";
-import { RootState } from "../../reduxUtils/store";
-import { translate } from "../../utils/languageUtils/I18n";
-import { useColorsOfApi } from "../../utils/styles/theme";
-import { wScale, hScale } from '../../utils/styles/dimensions';
-import {
-  Camera,
-  useCameraDevice,
-} from "react-native-vision-camera";
-import { useLocationHook } from "../../hooks/useLocationHook";
+} from 'react-native-permissions';
+import {Video} from 'react-native-compressor';
+import RNFS from 'react-native-fs';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import useAxiosHook from '../../utils/network/AxiosClient';
+import {APP_URLS} from '../../utils/network/urls';
+import ShowLoader from '../../components/ShowLoder';
+import {RootState} from '../../reduxUtils/store';
+import {translate} from '../../utils/languageUtils/I18n';
+import {useColorsOfApi} from '../../utils/styles/theme';
+import {wScale, hScale} from '../../utils/styles/dimensions';
+import {Camera, useCameraDevice} from 'react-native-vision-camera';
+import {useLocationHook} from '../../hooks/useLocationHook';
 const VideoKYC = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const cameraRef = useRef(null);
-
-  const device = useCameraDevice("front");
-  const { CNTNT } = route.params;
+  const device = useCameraDevice('front');
+  const {CNTNT} = route.params;
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const timerRef = useRef(null);
   const autoStopRef = useRef(null);
-  const { userId, IsDealer } = useSelector(
-    (state: RootState) => state.userInfo,
-  );
-  const { latitude, longitude, getLocation } = useLocationHook();
+  const {userId, IsDealer} = useSelector((state: RootState) => state.userInfo);
+  const {latitude, longitude, getLocation} = useLocationHook();
   const [isRecording, setIsRecording] = useState(false);
   useEffect(() => {
     return () => {
@@ -66,43 +56,41 @@ const VideoKYC = () => {
       console.log('📹 cameraRef:', cameraRef.current);
 
       if (!cameraRef.current || !isCameraReady) {
-        ToastAndroid.show("Camera not ready", ToastAndroid.SHORT);
+        ToastAndroid.show(translate('Camera not ready'), ToastAndroid.SHORT);
         return;
       }
-
       setIsRecording(true);
       setIsLoading2(true);
       setContent(false);
       setRecordingSeconds(0);
-
       // ── Timer start ──
       timerRef.current = setInterval(() => {
         setRecordingSeconds(prev => prev + 1);
       }, 1000);
-
       // ── Auto stop 38 sec ──
       autoStopRef.current = setTimeout(async () => {
         if (cameraRef.current) {
           await cameraRef.current.stopRecording();
         }
       }, 38000);
-
       cameraRef.current.startRecording({
-        onRecordingFinished: async (video) => {
+        onRecordingFinished: async video => {
           // timers clear karo
           clearInterval(timerRef.current);
           clearTimeout(autoStopRef.current);
           setRecordingSeconds(0);
-
           console.log('✅ Recording finished:', video.path);
           try {
             setLoader(true);
             const compressedVideo = await Video.compress(video.path, {
-              compressionMethod: "manual",
+              compressionMethod: 'manual',
             });
             const base64Video = await convertVideoToBase64(compressedVideo);
             setBase64Video(base64Video);
-            ToastAndroid.show("Recording Complete!", ToastAndroid.LONG);
+            ToastAndroid.show(
+              translate('Recording Complete!'),
+              ToastAndroid.LONG,
+            );
           } catch (e) {
             console.log('❌ Compress error:', e);
           } finally {
@@ -111,7 +99,7 @@ const VideoKYC = () => {
             setLoader(false);
           }
         },
-        onRecordingError: (error) => {
+        onRecordingError: error => {
           clearInterval(timerRef.current);
           clearTimeout(autoStopRef.current);
           setRecordingSeconds(0);
@@ -120,7 +108,6 @@ const VideoKYC = () => {
           setIsRecording(false);
         },
       });
-
     } catch (error) {
       clearInterval(timerRef.current);
       clearTimeout(autoStopRef.current);
@@ -141,14 +128,14 @@ const VideoKYC = () => {
       console.log(e);
     }
   };
-  const { primary, secondary } = useColorsOfApi();
+  const {primary, secondary} = useColorsOfApi();
 
   // ✅ Dynamic Colors
   const C = {
-    bg: "#0A0F1E",
-    card: "#1A2035",
-    cardDark: "#0D1525",
-    border: "#2A3050",
+    bg: '#0A0F1E',
+    card: '#1A2035',
+    cardDark: '#0D1525',
+    border: '#2A3050',
 
     primary,
     secondary,
@@ -156,114 +143,102 @@ const VideoKYC = () => {
     primaryBg: `${primary}20`,
     primaryBorder: `${primary}66`,
 
-    success: "#22C55E",
-    successBg: "rgba(34,197,94,0.08)",
-    successBorder: "rgba(34,197,94,0.3)",
+    success: '#22C55E',
+    successBg: 'rgba(34,197,94,0.08)',
+    successBorder: 'rgba(34,197,94,0.3)',
 
-    warning: "#EAB308",
-    warningBg: "rgba(234,179,8,0.15)",
+    warning: '#EAB308',
+    warningBg: 'rgba(234,179,8,0.15)',
 
-    text: "#E8EAF6",
-    textMuted: "#9CA3AF",
-    textDim: "#6B7280",
-    textDimmer: "#4B5563",
+    text: '#E8EAF6',
+    textMuted: '#9CA3AF',
+    textDim: '#6B7280',
+    textDimmer: '#4B5563',
   };
 
   const s = createStyles(C);
 
-
   const [content, setContent] = useState(true);
   const [englishRow, setEnglishRow] = useState(true);
   const [hindiRow, setHindiRow] = useState(false);
-
   const [firstTap, setFirstTap] = useState(true);
   const [secondTap, setSecondTap] = useState(false);
-
   const [videoBase64, setBase64Video] = useState(null);
-
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
-
   const [loader, setLoader] = useState(true);
-
-  const [hindi, setHindi] = useState(IsDealer ? CNTNT.hindi : "");
-  const [eng, setEng] = useState(IsDealer ? CNTNT.Eng : "");
+  const [hindi, setHindi] = useState(IsDealer ? CNTNT.hindi : '');
+  const [eng, setEng] = useState(IsDealer ? CNTNT.Eng : '');
   const [isCameraActive, setIsCameraActive] = useState(true);
   const [isCameraReady, setIsCameraReady] = useState(false);
-
-  const [name, setName] = useState("");
-
-  const { get } = useAxiosHook();
-
+  const [name, setName] = useState('');
+  const {get} = useAxiosHook();
   const videoRef = useRef(null);
-
   useEffect(() => {
     if (!IsDealer) {
       fetchContent();
     }
-
     requestCameraPermission();
   }, []);
 
   // ✅ Camera Permission
   const requestCameraPermission = useCallback(async () => {
-  try {
-    if (Platform.OS !== "android") return true;
+    try {
+      if (Platform.OS !== 'android') return true;
+      // ── Camera ──
+      const currentStatus = await check(PERMISSIONS.ANDROID.CAMERA);
+      if (currentStatus === RESULTS.BLOCKED) {
+        Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: translate('Permission Required'),
+          textBody: translate('key_pleasegra_85'),
+          button: translate('OK'),
+          onPressButton: () => {
+            Dialog.hide();
+            openSettings().catch(() => console.warn('cannot open settings'));
+          },
+        });
+        return false;
+      }
 
-    // ── Camera ──
-    const currentStatus = await check(PERMISSIONS.ANDROID.CAMERA);
+      if (currentStatus !== RESULTS.GRANTED) {
+        await request(PERMISSIONS.ANDROID.CAMERA);
+      }
 
-    if (currentStatus === RESULTS.BLOCKED) {
-      Dialog.show({
-        type: ALERT_TYPE.WARNING,
-        title: translate("Permission Required"),
-        textBody: translate("key_pleasegra_85"),
-        button: translate("OK"),
-        onPressButton: () => {
-          Dialog.hide();
-          openSettings().catch(() => console.warn("cannot open settings"));
-        },
-      });
+      // ── Mic ──
+      const micStatus = await check(PERMISSIONS.ANDROID.RECORD_AUDIO);
+      console.log('🎤 Mic status:', micStatus);
+
+      if (micStatus === RESULTS.BLOCKED) {
+        Dialog.show({
+          type: ALERT_TYPE.WARNING,
+          title: translate('Microphone Permission Required'),
+          textBody: translate(
+            'Please allow Microphone permission from settings for Video KYC.',
+          ),
+          button: translate('Open Settings'),
+          onPressButton: () => {
+            Dialog.hide();
+            openSettings().catch(() => console.warn('cannot open settings'));
+          },
+        });
+        return false;
+      }
+
+      if (micStatus !== RESULTS.GRANTED) {
+        const micResult = await request(PERMISSIONS.ANDROID.RECORD_AUDIO);
+        console.log('🎤 Mic result:', micResult);
+      }
+
+      return true;
+    } catch (err) {
+      console.warn(err);
       return false;
     }
-
-    if (currentStatus !== RESULTS.GRANTED) {
-      await request(PERMISSIONS.ANDROID.CAMERA);
-    }
-
-    // ── Mic ──
-    const micStatus = await check(PERMISSIONS.ANDROID.RECORD_AUDIO);
-    console.log('🎤 Mic status:', micStatus);
-
-    if (micStatus === RESULTS.BLOCKED) {
-      Dialog.show({
-        type: ALERT_TYPE.WARNING,
-        title: "Microphone Permission Required",
-        textBody: "Please allow Microphone permission from settings for Video KYC.",
-        button: "Open Settings",
-        onPressButton: () => {
-          Dialog.hide();
-          openSettings().catch(() => console.warn("cannot open settings"));
-        },
-      });
-      return false;
-    }
-
-    if (micStatus !== RESULTS.GRANTED) {
-      const micResult = await request(PERMISSIONS.ANDROID.RECORD_AUDIO);
-      console.log('🎤 Mic result:', micResult);
-    }
-
-    return true;
-
-  } catch (err) {
-    console.warn(err);
-    return false;
-  }
-}, []);
+  }, []);
 
   // ✅ Change Language
-  const changeLay = (lay) => {
+  const changeLay = lay => {
     setFirstTap(lay === 1);
     setSecondTap(lay === 2);
 
@@ -272,11 +247,11 @@ const VideoKYC = () => {
   };
 
   // ✅ Convert Video
-  const convertVideoToBase64 = async (videoUri) => {
+  const convertVideoToBase64 = async videoUri => {
     try {
-      return await RNFS.readFile(videoUri, "base64");
+      return await RNFS.readFile(videoUri, 'base64');
     } catch (error) {
-      console.error("Base64 Error:", error);
+      console.error('Base64 Error:', error);
       throw error;
     }
   };
@@ -284,28 +259,24 @@ const VideoKYC = () => {
   // ✅ Open Camera
   const openCamera = async () => {
     try {
-      if (Platform.OS === "android") {
-        const currentStatus = await check(
-          PERMISSIONS.ANDROID.CAMERA,
-        );
+      if (Platform.OS === 'android') {
+        const currentStatus = await check(PERMISSIONS.ANDROID.CAMERA);
 
         if (currentStatus !== RESULTS.GRANTED) {
-          const result = await request(
-            PERMISSIONS.ANDROID.CAMERA,
-          );
+          const result = await request(PERMISSIONS.ANDROID.CAMERA);
 
           if (result !== RESULTS.GRANTED) return;
         }
       }
 
       const options = {
-        mediaType: "video",
-        videoQuality: "high",
+        mediaType: 'video',
+        videoQuality: 'high',
         durationLimit: 60,
         saveToPhotos: false,
       };
 
-      launchCamera(options, async (response) => {
+      launchCamera(options, async response => {
         if (response.didCancel) {
           setIsLoading2(false);
           setContent(true);
@@ -313,7 +284,7 @@ const VideoKYC = () => {
         }
 
         if (response.errorCode) {
-          console.log("Camera Error:", response.errorMessage);
+          console.log('Camera Error:', response.errorMessage);
           setIsLoading2(false);
           return;
         }
@@ -328,29 +299,22 @@ const VideoKYC = () => {
             return;
           }
 
-          const compressedVideo = await Video.compress(
-            videoUri,
-            {
-              compressionMethod: "manual",
-            },
-          );
+          const compressedVideo = await Video.compress(videoUri, {
+            compressionMethod: 'manual',
+          });
 
-          const base64Video =
-            await convertVideoToBase64(compressedVideo);
+          const base64Video = await convertVideoToBase64(compressedVideo);
 
           setBase64Video(base64Video);
 
           ToastAndroid.show(
-            "Video Compression Complete!",
+            translate('Video Compression Complete!'),
             ToastAndroid.LONG,
           );
         } catch (error) {
           console.error(error);
 
-          ToastAndroid.show(
-            "Compression Failed",
-            ToastAndroid.LONG,
-          );
+          ToastAndroid.show(translate('Compression Failed'), ToastAndroid.LONG);
         } finally {
           setLoader(false);
           setIsLoading(false);
@@ -363,74 +327,97 @@ const VideoKYC = () => {
   };
 
   // ✅ Upload Video
- const uploadKYCVideo = async (video) => {
+  const uploadKYCVideo = async video => {
     setIsLoading(true);
 
     const now = new Date();
     const datetime = now.toLocaleString('en-IN', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
     });
 
     const url = `https://${APP_URLS.baseWebUrl}api/user/UploadKYCVIDEO`;
 
     const payload = {
-        userids: userId,
-        role: "Retailer",
-        kycvideo: video,
-        latitude: latitude ? String(latitude) : "",
-        longitude: longitude ? String(longitude) : "",
-        datetime: datetime,
+      userids: userId,
+      role: 'Retailer',
+      kycvideo: video,
+      latitude: latitude ? String(latitude) : '',
+      longitude: longitude ? String(longitude) : '',
+      datetime: datetime,
     };
 
-    console.log('📦 UPLOAD PAYLOAD:', JSON.stringify({
-        userids: payload.userids,
-        role: payload.role,
-        latitude: payload.latitude,
-        longitude: payload.longitude,
-        datetime: payload.datetime,
-        kycvideo_length: video?.length,
-    }, null, 2));
+    console.log(
+      '📦 UPLOAD PAYLOAD:',
+      JSON.stringify(
+        {
+          userids: payload.userids,
+          role: payload.role,
+          latitude: payload.latitude,
+          longitude: payload.longitude,
+          datetime: payload.datetime,
+          kycvideo_length: video?.length,
+        },
+        null,
+        2,
+      ),
+    );
 
-    const data = JSON.stringify(payload);  // ← yeh missing tha
+    const data = JSON.stringify(payload); // ← yeh missing tha
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
-    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = () => {
-        setIsLoading(false);
-        console.log('✅ STATUS:', xhr.status);
-        console.log('✅ RESPONSE:', xhr.responseText);
-        try {
-            const responseData = JSON.parse(xhr.responseText);
-            if (responseData.status === "Success") {
-                Alert.alert("Success", "Video Uploaded Successfully", [{
-                    text: "OK",
-                    onPress: () => IsDealer
-                        ? navigation.goBack()
-                        : navigation.navigate("LoginScreen"),
-                }]);
-            } else {
-                Alert.alert("Upload Failed", responseData.msg || "Unknown Error");
-            }
-        } catch (e) {
-            Alert.alert("Server Error", xhr.responseText || "Invalid Response");
+      setIsLoading(false);
+      console.log('✅ STATUS:', xhr.status);
+      console.log('✅ RESPONSE:', xhr.responseText);
+      try {
+        const responseData = JSON.parse(xhr.responseText);
+        if (responseData.status === 'Success') {
+          Alert.alert(
+            translate('Success'),
+            translate('Video Uploaded Successfully'),
+            [
+              {
+                text: translate('OK'),
+                onPress: () =>
+                  IsDealer
+                    ? navigation.goBack()
+                    : navigation.navigate('LoginScreen'),
+              },
+            ],
+          );
+        } else {
+          Alert.alert(
+            translate('Upload Failed'),
+            responseData.msg || 'Unknown Error',
+          );
         }
+      } catch (e) {
+        Alert.alert(
+          translate('Server Error'),
+          xhr.responseText || 'Invalid Response',
+        );
+      }
     };
 
     xhr.onerror = () => {
-        setIsLoading(false);
-        Alert.alert("Network Error", "Unable to upload video");
+      setIsLoading(false);
+      Alert.alert(
+        translate('Network Error'),
+        translate('Unable to upload video'),
+      );
     };
 
-    xhr.send(data);  // ✅ ab defined hai
-};
+    xhr.send(data); // ✅ ab defined hai
+  };
 
   // ✅ Fetch Content
   const fetchContent = async () => {
@@ -441,13 +428,11 @@ const VideoKYC = () => {
         url: APP_URLS.videokycContent,
       });
 
-      const englishText =
-        CNTNT["Eng"] || res.english;
+      const englishText = CNTNT['Eng'] || res.english;
 
-      const hindiText =
-        CNTNT["hindi"] || res.hindi;
+      const hindiText = CNTNT['hindi'] || res.hindi;
 
-      setName(res.remname || "");
+      setName(res.remname || '');
 
       setEng(englishText);
 
@@ -458,16 +443,16 @@ const VideoKYC = () => {
       setLoader(false);
     }
   };
-  
 
   return (
     <View style={s.screen}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={s.scroll}
-      >
+        contentContainerStyle={s.scroll}>
         <View style={s.headerRow}>
-          <TouchableOpacity style={s.backBtn} onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={s.backBtn}
+            onPress={() => navigation.goBack()}>
             <Text style={s.backArrow}>←</Text>
           </TouchableOpacity>
           <Text style={s.topTitle}>Video KYC</Text>
@@ -483,10 +468,10 @@ const VideoKYC = () => {
               device={device}
               isActive={true}
               video={true}
-              audio={true}   // ← temporarily false
+              audio={true} // ← temporarily false
               onInitialized={() => {
                 console.log('✅ Camera Initialized');
-                setIsCameraReady(true);   // ← ready flag
+                setIsCameraReady(true); // ← ready flag
               }}
             />
           ) : (
@@ -498,8 +483,8 @@ const VideoKYC = () => {
             <View style={s.recIndicator}>
               <View style={s.recDot} />
               <Text style={s.recText}>
-                REC  {String(Math.floor(recordingSeconds / 60)).padStart(2, '0')}:
-                {String(recordingSeconds % 60).padStart(2, '0')} / 00:38
+                REC {String(Math.floor(recordingSeconds / 60)).padStart(2, '0')}
+                :{String(recordingSeconds % 60).padStart(2, '0')} / 00:38
               </Text>
             </View>
           )}
@@ -507,10 +492,12 @@ const VideoKYC = () => {
           {/* Progress bar */}
           {isRecording && (
             <View style={s.progressBarBg}>
-              <View style={[
-                s.progressBarFill,
-                { width: `${(recordingSeconds / 38) * 100}%` }
-              ]} />
+              <View
+                style={[
+                  s.progressBarFill,
+                  {width: `${(recordingSeconds / 38) * 100}%`},
+                ]}
+              />
             </View>
           )}
           {isRecording && (
@@ -525,8 +512,6 @@ const VideoKYC = () => {
             {!isRecording && (
               <Text style={s.camLabel}>Position your face in frame</Text>
             )}
-
-            
           </View>
         </View>
 
@@ -535,45 +520,40 @@ const VideoKYC = () => {
           <View style={s.langRow}>
             <TouchableOpacity
               style={[s.langBtn, firstTap && s.langBtnActive]}
-              onPress={() => changeLay(1)}
-            >
+              onPress={() => changeLay(1)}>
               <Text style={s.langBtnText}>English</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[s.langBtn, secondTap && s.langBtnActive]}
-              onPress={() => changeLay(2)}
-            >
+              onPress={() => changeLay(2)}>
               <Text style={s.langBtnText}>हिंदी</Text>
             </TouchableOpacity>
           </View>
         )}
-
 
         <View style={s.contentBox}>
           {englishRow && <Text style={s.contentText}>{eng}</Text>}
           {hindiRow && <Text style={s.contentText}>{translate(hindi)}</Text>}
         </View>
 
-
         {/* ── BUTTONS ── */}
         <View style={s.btnRow}>
           {!isRecording ? (
             // Record button
             <TouchableOpacity
-              style={[s.btnRecord, !isCameraReady && { opacity: 0.5 }]}
-              disabled={!isCameraReady}   // ← yeh add karo
-              onPress={startRecording}
-            >
+              style={[s.btnRecord, !isCameraReady && {opacity: 0.5}]}
+              disabled={!isCameraReady} // ← yeh add karo
+              onPress={startRecording}>
               {isLoading2 ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={s.btnRecordText}>⏺  Record</Text>
+                <Text style={s.btnRecordText}>⏺ Record</Text>
               )}
             </TouchableOpacity>
           ) : (
             // Stop button
             <TouchableOpacity style={s.btnStop} onPress={stopRecording}>
-              <Text style={s.btnStopText}>⏹  Stop</Text>
+              <Text style={s.btnStopText}>⏹ Stop</Text>
             </TouchableOpacity>
           )}
 
@@ -582,19 +562,25 @@ const VideoKYC = () => {
               style={[s.btnUpload, videoBase64 && s.btnUploadReady]}
               onPress={() => {
                 if (!videoBase64) {
-                  ToastAndroid.show("Please record video first", ToastAndroid.SHORT);
+                  ToastAndroid.show(
+                    'Please record video first',
+                    ToastAndroid.SHORT,
+                  );
                 } else {
                   uploadKYCVideo(videoBase64);
                 }
-              }}
-            >
-              <Text style={s.btnUploadText}>↑  Upload</Text>
+              }}>
+              <Text style={s.btnUploadText}>↑ Upload</Text>
             </TouchableOpacity>
           )}
         </View>
 
         {isLoading && (
-          <ActivityIndicator size="large" color={C.primary} style={{ marginTop: 12 }} />
+          <ActivityIndicator
+            size="large"
+            color={C.primary}
+            style={{marginTop: 12}}
+          />
         )}
         {loader && <ShowLoader />}
       </ScrollView>
@@ -603,9 +589,9 @@ const VideoKYC = () => {
 };
 
 // ✅ Dynamic Styles
-const createStyles = (C) =>
+const createStyles = C =>
   StyleSheet.create({
-    screen: { flex: 1, backgroundColor: C.bg },
+    screen: {flex: 1, backgroundColor: C.bg},
     scroll: {
       paddingHorizontal: wScale(16),
       paddingTop: hScale(10),
@@ -614,8 +600,8 @@ const createStyles = (C) =>
 
     // ── HEADER (chota) ──
     headerRow: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: wScale(12),
       marginBottom: hScale(14),
     },
@@ -624,18 +610,18 @@ const createStyles = (C) =>
       height: hScale(38),
       borderRadius: wScale(12),
       backgroundColor: C.card,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       borderWidth: 0.5,
       borderColor: C.border,
     },
-    backArrow: { color: C.text, fontSize: wScale(18), fontWeight: "700" },
-    topTitle: { color: C.text, fontSize: wScale(16), fontWeight: "700" },
+    backArrow: {color: C.text, fontSize: wScale(18), fontWeight: '700'},
+    topTitle: {color: C.text, fontSize: wScale(16), fontWeight: '700'},
     userName: {
-      marginLeft: "auto",
+      marginLeft: 'auto',
       color: C.textMuted,
       fontSize: wScale(13),
-      fontWeight: "500",
+      fontWeight: '500',
     },
 
     // ── CAMERA ──
@@ -643,24 +629,23 @@ const createStyles = (C) =>
       height: hScale(380),
       borderRadius: wScale(24),
       backgroundColor: C.cardDark,
-      overflow: "hidden",
+      overflow: 'hidden',
       marginBottom: hScale(16),
       borderWidth: 1,
       borderColor: C.primaryBorder,
     },
 
-
     // recText: { color: "#fff", fontSize: wScale(12), fontWeight: "700" },
     cameraOverlay: {
-      position: "absolute",
+      position: 'absolute',
       bottom: hScale(20),
-      alignSelf: "center",
+      alignSelf: 'center',
     },
     camLabel: {
-      color: "#fff",
+      color: '#fff',
       fontSize: wScale(13),
-      fontWeight: "600",
-      backgroundColor: "rgba(0,0,0,0.45)",
+      fontWeight: '600',
+      backgroundColor: 'rgba(0,0,0,0.45)',
       paddingHorizontal: wScale(14),
       paddingVertical: hScale(6),
       borderRadius: wScale(20),
@@ -668,7 +653,7 @@ const createStyles = (C) =>
 
     // ── LANGUAGE ──
     langRow: {
-      flexDirection: "row",
+      flexDirection: 'row',
       marginBottom: hScale(14),
       gap: wScale(10),
     },
@@ -677,13 +662,13 @@ const createStyles = (C) =>
       height: hScale(46),
       borderRadius: wScale(14),
       backgroundColor: C.card,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       borderWidth: 1,
-      borderColor: "transparent",
+      borderColor: 'transparent',
     },
-    langBtnActive: { backgroundColor: C.primaryBg, borderColor: C.primary },
-    langBtnText: { color: C.text, fontWeight: "600", fontSize: wScale(14) },
+    langBtnActive: {backgroundColor: C.primaryBg, borderColor: C.primary},
+    langBtnText: {color: C.text, fontWeight: '600', fontSize: wScale(14)},
 
     // ── CONTENT ──
     contentBox: {
@@ -693,11 +678,15 @@ const createStyles = (C) =>
       paddingVertical: hScale(16),
       marginBottom: hScale(18),
     },
-    contentText: { color: C.textMuted, lineHeight: hScale(22), fontSize: wScale(13) },
+    contentText: {
+      color: C.textMuted,
+      lineHeight: hScale(22),
+      fontSize: wScale(13),
+    },
 
     // ── BUTTONS ──
     btnRow: {
-      flexDirection: "row",
+      flexDirection: 'row',
       gap: wScale(12),
       marginTop: hScale(4),
     },
@@ -706,21 +695,21 @@ const createStyles = (C) =>
       height: hScale(54),
       borderRadius: wScale(16),
       backgroundColor: C.primary,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-    btnRecordText: { color: "#fff", fontWeight: "700", fontSize: wScale(15) },
+    btnRecordText: {color: '#fff', fontWeight: '700', fontSize: wScale(15)},
 
     // Stop button
     btnStop: {
       flex: 1,
       height: hScale(54),
       borderRadius: wScale(16),
-      backgroundColor: "#EF4444",
-      justifyContent: "center",
-      alignItems: "center",
+      backgroundColor: '#EF4444',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-    btnStopText: { color: "#fff", fontWeight: "700", fontSize: wScale(15) },
+    btnStopText: {color: '#fff', fontWeight: '700', fontSize: wScale(15)},
 
     btnUpload: {
       flex: 1,
@@ -729,22 +718,22 @@ const createStyles = (C) =>
       backgroundColor: C.card,
       borderWidth: 1,
       borderColor: C.border,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     btnUploadReady: {
-      borderColor: "#22C55E",
-      backgroundColor: "rgba(34,197,94,0.08)",
+      borderColor: '#22C55E',
+      backgroundColor: 'rgba(34,197,94,0.08)',
     },
-    btnUploadText: { color: C.text, fontWeight: "700", fontSize: wScale(15) },
+    btnUploadText: {color: C.text, fontWeight: '700', fontSize: wScale(15)},
     recIndicator: {
-      position: "absolute",
+      position: 'absolute',
       top: hScale(14),
       left: wScale(14),
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: wScale(6),
-      backgroundColor: "rgba(0,0,0,0.55)",
+      backgroundColor: 'rgba(0,0,0,0.55)',
       paddingHorizontal: wScale(12),
       paddingVertical: hScale(6),
       borderRadius: wScale(20),
@@ -753,28 +742,27 @@ const createStyles = (C) =>
       width: 8,
       height: 8,
       borderRadius: 4,
-      backgroundColor: "#EF4444",
+      backgroundColor: '#EF4444',
     },
     recText: {
-      color: "#fff",
+      color: '#fff',
       fontSize: wScale(12),
-      fontWeight: "700",
+      fontWeight: '700',
       letterSpacing: 0.5,
     },
     progressBarBg: {
-      position: "absolute",
+      position: 'absolute',
       bottom: 0,
       left: 0,
       right: 0,
       height: hScale(4),
-      backgroundColor: "rgba(255,255,255,0.15)",
+      backgroundColor: 'rgba(255,255,255,0.15)',
     },
     progressBarFill: {
-      height: "100%",
-      backgroundColor: "#EF4444",
+      height: '100%',
+      backgroundColor: '#EF4444',
       borderRadius: 2,
     },
-
   });
 
 export default VideoKYC;

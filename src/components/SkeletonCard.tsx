@@ -1,30 +1,26 @@
 // components/SkeletonCard.tsx
 
-import React from "react";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { wScale, hScale } from '../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from "../reduxUtils/store"; // ✅ Path sahi check karlein
+import React from 'react';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {wScale, hScale} from '../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store'; // ✅ Path sahi check karlein
 
 type SkeletonCardProps = {
   highlightColor?: string; // ✅ Optional banaya hai fallback ke liye
 };
-
-const SkeletonCard = ({ highlightColor }: SkeletonCardProps) => {
+const SkeletonCard = ({highlightColor}: SkeletonCardProps) => {
   // ✅ Redux se data nikalne ke liye function body {} aur return zaroori hai
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
-
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const primaryColor = colorConfig?.primaryColor;
   // Agar props se highlightColor nahi aata toh primary color ka 30% alpha use hoga
-  const finalHighlight = highlightColor || (primaryColor + '30');
-
+  const finalHighlight = highlightColor || primaryColor + '30';
   return (
     <SkeletonPlaceholder
       borderRadius={16}
       speed={1200}
       backgroundColor="#F3F4F6"
-      highlightColor={finalHighlight}
-    >
+      highlightColor={finalHighlight}>
       <SkeletonPlaceholder.Item
         flexDirection="row"
         alignItems="center"

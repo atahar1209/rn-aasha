@@ -1,20 +1,18 @@
-import { translate } from "../utils/languageUtils/I18n";
-import React from "react";
-import { 
-  Image, 
-  View, 
-  StyleSheet, 
-  Text, 
-  Modal, 
-  TouchableOpacity, 
+import {translate} from '../utils/languageUtils/I18n';
+import React from 'react';
+import {
+  Image,
+  View,
+  StyleSheet,
+  Text,
+  Modal,
+  TouchableOpacity,
   TouchableWithoutFeedback,
-  Dimensions 
-} from "react-native";
-import { useSelector } from "react-redux";
-import { RootState } from "../reduxUtils/store";
-import { SCREEN_HEIGHT, hScale, wScale } from "../utils/styles/dimensions";
-import NoDatafound from "../features/drawer/svgimgcomponents/Nodatafound";
-
+} from 'react-native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store';
+import {SCREEN_HEIGHT, hScale, wScale} from '../utils/styles/dimensions';
+import NoDatafound from '../features/drawer/svgimgcomponents/Nodatafound';
 // TypeScript Interface for Props
 interface ImageUploadBottomSheetProps {
   imagePath: string;
@@ -23,7 +21,6 @@ interface ImageUploadBottomSheetProps {
   modalTitle: string;
   setImagePath: (path: string) => void;
 }
-
 const ImageUploadBottomSheet: React.FC<ImageUploadBottomSheetProps> = ({
   imagePath,
   isModalVisible,
@@ -31,27 +28,22 @@ const ImageUploadBottomSheet: React.FC<ImageUploadBottomSheetProps> = ({
   modalTitle,
   setImagePath,
 }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
-
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   return (
     <Modal
       visible={isModalVisible}
       transparent={true}
       animationType="slide"
       statusBarTranslucent={true} // For better full-screen feel
-      onRequestClose={() => setModalVisible(false)}
-    >
+      onRequestClose={() => setModalVisible(false)}>
       {/* 1. Backdrop Overlay (Bahar click karne pe close hoga) */}
-      <TouchableOpacity 
-        style={styles.modalOverlay} 
-        activeOpacity={1} 
-        onPressOut={() => setModalVisible(false)}
-      >
-        
+      <TouchableOpacity
+        style={styles.modalOverlay}
+        activeOpacity={1}
+        onPressOut={() => setModalVisible(false)}>
         {/* 2. Modal Content Container */}
         <TouchableWithoutFeedback>
           <View style={styles.bottomsheetview}>
-            
             {/* 3. Modern Grabber Handle */}
             <View style={styles.handle} />
 
@@ -64,27 +56,30 @@ const ImageUploadBottomSheet: React.FC<ImageUploadBottomSheetProps> = ({
             <View style={styles.contentContainer}>
               {imagePath ? (
                 <Image
-                  source={{ uri: imagePath }}
+                  source={{uri: imagePath}}
                   onError={() => setImagePath('')}
                   style={styles.imageStyle}
-                  resizeMode='contain'
+                  resizeMode="contain"
                 />
               ) : (
                 <View style={styles.noDataContainer}>
                   <NoDatafound size={wScale(220)} />
-                  <Text style={styles.noDataText}>{translate("No_Data_Found")}</Text>
+                  <Text style={styles.noDataText}>
+                    {translate('No_Data_Found')}
+                  </Text>
                 </View>
               )}
             </View>
 
             {/* 6. Bottom Spacer/Footer */}
-            <TouchableOpacity 
-               style={[styles.closeBtn, { backgroundColor: colorConfig.secondaryColor }]}
-               onPress={() => setModalVisible(false)}
-            >
-                <Text style={styles.closeBtnText}>{translate("Close_View")}</Text>
+            <TouchableOpacity
+              style={[
+                styles.closeBtn,
+                {backgroundColor: colorConfig.secondaryColor},
+              ]}
+              onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeBtnText}>{translate('Close_View')}</Text>
             </TouchableOpacity>
-
           </View>
         </TouchableWithoutFeedback>
       </TouchableOpacity>
@@ -99,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   bottomsheetview: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderTopLeftRadius: 30, // Extra rounded for modern look
     borderTopRightRadius: 30,
     height: SCREEN_HEIGHT / 1.15, // Slightly more height
@@ -107,7 +102,7 @@ const styles = StyleSheet.create({
     paddingBottom: hScale(20),
     elevation: 25,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -10 },
+    shadowOffset: {width: 0, height: -10},
     shadowOpacity: 0.1,
     shadowRadius: 10,
   },
@@ -143,7 +138,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   noDataContainer: {
-    alignItems: 'center', 
+    alignItems: 'center',
     justifyContent: 'center',
   },
   noDataText: {
@@ -159,13 +154,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: hScale(10)
+    marginBottom: hScale(10),
   },
   closeBtnText: {
     color: '#fff',
     fontSize: wScale(16),
     fontWeight: '700',
-  }
+  },
 });
 
 export default ImageUploadBottomSheet;

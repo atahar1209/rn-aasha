@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reduxUtils/store';
 
 interface BorderLineProps {
   height?: number;
   width?: number | string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 }
 
 const BorderLine: React.FC<BorderLineProps> = ({
@@ -16,15 +16,17 @@ const BorderLine: React.FC<BorderLineProps> = ({
 }) => {
   const { colorConfig } = useSelector((state: RootState) => state.userInfo);
 
+  const lineStyle: ViewStyle = {
+    height,
+    width: width as any,
+    backgroundColor: colorConfig.secondaryColor,
+  };
+
   return (
     <View
       style={[
         styles.line,
-        {
-          height,
-          width,
-          backgroundColor: colorConfig.secondaryColor,
-        },
+        lineStyle,
         style,
       ]}
     />

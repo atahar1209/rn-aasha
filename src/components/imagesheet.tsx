@@ -1,9 +1,16 @@
-import { translate } from "../utils/languageUtils/I18n";
+import { translate } from '../utils/languageUtils/I18n';
 import React from 'react';
+import type { FC } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Pressable } from 'react-native';
-import { wScale, hScale } from '../utils/styles/dimensions'; 
+import { wScale, hScale } from '../utils/styles/dimensions';
 
-const ImageBottomSheet = ({ isVisible, imageUri, onClose }) => {
+type ImageBottomSheetProps = {
+  isVisible: boolean;
+  imageUri?: string | null;
+  onClose: () => void;
+};
+
+const ImageBottomSheet: FC<ImageBottomSheetProps> = ({ isVisible, imageUri, onClose }) => {
   return (
     <Modal
       visible={isVisible}
@@ -14,18 +21,20 @@ const ImageBottomSheet = ({ isVisible, imageUri, onClose }) => {
       <View style={styles.overlay}>
         {/* Pressable backdrop to close when tapping outside the image area */}
         <Pressable style={styles.backdrop} onPress={onClose} />
-        
+
         <View style={styles.container}>
           {/* Optional: Drag Handle for visual cue */}
           <View style={styles.dragHandle} />
 
-          <Image
-            source={{ uri: imageUri }}
-            style={styles.image}
-          />
-          
+          {imageUri && (
+            <Image
+              source={{ uri: imageUri }}
+              style={styles.image}
+            />
+          )}
+
           <TouchableOpacity onPress={onClose} style={styles.closeButton} activeOpacity={0.8}>
-            <Text style={styles.closeButtonText}>{translate("Close")}</Text>
+            <Text style={styles.closeButtonText}>{translate('Close')}</Text>
           </TouchableOpacity>
         </View>
       </View>

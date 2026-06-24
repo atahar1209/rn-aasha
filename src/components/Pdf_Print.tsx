@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -6,61 +6,58 @@ import {
   Alert,
   StyleSheet,
   Image,
-  Platform
+  Platform,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import FileViewer from 'react-native-file-viewer';
 import Share from 'react-native-share';
 import useAxiosHook from '../utils/network/AxiosClient';
-import { APP_URLS } from '../utils/network/urls';
+import {APP_URLS} from '../utils/network/urls';
 import RNFS from 'react-native-fs';
+import {translate} from '../utils/languageUtils/I18n';
 
-const PDFGenerator = ({ route }) => {
+const PDFGenerator = ({route}) => {
   const {
     Recharge_amount,
     Operatorid,
     Status,
-    Debitamount,
     Reqesttime,
     Recharge_number,
     Operator_name,
     Request_ID,
-    frm_name,
-    Circle
+    Circle,
   } = route.params;
 
   const [filePath, setFilePath] = useState(null);
-  const { get } = useAxiosHook();
-
+  const {get} = useAxiosHook();
   useEffect(() => {
     const fetchData = async () => {
-      await get({ url: 'Common/api/data/HideShowrechargeSlip' });
+      await get({url: 'Common/api/data/HideShowrechargeSlip'});
       await createPDF();
     };
 
     fetchData();
   }, []);
 
-const convertLogoToBase64 = async () => {
-  try {
-    const asset = Image.resolveAssetSource(
-      require('../../assets/images/app_logo.png')
-    );
+  const convertLogoToBase64 = async () => {
+    try {
+      const asset = Image.resolveAssetSource(
+        require('../../assets/images/app_logo.png'),
+      );
 
-    const base64String = await RNFS.readFile(
-      Platform.OS === 'android'
-        ? asset.uri.replace('file://', '')
-        : asset.uri,
-      'base64'
-    );
+      const base64String = await RNFS.readFile(
+        Platform.OS === 'android'
+          ? asset.uri.replace('file://', '')
+          : asset.uri,
+        'base64',
+      );
 
-    return base64String;
-  } catch (error) {
-    console.log('Base64 error:', error);
-    return '';
-  }
-};
-
+      return base64String;
+    } catch (error) {
+      console.log('Base64 error:', error);
+      return '';
+    }
+  };
 
   const createPDF = async () => {
     const logoBase64 = await convertLogoToBase64();
@@ -156,7 +153,7 @@ const convertLogoToBase64 = async () => {
             </div>
               <div class="info-block">
               <div class="label">Circle</div>
-              <div class="value">${Circle ? Circle :'N/A'}</div>
+              <div class="value">${Circle ? Circle : 'N/A'}</div>
             </div>
             <div class="info-block">
               <div class="label">Amount</div>
@@ -175,7 +172,6 @@ const convertLogoToBase64 = async () => {
       </body>
     </html>
     `;
-    
 
     const options = {
       html: htmlContent,
@@ -192,7 +188,10 @@ const convertLogoToBase64 = async () => {
       try {
         await FileViewer.open(filePath);
       } catch (error) {
-        Alert.alert('Error', 'Failed to open PDF: ' + error.message);
+        Alert.alert(
+          translate('Error'),
+          translate('Failed to open PDF: ') + error.message,
+        );
       }
     }
   };
@@ -200,19 +199,21 @@ const convertLogoToBase64 = async () => {
   const sharePDF = () => {
     if (filePath) {
       const shareOptions = {
-        title: 'Share PDF',
+        title: translate('Share PDF'),
         url: 'file://' + filePath,
       };
 
       Share.open(shareOptions).catch(error => {
-        Alert.alert('Error', 'Failed to share PDF: ' + error.message);
+        Alert.alert(
+          translate('Error'),
+          translate('Failed to share PDF: ') + error.message,
+        );
       });
     }
   };
 
   return (
     <View style={styles.container}>
-
       <TouchableOpacity style={styles.primaryButton} onPress={viewPDF}>
         <Text style={styles.buttonText}>📄</Text>
       </TouchableOpacity>
@@ -227,7 +228,7 @@ const convertLogoToBase64 = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:'row',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     width: '15%',
     alignItems: 'center',
     shadowColor: '#28a745',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.4,
     shadowRadius: 4,
     elevation: 5,
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
     width: '15%',
     alignItems: 'center',
     shadowColor: '#007bff',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.4,
     shadowRadius: 4,
     elevation: 5,

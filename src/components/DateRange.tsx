@@ -1,28 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { hScale, SCREEN_HEIGHT, wScale } from '../utils/styles/dimensions';
+import {hScale, SCREEN_HEIGHT, wScale} from '../utils/styles/dimensions';
 import Calendarsvg from '../features/drawer/svgimgcomponents/Calendarsvg';
 import SearchIcon from '../features/drawer/svgimgcomponents/Searchicon';
-import { useSelector } from 'react-redux';
-import { RootState } from '../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store';
 import CustomCalendar from './Calender';
-import { BottomSheet } from '@rneui/base';
+import {BottomSheet} from '@rneui/base';
 import OnelineDropdownSvg from '../features/drawer/svgimgcomponents/simpledropdown';
-import { colors } from '../utils/styles/theme';
+import {colors} from '../utils/styles/theme';
 import FilterSvg from '../features/drawer/svgimgcomponents/FilterSvg';
 import useAxiosHook from '../utils/network/AxiosClient';
-import { APP_URLS } from '../utils/network/urls';
+import {APP_URLS} from '../utils/network/urls';
 import ClosseModalSvg2 from '../features/drawer/svgimgcomponents/ClosseModal2';
-import { FlashList } from '@shopify/flash-list';
-import { translate } from '../utils/languageUtils/I18n';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import {FlashList} from '@shopify/flash-list';
+import {translate} from '../utils/languageUtils/I18n';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 interface DateRangePickerProps {
   onDateSelected: (from: Date, to: Date) => void;
   SearchPress: (from: Date, to: Date, status: string) => void;
   status: string;
-  setSearchnumber: (string) => void;
+  setSearchnumber: (value: string) => void;
   setStatus: (status: string) => void;
   isStShow: boolean;
   cmsStatu: boolean;
@@ -30,22 +35,50 @@ interface DateRangePickerProps {
   isshowRetailer?: boolean;
 }
 
-const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateSelected, SearchPress, status, setStatus, isStShow = false, cmsStatu = false, isshowRetailer = true, retailerID }) => {
+interface RetailerItem {
+  UserID: string;
+  Name: string;
+  Mobile?: string;
+  firmName?: string;
+}
+
+const DateRangePicker: React.FC<DateRangePickerProps> = ({
+  onDateSelected,
+  SearchPress,
+  status,
+  setStatus,
+  isStShow = false,
+  cmsStatu = false,
+  isshowRetailer = true,
+  retailerID,
+}) => {
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [isSelectingFromDate, setIsSelectingFromDate] = useState(true);
   const [rotation, setRotation] = useState(false);
   const [filter, setFilter] = useState(false);
-  const [StShow, setStShow] = useState(isStShow);
-  const [StShow2, setStShow2] = useState(false);
+  const [StShow] = useState(isStShow);
+
   const [searchnumber, setSearchnumber] = useState('');
   const [relaiter, setRetailer] = useState('Select Retailer');
   const [isBankVisible, setIsBankVisible] = useState(false);
   const [searchstatus, setSearchStatus] = useState(status);
-  const [crStatus, setCrStatus] = useState(
-    !cmsStatu ? ['All Transactions', 'Success', 'Pending', 'Failed'] : ['Pending', 'Inprocess', 'Approved']
-  )
+  const [crStatus] = useState(
+    !cmsStatu
+      ? [
+          translate('All_Transactions'),
+          translate('Success'),
+          translate('Pending'),
+          translate('Failed'),
+        ]
+      : [
+          translate('Pending'),
+          translate('Inprocess'),
+          translate('Approved'),
+          translate('Rejected'),
+        ],
+  );
   const handleDateSelected = (data: string) => {
     const selectedDate = new Date(data);
     setIsCalendarVisible(false);
@@ -79,17 +112,17 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateSelected, Searc
   const searchHistory = () => {
     SearchPress(fromDate, toDate, searchstatus);
   };
-  const [retailers, setRetailers] = useState([]);
+  const [retailers, setRetailers] = useState<RetailerItem[]>([]);
 
-  const { colorConfig, IsDealer } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, IsDealer} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const color1 = `${colorConfig.secondaryColor}20`;
-  const { post } = useAxiosHook();
+  const {post} = useAxiosHook();
   useEffect(() => {
-
-
     const getUserList = async () => {
       try {
-        const response = await post({ url: APP_URLS.retailerlist });
+        const response = await post({url: APP_URLS.retailerlist});
         // console.log(response, '*****123');
 
         if (response) {
@@ -106,145 +139,168 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateSelected, Searc
     if (IsDealer) {
       getUserList();
     }
-
-  }, []);
+  }, [IsDealer, post]);
   const [searchQuery, setSearchQuery] = useState('');
-  const handleStateSelect = (selectedState) => {
+  const handleStateSelect = (selectedState: RetailerItem) => {
     retailerID(selectedState.UserID);
-    setRetailer(selectedState.Name)
-    setIsBankVisible(false)
+    setRetailer(selectedState.Name);
+    setIsBankVisible(false);
   };
 
-  const filteredData = retailers.filter(item =>
-    item["Name"]?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item["Mobile"]?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item["firmName"]?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = retailers.filter(
+    item =>
+      item.Name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.Mobile?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.firmName?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
   const insets = useSafeAreaInsets();
   return (
-    <LinearGradient colors={[colorConfig.primaryColor, colorConfig.secondaryColor]} style={[styles.gradient]}>
+    <LinearGradient
+      colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+      style={[styles.gradient]}>
       <View style={styles.header}>
         {rotation ? (
           <View>
-            {!cmsStatu && <>
-              {!IsDealer && <TextInput
-                placeholder={'Search By Consumer Number'}
-                placeholderTextColor={'#fff'}
-                value={searchnumber}
-                onChangeText={setSearchnumber}
-                style={styles.input}
-              />}
-            </>}
-            <TouchableOpacity
-              onPress={filteress}
-            >
+            {!cmsStatu && (
+              <>
+                {!IsDealer && (
+                  <TextInput
+                    placeholder={translate('Search By Consumer Number')}
+                    placeholderTextColor={'#fff'}
+                    value={searchnumber}
+                    onChangeText={setSearchnumber}
+                    style={styles.input}
+                  />
+                )}
+              </>
+            )}
+            <TouchableOpacity onPress={filteress}>
               <TextInput
-                placeholder={'Select Status'}
+                placeholder={translate('Select Status')}
                 placeholderTextColor={'#fff'}
                 value={searchstatus}
                 editable={false}
                 style={styles.input}
               />
               <View style={styles.righticon}>
-                <OnelineDropdownSvg size={25} color='#fff' />
+                <OnelineDropdownSvg size={25} color="#fff" />
               </View>
             </TouchableOpacity>
 
-            {filter ? <View style={[styles.statusheight,]}>
-              {crStatus.map((statusOption) => (
-                <TouchableOpacity key={statusOption} onPress={() => { setSearchStatus(statusOption); setStatus(statusOption); setFilter(false) }}>
-                  <Text style={styles.statusText}>{statusOption}</Text>
-                </TouchableOpacity>
-              ))}
-            </View> : null}
+            {filter ? (
+              <View style={[styles.statusheight]}>
+                {crStatus.map(statusOption => (
+                  <TouchableOpacity
+                    key={statusOption}
+                    onPress={() => {
+                      setSearchStatus(statusOption);
+                      setStatus(statusOption);
+                      setFilter(false);
+                    }}>
+                    <Text style={styles.statusText}>{statusOption}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : null}
           </View>
         ) : null}
         <View style={styles.headerrow}>
-
           {StShow ? (
             <TouchableOpacity
-              style={[styles.dropdown, { transform: [{ rotate: rotation ? '180deg' : '0deg' }] }]}
+              style={[
+                styles.dropdown,
+                {transform: [{rotate: rotation ? '180deg' : '0deg'}]},
+              ]}
               onPress={dropdownPress}>
-              <FilterSvg size={28} color='#fff' />
-            </TouchableOpacity>) : null
-          }
-          <TouchableOpacity style={styles.datePickerButton} onPress={onFromDatePress}>
-            <Calendarsvg color='#fff' />
-            <View style={{ paddingLeft: wScale(5) }}>
-              <Text style={styles.buttonText}>{translate("From_Date")}</Text>
-              <Text style={styles.dateText}>{fromDate.toISOString().split('T')[0]}</Text>
+              <FilterSvg size={28} color="#fff" />
+            </TouchableOpacity>
+          ) : null}
+          <TouchableOpacity
+            style={styles.datePickerButton}
+            onPress={onFromDatePress}>
+            <Calendarsvg color="#fff" />
+            <View style={{paddingLeft: wScale(5)}}>
+              <Text style={styles.buttonText}>{translate('From_Date')}</Text>
+              <Text style={styles.dateText}>
+                {fromDate.toISOString().split('T')[0]}
+              </Text>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.datePickerButton} onPress={onToDatePress}>
-            <Calendarsvg color='#fff' />
-            <View style={{ paddingLeft: wScale(5) }}>
-              <Text style={styles.buttonText}>{translate("To_Date")}</Text>
-              <Text style={styles.dateText}>{toDate.toISOString().split('T')[0]}</Text>
+          <TouchableOpacity
+            style={styles.datePickerButton}
+            onPress={onToDatePress}>
+            <Calendarsvg color="#fff" />
+            <View style={{paddingLeft: wScale(5)}}>
+              <Text style={styles.buttonText}>{translate('To_Date')}</Text>
+              <Text style={styles.dateText}>
+                {toDate.toISOString().split('T')[0]}
+              </Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.searchButton} onPress={searchHistory}>
-            <SearchIcon size={28} color='#fff' />
+            <SearchIcon size={28} color="#fff" />
           </TouchableOpacity>
         </View>
-        {isshowRetailer && <TouchableOpacity
-          onPress={() => {
-
-            setIsBankVisible(true)
-          }}
-        >
-          <TextInput
-            placeholder={relaiter}
-            placeholderTextColor={'#fff'}
-            value={relaiter.toUpperCase()}
-            editable={false}
-            style={styles.input}
-          />
-          <View style={styles.righticon}>
-            <OnelineDropdownSvg size={25} color='#fff' />
-          </View>
-        </TouchableOpacity>}
-
+        {isshowRetailer && (
+          <TouchableOpacity
+            onPress={() => {
+              setIsBankVisible(true);
+            }}>
+            <TextInput
+              placeholder={relaiter}
+              placeholderTextColor={'#fff'}
+              value={relaiter.toUpperCase()}
+              editable={false}
+              style={styles.input}
+            />
+            <View style={styles.righticon}>
+              <OnelineDropdownSvg size={25} color="#fff" />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
 
       <BottomSheet
-        animationType="none"        
-        isVisible={isCalendarVisible}
-        backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-        onBackdropPress={() => setIsCalendarVisible(false)}
-      >
+        animationType="none"
+        isVisible={isCalendarVisible}
+        backdropStyle={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
+        onBackdropPress={() => setIsCalendarVisible(false)}>
         <View>
-          <CustomCalendar onDateSelected={handleDateSelected}
+          <CustomCalendar
+            onDateSelected={handleDateSelected}
             selectedDate={isSelectingFromDate ? fromDate : toDate}
-
           />
-
         </View>
       </BottomSheet>
-      <BottomSheet animationType="none"  isVisible={isBankVisible}
+      <BottomSheet
+        animationType="none"
+        isVisible={isBankVisible}
         onBackdropPress={() => setIsBankVisible(false)}
-        containerStyle={[styles.bottomSheetContainer ,{paddingBottom: insets.bottom}]}
-      >
-        <View style={[styles.bottomsheetview,]}>
+        containerStyle={[
+          styles.bottomSheetContainer,
+          {paddingBottom: insets.bottom},
+        ]}>
+        <View style={[styles.bottomsheetview]}>
           <View style={{}}>
-            <View style={[styles.StateTitle, { backgroundColor: color1 }]}>
+            <View style={[styles.StateTitle, {backgroundColor: color1}]}>
               <View style={styles.titleview}>
-
                 <View>
                   <Text style={styles.stateTitletext}>
-                    {"All Retailers"}
+                    {translate('All Retailers')}
                   </Text>
                 </View>
               </View>
 
-              <TouchableOpacity onPress={() => setIsBankVisible(false)} activeOpacity={0.7}>
+              <TouchableOpacity
+                onPress={() => setIsBankVisible(false)}
+                activeOpacity={0.7}>
                 <ClosseModalSvg2 />
               </TouchableOpacity>
-
             </View>
             <TextInput
-              placeholder="Search..."
+              placeholder={translate('Search')}
               value={searchQuery}
               onChangeText={text => setSearchQuery(text)}
               style={styles.searchBar}
@@ -254,12 +310,15 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDateSelected, Searc
           </View>
           <FlashList
             data={filteredData}
-            renderItem={({ item }) => (
-              <TouchableOpacity style={[styles.itemContainer,]} onPress={() => handleStateSelect(item)}>
-                <Text style={styles.stateItem}>{item['Name']}</Text>
-                <Text style={{ color: colorConfig.secondaryColor }}>{item['firmName']}</Text>
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={[styles.itemContainer]}
+                onPress={() => handleStateSelect(item)}>
+                <Text style={styles.stateItem}>{item.Name}</Text>
+                <Text style={{color: colorConfig.secondaryColor}}>
+                  {item.firmName}
+                </Text>
                 {/* // <Text style={{ color: colorConfig.secondaryColor }}>{item['Mobile']}</Text> */}
-
               </TouchableOpacity>
             )}
           />
@@ -276,13 +335,13 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: wScale(10),
     paddingTop: wScale(10),
-    backgroundColor: 'rgba(255,255,255,0.3)'
+    backgroundColor: 'rgba(255,255,255,0.3)',
   },
   headerrow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: hScale(5)
+    marginBottom: hScale(5),
   },
   datePickerButton: {
     flexDirection: 'row',
@@ -291,13 +350,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: wScale(8),
     paddingVertical: wScale(5),
     borderRadius: 5,
-
   },
   buttonText: {
     color: '#fff',
     fontSize: wScale(13),
     fontWeight: 'bold',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   },
   dateText: {
     color: '#fff',
@@ -334,7 +392,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: hScale(-10),
     marginBottom: hScale(10),
-    backgroundColor: 'rgba(0,0,0,0.2)'
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
   statusText: {
     color: '#fff',
@@ -355,12 +413,12 @@ const styles = StyleSheet.create({
   },
   stateItem: {
     fontSize: wScale(18),
-    color: "#000",
-    textTransform: "uppercase",
+    color: '#000',
+    textTransform: 'uppercase',
   },
 
   bottomsheetview: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     height: SCREEN_HEIGHT / 1.3,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
@@ -369,23 +427,23 @@ const styles = StyleSheet.create({
     paddingVertical: hScale(10),
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
     paddingHorizontal: wScale(10),
     marginBottom: hScale(10),
   },
   stateTitletext: {
     fontSize: wScale(22),
-    color: "#000",
-    fontWeight: "bold",
-    textTransform: "uppercase",
+    color: '#000',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
   titleview: {
     flex: 1,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 
   searchBar: {
@@ -401,5 +459,3 @@ const styles = StyleSheet.create({
 });
 
 export default DateRangePicker;
-
-

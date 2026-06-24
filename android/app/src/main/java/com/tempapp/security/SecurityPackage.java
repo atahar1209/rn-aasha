@@ -1,4 +1,4 @@
-package com.globalmultisolution.security;
+package com.mobykwik.security;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

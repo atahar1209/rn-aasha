@@ -1,4 +1,4 @@
-package com.globalmultisolution
+package com.mobykwik
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -14,11 +14,11 @@ import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.react.modules.network.OkHttpClientProvider
 import com.facebook.react.modules.network.ReactCookieJarContainer
 
-import com.globalmultisolution.AepsPackage
-import com.globalmultisolution.upi.UpiPackage
-import com.globalmultisolution.location.LocationPackage
-import com.globalmultisolution.security.SecurityPackage
-import com.globalmultisolution.ContactPicker.ContactPickerPackage
+import com.mobykwik.AepsPackage
+import com.mobykwik.upi.UpiPackage
+import com.mobykwik.location.LocationPackage
+import com.mobykwik.security.SecurityPackage
+import com.mobykwik.ContactPicker.ContactPickerPackage
 import com.otahotupdate.OtaHotUpdate
 
 class MainApplication : Application(), ReactApplication {

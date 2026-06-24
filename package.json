@@ -1,6 +1,6 @@
 {
-  "name": "globalmultisolution",
-  "version": "0.0.1",
+  "name": "mobykwik",
+  "version": "3.0.3",
   "private": true,
   "scripts": {
     "adb-wifi": "node adb-wifi.js",

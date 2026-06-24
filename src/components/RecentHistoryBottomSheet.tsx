@@ -1,18 +1,17 @@
-import { BottomSheet } from '@rneui/themed';
-import React, { useCallback } from 'react';
-import { Image, Text, TouchableOpacity, View, StyleSheet, Platform } from 'react-native';
-import { useSelector } from 'react-redux';
-import { RootState } from '../reduxUtils/store';
-import { hScale, wScale } from '../utils/styles/dimensions';
-import { FlashList } from '@shopify/flash-list';
+import {BottomSheet} from '@rneui/themed';
+import React, {useCallback} from 'react';
+import {Text, TouchableOpacity, View, StyleSheet, Platform} from 'react-native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store';
+import {hScale, wScale} from '../utils/styles/dimensions';
+import {FlashList} from '@shopify/flash-list';
 import NoDatafound from '../features/drawer/svgimgcomponents/Nodatafound';
 import ClosseModalSvg2 from '../features/drawer/svgimgcomponents/ClosseModal2';
-import { translate } from '../utils/languageUtils/I18n';
-import { IMAGE_BASE_URL } from '../utils/network/urls';
+import {translate} from '../utils/languageUtils/I18n';
+import {IMAGE_BASE_URL} from '../utils/network/urls';
 import FastImage from 'react-native-fast-image';
 
 // ─── Operator Image Map ───────────────────────────────────────────────────────
-
 const OPERATOR_IMAGES: Record<string, any> = {
   JIO: require('.././utils/svgUtils/JIO.png'),
   'Jio Lite': require('.././utils/svgUtils/JIO.png'),
@@ -28,20 +27,31 @@ const getOperatorImage = (name: string) =>
 
 // ─── Status Config ────────────────────────────────────────────────────────────
 const getOperatorImageUrl = (name: string) => {
-  if (!name) {return `${IMAGE_BASE_URL}exclamation-mark.png`;}
+  if (!name) {
+    return `${IMAGE_BASE_URL}exclamation-mark.png`;
+  }
 
   let fileName = '';
   const n = name.toUpperCase();
 
   // Aapki file list ke hisaab se mapping
-  if (n.includes('JIO')) {fileName = 'JIO.png';}
-  else if (n.includes('AIRTEL')) {fileName = 'Airtel.png';}
-  else if (n.includes('VI') || n.includes('VODA')) {fileName = 'VI.png';}
-  else if (n.includes('BSNL')) {fileName = 'BSNL.png';}
-  else if (n.includes('TATA')) {fileName = 'TataPlay.png';}
-  else if (n.includes('DISH')) {fileName = 'DishTV.png';}
-  else if (n.includes('SUN')) {fileName = 'SunDirect.png';}
-  else {fileName = 'exclamation-mark.png';} // Default fallback
+  if (n.includes('JIO')) {
+    fileName = 'JIO.png';
+  } else if (n.includes('AIRTEL')) {
+    fileName = 'Airtel.png';
+  } else if (n.includes('VI') || n.includes('VODA')) {
+    fileName = 'VI.png';
+  } else if (n.includes('BSNL')) {
+    fileName = 'BSNL.png';
+  } else if (n.includes('TATA')) {
+    fileName = 'TataPlay.png';
+  } else if (n.includes('DISH')) {
+    fileName = 'DishTV.png';
+  } else if (n.includes('SUN')) {
+    fileName = 'SunDirect.png';
+  } else {
+    fileName = 'exclamation-mark.png';
+  } // Default fallback
 
   return {
     uri: `${IMAGE_BASE_URL}${fileName}`,
@@ -49,51 +59,65 @@ const getOperatorImageUrl = (name: string) => {
     cache: FastImage.cacheControl.immutable,
   };
 };
-const STATUS_CONFIG: Record<string, { color: string; bg: string; dot: string }> = {
-  SUCCESS: { color: '#15803D', bg: '#DCFCE7', dot: '#22C55E' },
-  FAILED:  { color: '#B91C1C', bg: '#FEE2E2', dot: '#EF4444' },
-};
+const STATUS_CONFIG: Record<string, {color: string; bg: string; dot: string}> =
+  {
+    SUCCESS: {color: '#15803D', bg: '#DCFCE7', dot: '#22C55E'},
+    FAILED: {color: '#B91C1C', bg: '#FEE2E2', dot: '#EF4444'},
+  };
 
 const getStatusConfig = (status: string) =>
-  STATUS_CONFIG[status] ?? { color: '#92400E', bg: '#FEF3C7', dot: '#F59E0B' };
+  STATUS_CONFIG[status] ?? {color: '#92400E', bg: '#FEF3C7', dot: '#F59E0B'};
 
 // ─── Transaction Item ─────────────────────────────────────────────────────────
 
-const TransactionItem = React.memo(({ item, index, themeColor }: { item: any; index: number; themeColor: string }) => {
-  const status = item.Status ?? '';
-  const { color, bg, dot } = getStatusConfig(status);
-  const isLast = index === 4;
+const TransactionItem = React.memo(
+  ({
+    item,
+    index,
+    themeColor,
+  }: {
+    item: any;
+    index: number;
+    themeColor: string;
+  }) => {
+    const status = item.Status ?? '';
+    const {color, bg, dot} = getStatusConfig(status);
+    const isLast = index === 4;
 
-  return (
-    <View style={[styles.itemRow, !isLast && styles.itemDivider]}>
-      {/* Operator Logo */}
-      <View style={[styles.logoWrap, { backgroundColor: `${themeColor}12` }]}>
-<FastImage
-  source={getOperatorImageUrl(item.Operator_name)}
-  style={styles.logo}
-  resizeMode={FastImage.resizeMode.contain}
-/>      </View>
+    return (
+      <View style={[styles.itemRow, !isLast && styles.itemDivider]}>
+        {/* Operator Logo */}
+        <View style={[styles.logoWrap, {backgroundColor: `${themeColor}12`}]}>
+          <FastImage
+            source={getOperatorImageUrl(item.Operator_name) as any}
+            style={styles.logo}
+            resizeMode={FastImage.resizeMode.contain}
+          />{' '}
+        </View>
 
-      {/* Info */}
-      <View style={styles.infoCol}>
-        <Text style={styles.operatorName} numberOfLines={1}>
-          {item.Operator_name}
-        </Text>
-        <Text style={styles.mobileNum}>{item.Recharge_number}</Text>
-        <Text style={styles.dateText}>{item.Reqesttime}</Text>
-      </View>
+        {/* Info */}
+        <View style={styles.infoCol}>
+          <Text style={styles.operatorName} numberOfLines={1}>
+            {item.Operator_name}
+          </Text>
+          <Text style={styles.mobileNum}>{item.Recharge_number}</Text>
+          <Text style={styles.dateText}>{item.Reqesttime}</Text>
+        </View>
 
-      {/* Right Side */}
-      <View style={styles.rightCol}>
-        <Text style={styles.amount}>₹{item.Recharge_amount}</Text>
-        <View style={[styles.statusBadge, { backgroundColor: bg }]}>
-          <View style={[styles.statusDot, { backgroundColor: dot }]} />
-          <Text style={[styles.statusText, { color }]}>{status}</Text>
+        {/* Right Side */}
+        <View style={styles.rightCol}>
+          <Text style={styles.amount}>₹{item.Recharge_amount}</Text>
+          <View style={[styles.statusBadge, {backgroundColor: bg}]}>
+            <View style={[styles.statusDot, {backgroundColor: dot}]} />
+            <Text style={[styles.statusText, {color}]}>
+              {translate(status)}
+            </Text>
+          </View>
         </View>
       </View>
-    </View>
-  );
-});
+    );
+  },
+);
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
@@ -110,11 +134,11 @@ const RecentHistory: React.FC<Props> = ({
   historylistdata,
   onBackdropPress,
 }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const themeColor: string = colorConfig?.primaryColor || '#0A84FF';
 
   const renderItem = useCallback(
-    ({ item, index }: { item: any; index: number }) => (
+    ({item, index}: {item: any; index: number}) => (
       <TransactionItem item={item} index={index} themeColor={themeColor} />
     ),
     [themeColor],
@@ -125,8 +149,7 @@ const RecentHistory: React.FC<Props> = ({
       animationType="none"
       isVisible={isModalVisible}
       onBackdropPress={onBackdropPress}
-      containerStyle={styles.overlay}
-    >
+      containerStyle={styles.overlay}>
       <View style={styles.sheet}>
         {/* Handle bar */}
         <View style={styles.handle} />
@@ -134,14 +157,17 @@ const RecentHistory: React.FC<Props> = ({
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.headerTitle}>{translate('Recent_Transactions')}</Text>
-            <Text style={styles.headerSub}>{translate('Last_5_recharges')}</Text>
+            <Text style={styles.headerTitle}>
+              {translate('Recent_Transactions')}
+            </Text>
+            <Text style={styles.headerSub}>
+              {translate('Last_5_recharges')}
+            </Text>
           </View>
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
             activeOpacity={0.7}
-            style={styles.closeBtn}
-          >
+            style={styles.closeBtn}>
             <ClosseModalSvg2 />
           </TouchableOpacity>
         </View>
@@ -153,7 +179,9 @@ const RecentHistory: React.FC<Props> = ({
         {historylistdata.length === 0 ? (
           <View style={styles.emptyWrap}>
             <NoDatafound />
-            <Text style={styles.emptyText}>{translate('No_transactions_yet')}</Text>
+            <Text style={styles.emptyText}>
+              {translate('No_transactions_yet')}
+            </Text>
           </View>
         ) : (
           <View style={styles.listWrap}>
@@ -170,7 +198,6 @@ const RecentHistory: React.FC<Props> = ({
     </BottomSheet>
   );
 };
-
 export default React.memo(RecentHistory);
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
@@ -187,7 +214,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: -4 },
+        shadowOffset: {width: 0, height: -4},
         shadowOpacity: 0.08,
         shadowRadius: 12,
       },

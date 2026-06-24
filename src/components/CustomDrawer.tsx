@@ -1,18 +1,21 @@
-import { translate } from "../utils/languageUtils/I18n";
+import {translate} from '../utils/languageUtils/I18n';
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
 import React from 'react';
 import {View, Text, Pressable} from 'react-native';
-import { hScale } from '../utils/styles/dimensions';
+import {hScale} from '../utils/styles/dimensions';
 
 const CustomDrawer = props => {
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{backgroundColor: 'red',marginBottom:hScale(-30)}}>
+        contentContainerStyle={{
+          backgroundColor: 'red',
+          marginBottom: hScale(-30),
+        }}>
         <View
           style={{
             flexDirection: 'row',
@@ -20,14 +23,14 @@ const CustomDrawer = props => {
             backgroundColor: 'black',
             alignItems: 'center',
           }}>
-          <Text>{'Test'}</Text>
+          <Text>{translate('Test')}</Text>
         </View>
         <View style={{padding: 20}}>
           <DrawerItemList {...props} />
         </View>
         <View>
           <Pressable>
-            <Text>{translate("Logout")}</Text>
+            <Text>{translate('Logout')}</Text>
           </Pressable>
         </View>
       </DrawerContentScrollView>

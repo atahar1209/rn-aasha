@@ -1,13 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { Component } from "react";
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  View,
-  Pressable,
-} from "react-native";
-import { translate } from "../../../utils/languageUtils/I18n";
+import React, {Component} from 'react';
+import {Text, StyleSheet, View, Pressable} from 'react-native';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 export default class BottomTabs extends Component {
   render() {
@@ -23,8 +17,7 @@ export default class BottomTabs extends Component {
       showLabel = true,
     } = this.props;
 
-    const routes = ["1", "2", "3", "4", "5"];
-
+    const routes = ['1', '2', '3', '4', '5'];
     return (
       <View style={styles.tabBar}>
         {routes.map((route, routeIndex) => {
@@ -36,14 +29,13 @@ export default class BottomTabs extends Component {
               key={routeIndex}
               style={styles.tab}
               onPress={() => {
-                onTabPress({ route });
+                onTabPress({route});
               }}
               onLongPress={() => {
-                onTabLongPress({ route });
-              }}
-            >
+                onTabLongPress({route});
+              }}>
               {/* {renderIcon({route, focused: isRouteActive, tintColor})} */}
-              {showLabel ? <Text>{translate("TEXT")}</Text> : null}
+              {showLabel ? <Text>{translate('TEXT')}</Text> : null}
             </Pressable>
           );
         })}
@@ -54,53 +46,53 @@ export default class BottomTabs extends Component {
 
 const styles = StyleSheet.create({
   tab: {
-    alignItems: "center",
+    alignItems: 'center',
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   tabBar: {
-    alignSelf: "center",
+    alignSelf: 'center',
 
     borderRadius: 50,
     bottom: 10,
     elevation: 2,
-    flexDirection: "row",
+    flexDirection: 'row',
     height: 65,
-    position: "absolute",
-    width: "95%",
+    position: 'absolute',
+    width: '95%',
   },
   infinity: {
     width: 80,
     height: 100,
   },
   infinityBefore: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     width: 0,
     height: 0,
     borderWidth: 20,
-    borderColor: "red",
-    borderStyle: "solid",
+    borderColor: 'red',
+    borderStyle: 'solid',
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     borderBottomRightRadius: 50,
     borderBottomLeftRadius: 0,
-    transform: [{ rotate: "-135deg" }],
+    transform: [{rotate: '-135deg'}],
   },
   infinityAfter: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     right: 0,
     width: 0,
     height: 0,
     borderWidth: 20,
-    borderColor: "red",
-    borderStyle: "solid",
+    borderColor: 'red',
+    borderStyle: 'solid',
     borderTopLeftRadius: 50,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 50,
     borderBottomLeftRadius: 50,
-    transform: [{ rotate: "-135deg" }],
+    transform: [{rotate: '-135deg'}],
   },
 });

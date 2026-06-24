@@ -1,4 +1,4 @@
-package com.globalmultisolution.upi;
+package com.mobykwik.upi;
 
 import androidx.annotation.NonNull;
 

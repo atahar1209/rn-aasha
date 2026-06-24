@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useEffect} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -9,13 +9,14 @@ import {
   ViewProps,
   Text,
   KeyboardAvoidingView, // Joda gaya
-  Platform,             // Joda gaya
+  Platform, // Joda gaya
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 import {SCREEN_WIDTH, wScale, SCREEN_HEIGHT} from '../utils/styles/dimensions';
 // useKeyboardEvent ko hata sakte hain agar KeyboardAvoidingView use kar rahe hain
 import {colors} from '../utils/styles/theme';
+import {translate} from '../utils/languageUtils/I18n';
 
 export interface BottomViewProps extends ViewProps {
   onClose?: any;
@@ -43,7 +44,9 @@ const BottomView = ({
   const close = useCallback(() => {
     if (didMount.current && animateRef?.current?.slideOutDown) {
       animateRef.current.slideOutDown(400).then(() => {
-         if (onClose) onClose();
+        if (onClose) {
+          onClose();
+        }
       });
     } else if (onClose) {
       onClose();
@@ -59,12 +62,10 @@ const BottomView = ({
       }}
       // Fabric Fix: Modal height fix
       style={[styles.modal, containerStyle, {height: SCREEN_HEIGHT}]}>
-      
       {/* FIX: Manual padding ki jagah KeyboardAvoidingView use karein */}
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'android' ? undefined : 'padding'} 
-        style={{width: '100%', justifyContent: 'flex-end'}}
-      >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'android' ? undefined : 'padding'}
+        style={{width: '100%', justifyContent: 'flex-end'}}>
         <TouchableWithoutFeedback>
           <Animatable.View
             ref={animateRef}
@@ -80,18 +81,20 @@ const BottomView = ({
               didMount.current = true;
             }}
             {...props}>
-            
             {hasHandleBar && (
               <View style={styles.handleBarContainer}>
                 <Pressable onPress={close} style={styles.handleBar} />
               </View>
             )}
-            
+
             {children}
-            
+
             {hasCloseButton && (
               <Pressable onPress={close} style={styles.close}>
-                <Text style={{color: colors.primary}}> {'Close'}</Text>
+                <Text style={{color: colors.primary}}>
+                  {' '}
+                  {translate('Close')}
+                </Text>
               </Pressable>
             )}
           </Animatable.View>

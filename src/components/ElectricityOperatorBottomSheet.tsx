@@ -1,6 +1,6 @@
-import { BottomSheet } from "@rneui/themed";
-import { FlashList } from "@shopify/flash-list";
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import {BottomSheet} from '@rneui/themed';
+import {FlashList} from '@shopify/flash-list';
+import React, {useState, useCallback, useMemo, useEffect} from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -8,49 +8,48 @@ import {
   StyleSheet,
   TextInput,
   Keyboard,
-  Platform,
-} from "react-native";
-import { useSelector } from "react-redux";
-import { RootState } from "../reduxUtils/store";
-import { SCREEN_HEIGHT, hScale, wScale } from "../utils/styles/dimensions";
-import NoDatafound from "../features/drawer/svgimgcomponents/Nodatafound";
-import ClosseModalSvg2 from "../features/drawer/svgimgcomponents/ClosseModal2";
-import { colors } from "../utils/styles/theme";
-import { translate } from "../utils/languageUtils/I18n";
+} from 'react-native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store';
+import {SCREEN_HEIGHT, hScale, wScale} from '../utils/styles/dimensions';
+import NoDatafound from '../features/drawer/svgimgcomponents/Nodatafound';
+import ClosseModalSvg2 from '../features/drawer/svgimgcomponents/ClosseModal2';
+import {translate} from '../utils/languageUtils/I18n';
 
 // ─────────────────────────────────────────────────
 // List Item
 // ─────────────────────────────────────────────────
-const ListItem = React.memo(({
-  label,
-  onPress,
-  primaryColor,
-}: {
-  label: string;
-  onPress: () => void;
-  primaryColor: string;
-}) => (
-  <TouchableOpacity
-    style={styles.itemRow}
-    onPress={onPress}
-    activeOpacity={0.75}
-  >
-    {/* Icon box with first letter */}
-    <View style={[styles.iconBox, { backgroundColor: `${primaryColor}15` }]}>
-      <Text style={[styles.iconLetter, { color: primaryColor }]}>
-        {label?.charAt(0)?.toUpperCase()}
+const ListItem = React.memo(
+  ({
+    label,
+    onPress,
+    primaryColor,
+  }: {
+    label: string;
+    onPress: () => void;
+    primaryColor: string;
+  }) => (
+    <TouchableOpacity
+      style={styles.itemRow}
+      onPress={onPress}
+      activeOpacity={0.75}>
+      {/* Icon box with first letter */}
+      <View style={[styles.iconBox, {backgroundColor: `${primaryColor}15`}]}>
+        <Text style={[styles.iconLetter, {color: primaryColor}]}>
+          {label?.charAt(0)?.toUpperCase()}
+        </Text>
+      </View>
+
+      {/* Label */}
+      <Text style={styles.itemLabel} numberOfLines={1} ellipsizeMode="tail">
+        {label}
       </Text>
-    </View>
 
-    {/* Label */}
-    <Text style={styles.itemLabel} numberOfLines={1} ellipsizeMode="tail">
-      {label}
-    </Text>
-
-    {/* Chevron */}
-    <Text style={[styles.chevron, { color: primaryColor }]}>›</Text>
-  </TouchableOpacity>
-));
+      {/* Chevron */}
+      <Text style={[styles.chevron, {color: primaryColor}]}>›</Text>
+    </TouchableOpacity>
+  ),
+);
 
 // ─────────────────────────────────────────────────
 // Search Bar
@@ -68,8 +67,15 @@ const SearchBar = ({
 }) => {
   const [focused, setFocused] = useState(false);
   return (
-    <View style={[styles.searchWrapper, { borderColor: focused ? primaryColor : '#E0E0E0' }]}>
-      <Text style={[styles.searchIcon, { color: focused ? primaryColor : '#bbb' }]}>⌕</Text>
+    <View
+      style={[
+        styles.searchWrapper,
+        {borderColor: focused ? primaryColor : '#E0E0E0'},
+      ]}>
+      <Text
+        style={[styles.searchIcon, {color: focused ? primaryColor : '#bbb'}]}>
+        ⌕
+      </Text>
       <TextInput
         value={value}
         onChangeText={onChangeText}
@@ -87,8 +93,7 @@ const SearchBar = ({
       {value.length > 0 && (
         <TouchableOpacity
           onPress={() => onChangeText('')}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
+          hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
           <Text style={styles.clearBtn}>✕</Text>
         </TouchableOpacity>
       )}
@@ -118,9 +123,9 @@ const ElectricityOperatorBottomSheet = ({
   setState: (state: string) => void;
   setOperator: (name: string) => void;
   GetOptlist: (stateId: string) => void;
-  handleItemPress?: (item: any) => void;   // optional — crash fix
+  handleItemPress?: (item: any) => void; // optional — crash fix
 }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const primaryColor = colorConfig.primaryColor;
   const bgColor = `${primaryColor}18`;
 
@@ -143,35 +148,48 @@ const ElectricityOperatorBottomSheet = ({
   // Filtered list
   const filteredData = useMemo(() => {
     const data = selectbool ? stateData : operatorData;
-    const key = selectbool ? "State Name" : "Operatorname";
+    const key = selectbool
+      ? translate('State Name')
+      : translate('Operatorname');
     return data.filter(item =>
-      item[key]?.toLowerCase().includes(searchQuery.toLowerCase())
+      item[key]?.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [selectbool, stateData, operatorData, searchQuery]);
 
   // Item tap handler
-  const onSelectItem = useCallback((item: any) => {
-    handleItemPress?.(item);   // optional chaining — undefined pe crash nahi hoga
-console.log('====================================');
-console.log(item);
-console.log('====================================');
-    if (selectbool) {
-      // Step 1: State selected → load operators
-      setState(item['State Name']);
-  
-      GetOptlist(item['Sate Id']);   // ← typo fix: 'Sate Id' → 'State Id'
-      setSearchQuery('');
-      setSelectbool(false);
-    } else {
-      // Step 2: Operator selected → done
-      setOperatorcode(item['OPtCode']);
-      setOperator(item['Operatorname']);
-      setSearchQuery('');
-      setSelectbool(true);
-      Keyboard.dismiss();
-      setModalVisible(false);
-    }
-  }, [selectbool, handleItemPress, setState, GetOptlist, setOperatorcode, setOperator, setModalVisible]);
+  const onSelectItem = useCallback(
+    (item: any) => {
+      handleItemPress?.(item); // optional chaining — undefined pe crash nahi hoga
+      console.log('====================================');
+      console.log(item);
+      console.log('====================================');
+      if (selectbool) {
+        // Step 1: State selected → load operators
+        setState(item['State Name']);
+
+        GetOptlist(item['Sate Id']); // ← typo fix: 'Sate Id' → 'State Id'
+        setSearchQuery('');
+        setSelectbool(false);
+      } else {
+        // Step 2: Operator selected → done
+        setOperatorcode(item['OPtCode']);
+        setOperator(item['Operatorname']);
+        setSearchQuery('');
+        setSelectbool(true);
+        Keyboard.dismiss();
+        setModalVisible(false);
+      }
+    },
+    [
+      selectbool,
+      handleItemPress,
+      setState,
+      GetOptlist,
+      setOperatorcode,
+      setOperator,
+      setModalVisible,
+    ],
+  );
 
   const isStep1 = selectbool;
   const isEmpty = filteredData.length === 0;
@@ -182,24 +200,24 @@ console.log('====================================');
       animationType="none"
       isVisible={isModalVisible}
       onBackdropPress={closeSheet}
-      containerStyle={{ backgroundColor: 'rgba(0,0,0,0.45)' }}
-    >
+      containerStyle={{backgroundColor: 'rgba(0,0,0,0.45)'}}>
       <View style={styles.sheet}>
-
         {/* ── Header ── */}
-        <View style={[styles.header, { backgroundColor: bgColor }]}>
+        <View style={[styles.header, {backgroundColor: bgColor}]}>
           {/* Drag handle */}
           <View style={styles.dragHandle} />
 
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
               {/* Step badge */}
-              <View style={[styles.stepBadge, { backgroundColor: primaryColor }]}>
+              <View style={[styles.stepBadge, {backgroundColor: primaryColor}]}>
                 <Text style={styles.stepBadgeText}>{isStep1 ? '1' : '2'}</Text>
               </View>
               <View>
-                <Text style={[styles.headerStepLabel, { color: primaryColor }]}>
-                  {isStep1 ? `${translate('Step')} 1 / 2` : `${translate('Step')} 2 / 2`}
+                <Text style={[styles.headerStepLabel, {color: primaryColor}]}>
+                  {isStep1
+                    ? `${translate('Step')} 1 / 2`
+                    : `${translate('Step')} 2 / 2`}
                 </Text>
                 <Text style={styles.headerTitle}>
                   {isStep1
@@ -212,19 +230,23 @@ console.log('====================================');
             <TouchableOpacity
               onPress={closeSheet}
               activeOpacity={0.7}
-              style={[styles.closeBtn, { backgroundColor: `${primaryColor}18` }]}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
+              style={[styles.closeBtn, {backgroundColor: `${primaryColor}18`}]}
+              hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
               <ClosseModalSvg2 />
             </TouchableOpacity>
           </View>
 
           {/* Progress bar */}
           <View style={styles.progressTrack}>
-            <View style={[
-              styles.progressFill,
-              { backgroundColor: primaryColor, width: isStep1 ? '50%' : '100%' }
-            ]} />
+            <View
+              style={[
+                styles.progressFill,
+                {
+                  backgroundColor: primaryColor,
+                  width: isStep1 ? '50%' : '100%',
+                },
+              ]}
+            />
           </View>
         </View>
 
@@ -232,7 +254,9 @@ console.log('====================================');
         <SearchBar
           value={searchQuery}
           onChangeText={setSearchQuery}
-          placeholder={isStep1 ? translate('Search state...') : translate('Search operator...')}
+          placeholder={
+            isStep1 ? translate('Search state') : translate('Search operator')
+          }
           primaryColor={primaryColor}
         />
 
@@ -242,14 +266,16 @@ console.log('====================================');
             // No operators loaded yet
             <View style={styles.emptyBox}>
               <NoDatafound />
-              <Text style={styles.emptyText}>{translate('No Operator Found')}</Text>
+              <Text style={styles.emptyText}>
+                {translate('No Operator Found')}
+              </Text>
             </View>
           ) : isEmpty ? (
             // Search returned nothing
             <View style={styles.emptyBox}>
               <Text style={styles.emptyIcon}>🔍</Text>
               <Text style={styles.emptyText}>
-                {translate('No results for')} "{searchQuery}"
+                `${translate('No results for')} "${searchQuery}"`
               </Text>
             </View>
           ) : (
@@ -263,8 +289,8 @@ console.log('====================================');
                   ? item['State Name'] ?? String(i)
                   : item['OPtCode'] ?? String(i)
               }
-              contentContainerStyle={{ paddingBottom: hScale(30) }}
-              renderItem={({ item }) => (
+              contentContainerStyle={{paddingBottom: hScale(30)}}
+              renderItem={({item}) => (
                 <ListItem
                   label={isStep1 ? item['State Name'] : item['Operatorname']}
                   onPress={() => onSelectItem(item)}

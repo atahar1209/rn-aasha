@@ -1,5 +1,4 @@
-
-import { createContext, Dispatch, SetStateAction } from 'react';
+import {createContext, Dispatch, SetStateAction} from 'react';
 import noop from 'lodash/noop';
 
 export type SignUpContext = {
@@ -47,17 +46,16 @@ export type SignUpContext = {
   setPanImg: Dispatch<SetStateAction<string | undefined>>;
   gstImg: string;
   setGstImg: Dispatch<SetStateAction<string | undefined>>;
-  stateId:string;
-  setStateid:Dispatch<SetStateAction<string | undefined>>;
-    distid:string;
-  setDistid:Dispatch<SetStateAction<string | undefined>>;
+  stateId: string;
+  setStateid: Dispatch<SetStateAction<string | undefined>>;
+  distid: string;
+  setDistid: Dispatch<SetStateAction<string | undefined>>;
   currentPage: number;
   setCurrentPage: Dispatch<SetStateAction<number | undefined>>;
   svg: [];
   setSvg: Dispatch<SetStateAction<[]>>;
-  Radius2:number;
-  setRadius2:Dispatch<SetStateAction<number | undefined>>;
-
+  Radius2: number;
+  setRadius2: Dispatch<SetStateAction<number | undefined>>;
 };
 
 export const SignUpContext = createContext<SignUpContext>({
@@ -105,17 +103,14 @@ export const SignUpContext = createContext<SignUpContext>({
   setPanImg: noop,
   gstImg: '',
   setGstImg: noop,
-  stateId:'',
-  setStateid:noop,
+  stateId: '',
+  setStateid: noop,
   svg: [],
   setSvg: noop,
-  Radius2:'',
-  setRadius2:noop,
+  Radius2: '',
+  setRadius2: noop,
   currentPage: 0,
   setCurrentPage: noop,
-  distid:'' ,
-  setDistid:noop,
-
+  distid: '',
+  setDistid: noop,
 });
-  
-

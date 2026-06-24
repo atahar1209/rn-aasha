@@ -1,11 +1,11 @@
 import SoundPlayer from 'react-native-sound-player';
 
-export const playSound = (status, istone  = true) => {
+export const playSound = (status, istone = true) => {
   try {
-    console.log(istone ,status);
+    console.log(istone, status);
 
-    if (istone == false) {
-      return; 
+    if (istone === false) {
+      return;
     }
 
     if (status === 'Success') {

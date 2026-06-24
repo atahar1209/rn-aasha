@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { View, Animated, Easing, Text, StyleSheet } from 'react-native';
-import { wScale } from '../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../reduxUtils/store';
+import React, {useEffect, useState} from 'react';
+import {View, Animated, Easing, StyleSheet} from 'react-native';
+import {wScale} from '../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store';
 
-const SecondaryColor = '#FF6347'; 
-const TextColor = '#FFFFFF';  
+const SecondaryColor = '#FF6347';
+const TextColor = '#FFFFFF';
 
-const DotLoader = ({ color = SecondaryColor }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+const DotLoader = ({color = SecondaryColor}) => {
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
   const [scale] = useState(new Animated.Value(1));
 
@@ -28,7 +28,7 @@ const DotLoader = ({ color = SecondaryColor }) => {
             easing: Easing.ease,
             useNativeDriver: true,
           }),
-        ])
+        ]),
       ).start();
     };
 
@@ -38,8 +38,12 @@ const DotLoader = ({ color = SecondaryColor }) => {
   return (
     <View style={styles.main}>
       {[...Array(4)].map((_, index) => (
-        <Animated.View key={index} style={[styles.box, { transform: [{ scale }], backgroundColor: colorConfig.primaryColor }]}>
-        </Animated.View>
+        <Animated.View
+          key={index}
+          style={[
+            styles.box,
+            {transform: [{scale}], backgroundColor: colorConfig.primaryColor},
+          ]} />
       ))}
     </View>
   );
@@ -49,18 +53,17 @@ const DotLoaderWhiteColor = () => {
   return <DotLoader color={TextColor} />;
 };
 
-export { DotLoader, DotLoaderWhiteColor };
+export {DotLoader, DotLoaderWhiteColor};
 
 const styles = StyleSheet.create({
-    main: {
+  main: {
     flexDirection: 'row',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   box: {
     width: wScale(8),
     height: wScale(8),
     borderRadius: 8,
-    marginHorizontal: wScale(1)
+    marginHorizontal: wScale(1),
   },
-
 });

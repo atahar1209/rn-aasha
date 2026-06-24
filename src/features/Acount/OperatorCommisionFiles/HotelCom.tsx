@@ -1,16 +1,23 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { APP_URLS } from '../../../utils/network/urls';
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+
+type HotelCommissionItem = {
+  IsDomestic?: boolean;
+  marginPercentage?: number | null | undefined;
+  gst?: number | null | undefined;
+  tds?: number | null | undefined;
+};
 
 const HotelCom = () => {
-  const { colorConfig, IsDealer } = useSelector((state: RootState) => state.userInfo);
+  const {IsDealer} = useSelector((state: RootState) => state.userInfo);
 
-  const { get } = useAxiosHook();
-  const [data, setData] = useState([]);
+  const {get} = useAxiosHook();
+  const [data, setData] = useState<HotelCommissionItem[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,23 +25,23 @@ const HotelCom = () => {
         const url2 = `${APP_URLS.dealeropcomn}ddltype=HOTEL`;
         const url = `${APP_URLS.opComm}ddltype=HOTEL`;
 
-        const response = await get({ url: IsDealer ? url2 : url });
-console.log(IsDealer ? url2 : url)
+        const response = await get({url: IsDealer ? url2 : url});
+        console.log(IsDealer ? url2 : url);
         if (response && Array.isArray(response) && response.length > 0) {
           setData(response);
         } else {
-          console.error("Invalid response format or empty data:", response);
+          console.error('Invalid response format or empty data:', response);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
-  }, [get]);
+  }, [get, IsDealer]);
 
   // Function to handle null or invalid values
-  const handleNullValue = (value) => {
+  const handleNullValue = (value: number | null): string => {
     // Check if the value is a valid number
     if (value === null || isNaN(value)) {
       return '0.00';
@@ -47,12 +54,20 @@ console.log(IsDealer ? url2 : url)
     <View style={styles.container}>
       <View style={styles.table}>
         <View style={styles.headerRow}>
-          <Text style={[styles.cell, styles.headerCell]}>{translate("Particulars")}</Text>
-          <Text style={[styles.cell, styles.headerCell]}>{translate("Margin")}</Text>
-          <Text style={[styles.cell, styles.headerCell]}>{translate("GST")}</Text>
-          <Text style={[styles.cell, styles.headerCell]}>{translate("TDS")}</Text>
+          <Text style={[styles.cell, styles.headerCell]}>
+            {translate('Particulars')}
+          </Text>
+          <Text style={[styles.cell, styles.headerCell]}>
+            {translate('Margin')}
+          </Text>
+          <Text style={[styles.cell, styles.headerCell]}>
+            {translate('GST')}
+          </Text>
+          <Text style={[styles.cell, styles.headerCell]}>
+            {translate('TDS')}
+          </Text>
         </View>
-        {data.length > 0 && (
+        {data.length > 0 &&
           data.map((item, index) => (
             <View style={styles.row} key={index}>
               <Text style={styles.cell}>
@@ -61,15 +76,10 @@ console.log(IsDealer ? url2 : url)
               <Text style={styles.cell}>
                 {handleNullValue(item.marginPercentage)}
               </Text>
-              <Text style={styles.cell}>
-                {handleNullValue(item.gst)}
-              </Text>
-              <Text style={styles.cell}>
-                {handleNullValue(item.tds)}
-              </Text>
+              <Text style={styles.cell}>{handleNullValue(item.gst)}</Text>
+              <Text style={styles.cell}>{handleNullValue(item.tds)}</Text>
             </View>
-          ))
-        )}
+          ))}
       </View>
     </View>
   );

@@ -1,4 +1,4 @@
-package com.globalmultisolution.location;
+package com.mobykwik.location;
 
 import android.Manifest;
 import android.app.Activity;

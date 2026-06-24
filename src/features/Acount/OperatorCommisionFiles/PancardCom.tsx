@@ -1,39 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {FlashList} from '@shopify/flash-list';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {APP_URLS} from '../../../utils/network/urls';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 const PancardCom = () => {
-  const { colorConfig,IsDealer } = useSelector((state: RootState) => state.userInfo);
+  const {IsDealer} = useSelector((state: RootState) => state.userInfo);
 
-  const { get } = useAxiosHook();
-  const [list, setList] = useState([]);
+  const {get} = useAxiosHook();
+  const [list, setList] = useState<Record<string, unknown>[]>([]);
 
   useEffect(() => {
-    const fetchCommissionData = async (operator) => {
+    const fetchCommissionData = async (operator: string) => {
       try {
-          const url2 = `${APP_URLS.dealeropcomn}ddltype=${operator}`
-            const url = `${APP_URLS.opComm}ddltype=${operator}`;
-            const response = await get({ url:IsDealer?url2:url });
-            setList(response);
-          } catch (error) {
-            console.error(error);
-          }
+        const url2 = `${APP_URLS.dealeropcomn}ddltype=${operator}`;
+        const url = `${APP_URLS.opComm}ddltype=${operator}`;
+        const response = await get({url: IsDealer ? url2 : url});
+        setList(response);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    fetchCommissionData('Pancard');
-  }, []);
+    fetchCommissionData(translate('Pancard'));
+  }, [IsDealer, get]);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}: {item: Record<string, unknown>}) => {
     return (
       <View style={styles.itemContainer}>
         {Object.entries(item).map(([key, value], index) => (
           <Text key={index} style={styles.text}>
             <Text style={styles.keyText}>{key}: </Text>
-            <Text style={styles.valueText}>{value !== null ? value.toString() : 'N/A'}</Text>
+            <Text style={styles.valueText}>
+              {value !== null && value !== undefined
+                ? value.toString()
+                : translate('N/A')}
+            </Text>
           </Text>
         ))}
       </View>
@@ -67,7 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#fff', // White background for each item
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2, // Android shadow effect

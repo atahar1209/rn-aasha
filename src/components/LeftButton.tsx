@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect} from 'react';
-
 import {BackHandler, StyleProp, ViewStyle} from 'react-native';
 import BackArrow from '../utils/svgUtils/BackArrow';
 import MeasuredView from './MeasuredView';

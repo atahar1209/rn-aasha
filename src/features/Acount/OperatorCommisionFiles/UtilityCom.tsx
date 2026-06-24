@@ -1,26 +1,34 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import { APP_URLS } from '../../../utils/network/urls';
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { RootState } from '../../../reduxUtils/store';
-import { useSelector } from 'react-redux';
-import { colors, FontSize } from '../../../utils/styles/theme';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {RootState} from '../../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {colors, FontSize} from '../../../utils/styles/theme';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 
 const UtilityCommission = () => {
-  const { colorConfig, IsDealer } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, IsDealer} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const color1 = `${colorConfig.secondaryColor}20`;
-  const { get } = useAxiosHook();
+  const {get} = useAxiosHook();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
-    const fetchCommissionData = async (operator) => {
+    const fetchCommissionData = async (operator: string) => {
       try {
         const url = `${APP_URLS.opComm}ddltype=${operator}`;
         const url2 = `${APP_URLS.dealeropcomn}ddltype=${operator}`;
-        const response = await get({ url: IsDealer ? url2 : url });
+        const response = await get({url: IsDealer ? url2 : url});
         console.log(IsDealer ? url2 : url);
 
         // Check if response is valid and contains data
@@ -38,40 +46,51 @@ const UtilityCommission = () => {
     };
 
     fetchCommissionData('Utility');
-  }, [IsDealer]);
+  }, [IsDealer, get]);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <View style={styles.row}>
-      <Text style={[styles.cell, styles.firstCell]}>{item.OperatorName || 'N/A'}</Text>
-      <Text style={[styles.cell, styles.secondCell]}>{item.OperatorCode || 'N/A'}</Text>
-      <Text style={[styles.cell, styles.third]}>{item.Commission || 'N/A'}</Text>
+      <Text style={[styles.cell, styles.firstCell]}>
+        {item.OperatorName || translate('N/A')}
+      </Text>
+      <Text style={[styles.cell, styles.secondCell]}>
+        {item.OperatorCode || translate('N/A')}
+      </Text>
+      <Text style={[styles.cell, styles.third]}>
+        {item.Commission || translate('N/A')}
+      </Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { backgroundColor: colorConfig.secondaryColor }]}>
-        <Text style={[styles.headerCell, styles.firstCell]}>{translate("Operator")}</Text>
-        <Text style={[styles.headerCell, styles.secondCell]}>{translate("Operator")}</Text>
-        <Text style={[styles.headerCell, styles.third]}>{'Commision By Range'}</Text>
+      <View
+        style={[styles.header, {backgroundColor: colorConfig.secondaryColor}]}>
+        <Text style={[styles.headerCell, styles.firstCell]}>
+          {translate('Operator')}
+        </Text>
+        <Text style={[styles.headerCell, styles.secondCell]}>
+          {translate('Code')}
+        </Text>
+        <Text style={[styles.headerCell, styles.third]}>
+          {translate('Commission_By_Range')}
+        </Text>
       </View>
 
       {/* Check if loading */}
       {loading ? (
         <ActivityIndicator size="large" color={colorConfig.secondaryColor} />
+      ) : // Check if the list is not empty
+      list.length > 0 ? (
+        <FlatList
+          data={list}
+          renderItem={renderItem}
+          keyExtractor={item => item.OperatorCode}
+        />
       ) : (
-        // Check if the list is not empty
-        list.length > 0 ? (
-          <FlatList
-            data={list}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.OperatorCode}
-          />
-        ) : (
-          <View style={styles.noDataContainer}>
-            <Text>{translate("No_data_available")}</Text>
-          </View>
-        )
+        <View style={styles.noDataContainer}>
+          <Text>{translate('No_data_available')}</Text>
+        </View>
       )}
     </View>
   );

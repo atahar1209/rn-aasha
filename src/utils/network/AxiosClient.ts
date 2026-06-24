@@ -1,36 +1,42 @@
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { useCallback, useEffect, useMemo } from 'react';
-import { reset, setAuthToken, setRefreshToken, setUserId } from '../../reduxUtils/store/userInfoSlice';
-import { APP_URLS } from './urls';
-import { encrypt } from '../encryptionUtils';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {useCallback, useEffect, useMemo} from 'react';
+import {
+  reset,
+  setAuthToken,
+  setRefreshToken,
+  setUserId,
+} from '../../reduxUtils/store/userInfoSlice';
+import {APP_URLS} from './urls';
+import {encrypt} from '../encryptionUtils';
 
 const useAxiosHook = () => {
-  const { authToken = '', refreshToken, IsDealer } = useSelector(
-    (state: RootState) => state.userInfo,
-  );
+  const {
+    authToken = '',
+    refreshToken,
+    IsDealer,
+  } = useSelector((state: RootState) => state.userInfo);
   const dispatch = useDispatch();
   let isRefreshing = false;
 
   useEffect(() => {
     console.log('**AUTH_TOKEN', authToken);
   }, [authToken]);
-  
 
   const axiosInstance = useMemo(
     () =>
       axios.create({
-        baseURL: 'http://native.rechargedrishti.com/',
+        baseURL: 'http://native.paypointsindia.com/',
         //  baseURL: 'http://native.skeshari.in/',
-        timeout: 120000
+        timeout: 120000,
       }),
     [],
   );
 
   // ---------- API functions ----------
   const get = useCallback(
-    async ({ url }: { url: string }) => {
+    async ({url}: {url: string}) => {
       const response = await axiosInstance.get(url);
       return response.data;
     },
@@ -51,16 +57,15 @@ const useAxiosHook = () => {
         const response = await axiosInstance.post(url, data, config);
         return response.data;
       } catch (e) {
-
-      // Alert.alert("API ERROR:", e?.response?.data || e?.message);
-      throw e;
+        // Alert.alert("API ERROR:", e?.response?.data || e?.message);
+        throw e;
       }
     },
     [axiosInstance],
   );
 
   const put = useCallback(
-    async ({ url, data }: { url: string; data: any }) => {
+    async ({url, data}: {url: string; data: any}) => {
       const response = await axiosInstance.put(url, data);
       return response.data;
     },
@@ -138,18 +143,17 @@ const useAxiosHook = () => {
 
       // Dealer prefix handling
       if (config.url) {
-      console.log('🌐 FULL URL:', `${config.baseURL}${config.url}`);
-      console.log('📡 IsDealer:', IsDealer);       // ← add
+        console.log('🌐 FULL URL:', `${config.baseURL}${config.url}`);
+        console.log('📡 IsDealer:', IsDealer); // ← add
         if (IsDealer) {
           if (
-            config.url.startsWith("api/Radiant/") ||
-            config.url.startsWith("api/RadiantCash/")
+            config.url.startsWith('api/Radiant/') ||
+            config.url.startsWith('api/RadiantCash/')
           ) {
             config.url = `Dealer/${config.url}`;
           }
         }
-              console.log('📡 AFTER URL:', config.url);   // ← add
-
+        console.log('📡 AFTER URL:', config.url); // ← add
       }
       return config;
     },
@@ -160,12 +164,15 @@ const useAxiosHook = () => {
   axiosInstance.interceptors.response.use(
     response => response,
     async error => {
-      if (error.response && error.response.status === 401 && isRefreshing === false) {
+      if (
+        error.response &&
+        error.response.status === 401 &&
+        isRefreshing === false
+      ) {
         isRefreshing = true;
 
         // Pehle test wala refresh
         let response = await onRefreshToken();
-
 
         if (response) {
           error.config.headers.Authorization = `Bearer ${response?.access_token}`;
@@ -182,7 +189,7 @@ const useAxiosHook = () => {
     },
   );
 
-  return { get, post, put };
+  return {get, post, put};
 };
 
 export default useAxiosHook;

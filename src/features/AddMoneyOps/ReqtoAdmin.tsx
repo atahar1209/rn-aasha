@@ -1,4 +1,4 @@
-import React, { useState, useEffect, act } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,20 +11,22 @@ import {
   FlatList,
   ActivityIndicator,
   ToastAndroid,
+  Alert,
 } from 'react-native';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { APP_URLS } from '../../utils/network/urls';
-import { isEmulator } from 'react-native-device-info';
-import { decryptData, encrypt } from '../../utils/encryptionUtils';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
+import {APP_URLS} from '../../utils/network/urls';
+import {decryptData, encrypt} from '../../utils/encryptionUtils';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
 import ShowLoader from '../../components/ShowLoder';
+import {translate} from '../../utils/languageUtils/I18n';
 
-const ReqToAdmin = ({ route }) => {
-
-  const { colorConfig, IsDealer } = useSelector((state: RootState) => state.userInfo);
-  const color1 = `${colorConfig.secondaryColor}20`
-  const { type, amount } = route.params
+const ReqToAdmin = ({route}) => {
+  const {colorConfig, IsDealer} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
+  const color1 = `${colorConfig.secondaryColor}20`;
+  const {type, amount} = route.params;
   const [paymentMode1, setPaymentMode1] = useState('');
   const [paymentType1, setPaymentType1] = useState('');
   const [dealerwallet1, setDealerWallet1] = useState('');
@@ -40,15 +42,14 @@ const ReqToAdmin = ({ route }) => {
   const [isAdmin, setIsAdmin] = useState(type === 'Admin');
   const [loading, setLoading] = useState(false);
   const [collectionBy, setCollectionBy] = useState('');
-  const [comment, setComment] = useState('')
+  const [comment, setComment] = useState('');
   const [AccountNo, setAccountNo] = useState('');
   const [utr, setUtrNo] = useState('');
   const [Deposit, setDeposit] = useState('');
-  const { post, get } = useAxiosHook();
+  const {post, get} = useAxiosHook();
   const [walletn, setWalletn] = useState('');
   const [walletname, setWalletname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
 
   const paymentModedialog = () => {
     setModalVisible(true);
@@ -64,28 +65,43 @@ const ReqToAdmin = ({ route }) => {
   const bankDialog3 = () => {
     setBankModalVisible3(true);
   };
-  const [isLoad, setIsload] = useState(false)
+  const [isLoad, setIsload] = useState(false);
   const fetchBanks = async () => {
-
-    setIsload(true)
+    setIsload(true);
     try {
       setLoading(true);
       const url = `${APP_URLS.admindealerbankList}`;
 
       const url2 = `${APP_URLS.AdminMasterBankList}`;
-      const response = await get({ url: IsDealer ? url2 : url });
+      const response = await get({url: IsDealer ? url2 : url});
 
       console.log(IsDealer ? url2 : url);
       // console.log(response.bindALLWallet.channel.Adminbanklist, '*******************');
       // console.log(response.bindALLWallet.channel.Adminwalletlist, '*******************');
-      setBanks(isAdmin ? (IsDealer ? response.adminbankllist : response.bindALLWallet.channel.Adminbanklist) : (IsDealer ? response.masterbanklistss : response.bindALLWallet.channel.dealerbanklist));
-      setWallets(isAdmin ? (IsDealer ? response.adminwalletlist : response.bindALLWallet.channel.Adminwalletlist) : (IsDealer ? response.masterwalletlist : response.bindALLWallet.channel.DealerWalletlist));
+      setBanks(
+        isAdmin
+          ? IsDealer
+            ? response.adminbankllist
+            : response.bindALLWallet.channel.Adminbanklist
+          : IsDealer
+          ? response.masterbanklistss
+          : response.bindALLWallet.channel.dealerbanklist,
+      );
+      setWallets(
+        isAdmin
+          ? IsDealer
+            ? response.adminwalletlist
+            : response.bindALLWallet.channel.Adminwalletlist
+          : IsDealer
+          ? response.masterwalletlist
+          : response.bindALLWallet.channel.DealerWalletlist,
+      );
     } catch (error) {
-      setIsload(false)
+      setIsload(false);
 
       console.error('Error fetching banks:', error);
     } finally {
-      setIsload(false)
+      setIsload(false);
 
       setLoading(false);
     }
@@ -114,19 +130,23 @@ const ReqToAdmin = ({ route }) => {
     setWalletname('');
     setIsLoading(false);
   };
-  
+
   useEffect(() => {
     fetchBanks();
-    console.log(isAdmin)
+    console.log(isAdmin);
   }, []);
 
-  const PaymentTypeDialog = ({ visible, onClose }) => {
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const PaymentTypeDialog = ({visible, onClose}) => {
     const paymentMode1 = [
-      "Cash", "Credit", "Branch/Cms Deposit", "Online Transfer", "Wallet"
+      translate('Cash'),
+      translate('Credit'),
+      translate('Branch/Cms Deposit'),
+      translate('Online Transfer'),
+      translate('Wallet'),
     ];
-    const handlePaymentTypeSelect = (paymentType) => {
-
-      console.log('handlePaymentTypeSelect', paymentType)
+    const handlePaymentTypeSelect = paymentType => {
+      console.log('handlePaymentTypeSelect', paymentType);
       setPaymentType1(paymentType);
       onClose();
     };
@@ -136,20 +156,20 @@ const ReqToAdmin = ({ route }) => {
         animationType="fade"
         transparent={true}
         visible={visible}
-        onRequestClose={onClose}
-      >
+        onRequestClose={onClose}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select Payment Type</Text>
+            <Text style={styles.modalTitle}>
+              {translate('Select_Payment_Type')}
+            </Text>
             <FlatList
               data={paymentMode1}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <TouchableOpacity
                   style={styles.paymentTypeItem}
-                  onPress={() => handlePaymentTypeSelect(item)}
-                >
-                  <Text style={styles.paymentTypeText}>{item}</Text>
+                  onPress={() => handlePaymentTypeSelect(item)}>
+                  <Text style={styles.paymentTypeText}>{translate(item)}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -158,19 +178,20 @@ const ReqToAdmin = ({ route }) => {
       </Modal>
     );
   };
-  const BankDialog2 = ({ visible, onClose }) => {
-    const handleBankSelect = (bank) => {
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const BankDialog2 = ({visible, onClose}) => {
+    const handleBankSelect = bank => {
       console.log(bank.acno, '*****');
       setBank2(bank.banknm);
       onClose();
     };
 
     const paymentTypes = [
-      { banknm: 'NEFT', acno: '12345' },
-      { banknm: 'IMPS', acno: '67890' },
-      { banknm: 'RTGS', acno: '11223' },
-      { banknm: 'UPI', acno: '44556' },
-      { banknm: 'Same Bank', acno: '78901' }
+      {banknm: 'NEFT', acno: '12345'},
+      {banknm: 'IMPS', acno: '67890'},
+      {banknm: 'RTGS', acno: '11223'},
+      {banknm: 'UPI', acno: '44556'},
+      {banknm: 'Same Bank', acno: '78901'},
     ];
 
     return (
@@ -178,22 +199,20 @@ const ReqToAdmin = ({ route }) => {
         animationType="fade"
         transparent={true}
         visible={visible}
-        onRequestClose={onClose}
-      >
+        onRequestClose={onClose}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select Type</Text>
+            <Text style={styles.modalTitle}>{translate('Select Type')}</Text>
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
               <FlatList
                 data={paymentTypes}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <TouchableOpacity
                     style={styles.paymentTypeItem}
-                    onPress={() => handleBankSelect(item)}
-                  >
+                    onPress={() => handleBankSelect(item)}>
                     <Text style={styles.paymentTypeText}>{item.banknm}</Text>
                   </TouchableOpacity>
                 )}
@@ -205,10 +224,11 @@ const ReqToAdmin = ({ route }) => {
     );
   };
 
-  const BankDialog = ({ visible, onClose }) => {
-    const handleBankSelect = (bank) => {
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const BankDialog = ({visible, onClose}) => {
+    const handleBankSelect = bank => {
       setBank1(bank.banknm);
-      console.log(bank.acno, '*****')
+      console.log(bank.acno, '*****');
       setAccountNo(bank.acno);
       onClose();
     };
@@ -218,22 +238,20 @@ const ReqToAdmin = ({ route }) => {
         animationType="fade"
         transparent={true}
         visible={visible}
-        onRequestClose={onClose}
-      >
+        onRequestClose={onClose}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{'Select Bank'}</Text>
+            <Text style={styles.modalTitle}>{translate('Select Bank')}</Text>
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
               <FlatList
                 data={banks}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <TouchableOpacity
                     style={styles.paymentTypeItem}
-                    onPress={() => handleBankSelect(item)}
-                  >
+                    onPress={() => handleBankSelect(item)}>
                     <Text style={styles.paymentTypeText}>{item.banknm}</Text>
                   </TouchableOpacity>
                 )}
@@ -245,13 +263,13 @@ const ReqToAdmin = ({ route }) => {
     );
   };
 
-  const WalletDialog = ({ visible, onClose }) => {
-    const handleBankSelect = (bank) => {
-      console.log(bank)
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const WalletDialog = ({visible, onClose}) => {
+    const handleBankSelect = bank => {
+      console.log(bank);
       // walletno ,walletname
       setWalletn(bank.walletno);
       setWalletname(bank.walletname);
-
 
       onClose();
     };
@@ -261,23 +279,23 @@ const ReqToAdmin = ({ route }) => {
         animationType="fade"
         transparent={true}
         visible={visible}
-        onRequestClose={onClose}
-      >
+        onRequestClose={onClose}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{'Select Wallet'}</Text>
+            <Text style={styles.modalTitle}>{translate('Select Wallet')}</Text>
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
               <FlatList
                 data={wallets}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <TouchableOpacity
                     style={styles.paymentTypeItem}
-                    onPress={() => handleBankSelect(item)}
-                  >
-                    <Text style={styles.paymentTypeText}>{item.walletname}</Text>
+                    onPress={() => handleBankSelect(item)}>
+                    <Text style={styles.paymentTypeText}>
+                      {item.walletname}
+                    </Text>
                   </TouchableOpacity>
                 )}
               />
@@ -289,29 +307,28 @@ const ReqToAdmin = ({ route }) => {
   };
 
   const transfer = () => {
-    setIsload(true)
+    setIsload(true);
     setIsLoading(true);
 
     switch (paymentType1) {
-      case 'Cash':
-      case 'Credit':
-        console.log("transfer***0000", paymentType1);
+      case translate('Cash'):
+      case translate('Credit'):
+        console.log('transfer***0000', paymentType1);
 
         submittxn();
         break;
 
-      case 'Branch/Cms Deposit':
+      case translate('Branch/Cms Deposit'):
         submittxnBRANCH();
         break;
-      case 'Online Transfer':
-        submittxnONLINE()
+      case translate('Online Transfer'):
+        submittxnONLINE();
         break;
-      case 'Wallet':
-        console.log("transfer***123", paymentType1);
+      case translate('Wallet'):
+        console.log('transfer***123', paymentType1);
 
         submittxnWALLET();
         break;
-
 
       default:
         console.log('Invalid payment mode');
@@ -320,36 +337,41 @@ const ReqToAdmin = ({ route }) => {
   };
   const submittxn = async () => {
     if (!amount || !paymentType1 || !comment) {
-      alert('Please fill in all required fields.');
-      setIsload(false)
-      setIsLoading(false)
+      Alert.alert(translate('Please fill in all required fields.'));
+      setIsload(false);
+      setIsLoading(false);
       return;
     }
 
-    const encryption = await encrypt([paymentType1, collectionBy, comment, IsDealer ? 'Dealer' : 'Retailer', type]);
-
+    const encryption = await encrypt([
+      paymentType1,
+      collectionBy,
+      comment,
+      IsDealer ? translate('Dealer') : translate('Retailer'),
+      type,
+    ]);
 
     const data = {
-      "payto": encryption.encryptedData[4],
-      "hdPaymentMode": encryption.encryptedData[0],
-      "hdPaymentAmount": amount,
-      "hdMDDepositeSlipNo": '',
-      "hdMDTransferType": '',
-      "hdMDcollection": encryption.encryptedData[1],
-      "hdMDComments": encryption.encryptedData[2],
-      "hdMDBank": bank2,
-      "hdsupraccno": "",
-      "hdMDaccountno": '',
-      "hdMDutrno": '',
-      "hdMDwallet": '',
-      "hdMDwalletno": '',
-      "hdMDtransationno": '',
-      "hdMDsettelment": "",
-      "hdMDCreditDetail": "",
-      "hdMDsubject": "",
-      "ROLE": encryption.encryptedData[3],
-      "value1": encryption.keyEncode || '',
-      "value2": encryption.ivEncode || '',
+      payto: encryption.encryptedData[4],
+      hdPaymentMode: encryption.encryptedData[0],
+      hdPaymentAmount: amount,
+      hdMDDepositeSlipNo: '',
+      hdMDTransferType: '',
+      hdMDcollection: encryption.encryptedData[1],
+      hdMDComments: encryption.encryptedData[2],
+      hdMDBank: bank2,
+      hdsupraccno: '',
+      hdMDaccountno: '',
+      hdMDutrno: '',
+      hdMDwallet: '',
+      hdMDwalletno: '',
+      hdMDtransationno: '',
+      hdMDsettelment: '',
+      hdMDCreditDetail: '',
+      hdMDsubject: '',
+      ROLE: encryption.encryptedData[3],
+      value1: encryption.keyEncode || '',
+      value2: encryption.ivEncode || '',
     };
 
     try {
@@ -360,16 +382,40 @@ const ReqToAdmin = ({ route }) => {
 
       console.log(response, 'Response from server');
 
-      if (response.Response === 'Failed') {
+      if (response.Response === translate('Failed')) {
         ToastAndroid.show(response.Message, ToastAndroid.BOTTOM);
         const decryptedData = {
-          hdMDDLM: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[0]),
-          hdPaymentMode: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[1]),
+          hdMDDLM: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[0],
+          ),
+          hdPaymentMode: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[1],
+          ),
           hdPaymentAmount: amount,
-          hdMDcollection: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[4]),
-          hdMDComments: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[5]),
-          txtcode: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[2]),
-          transferid: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[3]),
+          hdMDcollection: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[4],
+          ),
+          hdMDComments: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[5],
+          ),
+          txtcode: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[2],
+          ),
+          transferid: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[3],
+          ),
         };
 
         console.log('Decrypted Data:', decryptedData);
@@ -378,12 +424,10 @@ const ReqToAdmin = ({ route }) => {
         });
       } else {
         ToastAndroid.show(response.Message, ToastAndroid.BOTTOM);
-        clearAllFields()
-
+        clearAllFields();
       }
-      setIsload(false)
-      setIsLoading(false)
-
+      setIsload(false);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching  list:', error);
     }
@@ -392,37 +436,45 @@ const ReqToAdmin = ({ route }) => {
   };
   const submittxnBRANCH = async () => {
     if (!amount || !paymentType1 || !bank1 || !AccountNo || !Deposit) {
-      console.log(amount, paymentType1, bank1, AccountNo, Deposit)
-      alert('Please fill in all required fields.');
-      setIsload(false)
-      setIsLoading(false)
+      console.log(amount, paymentType1, bank1, AccountNo, Deposit);
+      Alert.alert(translate('Please fill in all required fields.'));
+      setIsload(false);
+      setIsLoading(false);
       return;
     }
 
-    const encryption = encrypt([paymentType1, collectionBy, comment, IsDealer ? 'Dealer' : 'Retailer', type, bank1, AccountNo, Deposit]);
-
+    const encryption = encrypt([
+      paymentType1,
+      collectionBy,
+      comment,
+      IsDealer ? translate('Dealer') : translate('Retailer'),
+      type,
+      bank1,
+      AccountNo,
+      Deposit,
+    ]);
 
     const data = {
-      "payto": encryption.encryptedData[4],
-      "hdPaymentMode": encryption.encryptedData[0],
-      "hdPaymentAmount": amount,
-      "hdMDDepositeSlipNo": encryption.encryptedData[7],
-      "hdMDTransferType": '',
-      "hdMDcollection": encryption.encryptedData[1],
-      "hdMDComments": encryption.encryptedData[2],
-      "hdMDBank": encryption.encryptedData[5],
-      "hdsupraccno": "",
-      "hdMDaccountno": encryption.encryptedData[6],
-      "hdMDutrno": '',
-      "hdMDwallet": '',
-      "hdMDwalletno": '',
-      "hdMDtransationno": '',
-      "hdMDsettelment": "",
-      "hdMDCreditDetail": "",
-      "hdMDsubject": "",
-      "ROLE": encryption.encryptedData[3],
-      "value1": encryption.keyEncode || '',
-      "value2": encryption.ivEncode || '',
+      payto: encryption.encryptedData[4],
+      hdPaymentMode: encryption.encryptedData[0],
+      hdPaymentAmount: amount,
+      hdMDDepositeSlipNo: encryption.encryptedData[7],
+      hdMDTransferType: '',
+      hdMDcollection: encryption.encryptedData[1],
+      hdMDComments: encryption.encryptedData[2],
+      hdMDBank: encryption.encryptedData[5],
+      hdsupraccno: '',
+      hdMDaccountno: encryption.encryptedData[6],
+      hdMDutrno: '',
+      hdMDwallet: '',
+      hdMDwalletno: '',
+      hdMDtransationno: '',
+      hdMDsettelment: '',
+      hdMDCreditDetail: '',
+      hdMDsubject: '',
+      ROLE: encryption.encryptedData[3],
+      value1: encryption.keyEncode || '',
+      value2: encryption.ivEncode || '',
     };
 
     try {
@@ -433,16 +485,40 @@ const ReqToAdmin = ({ route }) => {
 
       console.log(response, 'Response from server');
 
-      if (response.Response === 'Failed') {
+      if (response.Response === translate('Failed')) {
         ToastAndroid.show(response.Message, ToastAndroid.BOTTOM);
         const decryptedData = {
-          hdMDDLM: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[0]),
-          hdPaymentMode: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[1]),
+          hdMDDLM: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[0],
+          ),
+          hdPaymentMode: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[1],
+          ),
           hdPaymentAmount: amount,
-          hdMDcollection: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[4]),
-          hdMDComments: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[5]),
-          txtcode: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[2]),
-          transferid: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[3]),
+          hdMDcollection: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[4],
+          ),
+          hdMDComments: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[5],
+          ),
+          txtcode: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[2],
+          ),
+          transferid: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[3],
+          ),
         };
 
         console.log('Decrypted Data:', decryptedData);
@@ -451,13 +527,11 @@ const ReqToAdmin = ({ route }) => {
         });
       } else {
         ToastAndroid.show(response.Message, ToastAndroid.BOTTOM);
-        clearAllFields()
-
+        clearAllFields();
       }
 
-      setIsload(false)
-      setIsLoading(false)
-
+      setIsload(false);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching retailer list:', error);
     }
@@ -467,39 +541,43 @@ const ReqToAdmin = ({ route }) => {
   const submittxnONLINE = async () => {
     if (!amount || !paymentType1 || !bank1 || !AccountNo || !bank2 || !utr) {
       //alert('Please fill in all required fields.');
-      setIsload(false)
-      setIsLoading(false)
+      setIsload(false);
+      setIsLoading(false);
       //  return;
     }
-    console.log(paymentType1, bank2, bank1)
-    console.log([paymentType1, IsDealer ? 'Dealer' : 'Retailer', type, bank1, AccountNo,
-      bank2, utr])
+    console.log(paymentType1, bank2, bank1);
+    console.log([
+      paymentType1,
+      IsDealer ? translate('Dealer') : translate('Retailer'),
+      type,
+      bank1,
+      AccountNo,
+      bank2,
+      utr,
+    ]);
 
     // ["Online Transfer", "Retailer", "Admin", "ICICI", "723005000189", "UPI", ""]
-    const encryption = encrypt(
-      [
-        paymentType1,
-        IsDealer ? 'Dealer' : 'Retailer',
-        type,
-        bank1,
-        AccountNo,
-        bank2,
-        utr
-      ]);
-
-
+    const encryption = encrypt([
+      paymentType1,
+      IsDealer ? translate('Dealer') : translate('Retailer'),
+      type,
+      bank1,
+      AccountNo,
+      bank2,
+      utr,
+    ]);
 
     const data = {
-      "payto": encryption.encryptedData[2],
-      "hdPaymentMode": encryption.encryptedData[0],
-      "hdPaymentAmount": amount,
-      "hdMDTransferType": encryption.encryptedData[5],
-      "hdMDBank": encryption.encryptedData[3],
-      "hdMDaccountno": encryption.encryptedData[4],
-      "hdMDutrno": encryption.encryptedData[6],
-      "ROLE": encryption.encryptedData[1],
-      "value1": encryption.keyEncode || '',
-      "value2": encryption.ivEncode || '',
+      payto: encryption.encryptedData[2],
+      hdPaymentMode: encryption.encryptedData[0],
+      hdPaymentAmount: amount,
+      hdMDTransferType: encryption.encryptedData[5],
+      hdMDBank: encryption.encryptedData[3],
+      hdMDaccountno: encryption.encryptedData[4],
+      hdMDutrno: encryption.encryptedData[6],
+      ROLE: encryption.encryptedData[1],
+      value1: encryption.keyEncode || '',
+      value2: encryption.ivEncode || '',
     };
 
     try {
@@ -507,19 +585,43 @@ const ReqToAdmin = ({ route }) => {
         url: APP_URLS.PurchaseOrder,
         data: data,
       });
-      console.log(data, '*********************')
+      console.log(data, '*********************');
       console.log(response, 'Response from server');
 
-      if (response.Response === 'Failed') {
+      if (response.Response === translate('Failed')) {
         ToastAndroid.show(response.Message, ToastAndroid.BOTTOM);
         const decryptedData = {
-          hdMDDLM: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[0]),
-          hdPaymentMode: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[1]),
+          hdMDDLM: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[0],
+          ),
+          hdPaymentMode: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[1],
+          ),
           hdPaymentAmount: amount,
-          hdMDcollection: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[4]),
-          hdMDComments: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[5]),
-          txtcode: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[2]),
-          transferid: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[3]),
+          hdMDcollection: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[4],
+          ),
+          hdMDComments: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[5],
+          ),
+          txtcode: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[2],
+          ),
+          transferid: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[3],
+          ),
         };
 
         console.log('Decrypted Data:', decryptedData);
@@ -528,13 +630,11 @@ const ReqToAdmin = ({ route }) => {
         });
       } else {
         ToastAndroid.show(response.Message, ToastAndroid.BOTTOM);
-        clearAllFields()
-
+        clearAllFields();
       }
 
-      setIsload(false)
-      setIsLoading(false)
-
+      setIsload(false);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching retailer list:', error);
     }
@@ -545,34 +645,46 @@ const ReqToAdmin = ({ route }) => {
     console.log(paymentType1);
 
     if (!amount || !paymentType1 || !walletname || !transactionn) {
-      alert('Please fill in all required fields.');
+      Alert.alert(translate('Please fill in all required fields.'));
       setIsLoading(false);
       return;
     }
 
-    const encryption = encrypt([paymentType1, collectionBy, comment, IsDealer ? 'Dealer' : 'Retailer', type, bank1, AccountNo, bank2, transactionn, walletname, walletn]);
+    const encryption = encrypt([
+      paymentType1,
+      collectionBy,
+      comment,
+      IsDealer ? translate('Dealer') : translate('Retailer'),
+      type,
+      bank1,
+      AccountNo,
+      bank2,
+      transactionn,
+      walletname,
+      walletn,
+    ]);
 
     const data = {
-      "payto": encryption.encryptedData[4],
-      "hdPaymentMode": encryption.encryptedData[0],
-      "hdPaymentAmount": amount,
-      "hdMDDepositeSlipNo": '',
-      "hdMDTransferType": encryption.encryptedData[7],
-      "hdMDcollection": encryption.encryptedData[1],
-      "hdMDComments": encryption.encryptedData[2],
-      "hdMDBank": '',
-      "hdsupraccno": "",
-      "hdMDaccountno": encryption.encryptedData[6],
-      "hdMDutrno": '',
-      "hdMDwallet": encryption.encryptedData[9],
-      "hdMDwalletno": encryption.encryptedData[10],
-      "hdMDtransationno": encryption.encryptedData[8],
-      "hdMDsettelment": "",
-      "hdMDCreditDetail": "",
-      "hdMDsubject": "",
-      "ROLE": encryption.encryptedData[3],
-      "value1": encryption.keyEncode || '',
-      "value2": encryption.ivEncode || '',
+      payto: encryption.encryptedData[4],
+      hdPaymentMode: encryption.encryptedData[0],
+      hdPaymentAmount: amount,
+      hdMDDepositeSlipNo: '',
+      hdMDTransferType: encryption.encryptedData[7],
+      hdMDcollection: encryption.encryptedData[1],
+      hdMDComments: encryption.encryptedData[2],
+      hdMDBank: '',
+      hdsupraccno: '',
+      hdMDaccountno: encryption.encryptedData[6],
+      hdMDutrno: '',
+      hdMDwallet: encryption.encryptedData[9],
+      hdMDwalletno: encryption.encryptedData[10],
+      hdMDtransationno: encryption.encryptedData[8],
+      hdMDsettelment: '',
+      hdMDCreditDetail: '',
+      hdMDsubject: '',
+      ROLE: encryption.encryptedData[3],
+      value1: encryption.keyEncode || '',
+      value2: encryption.ivEncode || '',
     };
 
     try {
@@ -583,21 +695,61 @@ const ReqToAdmin = ({ route }) => {
 
       console.log(response, 'Response from server');
 
-      if (response.Response === 'Failed') {
+      if (response.Response === translate('Failed')) {
         ToastAndroid.show(response.Message, ToastAndroid.BOTTOM);
 
         const decryptedData = {
-          hdPaymentMode: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[0]),
+          hdPaymentMode: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[0],
+          ),
           hdPaymentAmount: amount,
-          hdMDcollection: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[1]),
-          hdMDComments: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[2]),
-          transferid: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[3]),
-          hdMDBank: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[5]),
-          hdMDaccountno: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[6]),
-          hdMDTransferType: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[7]),
-          hdMDwallet: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[9]),
-          hdMDwalletno: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[10]),
-          hdMDtransationno: decryptData(encryption.keyEncode, encryption.ivEncode, encryption.encryptedData[8]),
+          hdMDcollection: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[1],
+          ),
+          hdMDComments: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[2],
+          ),
+          transferid: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[3],
+          ),
+          hdMDBank: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[5],
+          ),
+          hdMDaccountno: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[6],
+          ),
+          hdMDTransferType: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[7],
+          ),
+          hdMDwallet: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[9],
+          ),
+          hdMDwalletno: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[10],
+          ),
+          hdMDtransationno: decryptData(
+            encryption.keyEncode,
+            encryption.ivEncode,
+            encryption.encryptedData[8],
+          ),
         };
 
         console.log('Decrypted Data:', decryptedData);
@@ -606,17 +758,15 @@ const ReqToAdmin = ({ route }) => {
         });
       } else {
         ToastAndroid.show(response.Message, ToastAndroid.BOTTOM);
-        clearAllFields()
-
+        clearAllFields();
       }
-      setIsload(false)
+      setIsload(false);
 
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching retailer list:', error);
       setIsLoading(false);
-      setIsload(false)
-
+      setIsload(false);
     }
 
     console.log(JSON.stringify(data));
@@ -626,65 +776,86 @@ const ReqToAdmin = ({ route }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.contentContainer}>
-          <Text style={styles.title}>Request to {type} : ₹ {amount}
+          <Text style={styles.title}>
+            {translate(' Request to')} {type} : ₹ {amount}
           </Text>
 
-          <TouchableOpacity style={styles.selectionButton} onPress={paymentModedialog}>
-            <Text style={styles.selectionButtonText}>{paymentMode1 || 'Select Payment Mode'}</Text>
+          <TouchableOpacity
+            style={styles.selectionButton}
+            onPress={paymentModedialog}>
+            <Text style={styles.selectionButtonText}>
+              {paymentMode1 || translate('Select Payment Mode')}
+            </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.selectionButton} onPress={paymentModedialog}>
-            <Text style={styles.selectionButtonText}>{paymentType1 || 'Select Payment Type'}</Text>
+          <TouchableOpacity
+            style={styles.selectionButton}
+            onPress={paymentModedialog}>
+            <Text style={styles.selectionButtonText}>
+              {paymentType1 || translate('Select Payment Type')}
+            </Text>
           </TouchableOpacity>
 
+          {paymentType1 === translate('Online Transfer') && (
+            <TouchableOpacity
+              style={styles.selectionButton}
+              onPress={bankDialog2}>
+              <Text style={styles.selectionButtonText}>
+                {bank2 || translate('Select  Pay Type')}
+              </Text>
+            </TouchableOpacity>
+          )}
+          {(paymentType1 === translate('Branch/Cms Deposit') ||
+            paymentType1 === translate('Online Transfer')) && (
+            <TouchableOpacity
+              style={styles.selectionButton}
+              onPress={bankDialog}>
+              <Text style={styles.selectionButtonText}>
+                {bank1 || translate('Select Bank')}
+              </Text>
+            </TouchableOpacity>
+          )}
 
-          {
-            paymentType1 === 'Online Transfer' && <TouchableOpacity style={styles.selectionButton} onPress={bankDialog2}>
-              <Text style={styles.selectionButtonText}>{bank2 || 'Select  Pay Type'}</Text>
-            </TouchableOpacity>}
-          {
-            (paymentType1 === 'Branch/Cms Deposit' || paymentType1 === 'Online Transfer') && <TouchableOpacity style={styles.selectionButton} onPress={bankDialog}>
-              <Text style={styles.selectionButtonText}>{bank1 || 'Select Bank'}</Text>
-            </TouchableOpacity>}
-
-          {
-            (paymentType1 === 'Wallet') && <TouchableOpacity style={styles.selectionButton} onPress={bankDialog3}>
-              <Text style={styles.selectionButtonText}>{walletname || 'Select Wallet'}</Text>
-            </TouchableOpacity>}
-          {(paymentType1 === 'Branch/Cms Deposit' || paymentType1 === 'Online Transfer') && (
+          {paymentType1 === translate('Wallet') && (
+            <TouchableOpacity
+              style={styles.selectionButton}
+              onPress={bankDialog3}>
+              <Text style={styles.selectionButtonText}>
+                {walletname || translate('Select Wallet')}
+              </Text>
+            </TouchableOpacity>
+          )}
+          {(paymentType1 === translate('Branch/Cms Deposit') ||
+            paymentType1 === translate('Online Transfer')) && (
             <>
               <TextInput
                 style={styles.input}
-                placeholder="Account No"
+                placeholder={translate('Account No')}
                 onChangeText={setAccountNo}
                 editable={false}
                 value={AccountNo}
               />
-
             </>
-
           )}
 
-
-          {(paymentType1 === 'Branch/Cms Deposit') && (
+          {paymentType1 === translate('Branch/Cms Deposit') && (
             <TextInput
               style={styles.input}
-              placeholder="Deposit Slip No"
+              placeholder={translate('Deposit Slip No')}
               onChangeText={setDeposit}
               editable={true}
               value={Deposit}
             />
           )}
-          {(paymentType1 === 'Online Transfer') && (
+          {paymentType1 === translate('Online Transfer') && (
             <TextInput
               style={styles.input}
-              placeholder="Utr No"
+              placeholder={translate('Utr No')}
               onChangeText={setUtrNo}
               value={utr}
             />
           )}
           {isLoad && <ShowLoader />}
-
 
           <PaymentTypeDialog
             visible={modalVisible}
@@ -706,31 +877,47 @@ const ReqToAdmin = ({ route }) => {
             onClose={() => setBankModalVisible3(false)}
           />
 
-          {paymentType1 == 'Wallet' && <TextInput
-            style={styles.input}
-            placeholder="Transaction no"
-            onChangeText={settransactionn}
-            value={transactionn}
-          />}
-
-          {(paymentType1 === 'Cash' || paymentType1 === 'Credit' || paymentType1 === 'Credit' || paymentType1 === 'Wallet') && (
+          {paymentType1 === translate('Wallet') && (
             <TextInput
               style={styles.input}
-              placeholder="Comment"
+              placeholder={translate('Transaction no')}
+              onChangeText={settransactionn}
+              value={transactionn}
+            />
+          )}
+
+          {(paymentType1 === translate('Cash') ||
+            paymentType1 === translate('Credit') ||
+            paymentType1 === translate('Credit') ||
+            paymentType1 === translate('Wallet')) && (
+            <TextInput
+              style={styles.input}
+              placeholder={translate('Comment')}
               onChangeText={setComment}
               value={comment}
             />
           )}
 
-          {(paymentType1 === 'Cash' || paymentType1 === 'Credit') && <TextInput
-            style={styles.input}
-            placeholder="Collection by"
-            onChangeText={setCollectionBy}
-            value={collectionBy}
-          />}
+          {(paymentType1 === translate('Cash') ||
+            paymentType1 === translate('Credit')) && (
+            <TextInput
+              style={styles.input}
+              placeholder={translate('Collection by')}
+              onChangeText={setCollectionBy}
+              value={collectionBy}
+            />
+          )}
 
-          <TouchableOpacity style={styles.submitButton} onPress={() => { transfer() }}>
-            {isLoading ? <ActivityIndicator /> : <Text style={styles.submitButtonText}>Submit</Text>}
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => {
+              transfer();
+            }}>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <Text style={styles.submitButtonText}>{translate('Submit')}</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

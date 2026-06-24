@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { APP_URLS } from '../../../utils/network/urls';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import { translate } from '../../../utils/languageUtils/I18n';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 const MoneyCom = () => {
-  const { colorConfig,IsDealer } = useSelector((state: RootState) => state.userInfo);
-  const color1 = `${colorConfig.secondaryColor}20`
-  const [list, setList] = useState([]);
-  const { get } = useAxiosHook();
+  const {colorConfig, IsDealer} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
+  const color1 = `${colorConfig.secondaryColor}20`;
+  const [list, setList] = useState<any[]>([]);
+  const {get} = useAxiosHook();
 
   useEffect(() => {
-    const fetchCommissionData = async (operator) => {
+    const fetchCommissionData = async (operator: string) => {
       try {
-      const url2 = `${APP_URLS.dealeropcomn}ddltype=${operator}`
+        const url2 = `${APP_URLS.dealeropcomn}ddltype=${operator}`;
         const url = `${APP_URLS.opComm}ddltype=${operator}`;
-        const response = await get({ url:IsDealer?url2:url });
+        const response = await get({url: IsDealer ? url2 : url});
         setList(response);
       } catch (error) {
         console.error(error);
@@ -26,18 +28,18 @@ const MoneyCom = () => {
     };
 
     fetchCommissionData('Money');
-  }, [get]);
+  }, [IsDealer, get]);
 
   const item = list[0] || {}; // Ensure item is defined
 
-  const renderRow = (title, value, type, index) => {
+  const renderRow = (title: string, value: number, type: string, index: number) => {
     // Conditional row background color
-    const backgroundColor = index % 2 === 0 ? color1 : 'transparaent'; 
+    const backgroundColor = index % 2 === 0 ? color1 : 'transparaent';
     return (
-      <View style={[styles.row, { backgroundColor }]} key={title}>
+      <View style={[styles.row, {backgroundColor}]} key={title}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.value}>
-          {value === 0 ? '₹ 0' : (type === 'Per' ? `% ${value}` : `₹ ${value}`)}
+          {value === 0 ? '₹ 0' : type === 'Per' ? `% ${value}` : `₹ ${value}`}
         </Text>
       </View>
     );
@@ -45,9 +47,10 @@ const MoneyCom = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={[styles.header, { backgroundColor: colorConfig.secondaryColor }]}>
-        <Text style={styles.headerText}>{translate("Up v/s To")}</Text>
-        <Text style={styles.headerText}>{translate("Charges")}</Text>
+      <View
+        style={[styles.header, {backgroundColor: colorConfig.secondaryColor}]}>
+        <Text style={styles.headerText}>{translate('Up v/s To')}</Text>
+        <Text style={styles.headerText}>{translate('Charges')}</Text>
       </View>
       <View style={styles.content}>
         {renderRow('Verify Commission', item.VerifyComm, 'Rs', 0)}
@@ -120,15 +123,14 @@ const styles = StyleSheet.create({
     fontSize: wScale(14),
     color: '#fff',
   },
-  content: {
-  },
+  content: {},
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: hScale(5),
     alignItems: 'center',
     paddingHorizontal: wScale(15),
-    borderBottomWidth:wScale(.6)
+    borderBottomWidth: wScale(0.6),
   },
   title: {
     fontSize: 14,

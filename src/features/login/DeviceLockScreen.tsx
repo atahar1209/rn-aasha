@@ -1,12 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {memo, useCallback, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {wScale} from '../../utils/styles/dimensions';
 // import ReactNativeBiometrics from 'react-native-biometrics';
@@ -21,7 +15,6 @@ const DeviceLockScreen = () => {
     //   .simplePrompt({promptMessage: 'Confirm fingerprint'})
     //   .then(resultObject => {
     //     const {success} = resultObject;
-
     //     if (success) {
     //       navigation.navigate('DashboardScreen');
     //     } else {
@@ -34,7 +27,6 @@ const DeviceLockScreen = () => {
   }, [navigation]);
 
   useEffect(() => {
-    
     authenticateFingerprint();
   }, []);
 

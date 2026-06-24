@@ -1,42 +1,25 @@
-
 /* eslint-disable react-native/no-inline-styles */
 import StepIndicator from 'react-native-step-indicator';
 
-import { Button } from '@rneui/themed';
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  Linking,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { encrypt } from '../../utils/encryptionUtils';
-import { useNavigation } from '@react-navigation/native';
-import { translate } from '../../utils/languageUtils/I18n';
-import { StepIndicatorStyle } from './stepIndicatorStyle';
+import React, {useCallback, useEffect, useState} from 'react';
+import {StyleSheet, View, Linking} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {useNavigation} from '@react-navigation/native';
+import {translate} from '../../utils/languageUtils/I18n';
+import {StepIndicatorStyle} from './stepIndicatorStyle';
 import PersonalInfoStep from './PersonalInfoStep';
 import LoginInfoStep from './LoginInfoStep';
-import KycStep from './KycStep';
-import { colors } from '../../utils/styles/theme';
-import BackArrow from '../../utils/svgUtils/BackArrow';
-import Header from '../../components/Header';
-import { wScale } from '../../utils/styles/dimensions';
-import { SignUpContext } from './SignUpContext';
+import {colors} from '../../utils/styles/theme';
+import {wScale} from '../../utils/styles/dimensions';
+import {SignUpContext} from './SignUpContext';
 import VerifyInfoStep from './VerifyInfoStep';
 import SignUpKyc from './KycStep';
-import AppBar from '../drawer/headerAppbar/AppBar';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
-import { SvgUri } from 'react-native-svg';
-import { APP_URLS } from '../../utils/network/urls';
+import {APP_URLS} from '../../utils/network/urls';
 
-const SignUpScreen = ({ route }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo)
-
+const SignUpScreen = ({route}) => {
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
@@ -50,8 +33,6 @@ const SignUpScreen = ({ route }) => {
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [referralCode, setReferralCode] = useState('');
   const [businessName, setBusinessName] = useState('');
-
-
   const [businessType, setBusinessType] = useState('');
   const [personalAadhar, setPersonalAadhar] = useState('');
   const [personalPAN, setPersonalPAN] = useState('');
@@ -72,12 +53,9 @@ const SignUpScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    setSvg(route.params.svg)
-    setRadius2(route.params.Radius2)
-
-
-  })
-
+    setSvg(route.params.svg);
+    setRadius2(route.params.Radius2);
+  }, [route.params.svg, route.params.Radius2]);
 
   const getScreen = useCallback(() => {
     if (currentPage === 0) {
@@ -87,8 +65,9 @@ const SignUpScreen = ({ route }) => {
       return <PersonalInfoStep svg={svg} Radius2={Radius2} />;
     }
     if (currentPage === 2) {
-      return <SignUpKyc  svg={svg} Radius2={Radius2}/>;
-    } if (currentPage === 3) {
+      return <SignUpKyc svg={svg} Radius2={Radius2} />;
+    }
+    if (currentPage === 3) {
       return <VerifyInfoStep svg={svg} Radius2={Radius2} />;
     }
   }, [currentPage]);
@@ -150,11 +129,17 @@ const SignUpScreen = ({ route }) => {
         setDistid,
       }}>
       <>
-        <View style={{ flex: 1, backgroundColor: colors.base }}>
-          <AppBarSecond title={'SIGN UP NOW !'}  titlestyle={{}}  actionButton="From Web"
- onActionPress={()=>{
-  Linking.openURL(`https://${APP_URLS.baseWebUrl}/Home/Login/singup`)
- }}/>
+        <View style={{flex: 1, backgroundColor: colors.base}}>
+          <AppBarSecond
+            title={translate('SIGN UP NOW !')}
+            titlestyle={{}}
+            actionButton={translate('From Web')}
+            onActionPress={() => {
+              Linking.openURL(
+                `https://${APP_URLS.baseWebUrl}/Home/Login/singup`,
+              );
+            }}
+          />
           {/* <Header
             LeftAction={'none'}
             
@@ -178,7 +163,6 @@ const SignUpScreen = ({ route }) => {
             }
           /> */}
 
-
           <View style={styles.stepIndicator}>
             <StepIndicator
               stepCount={4}
@@ -189,14 +173,12 @@ const SignUpScreen = ({ route }) => {
                 translate('loginInfo'),
                 translate('personalInfo'),
 
-                'Kyc',
+                translate('Kyc'),
                 translate('verifyDetails'),
               ]}
             />
           </View>
-          <>{getScreen()}
-          </>
-
+          <>{getScreen()}</>
         </View>
       </>
     </SignUpContext.Provider>
@@ -209,5 +191,3 @@ const styles = StyleSheet.create({
   },
 });
 export default SignUpScreen;
-
-

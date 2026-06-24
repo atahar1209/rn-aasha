@@ -1,22 +1,37 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { hScale, wScale } from '../utils/styles/dimensions';
-import Success from '../features/drawer/svgimgcomponents/Success';
+import {Modal, View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {hScale, wScale} from '../utils/styles/dimensions';
 import Successful from '../features/drawer/svgimgcomponents/successfulimg';
-import { translate } from '../utils/languageUtils/I18n';
+import {translate} from '../utils/languageUtils/I18n';
 
-const CmsSuccessModal = ({ visible, onClose, message, title = "Submit Successful 🎉" }) => {
+type CmsSuccessModalProps = {
+  visible: boolean;
+  onClose: () => void;
+  message?: string;
+  title?: string;
+};
+
+const CmsSuccessModal: React.FC<CmsSuccessModalProps> = ({
+  visible,
+  onClose,
+  message,
+  title = translate('Submit Successful 🎉'),
+}) => {
   return (
-    <Modal transparent visible={visible} animationType="fade" >
+    <Modal transparent visible={visible} animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
-          <Successful/>
-          <Text style={styles.title}>{title}</Text>
+          <Successful />
+          <Text style={styles.title}>{translate(title)}</Text>
           <Text style={styles.message}>
-            {message || "Your report has been uploaded successfully."}
+            {message ||
+              translate('Your report has been uploaded successfully.')}
           </Text>
-          <TouchableOpacity style={styles.button} onPress={onClose} activeOpacity={0.8}>
-            <Text style={styles.buttonText}>{translate("Continue")}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={onClose}
+            activeOpacity={0.8}>
+            <Text style={styles.buttonText}>{translate('Continue')}</Text>
           </TouchableOpacity>
         </View>
       </View>

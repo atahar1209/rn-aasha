@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
-
-
-import { StyleSheet, Text, TextProps, View, ViewProps, ViewStyle } from 'react-native';
-import { colors } from '../utils/styles/theme';
-import { wScale } from '../utils/styles/dimensions';
-
-
-
+import React, {FC} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextProps,
+  View,
+  ViewProps,
+  ViewStyle,
+} from 'react-native';
+import {colors} from '../utils/styles/theme';
+import {wScale} from '../utils/styles/dimensions';
 
 type Props = ViewProps & {
   size: number | 'small' | 'large';
@@ -58,21 +60,19 @@ const Avatar: FC<Props> = ({
             borderRadius: circleSize / 2,
             backgroundColor,
           },
-        ]}
-      >
+        ]}>
         {!!letter && (
-          <Text
-            
-    
-            {...textProps}
-            style={[styles.text, textProps?.style]}
-          >
+          <Text {...textProps} style={[styles.text, textProps?.style]}>
             {letter}
           </Text>
         )}
       </View>
 
-      {Badge && <View style={[styles.badgeContainer, badgeContainerStyle]}>{Badge}</View>}
+      {Badge && (
+        <View style={[styles.badgeContainer, badgeContainerStyle]}>
+          {Badge}
+        </View>
+      )}
     </View>
   );
 };

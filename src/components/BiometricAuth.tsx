@@ -1,39 +1,38 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  Alert, 
-  BackHandler, 
-  NativeModules, 
-  StatusBar 
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  BackHandler,
+  NativeModules,
+  StatusBar,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../reduxUtils/store';
-import { setUnlocked } from '../reduxUtils/store/userInfoSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store';
+import {setUnlocked} from '../reduxUtils/store/userInfoSlice';
+import {translate} from '../utils/languageUtils/I18n';
 
-const { SecurityModule } = NativeModules;
+const {SecurityModule} = NativeModules;
 
 export default function BiometricAuth() {
   const dispatch = useDispatch();
-  const { unLocked } = useSelector((state: RootState) => state.userInfo);
-  
+  const {unLocked} = useSelector((state: RootState) => state.userInfo);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   // ✅ Memoized auth function
   const authenticateWithNative = useCallback(async () => {
-    if (isAuthenticating) return; // Prevent multiple calls
+    if (isAuthenticating) {
+      return;
+    } // Prevent multiple calls
 
     setIsAuthenticating(true);
-    
     try {
       console.log('🔐 Starting native authentication...');
-      
       // First check device security
       const securityStatus = await SecurityModule.checkDeviceSecurity();
-      
-      if (securityStatus === 'NOT_SECURE') {
+      if (securityStatus === translate('NOT_SECURE')) {
         console.log('📱 No screen lock found, allowing access');
         dispatch(setUnlocked(true));
         return;
@@ -41,24 +40,28 @@ export default function BiometricAuth() {
 
       // Show screen lock
       const success = await SecurityModule.showScreenLock();
-      
+
       console.log('✅ Auth result:', success);
-      
+
       // Success ya Cancel - dono case me aage allow
       dispatch(setUnlocked(true));
-      
     } catch (error) {
       console.log('❌ Auth error:', error);
-      
+
+      const nativeError = error as {code?: string};
+
       // Handle all error cases - allow access
-      if (error.code === 'NO_LOCK' || error.code === 'ACTIVITY_GONE') {
+      if (
+        nativeError.code === 'NO_LOCK' ||
+        nativeError.code === 'ACTIVITY_GONE'
+      ) {
         dispatch(setUnlocked(true));
       } else {
         // Critical error - show alert
         Alert.alert(
-          'Security Check',
-          'Unable to verify security. Please restart app.',
-          [{ text: 'OK', onPress: () => dispatch(setUnlocked(true)) }]
+          translate('Security Check'),
+          translate('Unable to verify security. Please restart app.'),
+          [{text: translate('OK'), onPress: () => dispatch(setUnlocked(true))}],
         );
       }
     } finally {
@@ -72,13 +75,16 @@ export default function BiometricAuth() {
       setModalVisible(true);
       authenticateWithNative();
     }
-  }, [unLocked, authenticateWithNative]);
+  }, [unLocked, authenticateWithNative, isModalVisible]);
 
   // ✅ BackHandler cleanup
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      return isModalVisible || isAuthenticating;
-    });
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        return isModalVisible || isAuthenticating;
+      },
+    );
 
     return () => backHandler.remove();
   }, [isModalVisible, isAuthenticating]);
@@ -91,18 +97,21 @@ export default function BiometricAuth() {
   // Show loading modal during auth
   return (
     <>
-      <StatusBar backgroundColor="transparent" barStyle="light-content" translucent />
-      
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle="light-content"
+        translucent
+      />
+
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
           <View style={styles.loadingSpinner} />
-          
-          <Text style={styles.title}>Security Check</Text>
+
+          <Text style={styles.title}>translate('SECURITY_CHECK')</Text>
           <Text style={styles.subtitle}>
-            {isAuthenticating 
-              ? 'Please authenticate to continue...' 
-              : 'Verifying device security...'
-            }
+            {isAuthenticating
+              ? translate('PLEASE_AUTHENTICATE')
+              : translate('VERIFYING_DEVICE_SECURITY')}
           </Text>
         </View>
       </View>
@@ -128,7 +137,7 @@ const styles = StyleSheet.create({
     padding: 30,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: {width: 0, height: 10},
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 20,

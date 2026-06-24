@@ -1,52 +1,77 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-  FlatList,
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useSelector } from 'react-redux';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, Text, StyleSheet, Platform, FlatList} from 'react-native';
+import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-
-import { translate } from '../../utils/languageUtils/I18n';
+import {translate} from '../../utils/languageUtils/I18n';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { APP_URLS } from '../../utils/network/urls';
+import {APP_URLS} from '../../utils/network/urls';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
-import { hScale, wScale } from '../../utils/styles/dimensions';
-import { RootState } from '../../reduxUtils/store';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {RootState} from '../../reduxUtils/store';
 import DateRangePicker from '../../components/DateRange';
-
-import AadharPay  from '../drawer/svgimgcomponents/AdharPaysvg';
+import AadharPay from '../drawer/svgimgcomponents/AdharPaysvg';
 import RechargeSvg from '../drawer/svgimgcomponents/RechargeSvg';
-import Pansvg     from '../drawer/svgimgcomponents/Pansvg';
-import IMPSsvg    from '../drawer/svgimgcomponents/IMPSsvg';
-import Upisvg     from '../drawer/svgimgcomponents/Upisvg';
+import Pansvg from '../drawer/svgimgcomponents/Pansvg';
+import IMPSsvg from '../drawer/svgimgcomponents/IMPSsvg';
+import Upisvg from '../drawer/svgimgcomponents/Upisvg';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-
 const TODAY = new Date().toISOString().split('T')[0];
-
 const DUMMY_DATA = [
-  { Type: 'Aeps',    Amount: 0, TotalSuccess: 0, TotalPending: 0, TotalFailed: 0 },
-  { Type: 'Recharge',Amount: 0, TotalSuccess: 0, TotalPending: 0, TotalFailed: 0 },
-  { Type: 'Pancard', Amount: 0, TotalSuccess: 0, TotalPending: 0, TotalFailed: 0 },
-  { Type: 'DMT',     Amount: 0, TotalSuccess: 0, TotalPending: 0, TotalFailed: 0 },
-  { Type: 'UPI',     Amount: 0, TotalSuccess: 0, TotalPending: 0, TotalFailed: 0 },
+  {
+    Type: translate('Aeps'),
+    Amount: 0,
+    TotalSuccess: 0,
+    TotalPending: 0,
+    TotalFailed: 0,
+  },
+  {
+    Type: translate('Recharge'),
+    Amount: 0,
+    TotalSuccess: 0,
+    TotalPending: 0,
+    TotalFailed: 0,
+  },
+  {
+    Type: translate('Pancard'),
+    Amount: 0,
+    TotalSuccess: 0,
+    TotalPending: 0,
+    TotalFailed: 0,
+  },
+  {
+    Type: translate('DMT'),
+    Amount: 0,
+    TotalSuccess: 0,
+    TotalPending: 0,
+    TotalFailed: 0,
+  },
+  {
+    Type: translate('UPI'),
+    Amount: 0,
+    TotalSuccess: 0,
+    TotalPending: 0,
+    TotalFailed: 0,
+  },
 ];
 
-const TYPE_CONFIG: Record<string, { icon: React.ReactNode; color: string; bg: string }> = {
-  Aeps:    { icon: <AadharPay color="#0A84FF"  />, color: '#0A84FF', bg: '#EFF6FF' },
-  Recharge:{ icon: <RechargeSvg color="#8B5CF6"/>, color: '#8B5CF6', bg: '#F5F3FF' },
-  Pancard: { icon: <Pansvg color="#F59E0B"     />, color: '#F59E0B', bg: '#FFFBEB' },
-  DMT:     { icon: <IMPSsvg color="#10B981"    />, color: '#10B981', bg: '#ECFDF5' },
-  UPI:     { icon: <Upisvg                     />, color: '#EF4444', bg: '#FEF2F2' },
+const TYPE_CONFIG: Record<
+  string,
+  {icon: React.ReactNode; color: string; bg: string}
+> = {
+  Aeps: {icon: <AadharPay color="#0A84FF" />, color: '#0A84FF', bg: '#EFF6FF'},
+  Recharge: {
+    icon: <RechargeSvg color="#8B5CF6" />,
+    color: '#8B5CF6',
+    bg: '#F5F3FF',
+  },
+  Pancard: {icon: <Pansvg color="#F59E0B" />, color: '#F59E0B', bg: '#FFFBEB'},
+  DMT: {icon: <IMPSsvg color="#10B981" />, color: '#10B981', bg: '#ECFDF5'},
+  UPI: {icon: <Upisvg />, color: '#EF4444', bg: '#FEF2F2'},
 };
 
 const getConfig = (type: string) =>
-  TYPE_CONFIG[type] ?? { icon: null, color: '#8E8E93', bg: '#F2F2F7' };
+  TYPE_CONFIG[type] ?? {icon: null, color: '#8E8E93', bg: '#F2F2F7'};
 
 // ─── Stat Box ─────────────────────────────────────────────────────────────────
 
@@ -61,33 +86,39 @@ const StatBox = ({
 }) => (
   <View style={styles.statBox}>
     <Text style={styles.statLabel}>{label}</Text>
-    <Text style={[styles.statValue, { color: valueColor }]}>₹{value}</Text>
+    <Text style={[styles.statValue, {color: valueColor}]}>₹{value}</Text>
   </View>
 );
 
 // ─── Report Card ──────────────────────────────────────────────────────────────
 
-const ReportCard = React.memo(({ item }: { item: any }) => {
-  const { icon, color, bg } = getConfig(item.Type);
+const ReportCard = React.memo(({item}: {item: any}) => {
+  const {icon, color, bg} = getConfig(item.Type);
 
   return (
     <View style={styles.card}>
       {/* Top accent line */}
-      <View style={[styles.cardTopLine, { backgroundColor: color }]} />
+      <View style={[styles.cardTopLine, {backgroundColor: color}]} />
 
       <View style={styles.cardInner}>
         {/* Header */}
         <View style={styles.cardHeader}>
-          <View style={[styles.iconWrap, { backgroundColor: bg }]}>{icon}</View>
+          <View style={[styles.iconWrap, {backgroundColor: bg}]}>{icon}</View>
 
           <View style={styles.cardTitleCol}>
-            <Text style={styles.particularLabel}>{translate("Particular")}</Text>
-            <Text style={[styles.typeName, { color }]}>{item.Type}</Text>
+            <Text style={styles.particularLabel}>
+              {translate('Particular')}
+            </Text>
+            <Text style={[styles.typeName, {color}]}>
+              {translate(item.Type)}
+            </Text>
           </View>
 
           <View style={styles.earnCol}>
-            <Text style={styles.earnLabel}>{translate("Earn")}</Text>
-            <Text style={[styles.earnAmount, { color }]}>₹{item.Amount}</Text>
+            <Text style={styles.earnLabel}>{translate('Earn')}</Text>
+            <Text style={[styles.earnAmount, {color}]}>
+              ₹{translate(item.Amount)}
+            </Text>
           </View>
         </View>
 
@@ -97,19 +128,19 @@ const ReportCard = React.memo(({ item }: { item: any }) => {
         {/* Stats */}
         <View style={styles.statsRow}>
           <StatBox
-            label={translate("Total Success")}
+            label={translate('Total Success')}
             value={item.TotalSuccess}
             valueColor="#15803D"
           />
           <View style={styles.statDivider} />
           <StatBox
-            label={translate("Total Pending")}
+            label={translate('Total Pending')}
             value={item.TotalPending}
             valueColor="#92400E"
           />
           <View style={styles.statDivider} />
           <StatBox
-            label={translate("Total Failed")}
+            label={translate('Total Failed')}
             value={item.TotalFailed}
             valueColor="#B91C1C"
           />
@@ -122,33 +153,43 @@ const ReportCard = React.memo(({ item }: { item: any }) => {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 const DayEarningReport = () => {
-  const { colorConfig, IsDealer } = useSelector((state: RootState) => state.userInfo);
-  const primary:   string = colorConfig?.primaryColor   || '#0A84FF';
+  const {colorConfig, IsDealer} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
+  const primary: string = colorConfig?.primaryColor || '#0A84FF';
   const secondary: string = colorConfig?.secondaryColor || '#0055FF';
 
-  const { get } = useAxiosHook();
+  const {get} = useAxiosHook();
 
-  const [inforeport,     setInforeport]     = useState<any[]>([]);
-  const [selectedDate,   setSelectedDate]   = useState({ from: TODAY, to: TODAY });
+  const [inforeport, setInforeport] = useState<any[]>([]);
+  const [selectedDate, setSelectedDate] = useState<{
+    from: string | Date;
+    to: string | Date;
+  }>({from: TODAY, to: TODAY});
   const [selectedStatus, setSelectedStatus] = useState('ALL');
 
-  const fetchData = useCallback(async (from: string, to: string, status: string) => {
-    try {
-      const formattedFrom = new Date(from).toISOString().split('T')[0];
-      const url = IsDealer
-        ? `${APP_URLS.ShowActualIncome}${formattedFrom}`
-        : `${APP_URLS.dayErm}${formattedFrom}`;
-      const response = await get({ url });
-      setInforeport(response?.Status === 'Failed' ? [] : response?.RESULT || []);
-    } catch (e) {
-      console.error('DayEarningReport fetch error:', e);
-      setInforeport([]);
-    }
-  }, [IsDealer]);
+  const fetchData = useCallback(
+    async (from: string | Date, to: string | Date, _status: string) => {
+      try {
+        const formattedFrom = new Date(from).toISOString().split('T')[0];
+        const url = IsDealer
+          ? `${APP_URLS.ShowActualIncome}${formattedFrom}`
+          : `${APP_URLS.dayErm}${formattedFrom}`;
+        const response = await get({url});
+        setInforeport(
+          response?.Status === 'Failed' ? [] : response?.RESULT || [],
+        );
+      } catch (e) {
+        console.error('DayEarningReport fetch error:', e);
+        setInforeport([]);
+      }
+    },
+    [IsDealer, get],
+  );
 
   useEffect(() => {
     fetchData(selectedDate.from, selectedDate.to, selectedStatus);
-  }, []);
+  }, [fetchData, selectedDate.from, selectedDate.to, selectedStatus]);
 
   const listData = inforeport.length > 0 ? inforeport : DUMMY_DATA;
 
@@ -157,24 +198,23 @@ const DayEarningReport = () => {
       {/* AppBar */}
       <LinearGradient
         colors={[primary, secondary]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.gradientHeader}
-      >
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
+        style={styles.gradientHeader}>
         <AppBarSecond
-          title={translate("Income Report")}
+          title={translate('Income Report')}
           titlestyle={styles.appBarTitle}
         />
 
         {/* Date Range Picker */}
         <DateRangePicker
-          onDateSelected={(from, to) => setSelectedDate({ from, to })}
+          onDateSelected={(from, to) => setSelectedDate({from, to})}
           SearchPress={(from, to, status) => fetchData(from, to, status)}
           status={selectedStatus}
           setStatus={setSelectedStatus}
           isStShow={false}
           isshowRetailer={false}
-          retailerID={(id) => {}}
+          retailerID={id => {}}
           setSearchnumber={() => {}}
           cmsStatu={false}
           onlyFromDate={false}
@@ -187,7 +227,7 @@ const DayEarningReport = () => {
         keyExtractor={item => item.Type}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <ReportCard item={item} />}
+        renderItem={({item}) => <ReportCard item={item} />}
       />
     </View>
   );
@@ -207,11 +247,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.12,
         shadowRadius: 8,
       },
-      android: { elevation: 6 },
+      android: {elevation: 6},
     }),
   },
   appBarTitle: {
@@ -233,11 +273,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.06,
         shadowRadius: 8,
       },
-      android: { elevation: 2 },
+      android: {elevation: 2},
     }),
   },
   cardTopLine: {

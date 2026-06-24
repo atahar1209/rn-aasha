@@ -1,7 +1,7 @@
-import { translate } from "../../utils/languageUtils/I18n";
-import React, { useEffect, useState } from 'react';
-import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import { APP_URLS } from '../../utils/network/urls';
+import {translate} from '../../utils/languageUtils/I18n';
+import React, {useEffect, useState} from 'react';
+import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
 import RechargeUtilityCommission from './OperatorCommisionFiles/PrePaidCom';
 import UtilityCommission from './OperatorCommisionFiles/UtilityCom';
@@ -14,25 +14,38 @@ import HotelCom from './OperatorCommisionFiles/HotelCom';
 import BusCom from './OperatorCommisionFiles/BusCom';
 import MicroAtmCashCom from './OperatorCommisionFiles/MicroAtmCashCom';
 import Vm30PurchaseCom from './OperatorCommisionFiles/Vm30PurchaseCom';
-import { hScale, SCREEN_HEIGHT, wScale } from '../../utils/styles/dimensions';
+import {hScale, SCREEN_HEIGHT, wScale} from '../../utils/styles/dimensions';
 import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
-import { BottomSheet } from '@rneui/base';
+import {BottomSheet} from '@rneui/base';
 import ClosseModalSvg2 from '../drawer/svgimgcomponents/ClosseModal2';
 
-const operatorList = ["Prepaid", "Utility", "Money", "Pancard", "Aeps & Aadhar Services", "MPOS", "FLIGHT", "HOTEL", "BUS", "MICROATM CASH", "VM30PURCHASE"];
-
+const operatorList = [
+  'Prepaid',
+  'Utility',
+  'Money',
+  'Pancard',
+  'Aeps & Aadhar Services',
+  'MPOS',
+  'FLIGHT',
+  'HOTEL',
+  'BUS',
+  'MICROATM CASH',
+  'VM30PURCHASE',
+];
 const OperatorCommissionReport = () => {
-  const { colorConfig ,IsDealer} = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, IsDealer} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const color1 = `${colorConfig.secondaryColor}20`;
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedOperator, setSelectedOperator] = useState("Prepaid");
+  const [selectedOperator, setSelectedOperator] = useState('Prepaid');
   const [operatorInfoList, setOperatorInfoList] = useState([]);
-  const { get } = useAxiosHook();
+  const {get} = useAxiosHook();
 
-  const handleOperatorSelect = async (operator) => {
+  const handleOperatorSelect = async operator => {
     setSelectedOperator(operator);
     setIsVisible(false);
     await fetchCommissionData(operator);
@@ -40,12 +53,11 @@ const OperatorCommissionReport = () => {
 
   useEffect(() => {
     const fetchHeaderData = async () => {
-      await fetchCommissionData("Prepaid");
+      await fetchCommissionData('Prepaid');
       try {
-
-        const url2 =`${APP_URLS.dealeropcomn}ddltype=Header`
+        const url2 = `${APP_URLS.dealeropcomn}ddltype=Header`;
         const url = `${APP_URLS.opComm}ddltype=Header`;
-        const response = await get({ url :IsDealer?url2:url});
+        const response = await get({url: IsDealer ? url2 : url});
         console.log('Header', response.data);
         console.log('Header', response.data);
       } catch (error) {
@@ -83,12 +95,12 @@ const OperatorCommissionReport = () => {
     }
   };
 
-  const fetchCommissionData = async (operator) => {
+  const fetchCommissionData = async operator => {
     try {
-      const url2 =`${APP_URLS.dealeropcomn}ddltype=${operator}`
+      const url2 = `${APP_URLS.dealeropcomn}ddltype=${operator}`;
       const url = `${APP_URLS.opComm}ddltype=${operator}`;
-      const response = await get({url:IsDealer?url2:url });
-      console.log(url, response)
+      const response = await get({url: IsDealer ? url2 : url});
+      console.log(url, response);
 
       setOperatorInfoList(response.data);
     } catch (error) {
@@ -99,7 +111,7 @@ const OperatorCommissionReport = () => {
   const fetchHeaderData = async () => {
     try {
       const url = `${APP_URLS.opComm}ddltype=Header`;
-      const response = await get({ url });
+      const response = await get({url});
       console.log('Header', response.data);
     } catch (error) {
       console.error(error);
@@ -107,31 +119,29 @@ const OperatorCommissionReport = () => {
   };
 
   return (
-
     <View style={styles.main}>
       <AppBarSecond title={'Oprerator Commission'} />
       <View style={styles.container}>
-
-        <View style={[{ backgroundColor: color1 }]}>
-          <TouchableOpacity style={styles.button} onPress={() => setIsVisible(true)}>
+        <View style={[{backgroundColor: color1}]}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setIsVisible(true)}>
             <Text style={styles.buttonText}>{selectedOperator}</Text>
             <View style={styles.righticon}>
               <OnelineDropdownSvg />
             </View>
           </TouchableOpacity>
         </View>
-
         {renderComponent()}
-
-
         {/* // <RechargeUtilityCommission/> */}
 
-        <BottomSheet animationType="none"  
-          isVisible={isVisible} >
+        <BottomSheet animationType="none" isVisible={isVisible}>
           <View style={styles.bottomsheetview}>
-            <View style={[styles.StateTitle, { backgroundColor: color1 }]}>
+            <View style={[styles.StateTitle, {backgroundColor: color1}]}>
               <View style={styles.titleview}>
-                <Text style={styles.stateTitletext}>{translate("Select_Category")}</Text>
+                <Text style={styles.stateTitletext}>
+                  {translate('Select_Category')}
+                </Text>
               </View>
               <TouchableOpacity
                 onPress={() => setIsVisible(false)}
@@ -142,13 +152,12 @@ const OperatorCommissionReport = () => {
 
             <FlatList
               data={operatorList}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
+              keyExtractor={item => item}
+              renderItem={({item}) => (
                 <TouchableOpacity
                   style={styles.operatorview}
-                  onPress={() => handleOperatorSelect(item)}
-                >
-                  <Text style={styles.operatornametext}>{item}</Text>
+                  onPress={() => handleOperatorSelect(item)}>
+                  <Text style={styles.operatornametext}>{translate(item)}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -173,31 +182,31 @@ const styles = StyleSheet.create({
     borderWidth: wScale(1),
     height: hScale(48),
     justifyContent: 'center',
-    marginHorizontal: wScale(15)
+    marginHorizontal: wScale(15),
   },
   righticon: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    alignItems: "flex-end",
-    justifyContent: "center",
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
-    height: '100%'
+    height: '100%',
   },
   buttonText: {
     color: '#000',
     fontSize: wScale(18),
   },
   operatornametext: {
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
     fontSize: wScale(20),
-    color: "#000",
+    color: '#000',
     flex: 1,
-    borderBottomColor: "#000",
+    borderBottomColor: '#000',
     borderBottomWidth: wScale(0.5),
     paddingVertical: hScale(10),
-    marginHorizontal: wScale(10)
+    marginHorizontal: wScale(10),
   },
   bottomsheetview: {
     backgroundColor: '#fff',
@@ -214,7 +223,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: wScale(10),
-    marginBottom: hScale(10)
+    marginBottom: hScale(10),
   },
   stateTitletext: {
     fontSize: wScale(22),
@@ -224,7 +233,7 @@ const styles = StyleSheet.create({
   },
   titleview: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   operatorview: {
     flexDirection: 'row-reverse',

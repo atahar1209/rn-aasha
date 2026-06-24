@@ -1,4 +1,4 @@
-package com.globalmultisolution;
+package com.mobykwik;
 
 import okhttp3.OkHttpClient;
 import javax.net.ssl.*;

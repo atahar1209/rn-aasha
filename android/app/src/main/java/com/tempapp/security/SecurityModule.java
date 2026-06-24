@@ -1,4 +1,4 @@
-package com.globalmultisolution.security;
+package com.mobykwik.security;
 
 import android.app.Activity;
 import android.app.KeyguardManager;

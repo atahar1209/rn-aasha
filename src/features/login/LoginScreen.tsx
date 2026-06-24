@@ -1,6 +1,6 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -21,57 +21,62 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../reduxUtils/store';
-import { decryptData, encrypt } from '../../utils/encryptionUtils';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { translate } from '../../utils/languageUtils/I18n';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../reduxUtils/store';
+import {encrypt} from '../../utils/encryptionUtils';
+import {useNavigation} from '@react-navigation/native';
+import {translate} from '../../utils/languageUtils/I18n';
 import LinearGradient from 'react-native-linear-gradient';
-import { hScale, wScale } from '../../utils/styles/dimensions';
-import {
-  ALERT_TYPE,
-  Dialog,
-} from 'react-native-alert-notification';
-import messaging from '@react-native-firebase/messaging';
-
-import { APP_URLS, IMAGE_BASE_URL, logoUrl } from '../../utils/network/urls';
+import {hScale, wScale} from '../../utils/styles/dimensions';
+import {APP_URLS, IMAGE_BASE_URL, logoUrl} from '../../utils/network/urls';
 import {
   setAuthToken,
   setColorConfig,
-  setFcmToken,
   setFingerprintStatus,
   setIsDealer,
   setRefreshToken,
   setUserId,
 } from '../../reduxUtils/store/userInfoSlice';
 import useAxiosHook from '../../utils/network/AxiosClient';
-import { useLocationHook } from '../../hooks/useLocationHook';
-import { colors } from '../../utils/styles/theme';
-import { useDeviceInfoHook } from '../../utils/hooks/useDeviceInfoHook';
-import DynamicButton from '../drawer/button/DynamicButton';
-import DeviceInfo, { getBrand, getBuildId, getBuildNumber, getCarrier, getDevice, getDeviceId, getDeviceName, getIpAddress, getModel, getSerialNumber, getSystemName, getSystemVersion, getUniqueId, getVersion } from 'react-native-device-info';
+import {useLocationHook} from '../../hooks/useLocationHook';
+import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
+import DeviceInfo, {
+  getBrand,
+  getBuildId,
+  getBuildNumber,
+  getCarrier,
+  getDevice,
+  getDeviceId,
+  getDeviceName,
+  getIpAddress,
+  getModel,
+  getSerialNumber,
+  getSystemName,
+  getSystemVersion,
+  getUniqueId,
+  getVersion,
+} from 'react-native-device-info';
 import ShowEye from '../drawer/HideShowImgBtn/ShowEye';
 import ForgotPasswordModal from '../../components/ForgotPassword';
-import { SvgUri, } from 'react-native-svg';
-import SplashScreen from './SplashScreen';
+import {SvgUri} from 'react-native-svg';
 import OTPModal from '../../components/OTPModal';
-import ShowLoader from '../../components/ShowLoder';
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
-import registerNotification, { listenFCMDeviceToken, onReceiveNotification2 } from '../../utils/NotificationService';
-import { appendLog, generateUniqueId, requestStoragePermission } from '../../components/log_file_Saver';
-import BorderLine from '../../components/BorderLine';
-import { DemoConfig } from './DemouserData';
-import { useLocationManager } from '../../utils/hooks/useLocationManager';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import registerNotification, {
+  listenFCMDeviceToken,
+  onReceiveNotification2,
+} from '../../utils/NotificationService';
+import {DemoConfig} from './DemouserData';
+import {useLocationManager} from '../../utils/hooks/useLocationManager';
 import SecurityBottomSheet from '../../components/SecurityBottomSheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LanguageButton from '../../components/LanguageButton';
 import CheckSvg from '../drawer/svgimgcomponents/CheckSvg';
 import FastImage from 'react-native-fast-image';
-import { getAssetSource } from '../../utils/network/NetWorkImages';
 const LoginScreen = () => {
-  const { colorConfig, Loc_Data, deviceInfo, signUpId, signUpPassword ,logoUrl} = useSelector((state: RootState) => state.userInfo);
-  const [modalVisible, setModalVisible] = useState(false)
+  const {colorConfig, Loc_Data, deviceInfo, signUpId, signUpPassword, logoUrl} =
+    useSelector((state: RootState) => state.userInfo);
+  const [modalVisible, setModalVisible] = useState(false);
   const [userEmail, setUserEmail] = useState(signUpId || '');
   const [userPassword, setUserPassword] = useState(signUpPassword || '');
   const [mobileNumber, setMobileNumber] = useState('7414088555');
@@ -88,29 +93,23 @@ const LoginScreen = () => {
   const [passwordimgreadius, setPasswordimgreadius] = useState(Number);
   const [Radius1, setRadius1] = useState(Number);
   const [Radius2, setRadius2] = useState(Number);
-  const [svg, setSvg] = useState([])
+  const [svg, setSvg] = useState([]);
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
-  const { latitude, longitude, getLocation } = useLocationHook();
-  const { SecurityModule } = NativeModules;
-
-  const { authToken } = useSelector(
-    (state: RootState) => state.userInfo,
-  );
-  const [secToken, setSecToken] = useState('')
-  const { refreshStrictly } = useLocationManager();
+  const {latitude, longitude, getLocation} = useLocationHook();
+  const {SecurityModule} = NativeModules;
+  const {authToken} = useSelector((state: RootState) => state.userInfo);
+  const [secToken, setSecToken] = useState('');
+  const {refreshStrictly} = useLocationManager();
   const [ShowOtpModal, setShowOtpModal] = useState(false);
   const [isVer, setIsVer] = useState(true);
-  const [showEnable, setShowEnable] = useState(false)
-  const { post, get } = useAxiosHook();
-
+  const [showEnable, setShowEnable] = useState(false);
+  const {post, get} = useAxiosHook();
   const pendingAuthDataRef = useRef(null);
-
   // Animated values for modern UI
   const logoAnim = useRef(new Animated.Value(0)).current;
   const formSlide = useRef(new Animated.Value(60)).current;
   const formOpacity = useRef(new Animated.Value(0)).current;
-
   useEffect(() => {
     Animated.parallel([
       Animated.spring(logoAnim, {
@@ -135,7 +134,6 @@ const LoginScreen = () => {
     ]).start();
   }, []);
 
-
   const getDeviceInfo = useCallback(async () => {
     await getLocation();
     const brand = getBrand();
@@ -154,20 +152,18 @@ const LoginScreen = () => {
   }, []);
 
   useEffect(() => {
-    const onFocusCall = navigation.addListener('focus', async () => {
-    })
+    const onFocusCall = navigation.addListener('focus', async () => {});
     return onFocusCall;
   }, [navigation, latitude, longitude]);
 
-  const extsvg = (svgarray) => {
+  const extsvg = svgarray => {
     const result = {};
-    svgarray.forEach((item) => {
+    svgarray.forEach(item => {
       result[item.name] = item.svg;
     });
     return result;
   };
   const [loading, setLoading] = useState(true);
-
 
   const getCredentials = async () => {
     try {
@@ -176,7 +172,7 @@ const LoginScreen = () => {
       if (id !== null && password !== null) {
         setUserEmail(id);
         setUserPassword(password);
-        return { id, password };
+        return {id, password};
       }
       return null;
     } catch (error) {
@@ -185,11 +181,11 @@ const LoginScreen = () => {
   };
 
   useEffect(() => {
-    getCredentials()
+    getCredentials();
     const fetchData = async () => {
       try {
         getDeviceInfo();
-        const res = await get({ url: APP_URLS.getColors });
+        const res = await get({url: APP_URLS.getColors});
         if (res) {
           dispatch(
             setColorConfig({
@@ -201,7 +197,7 @@ const LoginScreen = () => {
             }),
           );
         }
-        const response = await post({ url: APP_URLS.signUpSvg });
+        const response = await post({url: APP_URLS.signUpSvg});
         if (response && Array.isArray(response)) {
           setRadius1(response[0].Radius2);
           setRadius2(response[0].Radius3);
@@ -211,9 +207,12 @@ const LoginScreen = () => {
         if (authToken) {
           navigation.navigate('Dashboard');
         }
-        await checkNotificationPermission()
+        await checkNotificationPermission();
       } catch (error) {
-        Alert.alert('Error', 'There was an issue fetching the data. Please try again.');
+        Alert.alert(
+          translate('Error'),
+          translate('There was an issue fetching the data. Please try again.'),
+        );
       } finally {
         setLoading(false);
       }
@@ -221,18 +220,25 @@ const LoginScreen = () => {
     fetchData();
   }, [authToken, dispatch, get, navigation]);
 
-  const { getMobileDeviceId } = useDeviceInfoHook();
+  const {getMobileDeviceId} = useDeviceInfoHook();
 
   const openSettings = () => {
     if (Platform.OS === 'android') {
-      Linking.openSettings().catch(() => console.warn('Unable to open settings'));
+      Linking.openSettings().catch(() =>
+        console.warn('Unable to open settings'),
+      );
     }
   };
 
   const checkNotificationPermission = async () => {
-    const permissionStatus = await check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
+    const permissionStatus = await check(
+      PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
+    );
     if (permissionStatus === RESULTS.GRANTED) {
-      ToastAndroid.show('Notification permission granted', ToastAndroid.LONG);
+      ToastAndroid.show(
+        translate('Notification permission granted'),
+        ToastAndroid.LONG,
+      );
     } else if (permissionStatus === RESULTS.DENIED) {
       requestNotificationPermission();
     } else if (permissionStatus === RESULTS.BLOCKED) {
@@ -246,69 +252,68 @@ const LoginScreen = () => {
         try {
           await refreshStrictly();
         } catch (err) {
-          console.log("Auto location fetch failed", err);
+          console.log('Auto location fetch failed', err);
         }
       };
       autoFetch();
-      refreshStrictly()
+      refreshStrictly();
     }
-  }, [mobileNumber]);
+  }, [mobileNumber, refreshStrictly]);
 
   const requestNotificationPermission = async () => {
-    const permissionStatus = await request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
+    const permissionStatus = await request(
+      PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
+    );
     if (permissionStatus === RESULTS.GRANTED) {
       console.log('Notification permission granted');
     } else {
       Alert.alert(
-        'Notification permission not granted', '',
+        translate('Notification permission not granted'),
+        '',
         [
-          { text: 'Cancel', onPress: () => null },
-          { text: 'Open Setting', onPress: () => openSettings() },
+          {text: translate('Cancel'), onPress: () => null},
+          {text: translate('Open Setting'), onPress: () => openSettings()},
         ],
-        { cancelable: false }
+        {cancelable: false},
       );
     }
   };
 
-  const safeValue = (val) => {
-    if (val === null || val === undefined || val === '') return 'NA';
+  const safeValue = val => {
+    if (val === null || val === undefined || val === '') {
+      return 'NA';
+    }
     return String(val);
   };
 
-  const [iswritelog, setisWriteLog] = useState(false)
+  const [iswritelog, setisWriteLog] = useState(false);
 
   // ✅ F8888888888888888888888888888888888888888888888888888888888888888888888888ile level (global for this file)
   // ================== DEBUG SETUP (TOP OF FILE) ==================
 
   let debugJson = {
     startTime: '',
-    timeline: []
+    timeline: [],
   };
 
   const initDebug = () => {
     debugJson = {
       startTime: new Date().toISOString(),
-      timeline: []
+      timeline: [],
     };
   };
 
   const addDebugStep = (
     step,
-    {
-      status = 'SUCCESS',
-      message = '',
-      data = {},
-      error = null
-    } = {}
+    {status = 'SUCCESS', message = '', data = {}, error = null} = {},
   ) => {
-
     debugJson.timeline.push({
       step,
       status,
       message,
       data,
       error,
-      time: new Date().toISOString()
+      time: new Date().toISOString(),
     });
   };
 
@@ -316,12 +321,9 @@ const LoginScreen = () => {
 
   /* ================== STORAGE ================== */
 
-  const saveDebugToStorage = async (debugData) => {
+  const saveDebugToStorage = async debugData => {
     try {
-      await AsyncStorage.setItem(
-        'LOGIN_DEBUG',
-        JSON.stringify(debugData)
-      );
+      await AsyncStorage.setItem('LOGIN_DEBUG', JSON.stringify(debugData));
       console.log('✅ Debug saved in storage');
     } catch (e) {
       console.log('❌ Save debug failed', e);
@@ -345,484 +347,445 @@ const LoginScreen = () => {
 
   /* ================== LOGIN FUNCTION ================== */
 
-  const onPressLogin = useCallback(async (otp) => {
-
-    initDebug(); // 🔥 हर बार reset
-
-    Keyboard.dismiss();
-    setIsLoading(true);
-
-    let role = '';
-    let msg = '';
-
-    try {
-
-      /* ---------------- INIT ---------------- */
-      addDebugStep('INIT', { message: 'Login started' });
-
-      setShowOtpModal(false);
-      addDebugStep('OTP_MODAL_CLOSED');
-
-      /* ---------------- NETWORK ---------------- */
-      let net = 'unknown';
-
+  const onPressLogin = useCallback(
+    async otp => {
+      initDebug(); // 🔥 हर बार reset
+      Keyboard.dismiss();
+      setIsLoading(true);
+      let role = '';
+      let msg = '';
       try {
-        net = (await getCarrier()) || 'wifi/net';
+        /* ---------------- INIT ---------------- */
+        addDebugStep('INIT', {message: 'Login started'});
+        setShowOtpModal(false);
+        addDebugStep('OTP_MODAL_CLOSED');
 
-        addDebugStep('NETWORK_DETECTED', {
-          data: { net }
-        });
+        /* ---------------- NETWORK ---------------- */
+        let net = 'unknown';
 
-      } catch (e) {
-        addDebugStep('NETWORK_FAILED', {
-          status: 'ERROR',
-          message: 'Network detect failed',
-          error: e?.message
-        });
-      }
+        try {
+          net = (await getCarrier()) || 'wifi/net';
 
-      /* ---------------- ENCRYPTION ---------------- */
-      const encryption = encrypt([
-        userEmail,
-        userPassword,
-        otp,
-        mobileNumber,
-        deviceInfo?.buildId,
-        deviceInfo?.uniqueId,
-        Loc_Data?.latitude,
-        Loc_Data?.longitude,
-        deviceInfo?.modelNumber,
-        deviceInfo?.brand,
-        deviceInfo?.ipAddress,
-        deviceInfo?.address,
-        deviceInfo?.city,
-        deviceInfo?.postalCode,
-        net
-      ]);
-
-      if (!encryption?.encryptedData || encryption.encryptedData.length < 15) {
-
-        addDebugStep('ENCRYPTION_FAILED', {
-          status: 'ERROR',
-          message: 'Encryption failed',
-          data: encryption
-        });
-
-        throw new Error('Encryption failed');
-      }
-
-      addDebugStep('ENCRYPTION_SUCCESS');
-
-      /* ---------------- PAYLOAD ---------------- */
-      const loginData = {
-        UserName: encryption.encryptedData[0],
-        Password: encryption.encryptedData[1],
-        'X-OTP': encryption.encryptedData[2],
-        Mobile: encryption.encryptedData[3],
-        Imei: encryption.encryptedData[4],
-        Devicetoken: encryption.encryptedData[5],
-        Latitude: encryption.encryptedData[6],
-        Longitude: encryption.encryptedData[7],
-        ModelNo: encryption.encryptedData[8],
-        BrandName: encryption.encryptedData[9],
-        IPAddress: encryption.encryptedData[10],
-        City: encryption.encryptedData[11],
-        Address: encryption.encryptedData[12],
-        PostalCode: encryption.encryptedData[13],
-        InternetTYPE: encryption.encryptedData[14],
-        grant_type: 'password',
-      };
-
-      addDebugStep('PAYLOAD_READY', {
-        data: { keys: Object.keys(loginData) }
-      });
-
-      /* ---------------- API CALL ---------------- */
-      addDebugStep('API_CALL_STARTED');
-
-      const responseRaw = await post({
-        url: APP_URLS.getToken,
-        data: loginData,
-        config: {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'bearer',
-            value1: encryption.keyEncode,
-            value2: encryption.ivEncode,
-          },
-        },
-      });
-
-      const response = responseRaw?.data ?? responseRaw ?? {};
-console.log(response);
-
-      addDebugStep('API_RESPONSE', {
-        data: response
-      });
-
-      /* ---------------- SUCCESS ---------------- */
-      if (response?.access_token) {
-
-        role = response.role;
-        msg = `Login success: ${role}`;
-
-        addDebugStep('LOGIN_SUCCESS', {
-          message: msg,
-          data: { role, userId: response.userId }
-        });
-
-        dispatch(setIsDealer(response.role === 'Dealer'));
-
-        if (response.VideoKYC === 'VideoKYCPENDING') {
-
-          addDebugStep('VIDEO_KYC_PENDING', {
-            status: 'INFO'
+          addDebugStep('NETWORK_DETECTED', {
+            data: {net},
           });
-
-          // Alert.alert('', 'Video KYC Uploaded. Wait for admin approval.');
-          // return;
+        } catch (e) {
+          addDebugStep('NETWORK_FAILED', {
+            status: 'ERROR',
+            message: 'Network detect failed',
+            error: e?.message,
+          });
         }
 
-        authenticate(response);
-        dispatch(setUserId(response?.userId));
-        dispatch(setRefreshToken(response?.refresh_token));
+        /* ---------------- ENCRYPTION ---------------- */
+        const encryption = encrypt([
+          userEmail,
+          userPassword,
+          otp,
+          mobileNumber,
+          deviceInfo?.buildId,
+          deviceInfo?.uniqueId,
+          Loc_Data?.latitude,
+          Loc_Data?.longitude,
+          deviceInfo?.modelNumber,
+          deviceInfo?.brand,
+          deviceInfo?.ipAddress,
+          deviceInfo?.address,
+          deviceInfo?.city,
+          deviceInfo?.postalCode,
+          net,
+        ]);
 
-        userData(response[".expires"]);
-      }
+        if (
+          !encryption?.encryptedData ||
+          encryption.encryptedData.length < 15
+        ) {
+          addDebugStep('ENCRYPTION_FAILED', {
+            status: translate('ERROR'),
+            message: translate('Encryption failed'),
+            data: encryption,
+          });
 
-      /* ---------------- API ERROR ---------------- */
-      else if (response?.error || response?.message) {
+          throw new Error(translate('Encryption failed'));
+        }
+
+        addDebugStep('ENCRYPTION_SUCCESS');
+
+        /* ---------------- PAYLOAD ---------------- */
+        const loginData = {
+          UserName: encryption.encryptedData[0],
+          Password: encryption.encryptedData[1],
+          'X-OTP': encryption.encryptedData[2],
+          Mobile: encryption.encryptedData[3],
+          Imei: encryption.encryptedData[4],
+          Devicetoken: encryption.encryptedData[5],
+          Latitude: encryption.encryptedData[6],
+          Longitude: encryption.encryptedData[7],
+          ModelNo: encryption.encryptedData[8],
+          BrandName: encryption.encryptedData[9],
+          IPAddress: encryption.encryptedData[10],
+          City: encryption.encryptedData[11],
+          Address: encryption.encryptedData[12],
+          PostalCode: encryption.encryptedData[13],
+          InternetTYPE: encryption.encryptedData[14],
+          grant_type: 'password',
+        };
+        addDebugStep('PAYLOAD_READY', {
+          data: {keys: Object.keys(loginData)},
+        });
+        /* ---------------- API CALL ---------------- */
+        addDebugStep('API_CALL_STARTED');
+        const responseRaw = await post({
+          url: APP_URLS.getToken,
+          data: loginData,
+          config: {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: 'bearer',
+              value1: encryption.keyEncode,
+              value2: encryption.ivEncode,
+            },
+          },
+        });
+        const response = responseRaw?.data ?? responseRaw ?? {};
+        console.log(response);
+        addDebugStep('API_RESPONSE', {
+          data: response,
+        });
+        /* ---------------- SUCCESS ---------------- */
+        if (response?.access_token) {
+          role = response.role;
+          msg = `${translate('Login success')}: ${role}`;
+
+          addDebugStep(translate('Login success'), {
+            message: msg,
+            data: {role, userId: response.userId},
+          });
+
+          dispatch(setIsDealer(response.role === 'Dealer'));
+
+          if (response.VideoKYC === translate('VideoKYCPENDING')) {
+            addDebugStep(translate('VIDEO_KYC_PENDING'), {
+              status: translate('INFO'),
+            });
+
+            // Alert.alert('', 'Video KYC Uploaded. Wait for admin approval.');
+            // return;
+          }
+
+          authenticate(response);
+          dispatch(setUserId(response?.userId));
+          dispatch(setRefreshToken(response?.refresh_token));
+
+          userData(response['.expires']);
+        } else if (response?.error || response?.message) {
+          /* ---------------- API ERROR ---------------- */
+          const errorDescription =
+            response?.error_description ||
+            response?.message ||
+            response?.error ||
+            translate('Something went wrong');
+
+          msg = errorDescription;
+
+          addDebugStep(translate('API_ERROR'), {
+            status: 'ERROR',
+            message: errorDescription,
+            data: response,
+          });
+
+          Alert.alert(translate('Login Error'), errorDescription);
+
+          if (response?.error === translate('SENDOTP')) {
+            addDebugStep(translate('OTP_RESEND'), {
+              status: translate('INFO'),
+            });
+
+            setShowOtpModal(true);
+          }
+        } else {
+          /* ---------------- UNKNOWN ---------------- */
+          addDebugStep(translate('UNKNOWN_RESPONSE'), {
+            status: 'ERROR',
+            data: response,
+          });
+
+          msg = translate('Unexpected response');
+        }
+      } catch (error) {
+        const apiError = error?.response?.data || error?.data || error;
 
         const errorDescription =
-          response?.error_description ||
-          response?.message ||
-          response?.error ||
-          'Something went wrong';
+          apiError?.error_description ||
+          apiError?.message ||
+          apiError?.error ||
+          error?.message ||
+          translate('Network failed');
 
         msg = errorDescription;
 
-        addDebugStep('API_ERROR', {
+        addDebugStep('CATCH_ERROR', {
           status: 'ERROR',
           message: errorDescription,
-          data: response
+          data: apiError,
         });
 
-        Alert.alert('Login Error', errorDescription);
+        console.log('FULL ERROR =>', JSON.stringify(apiError, null, 2));
 
-        if (response?.error === 'SENDOTP') {
-
+        // 🔥 OTP CASE
+        if (apiError?.error === 'SENDOTP') {
           addDebugStep('OTP_RESEND', {
-            status: 'INFO'
+            status: 'INFO',
+            message: translate('Opening OTP Modal'),
           });
 
-          setShowOtpModal(true);
+          // modal force reopen
+          setShowOtpModal(false);
+
+          setTimeout(() => {
+            setShowOtpModal(true);
+          }, 100);
+
+          // Alert.alert(
+          //   'OTP Sent',
+          //   apiError?.error_description || 'OTP Send To Your Registered Email'
+          // );
+          ToastAndroid.show(
+            apiError?.error_description ||
+              translate('OTP Send To Your Registered Email'),
+            ToastAndroid.LONG,
+          );
+        } else {
+          Alert.alert(translate('Error'), errorDescription);
         }
-      }
 
-      /* ---------------- UNKNOWN ---------------- */
-      else {
-
-        addDebugStep('UNKNOWN_RESPONSE', {
-          status: 'ERROR',
-          data: response
+        // 🔥 Backup save
+        const debug = getDebugJson();
+        await saveDebugToStorage(debug);
+      } finally {
+        addDebugStep('FINAL', {
+          message: translate('Flow completed'),
+          data: {role, msg},
         });
 
-        msg = 'Unexpected response';
-      }
+        const debug = getDebugJson();
 
-   } catch (error) {
+        console.log('🧪 FULL DEBUG JSON 👉', JSON.stringify(debug, null, 2));
 
-  const apiError =
-    error?.response?.data ||
-    error?.data ||
-    error;
+        await saveDebugToStorage(debug);
 
-  const errorDescription =
-    apiError?.error_description ||
-    apiError?.message ||
-    apiError?.error ||
-    error?.message ||
-    'Network failed';
-
-  msg = errorDescription;
-
-  addDebugStep('CATCH_ERROR', {
-    status: 'ERROR',
-    message: errorDescription,
-    data: apiError
-  });
-
-  console.log('FULL ERROR =>', JSON.stringify(apiError, null, 2));
-
-  // 🔥 OTP CASE
-  if (apiError?.error === 'SENDOTP') {
-
-    addDebugStep('OTP_RESEND', {
-      status: 'INFO',
-      message: 'Opening OTP Modal'
-    });
-
-    // modal force reopen
-    setShowOtpModal(false);
-
-    setTimeout(() => {
-      setShowOtpModal(true);
-    }, 100);
-
-    // Alert.alert(
-    //   'OTP Sent',
-    //   apiError?.error_description || 'OTP Send To Your Registered Email'
-    // );
-ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Email', ToastAndroid.LONG);
-  } else {
-
-    Alert.alert('Error', errorDescription);
-  }
-
-  // 🔥 Backup save
-  const debug = getDebugJson();
-  await saveDebugToStorage(debug);
-
-} finally {
-
-  addDebugStep('FINAL', {
-    message: 'Flow completed',
-    data: { role, msg }
-  });
-
-  const debug = getDebugJson();
-
-  console.log(
-    '🧪 FULL DEBUG JSON 👉',
-    JSON.stringify(debug, null, 2)
-  );
-
-  await saveDebugToStorage(debug);
-
-  onReceiveNotification2({
-    notification: {
-      title: role || 'Login',
-      body: msg || 'Done',
-    },
-  });
-
-  setIsLoading(false);
-}
-
-  }, [
-    dispatch,
-    post,
-    userEmail,
-    userPassword,
-    mobileNumber,
-    Loc_Data,
-    deviceInfo
-  ]);
-  const onPressLoginHardcoded = useCallback(async (otp) => {
-
-    initDebug(); // 🔥 reset हर बार
-
-    Keyboard.dismiss();
-    setIsLoading(true);
-
-    let role = '';
-    let msg = '';
-
-    try {
-
-      /* ---------------- INIT ---------------- */
-      addDebugStep('INIT', { message: 'Hardcoded login started' });
-
-      setShowOtpModal(false);
-      addDebugStep('OTP_MODAL_CLOSED');
-
-      const net = 'wifi';
-
-      addDebugStep('NETWORK_FIXED', {
-        data: { net }
-      });
-
-      /* ---------------- RAW DATA ---------------- */
-      const rawData = [
-        userEmail ?? 'demoUser',
-        userPassword ?? '1234',
-        otp ?? '',
-        '9876543210',
-        'BUILD_ID_TEST_123',
-        'UNIQUE_DEVICE_ID_TEST',
-        '27.3681',
-        '75.0427',
-        'CPH2249',
-        'OPPO',
-        '192.168.1.1',
-        'Test Address',
-        'Sikar',
-        '332311',
-        net
-      ];
-
-      addDebugStep('RAW_DATA_READY', {
-        data: rawData
-      });
-
-      /* ---------------- ENCRYPTION ---------------- */
-      const encryption = encrypt(rawData);
-
-      if (!encryption?.encryptedData || encryption.encryptedData.length < 15) {
-
-        addDebugStep('ENCRYPTION_FAILED', {
-          status: 'ERROR',
-          message: 'Encryption failed',
-          data: encryption
-        });
-
-        throw new Error('Encryption failed');
-      }
-
-      addDebugStep('ENCRYPTION_SUCCESS');
-
-      /* ---------------- PAYLOAD ---------------- */
-      const loginData = {
-        UserName: encryption.encryptedData[0],
-        Password: encryption.encryptedData[1],
-        'X-OTP': encryption.encryptedData[2],
-        Mobile: encryption.encryptedData[3],
-        Imei: encryption.encryptedData[4],
-        Devicetoken: encryption.encryptedData[5],
-        Latitude: encryption.encryptedData[6],
-        Longitude: encryption.encryptedData[7],
-        ModelNo: encryption.encryptedData[8],
-        BrandName: encryption.encryptedData[9],
-        IPAddress: encryption.encryptedData[10],
-        City: encryption.encryptedData[11],
-        Address: encryption.encryptedData[12],
-        PostalCode: encryption.encryptedData[13],
-        InternetTYPE: encryption.encryptedData[14],
-        grant_type: 'password',
-      };
-
-      addDebugStep('PAYLOAD_READY', {
-        data: { keys: Object.keys(loginData) }
-      });
-
-      /* ---------------- API CALL ---------------- */
-      addDebugStep('API_CALL_STARTED');
-
-      const responseRaw = await post({
-        url: APP_URLS.getToken,
-        data: loginData,
-        config: {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'bearer',
-            value1: encryption.keyEncode,
-            value2: encryption.ivEncode,
+        onReceiveNotification2({
+          notification: {
+            title: role || translate('Login'),
+            body: msg || translate('Done'),
           },
-        },
-      });
-
-      const response = responseRaw?.data ?? responseRaw ?? {};
-
-      addDebugStep('API_RESPONSE', {
-        data: response
-      });
-
-      /* ---------------- SUCCESS ---------------- */
-      if (response?.access_token) {
-
-        role = response.role || 'USER';
-        msg = 'Login success';
-
-        addDebugStep('LOGIN_SUCCESS', {
-          message: msg,
-          data: { role, userId: response.userId }
         });
 
-        dispatch(setIsDealer(role === 'Dealer'));
-        authenticate(response);
-        dispatch(setUserId(response?.userId));
-        dispatch(setRefreshToken(response?.refresh_token));
-        userData(response[".expires"]);
+        setIsLoading(false);
       }
+    },
+    [
+      dispatch,
+      post,
+      userEmail,
+      userPassword,
+      mobileNumber,
+      Loc_Data,
+      deviceInfo,
+    ],
+  );
+  const onPressLoginHardcoded = useCallback(
+    async otp => {
+      initDebug(); // 🔥 reset हर बार
+      Keyboard.dismiss();
+      setIsLoading(true);
 
-      /* ---------------- ERROR ---------------- */
-      else if (response?.error) {
+      let role = '';
+      let msg = '';
 
-        msg = response?.error_description || 'Login failed';
+      try {
+        /* ---------------- INIT ---------------- */
+        addDebugStep('INIT', {message: translate('Hardcoded login started')});
 
-        addDebugStep('API_ERROR', {
-          status: 'ERROR',
-          message: msg,
-          data: response
+        setShowOtpModal(false);
+        addDebugStep('OTP_MODAL_CLOSED');
+
+        const net = 'wifi';
+
+        addDebugStep('NETWORK_FIXED', {
+          data: {net},
         });
 
-        if (response.error === 'SENDOTP') {
-          addDebugStep('OTP_RESEND', { status: 'INFO' });
-          setShowOtpModal(true);
+        /* ---------------- RAW DATA ---------------- */
+        const rawData = [
+          userEmail ?? 'demoUser',
+          userPassword ?? '1234',
+          otp ?? '',
+          '9876543210',
+          'BUILD_ID_TEST_123',
+          'UNIQUE_DEVICE_ID_TEST',
+          '27.3681',
+          '75.0427',
+          'CPH2249',
+          'OPPO',
+          '192.168.1.1',
+          'Test Address',
+          'Sikar',
+          '332311',
+          net,
+        ];
+
+        addDebugStep('RAW_DATA_READY', {
+          data: rawData,
+        });
+
+        /* ---------------- ENCRYPTION ---------------- */
+        const encryption = encrypt(rawData);
+
+        if (
+          !encryption?.encryptedData ||
+          encryption.encryptedData.length < 15
+        ) {
+          addDebugStep('ENCRYPTION_FAILED', {
+            status: 'ERROR',
+            message: translate('Encryption failed'),
+            data: encryption,
+          });
+
+          throw new Error(translate('Encryption failed'));
         }
-      }
 
-      /* ---------------- UNKNOWN ---------------- */
-      else {
+        addDebugStep('ENCRYPTION_SUCCESS');
 
-        msg = 'Unexpected response';
+        /* ---------------- PAYLOAD ---------------- */
+        const loginData = {
+          UserName: encryption.encryptedData[0],
+          Password: encryption.encryptedData[1],
+          'X-OTP': encryption.encryptedData[2],
+          Mobile: encryption.encryptedData[3],
+          Imei: encryption.encryptedData[4],
+          Devicetoken: encryption.encryptedData[5],
+          Latitude: encryption.encryptedData[6],
+          Longitude: encryption.encryptedData[7],
+          ModelNo: encryption.encryptedData[8],
+          BrandName: encryption.encryptedData[9],
+          IPAddress: encryption.encryptedData[10],
+          City: encryption.encryptedData[11],
+          Address: encryption.encryptedData[12],
+          PostalCode: encryption.encryptedData[13],
+          InternetTYPE: encryption.encryptedData[14],
+          grant_type: 'password',
+        };
 
-        addDebugStep('UNKNOWN_RESPONSE', {
-          status: 'ERROR',
-          data: response
+        addDebugStep('PAYLOAD_READY', {
+          data: {keys: Object.keys(loginData)},
         });
+
+        /* ---------------- API CALL ---------------- */
+        addDebugStep('API_CALL_STARTED');
+
+        const responseRaw = await post({
+          url: APP_URLS.getToken,
+          data: loginData,
+          config: {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: 'bearer',
+              value1: encryption.keyEncode,
+              value2: encryption.ivEncode,
+            },
+          },
+        });
+
+        const response = responseRaw?.data ?? responseRaw ?? {};
+
+        addDebugStep('API_RESPONSE', {
+          data: response,
+        });
+
+        /* ---------------- SUCCESS ---------------- */
+        if (response?.access_token) {
+          role = response.role || 'USER';
+          msg = translate('Login success');
+
+          addDebugStep('LOGIN_SUCCESS', {
+            message: msg,
+            data: {role, userId: response.userId},
+          });
+
+          dispatch(setIsDealer(role === 'Dealer'));
+          authenticate(response);
+          dispatch(setUserId(response?.userId));
+          dispatch(setRefreshToken(response?.refresh_token));
+          userData(response['.expires']);
+        } else if (response?.error) {
+          /* ---------------- ERROR ---------------- */
+          msg = response?.error_description || translate('Login failed');
+
+          addDebugStep('API_ERROR', {
+            status: 'ERROR',
+            message: msg,
+            data: response,
+          });
+
+          if (response.error === 'SENDOTP') {
+            addDebugStep('OTP_RESEND', {status: 'INFO'});
+            setShowOtpModal(true);
+          }
+        } else {
+          /* ---------------- UNKNOWN ---------------- */
+          msg = translate('Unexpected response');
+
+          addDebugStep('UNKNOWN_RESPONSE', {
+            status: 'ERROR',
+            data: response,
+          });
+        }
+      } catch (error) {
+        const errMsg = error?.message || 'Unknown error';
+        msg = errMsg;
+
+        addDebugStep('CATCH_ERROR', {
+          status: 'ERROR',
+          message: errMsg,
+          data: error,
+        });
+
+        // 🔥 backup save
+        const debug = getDebugJson();
+        await saveDebugToStorage(debug);
+      } finally {
+        addDebugStep('FINAL', {
+          message: translate('Hardcoded flow completed'),
+          data: {role, msg},
+        });
+
+        const debug = getDebugJson();
+
+        console.log('🧪 HARDCODE DEBUG 👉', JSON.stringify(debug, null, 2));
+
+        // 🔥 FINAL SAVE
+        await saveDebugToStorage(debug);
+
+        setIsLoading(false);
       }
-
-    } catch (error) {
-
-      const errMsg = error?.message || 'Unknown error';
-      msg = errMsg;
-
-      addDebugStep('CATCH_ERROR', {
-        status: 'ERROR',
-        message: errMsg,
-        data: error
-      });
-
-      // 🔥 backup save
-      const debug = getDebugJson();
-      await saveDebugToStorage(debug);
-
-    } finally {
-
-      addDebugStep('FINAL', {
-        message: 'Hardcoded flow completed',
-        data: { role, msg }
-      });
-
-      const debug = getDebugJson();
-
-      console.log("🧪 HARDCODE DEBUG 👉", JSON.stringify(debug, null, 2));
-
-      // 🔥 FINAL SAVE
-      await saveDebugToStorage(debug);
-
-      setIsLoading(false);
-    }
-
-  }, [dispatch, post, userEmail, userPassword]);
+    },
+    [dispatch, post, userEmail, userPassword],
+  );
   const viewlog = async () => {
     const debug = await getDebugFromStorage();
 
     if (!debug) {
-      Alert.alert('Debug', 'No data');
+      Alert.alert(translate('Debug'), translate('No data'));
       return;
     }
 
     Alert.alert(
-      'Debug JSON',
-      JSON.stringify(debug, null, 2).slice(0, 3000) // ⚠️ limit
+      translate('Debug JSON'),
+      JSON.stringify(debug, null, 2).slice(0, 3000), // ⚠️ limit
     );
-  }
+  };
 
-
-
- 
   const onPressLogin2 = useCallback(async () => {
     Keyboard.dismiss();
     setIsLoading(true);
@@ -831,121 +794,199 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
     try {
       setShowOtpModal(false);
       const rawData = [
-        safeValue(userEmail), safeValue(userPassword),
-        '123456', '9876543210', 'BUILD_ID_TEST_123', 'UNIQUE_ID_OPPO_TEST',
-        '27.3681', '75.0427', 'CPH2249', 'OPPO', '192.168.1.1',
-        'Test Address, Sikar', 'Sikar', '332311', 'wifi'
+        safeValue(userEmail),
+        safeValue(userPassword),
+        '123456',
+        '9876543210',
+        'BUILD_ID_TEST_123',
+        'UNIQUE_ID_OPPO_TEST',
+        '27.3681',
+        '75.0427',
+        'CPH2249',
+        'OPPO',
+        '192.168.1.1',
+        'Test Address, Sikar',
+        'Sikar',
+        '332311',
+        'wifi',
       ];
       const encryption = encrypt(rawData);
-      if (!encryption) throw new Error('Encryption Object is null');
-      if (!encryption?.encryptedData || encryption.encryptedData.length < 15) throw new Error('Incomplete Encrypted Data');
+      if (!encryption) {
+        throw new Error(translate('Encryption Object is null'));
+      }
+      if (!encryption?.encryptedData || encryption.encryptedData.length < 15) {
+        throw new Error(translate('Incomplete Encrypted Data'));
+      }
       const loginData = {
-        UserName: encryption.encryptedData[0], Password: encryption.encryptedData[1],
-        'X-OTP': encryption.encryptedData[2], Mobile: encryption.encryptedData[3],
-        Imei: encryption.encryptedData[4], Devicetoken: encryption.encryptedData[5],
-        Latitude: encryption.encryptedData[6], Longitude: encryption.encryptedData[7],
-        ModelNo: encryption.encryptedData[8], BrandName: encryption.encryptedData[9],
-        IPAddress: encryption.encryptedData[10], City: encryption.encryptedData[11],
-        Address: encryption.encryptedData[12], PostalCode: encryption.encryptedData[13],
-        InternetTYPE: encryption.encryptedData[14], grant_type: 'password',
+        UserName: encryption.encryptedData[0],
+        Password: encryption.encryptedData[1],
+        'X-OTP': encryption.encryptedData[2],
+        Mobile: encryption.encryptedData[3],
+        Imei: encryption.encryptedData[4],
+        Devicetoken: encryption.encryptedData[5],
+        Latitude: encryption.encryptedData[6],
+        Longitude: encryption.encryptedData[7],
+        ModelNo: encryption.encryptedData[8],
+        BrandName: encryption.encryptedData[9],
+        IPAddress: encryption.encryptedData[10],
+        City: encryption.encryptedData[11],
+        Address: encryption.encryptedData[12],
+        PostalCode: encryption.encryptedData[13],
+        InternetTYPE: encryption.encryptedData[14],
+        grant_type: 'password',
       };
       const config = {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: 'bearer', value1: encryption.keyEncode, value2: encryption.ivEncode,
+          Authorization: 'bearer',
+          value1: encryption.keyEncode,
+          value2: encryption.ivEncode,
         },
       };
-      const response = await post({ url: APP_URLS.getToken, data: loginData, config });
+      const response = await post({
+        url: APP_URLS.getToken,
+        data: loginData,
+        config,
+      });
 
-      console.log("API Response:", response);
+      console.log('API Response:', response);
       if (response?.access_token) {
-        debugRole = response.role || 'No Role Found';
-        debugMsg = `finally ${debugRole} Login process completed.`;
+        debugRole = response.role || translate('No Role Found');
+        debugMsg = `${translate('finally')} ${debugRole} ${translate(
+          'Login process completed.',
+        )}`;
         dispatch(setIsDealer(debugRole === 'Dealer'));
         if (response.VideoKYC === 'VideoKYCPENDING') {
-          Alert.alert('', 'Video KYC Uploaded. Wait for admin approval.');
+          Alert.alert(
+            '',
+            translate('Video KYC Uploaded. Wait for admin approval.'),
+          );
           //  return;
         }
         authenticate(response);
         dispatch(setUserId(response?.userId));
         dispatch(setRefreshToken(response?.refresh_token));
-        userData(response[".expires"]);
+        userData(response['.expires']);
       } else if (response?.error) {
         debugRole = 'API_ERROR';
-        debugMsg = response?.error_description || 'Unknown API Error';
+        debugMsg =
+          response?.error_description || translate('Unknown API Error');
         Alert.alert('Login Error', debugMsg);
-        if (response.error === 'SENDOTP') 
+        if (response.error === 'SENDOTP') {
           setShowOtpModal(true);
-      }
-    } catch (error) {
-      debugRole = 'EXCEPTION'; debugMsg = error.message;
-      ToastAndroid.show('An error occurred', ToastAndroid.LONG);
-    } finally {
-      onReceiveNotification2({ notification: { title: debugRole, body: debugMsg } });
-      setIsLoading(false);
-    }
-  }, [dispatch, navigation, post, userEmail, userPassword, mobileNumber, Loc_Data, deviceInfo]);
-
-  const authenticate = useCallback(async (authData) => {
-    try {
-      setIsLoading(true);
-      const currentDevice = deviceInfo;
-      const isDemo = DemoConfig.demoNumbers.includes(userEmail);
-      if (!isDemo && (!currentDevice?.latitude || currentDevice?.latitude == "0")) {
-        pendingAuthDataRef.current = authData;
-        handleLocationError();
-        return;
-      }
-      let fcmToken = '';
-      const params = new URLSearchParams({
-        Devicetoken: fcmToken,
-        Imeino: currentDevice.uniqueId || 'NA',
-        Latitude: isDemo ? DemoConfig.defaultLocation.latitude : currentDevice.latitude.toString() || "NA",
-        Longitude: isDemo ? DemoConfig.defaultLocation.longitude : currentDevice.longitude.toString() || "NA",
-        Address: isDemo ? DemoConfig.defaultLocation.address : currentDevice.address || "NA",
-        City: isDemo ? DemoConfig.defaultLocation.city : currentDevice.city || "NA",
-        PostalCode: isDemo ? DemoConfig.defaultLocation.postalCode : currentDevice.postalCode || "NA",
-        ModelNo: currentDevice.modelNumber || "NA",
-        IPAddress: currentDevice.ipAddress || "NA",
-        InternetTYPE: currentDevice.net || "NA",
-        simslote1: 'SIM1' || "NA", simslote2: 'SIM2' || "NA",
-        brandname: currentDevice.brand || "NA"
-      });
-      const url = `http://native.${APP_URLS.baseWebUrl}Common/api/data/authenticate?${params.toString()}`;
-      const authResponse = await fetch(url, {
-        method: 'GET',
-        headers: { Accept: 'application/json', Authorization: `Bearer ${authData?.access_token}` },
-      });
-      const json = await authResponse.json();
-      if (json.status === 'SUCCESS') {
-        const status = await SecurityModule.checkDeviceSecurity();
-        if (status === 'SECUREe') {
-          setShowEnable(true);
-          setSecToken(authData?.access_token);
-        } else {
-          dispatch(setAuthToken(authData?.access_token));
         }
-      } else if (json.status === 'False' || json.message.includes("Location")) {
-        pendingAuthDataRef.current = authData;
-      } else {
-        Alert.alert("Auth Failed", json.message);
       }
     } catch (error) {
-      console.error(error);
+      debugRole = 'EXCEPTION';
+      debugMsg = error.message;
+      ToastAndroid.show(translate('An error occurred'), ToastAndroid.LONG);
     } finally {
+      onReceiveNotification2({
+        notification: {title: debugRole, body: debugMsg},
+      });
       setIsLoading(false);
     }
-  }, [userEmail, deviceInfo, dispatch]);
+  }, [
+    dispatch,
+    navigation,
+    post,
+    userEmail,
+    userPassword,
+    mobileNumber,
+    Loc_Data,
+    deviceInfo,
+  ]);
+
+  const authenticate = useCallback(
+    async authData => {
+      try {
+        setIsLoading(true);
+        const currentDevice = deviceInfo;
+        const isDemo = DemoConfig.demoNumbers.includes(userEmail);
+        if (
+          !isDemo &&
+          (!currentDevice?.latitude || currentDevice?.latitude == '0')
+        ) {
+          pendingAuthDataRef.current = authData;
+          handleLocationError();
+          return;
+        }
+        let fcmToken = '';
+        const params = new URLSearchParams({
+          Devicetoken: fcmToken,
+          Imeino: currentDevice.uniqueId || translate('NA'),
+          Latitude: isDemo
+            ? DemoConfig.defaultLocation.latitude
+            : currentDevice.latitude.toString() || translate('NA'),
+          Longitude: isDemo
+            ? DemoConfig.defaultLocation.longitude
+            : currentDevice.longitude.toString() || translate('NA'),
+          Address: isDemo
+            ? DemoConfig.defaultLocation.address
+            : currentDevice.address || translate('NA'),
+          City: isDemo
+            ? DemoConfig.defaultLocation.city
+            : currentDevice.city || translate('NA'),
+          PostalCode: isDemo
+            ? DemoConfig.defaultLocation.postalCode
+            : currentDevice.postalCode || translate('NA'),
+          ModelNo: currentDevice.modelNumber || translate('NA'),
+          IPAddress: currentDevice.ipAddress || translate('NA'),
+          InternetTYPE: currentDevice.net || translate('NA'),
+          simslote1: 'SIM1' || translate('NA'),
+          simslote2: 'SIM2' || translate('NA'),
+          brandname: currentDevice.brand || translate('NA'),
+        });
+        const url = `http://native.${
+          APP_URLS.baseWebUrl
+        }Common/api/data/authenticate?${params.toString()}`;
+        const authResponse = await fetch(url, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${authData?.access_token}`,
+          },
+        });
+        const json = await authResponse.json();
+        if (json.status === 'SUCCESS') {
+          const status = await SecurityModule.checkDeviceSecurity();
+          if (status === 'SECUREe') {
+            setShowEnable(true);
+            setSecToken(authData?.access_token);
+          } else {
+            dispatch(setAuthToken(authData?.access_token));
+          }
+        } else if (
+          json.status === 'False' ||
+          json.message.includes('Location')
+        ) {
+          pendingAuthDataRef.current = authData;
+        } else {
+          Alert.alert(translate('Auth Failed'), json.message);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [userEmail, deviceInfo, dispatch],
+  );
 
   const handleLocationError = () => {
     Alert.alert(
-      "Security Verification Failed",
-      "For security purposes, we need to verify your exact location. Please ensure GPS is ON and permissions are granted.",
+      translate('Security Verification Failed'),
+      translate(
+        'For security purposes, we need to verify your exact location. Please ensure GPS is ON and permissions are granted.',
+      ),
       [
-        { text: "Open Settings", onPress: () => Linking.openSettings() },
-        { text: "Cancel", style: "cancel" },
         {
-          text: "Try Again",
+          text: translate('Open Settings'),
+          onPress: () => Linking.openSettings(),
+        },
+        {text: translate('Cancel'), style: 'cancel'},
+        {
+          text: translate('Try Again'),
           onPress: async () => {
             try {
               await refreshStrictly();
@@ -956,68 +997,81 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
                 }
               }, 500);
             } catch (e) {
-              ToastAndroid.show("Location fetch failed. Please try again.", ToastAndroid.SHORT);
+              ToastAndroid.show(
+                translate('Location fetch failed. Please try again.'),
+                ToastAndroid.SHORT,
+              );
             }
           },
         },
-      ]
+      ],
     );
   };
 
   const onPressSignUp = () => {
-    navigation.navigate("SignUpScreen", { svg, Radius2 });
-  }
+    navigation.navigate('SignUpScreen', {svg, Radius2});
+  };
 
   const ToggleSecureEntry = () => setSecureEntry(!secureEntry);
 
-
-  const userData = async (expiryDate) => {
+  const userData = async expiryDate => {
     try {
       await AsyncStorage.setItem('expiryDate', expiryDate);
-    } catch (error) { console.log('Error saving data: ', error); }
+    } catch (error) {
+      console.log('Error saving data: ', error);
+    }
   };
 
   const [fadeAnim] = useState(new Animated.Value(0));
   const [isAutofilled, setIsAutofilled] = useState(false);
 
-
   const [latestVersion, setLatestVersion] = useState([]);
-  const [lockActive, setLockActive] = useState('')
+  const [lockActive, setLockActive] = useState('');
 
   useEffect(() => {
     const fetchVersion = async () => {
       try {
-        const version = await get({ url: APP_URLS.current_version });
+        const version = await get({url: APP_URLS.current_version});
         setLatestVersion(version);
-      } catch (error) { console.error('Version fetch error:', error); }
+      } catch (error) {
+        console.error('Version fetch error:', error);
+      }
     };
     fetchVersion();
     const checkLock = async () => {
       const status = await SecurityModule.checkDeviceSecurity();
       setLockActive(status);
     };
-    checkLock()
+    checkLock();
   }, []);
 
   // ─── Version Update Screen ───────────────────────────────────────────────────
 
-
   // ─── Loading / Splash ────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <LinearGradient colors={[colorConfig.secondaryColor, colorConfig.primaryColor]} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Animated.View style={{ transform: [{ scale: logoAnim }], alignItems: 'center' }}>
+      <LinearGradient
+        colors={[colorConfig.secondaryColor, colorConfig.primaryColor]}
+        style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Animated.View
+          style={{transform: [{scale: logoAnim}], alignItems: 'center'}}>
           <FastImage
             source={{
               priority: FastImage.priority.high,
-              uri:logoUrl
+              uri: logoUrl,
             }}
             // source={require('../../.
             // ./assets/images/app_logo.png')}
 
-            style={{ width: wScale(110), height: wScale(110) }} resizeMode='contain' />
+            style={{width: wScale(110), height: wScale(110)}}
+            resizeMode="contain"
+          />
         </Animated.View>
-        <ActivityIndicator color="#6C63FF" size="large" style={{ marginTop: 24 }} />
+        <ActivityIndicator
+          color="#6C63FF"
+          size="large"
+          style={{marginTop: 24}}
+        />
       </LinearGradient>
     );
   }
@@ -1026,29 +1080,27 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
     setShowEnable(false);
     dispatch(setFingerprintStatus(true));
     dispatch(setAuthToken(secToken));
-  }
+  };
 
   const handleDesable = () => {
     setShowEnable(false);
     dispatch(setAuthToken(secToken));
-  }
+  };
 
   // ─── Main Login UI ───────────────────────────────────────────────────────────
   return (
     <KeyboardAwareScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{ flexGrow: 1 }}
+      style={{flex: 1}}
+      contentContainerStyle={{flexGrow: 1}}
       enableOnAndroid={true}
       enableAutomaticScroll={true}
       extraScrollHeight={0}
       keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
+      showsVerticalScrollIndicator={false}>
       {/* Deep dark gradient background */}
       <LinearGradient
         colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-        style={styles.gradientContainer}
-      >
+        style={styles.gradientContainer}>
         {/* Top decorative circles */}
         <View style={styles.circleTopRight} />
         <View style={styles.circleTopLeft} />
@@ -1057,8 +1109,7 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
         <ScrollView
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          contentContainerStyle={{flexGrow: 1}}>
           {/* Language toggle — top right */}
           <View style={styles.langRow}>
             <LanguageButton />
@@ -1068,31 +1119,30 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
           <View style={styles.logoBlock}>
             <LinearGradient
               colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-              style={styles.logoGlass}
-            >
-
+              style={styles.logoGlass}>
               <FastImage
                 source={{
                   priority: FastImage.priority.high,
-                  uri:logoUrl
+                  uri: logoUrl,
                 }}
                 style={styles.logoImg}
                 resizeMode={FastImage.resizeMode.contain}
               />
-
-              
             </LinearGradient>
             <Text style={styles.appName}>{APP_URLS.AppName}</Text>
-            <Text style={styles.tagline}>{translate("Welcome back.")}</Text>
+            <Text style={styles.tagline}>{translate('Welcome back.')}</Text>
           </View>
 
           {/* ── Form Card ── */}
           <View style={styles.card}>
-
             {/* Username Input */}
             <View style={styles.inputWrapper}>
               <View style={styles.iconBox}>
-                <SvgUri height={hScale(22)} width={hScale(22)} uri={svg.personUser} />
+                <SvgUri
+                  height={hScale(22)}
+                  width={hScale(22)}
+                  uri={svg.personUser}
+                />
               </View>
               <TextInput
                 style={styles.textInput}
@@ -1108,7 +1158,11 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
             {/* Password Input */}
             <View style={styles.inputWrapper}>
               <View style={styles.iconBox}>
-                <SvgUri height={hScale(22)} width={hScale(22)} uri={svg.Password} />
+                <SvgUri
+                  height={hScale(22)}
+                  width={hScale(22)}
+                  uri={svg.Password}
+                />
               </View>
               <TextInput
                 style={styles.textInput}
@@ -1123,9 +1177,11 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
                 <TouchableOpacity
                   onPressOut={ToggleSecureEntry}
                   onPressIn={ToggleSecureEntry}
-                  style={styles.eyeBtn}
-                >
-                  <ShowEye color1="rgba(255,255,255,0.5)" color2="rgba(255,255,255,0.5)" />
+                  style={styles.eyeBtn}>
+                  <ShowEye
+                    color1="rgba(255,255,255,0.5)"
+                    color2="rgba(255,255,255,0.5)"
+                  />
                 </TouchableOpacity>
               )}
             </View>
@@ -1137,19 +1193,23 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
                 onLongPress={() => viewlog()}
                 onPress={() => {
                   setRemember(!remember);
-                }}
-              >
-                <View style={[styles.checkbox, remember && styles.checkboxActive]}>
+                }}>
+                <View
+                  style={[styles.checkbox, remember && styles.checkboxActive]}>
                   {remember && <CheckSvg size={8} />}
                 </View>
-                <Text style={styles.optionText}>{translate('remember_me')}</Text>
+                <Text style={styles.optionText}>
+                  {translate('remember_me')}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                onLongPress={() => { setisWriteLog(true); }}
-                onPress={() => setShowForgotPasswordModal(true)}
-              >
-                <Text style={[styles.forgotText, iswritelog && { color: '#ff6b6b' }]}>
+                onLongPress={() => {
+                  setisWriteLog(true);
+                }}
+                onPress={() => setShowForgotPasswordModal(true)}>
+                <Text
+                  style={[styles.forgotText, iswritelog && {color: '#ff6b6b'}]}>
                   {translate('forgotPassword')}
                 </Text>
               </TouchableOpacity>
@@ -1158,29 +1218,30 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
             {/* Login Button */}
             <TouchableOpacity
               activeOpacity={0.85}
-              onLongPress={() => onPressLoginHardcoded("")}
+              onLongPress={() => onPressLoginHardcoded('')}
               onPress={() => {
                 if (userEmail && userPassword) {
                   onPressLogin('');
                 } else {
                   listenFCMDeviceToken();
                   ToastAndroid.show(
-                    "Please enter valid User ID and Password, you cannot leave it blank",
-                    ToastAndroid.SHORT
+                    translate(
+                      'Please enter valid User ID and Password, you cannot leave it blank',
+                    ),
+                    ToastAndroid.SHORT,
                   );
                 }
-              }}
-            >
+              }}>
               <LinearGradient
                 colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.loginBtn}
-              >
-                {isLoading
-                  ? <ActivityIndicator color="#fff" size="small" />
-                  : <Text style={styles.loginBtnText}>{translate('Login')}</Text>
-                }
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                style={styles.loginBtn}>
+                {isLoading ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Text style={styles.loginBtnText}>{translate('Login')}</Text>
+                )}
               </LinearGradient>
             </TouchableOpacity>
 
@@ -1198,7 +1259,6 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
                 <Text style={styles.signupLink}>{translate('signUp')}</Text>
               </TouchableOpacity>
             </View>
-
           </View>
 
           {/* Modals */}
@@ -1218,20 +1278,19 @@ ToastAndroid.show(apiError?.error_description || 'OTP Send To Your Registered Em
             inputCount={6}
             sendID={userEmail}
           />
-
           <SecurityBottomSheet
             visible={showEnable}
             onEnable={handleEnable}
             onLater={handleDesable}
           />
-
           {/* Version Footer */}
           <View style={styles.footerRow}>
             <Text style={styles.footerText}>{latestVersion.PackageName}</Text>
             <View style={styles.footerDot} />
-            <Text style={styles.footerText}>v{latestVersion.currentversion}</Text>
+            <Text style={styles.footerText}>
+              v{latestVersion.currentversion}
+            </Text>
           </View>
-
         </ScrollView>
       </LinearGradient>
     </KeyboardAwareScrollView>
@@ -1397,7 +1456,6 @@ const styles = StyleSheet.create({
     paddingVertical: hScale(15),
     alignItems: 'center',
     justifyContent: 'center',
-
   },
   loginBtnText: {
     color: '#FFFFFF',

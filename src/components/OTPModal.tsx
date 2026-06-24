@@ -1,15 +1,27 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { View, Text, StyleSheet, Keyboard } from 'react-native';
-import { BottomSheet, Button } from '@rneui/themed';
+import {View, Text, StyleSheet, Keyboard} from 'react-native';
+import {BottomSheet, Button} from '@rneui/themed';
 import OTPTextView from 'react-native-otp-textinput';
-import { colors } from '../utils/styles/theme';
-import { useSelector } from 'react-redux';
-import { RootState } from '../reduxUtils/store';
-import { SCREEN_HEIGHT, hScale, wScale } from '../utils/styles/dimensions';
-import DynamicButton from '../features/drawer/button/DynamicButton';
+import {colors} from '../utils/styles/theme';
+import {useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store';
+import {SCREEN_HEIGHT, hScale, wScale} from '../utils/styles/dimensions';
+import {translate} from '../utils/languageUtils/I18n';
 
-const OTPModal = ({
+interface OTPModalProps {
+  showOtpModal: boolean;
+  setMobileOtp?: (otp: string) => void;
+  setEmailOtp?: (otp: string) => void;
+  setShowOtpModal: (visible: boolean) => void;
+  disabled?: boolean;
+  verifyOtp: () => void;
+  inputCount: number;
+  resendotp?: () => void;
+  isresend?: boolean;
+  sendID?: string;
+}
+
+const OTPModal: React.FC<OTPModalProps> = ({
   showOtpModal,
   setMobileOtp,
   setEmailOtp,
@@ -19,48 +31,55 @@ const OTPModal = ({
   inputCount,
   resendotp,
   isresend = false,
-  email = '',
-  sendID
+  sendID,
 }) => {
   // Handle OTP change
-  const handleOtpChange = (otp, setOtp) => {
-    setOtp(otp);  // Update OTP value
+  const handleOtpChange = (otp: string, setOtp: (otp: string) => void) => {
+    setOtp(otp); // Update OTP value
     if (otp.length === inputCount) {
       Keyboard.dismiss(); // Dismiss the keyboard when OTP is complete
     }
   };
 
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
-
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <BottomSheet
-        animationType="none"  
+        animationType="none"
         isVisible={showOtpModal}
         onBackdropPress={() => {
           setShowOtpModal(false);
         }}
-        scrollViewProps={{ scrollEnabled: false }}
-        containerStyle={{ backgroundColor: 'transparent' }}
-      >
-        <View style={styles.main} >
-          <View style={[styles.StateTitle, { backgroundColor: colorConfig.secondaryColor, }]}>
-            <Text style={[styles.stateTitletext,]}>{'Verify OTP'}</Text>
-
+        scrollViewProps={{scrollEnabled: false}}
+        containerStyle={{backgroundColor: 'transparent'}}>
+        <View style={styles.main}>
+          <View
+            style={[
+              styles.StateTitle,
+              {backgroundColor: colorConfig.secondaryColor},
+            ]}>
+            <Text style={[styles.stateTitletext]}>
+              {translate('Verify OTP')}
+            </Text>
           </View>
 
           <View>
             {setMobileOtp && (
               <>
                 <Text style={styles.text}>
-                 OTP Sent to Mobile Number or Email
-           {/* ${email ? ' and Email' : ''}` */}
-                 
+                  {translate(' OTP Sent to Mobile Number or Email')}
+                  {/* ${email ? ' and Email' : ''}` */}
                 </Text>
-                <Text style={[styles.numberID, { color: colorConfig.secondaryColor }]}>{sendID}</Text>
+                <Text
+                  style={[
+                    styles.numberID,
+                    {color: colorConfig.secondaryColor},
+                  ]}>
+                  {sendID}
+                </Text>
 
                 <OTPTextView
-                  handleTextChange={(otp) => handleOtpChange(otp, setMobileOtp)} // Handle OTP change
+                  handleTextChange={otp => handleOtpChange(otp, setMobileOtp)} // Handle OTP change
                   containerStyle={{
                     marginHorizontal: wScale(10),
                     marginVertical: wScale(30),
@@ -73,9 +92,11 @@ const OTPModal = ({
 
             {setEmailOtp && (
               <>
-                <Text style={styles.text}>{'Enter the OTP sent to your email'}</Text>
+                <Text style={styles.text}>
+                  {translate('Enter the OTP sent to your email')}
+                </Text>
                 <OTPTextView
-                  handleTextChange={(otp) => handleOtpChange(otp, setEmailOtp)}
+                  handleTextChange={otp => handleOtpChange(otp, setEmailOtp)}
                   containerStyle={{
                     marginHorizontal: wScale(10),
                     marginVertical: wScale(10),
@@ -89,29 +110,32 @@ const OTPModal = ({
 
           <Button
             disabled={disabled}
-            title={'Verify'}
+            title={translate('Verify')}
             onPress={verifyOtp}
             buttonStyle={styles.SignupButton}
-            titleStyle={{ fontWeight: 'bold' }}
+            titleStyle={{fontWeight: 'bold'}}
           />
-          {isresend && <Button
-            //disabled={disabled}
-            title={'Resend Otp'}
-            onPress={resendotp}
-            buttonStyle={styles.SignupButton}
-            titleStyle={{ fontWeight: 'bold' }}
-
-          />}
-
+          {isresend && (
+            <Button
+              //disabled={disabled}
+              title={translate('Resend Otp')}
+              onPress={resendotp}
+              buttonStyle={styles.SignupButton}
+              titleStyle={{fontWeight: 'bold'}}
+            />
+          )}
         </View>
-      </BottomSheet >
-    </View >
+      </BottomSheet>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
-    backgroundColor: colors.white, height: SCREEN_HEIGHT / 1.5, flex: 1, borderTopLeftRadius: wScale(15),
+    backgroundColor: colors.white,
+    height: SCREEN_HEIGHT / 1.5,
+    flex: 1,
+    borderTopLeftRadius: wScale(15),
     borderTopRightRadius: wScale(15),
   },
 
@@ -121,12 +145,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 20,
     marginTop: 10,
-    backgroundColor: colors.dark_blue
+    backgroundColor: colors.dark_blue,
   },
   resendtitl: {
-    color: 'red'
+    color: 'red',
   },
-
 
   StateTitle: {
     paddingVertical: hScale(10),
@@ -136,7 +159,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: wScale(15),
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   stateTitletext: {
     paddingHorizontal: wScale(12),
@@ -151,7 +173,7 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: 'bold',
     textTransform: 'uppercase',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   SignupButton: {
     marginTop: wScale(40),

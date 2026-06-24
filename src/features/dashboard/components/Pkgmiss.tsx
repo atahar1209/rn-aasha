@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Animated,
   Dimensions,
-  TouchableOpacity,
   StatusBar,
   Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import Svg, { Path, Circle, Defs, RadialGradient, Stop, G } from 'react-native-svg';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store/index';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import Svg, {Path, Defs, RadialGradient, Stop, G} from 'react-native-svg';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store/index';
+import {translate} from '../../../utils/languageUtils/I18n';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 type BlockedMessageProps = {
   message: string;
@@ -34,49 +34,90 @@ const BlockedMessageAnimated: React.FC<BlockedMessageProps> = ({
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const ringAnim = useRef(new Animated.Value(0)).current;
   const shieldAnim = useRef(new Animated.Value(0)).current;
-  const { colorConfig, Loc_Data, deviceInfo, isDemoUser } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig, Loc_Data, deviceInfo, isDemoUser} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
 
   const [particles] = useState(() =>
-    Array.from({ length: 12 }).map((_, i) => ({
+    Array.from({length: 12}).map((_, i) => ({
       angle: (i / 12) * Math.PI * 2,
       radius: Math.random() * 40 + 80,
       size: Math.random() * 4 + 2,
       opacity: new Animated.Value(0),
       orbitAnim: new Animated.Value(0),
       delay: i * 150,
-    }))
+    })),
   );
 
   useEffect(() => {
     // Entrance
     Animated.parallel([
-      Animated.timing(fadeAnim, { toValue: 1, duration: 700, useNativeDriver: true }),
-      Animated.spring(slideAnim, { toValue: 0, friction: 9, tension: 60, useNativeDriver: true }),
-      Animated.spring(scaleAnim, { toValue: 1, friction: 8, tension: 50, useNativeDriver: true }),
-      Animated.timing(shieldAnim, { toValue: 1, duration: 900, delay: 300, useNativeDriver: true }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 700,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        friction: 9,
+        tension: 60,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 8,
+        tension: 50,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shieldAnim, {
+        toValue: 1,
+        duration: 900,
+        delay: 300,
+        useNativeDriver: true,
+      }),
     ]).start();
 
     // Pulse ring
     Animated.loop(
       Animated.sequence([
-        Animated.timing(pulseAnim, { toValue: 1.15, duration: 1200, useNativeDriver: true }),
-        Animated.timing(pulseAnim, { toValue: 1, duration: 1200, useNativeDriver: true }),
-      ])
+        Animated.timing(pulseAnim, {
+          toValue: 1.15,
+          duration: 1200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1200,
+          useNativeDriver: true,
+        }),
+      ]),
     ).start();
 
     // Orbit ring rotation
     Animated.loop(
-      Animated.timing(ringAnim, { toValue: 1, duration: 8000, useNativeDriver: true })
+      Animated.timing(ringAnim, {
+        toValue: 1,
+        duration: 8000,
+        useNativeDriver: true,
+      }),
     ).start();
 
     // Particles appear
-    particles.forEach((p) => {
+    particles.forEach(p => {
       Animated.loop(
         Animated.sequence([
           Animated.delay(p.delay),
-          Animated.timing(p.opacity, { toValue: 0.7, duration: 600, useNativeDriver: true }),
-          Animated.timing(p.opacity, { toValue: 0.1, duration: 1200, useNativeDriver: true }),
-        ])
+          Animated.timing(p.opacity, {
+            toValue: 0.7,
+            duration: 600,
+            useNativeDriver: true,
+          }),
+          Animated.timing(p.opacity, {
+            toValue: 0.1,
+            duration: 1200,
+            useNativeDriver: true,
+          }),
+        ]),
       ).start();
     });
   }, []);
@@ -93,7 +134,11 @@ const BlockedMessageAnimated: React.FC<BlockedMessageProps> = ({
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <StatusBar
+        barStyle="light-content"
+        translucent
+        backgroundColor="transparent"
+      />
 
       {/* Deep background */}
       <LinearGradient
@@ -115,10 +160,9 @@ const BlockedMessageAnimated: React.FC<BlockedMessageProps> = ({
           styles.card,
           {
             opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }, { scale: scaleAnim }],
+            transform: [{translateY: slideAnim}, {scale: scaleAnim}],
           },
-        ]}
-      >
+        ]}>
         {/* Card inner border glow */}
         <View style={styles.cardBorderGlow} />
 
@@ -126,19 +170,12 @@ const BlockedMessageAnimated: React.FC<BlockedMessageProps> = ({
         <View style={styles.iconSection}>
           {/* Outer pulse ring */}
           <Animated.View
-            style={[
-              styles.pulseRing,
-              { transform: [{ scale: pulseAnim }] },
-            ]}
+            style={[styles.pulseRing, {transform: [{scale: pulseAnim}]}]}
           />
 
           {/* Orbit ring */}
           <Animated.View
-            style={[
-              styles.orbitRing,
-              { transform: [{ rotate: ringRotate }] },
-            ]}
-          >
+            style={[styles.orbitRing, {transform: [{rotate: ringRotate}]}]}>
             {particles.slice(0, 6).map((p, i) => (
               <Animated.View
                 key={i}
@@ -149,10 +186,7 @@ const BlockedMessageAnimated: React.FC<BlockedMessageProps> = ({
                     width: p.size,
                     height: p.size,
                     borderRadius: p.size / 2,
-                    transform: [
-                      { rotate: `${i * 60}deg` },
-                      { translateX: 52 },
-                    ],
+                    transform: [{rotate: `${i * 60}deg`}, {translateX: 52}],
                   },
                 ]}
               />
@@ -161,13 +195,15 @@ const BlockedMessageAnimated: React.FC<BlockedMessageProps> = ({
 
           {/* Main icon circle */}
           <Animated.View
-            style={[styles.iconCircle, { transform: [{ scale: shieldScale }] }]}
-          >
+            style={[styles.iconCircle, {transform: [{scale: shieldScale}]}]}>
             <LinearGradient
               colors={['rgba(255,70,70,0.18)', 'rgba(180,20,20,0.08)']}
-              style={styles.iconGradientBg}
-            >
-              <Svg width={wScale(38)} height={wScale(38)} viewBox="0 0 24 24" fill="none">
+              style={styles.iconGradientBg}>
+              <Svg
+                width={wScale(38)}
+                height={wScale(38)}
+                viewBox="0 0 24 24"
+                fill="none">
                 <Defs>
                   <RadialGradient id="sg" cx="50%" cy="30%" r="60%">
                     <Stop offset="0%" stopColor="#FF6B6B" />
@@ -202,17 +238,20 @@ const BlockedMessageAnimated: React.FC<BlockedMessageProps> = ({
         <View style={styles.topDivider} />
 
         {/* Title */}
-        <Text style={styles.title}>Access{'\n'}Restricted</Text>
+        <Text style={styles.title}>
+          Access{'\n'}
+          {translate('Restricted')}
+        </Text>
 
         {/* Subtitle badge */}
         <View style={styles.badge}>
           <View style={styles.badgeDot} />
-          <Text style={styles.badgeText}>SECURITY ALERT</Text>
+          <Text style={styles.badgeText}>{translate('SECURITY ALERT')}</Text>
         </View>
 
         {/* Message box */}
         <View style={styles.messageBox}>
-          <Text style={styles.messageText}>{message}</Text>
+          <Text style={styles.messageText}>{translate(message)}</Text>
         </View>
 
         {/* Thin decorative line */}
@@ -228,14 +267,14 @@ const BlockedMessageAnimated: React.FC<BlockedMessageProps> = ({
           ))}
         </View>
 
-     
         {/* Footer */}
-        <Text style={styles.footer}>PROTECTED BY SECURITY SYSTEM · v2.0</Text>
+        <Text style={styles.footer}>
+          {translate('PROTECTED BY SECURITY SYSTEM')} · v2.0
+        </Text>
       </Animated.View>
     </View>
   );
 };
-
 const CARD_WIDTH = width * 0.88;
 
 const styles = StyleSheet.create({
@@ -253,7 +292,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF2020',
     opacity: 0.045,
     borderRadius: 999,
-    transform: [{ scaleX: 1.4 }],
+    transform: [{scaleX: 1.4}],
   },
   glowBottom: {
     position: 'absolute',
@@ -285,16 +324,18 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#FF3030',
-        shadowOffset: { width: 0, height: 12 },
+        shadowOffset: {width: 0, height: 12},
         shadowOpacity: 0.25,
         shadowRadius: 30,
       },
-      android: { elevation: 18 },
+      android: {elevation: 18},
     }),
   },
   cardBorderGlow: {
     position: 'absolute',
-    top: 0, left: 0, right: 0,
+    top: 0,
+    left: 0,
+    right: 0,
     height: 1,
     backgroundColor: 'rgba(255, 100, 100, 0.35)',
     borderTopLeftRadius: 28,
@@ -458,11 +499,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#FF3030',
-        shadowOffset: { width: 0, height: 6 },
+        shadowOffset: {width: 0, height: 6},
         shadowOpacity: 0.4,
         shadowRadius: 12,
       },
-      android: { elevation: 8 },
+      android: {elevation: 8},
     }),
   },
   btn: {

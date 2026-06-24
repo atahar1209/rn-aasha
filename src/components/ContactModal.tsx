@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -9,11 +9,20 @@ import {
   Platform,
   StatusBar,
   KeyboardAvoidingView,
-} from "react-native";
-import { SCREEN_HEIGHT, hScale, wScale } from "../utils/styles/dimensions";
-import { translate } from "../utils/languageUtils/I18n";
-import SearchIcon from "../features/drawer/svgimgcomponents/Searchicon";
-import ClosseModalSvg2 from "../features/drawer/svgimgcomponents/ClosseModal2";
+} from 'react-native';
+import { hScale, wScale } from '../utils/styles/dimensions';
+import { translate } from '../utils/languageUtils/I18n';
+import SearchIcon from '../features/drawer/svgimgcomponents/Searchicon';
+import ClosseModalSvg2 from '../features/drawer/svgimgcomponents/ClosseModal2';
+
+type ContactModalProps = {
+  showContactModal: boolean;
+  setShowContactModal: (value: boolean) => void;
+  searchText: string;
+  setSearchText: (text: string) => void;
+  showContactsList: React.ReactNode;
+  color1?: string;
+};
 
 const ContactModal = ({
   showContactModal,
@@ -21,8 +30,8 @@ const ContactModal = ({
   searchText,
   setSearchText,
   showContactsList,
-  color1, 
-}) => {
+  color1,
+}: ContactModalProps) => {
   return (
     <Modal
       visible={showContactModal}
@@ -34,36 +43,36 @@ const ContactModal = ({
       <View style={styles.fullScreenContainer}>
         {/* Modern Status Bar Handling */}
         <StatusBar backgroundColor="transparent" barStyle="dark-content" translucent />
-        
-        <KeyboardAvoidingView 
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined} 
+
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           style={{ flex: 1 }}
         >
           {/* Main Header Container */}
           <View style={[styles.headerArea, { backgroundColor: color1 || '#F5F7FA' }]}>
             <View style={styles.topSpacer} />
-            
+
             <View style={styles.headerRow}>
               <View style={styles.searchBarContainer}>
                 <View style={styles.searchIconWrapper}>
                   <SearchIcon width={wScale(20)} height={wScale(20)} color="#8E8E93" />
                 </View>
-                
+
                 <TextInput
                   value={searchText}
                   onChangeText={(text) => setSearchText(text)}
-                  placeholder={translate("Search Name or Number")}
+                  placeholder={translate('Search Name or Number')}
                   style={styles.modernInput}
-                  placeholderTextColor={"#A0A0A0"}
+                  placeholderTextColor={'#A0A0A0'}
                   selectionColor={color1 ? '#000' : '#4A90E2'}
                 />
 
                 {searchText.length > 0 && (
-                  <TouchableOpacity 
-                    onPress={() => setSearchText("")} 
+                  <TouchableOpacity
+                    onPress={() => setSearchText('')}
                     style={styles.clearCircle}
                   >
-                    <Text style={styles.clearX}>{translate("✕")}</Text>
+                    <Text style={styles.clearX}>{translate('✕')}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -92,7 +101,7 @@ const ContactModal = ({
 const styles = StyleSheet.create({
   fullScreenContainer: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
   topSpacer: {
     height: Platform.OS === 'ios' ? hScale(45) : StatusBar.currentHeight + hScale(5),
@@ -104,29 +113,29 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
     // Soft depth
     elevation: 4,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.05,
     shadowRadius: 15,
   },
   headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   searchBarContainer: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     height: hScale(52),
     paddingHorizontal: wScale(15),
     marginRight: wScale(12),
     // Neumorphic style sublte border
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.03)",
+    borderColor: 'rgba(0,0,0,0.03)',
     elevation: 2,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 5,
@@ -137,38 +146,38 @@ const styles = StyleSheet.create({
   modernInput: {
     flex: 1,
     fontSize: wScale(16),
-    color: "#1C1C1E",
-    fontWeight: "500",
+    color: '#1C1C1E',
+    fontWeight: '500',
     letterSpacing: -0.3,
   },
   clearCircle: {
-    backgroundColor: "#F2F2F7",
+    backgroundColor: '#F2F2F7',
     width: 22,
     height: 22,
     borderRadius: 11,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   clearX: {
     fontSize: 10,
-    fontWeight: "900",
-    color: "#8E8E93",
+    fontWeight: '900',
+    color: '#8E8E93',
   },
   closeIconButton: {
     width: wScale(44),
     height: wScale(44),
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
     borderRadius: 22,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     elevation: 2,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
   },
   listSection: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
     marginTop: hScale(-15), // Smooth overlap
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -178,9 +187,9 @@ const styles = StyleSheet.create({
   dragHandle: {
     width: 40,
     height: 4,
-    backgroundColor: "#E5E5EA",
+    backgroundColor: '#E5E5EA',
     borderRadius: 2,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginBottom: 10,
   }
 });

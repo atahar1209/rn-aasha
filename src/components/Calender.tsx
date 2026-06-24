@@ -1,32 +1,47 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
-import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { RootState } from '../reduxUtils/store';
-import { hScale, wScale } from '../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../reduxUtils/store';
+import {hScale, wScale} from '../utils/styles/dimensions';
 import BackSvg from '../features/drawer/svgimgcomponents/BackSvg';
 import NextcalenderSvg from '../features/drawer/svgimgcomponents/NextcalenderSvg';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const CustomCalendar = ({ onDateSelected, selectedDate }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
-  const handleDateChange = (date) => {
+interface CustomCalendarProps {
+  onDateSelected: (date: string) => void;
+  selectedDate?: string | Date;
+}
+
+const CustomCalendar: React.FC<CustomCalendarProps> = ({
+  onDateSelected,
+  selectedDate,
+}) => {
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
+  const handleDateChange = (date: Date | string) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     console.log(formattedDate);
     onDateSelected(formattedDate);
   };
-const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.main, { backgroundColor: colorConfig.secondaryColor, paddingBottom: insets.bottom }]}>
-      <View style={[styles.container, { borderColor: colorConfig.secondaryColor }]}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: colorConfig.secondaryColor,
+          paddingBottom: insets.bottom,
+        },
+      ]}>
+      <View
+        style={[styles.container, {borderColor: colorConfig.secondaryColor}]}>
         <CalendarPicker
           onDateChange={handleDateChange}
           initialDate={selectedDate ? new Date(selectedDate) : new Date()}
           selectedDayTextColor="green"
-          nextTitle={<NextcalenderSvg size={25} color='#000' />}
-          previousTitle={<BackSvg size={25} color='#000' />}
+          nextTitle={<NextcalenderSvg size={25} color="#000" />}
+          previousTitle={<BackSvg size={25} color="#000" />}
           selectedDayColor="red"
           monthTitleStyle={styles.month}
           yearTitleStyle={styles.month}
@@ -42,8 +57,7 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 10,
     borderTopLeftRadius: 10,
     flex: 1,
-    paddingBottom:hScale(30)
-
+    paddingBottom: hScale(30),
   },
   container: {
     borderTopEndRadius: 10,
@@ -52,13 +66,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: hScale(20),
     borderWidth: 6,
-    borderBottomWidth: 0
+    borderBottomWidth: 0,
   },
   month: {
     fontSize: wScale(25),
     fontWeight: 'bold',
-    textTransform: 'uppercase'
-  }
+    textTransform: 'uppercase',
+  },
 });
 
 export default CustomCalendar;

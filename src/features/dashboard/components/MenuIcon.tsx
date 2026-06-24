@@ -1,14 +1,12 @@
 import React from 'react';
-import { Pressable, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { SvgXml } from 'react-native-svg';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
+import {Pressable, StyleSheet} from 'react-native';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
+import {SvgXml} from 'react-native-svg';
+import {wScale} from '../../../utils/styles/dimensions';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 const MenuIcon = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo)
-
-
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
   const setting = `
 
@@ -26,18 +24,16 @@ const MenuIcon = () => {
         navigation.dispatch(DrawerActions.openDrawer());
       }}
       style={styles.MenuDottcontainer}>
-
       <SvgXml xml={setting} width={wScale(30)} height={wScale(30)} />
     </Pressable>
   );
 };
 const styles = StyleSheet.create({
-
   MenuDottcontainer: {
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     marginRight: wScale(0),
   },
-})
+});
 
 export default MenuIcon;
