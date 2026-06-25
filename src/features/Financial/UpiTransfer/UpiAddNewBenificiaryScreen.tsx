@@ -1,33 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, StyleSheet, ToastAndroid, Alert, TouchableOpacity } from 'react-native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import { translate } from '../../../utils/languageUtils/I18n';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  ScrollView,
+  StyleSheet,
+  ToastAndroid,
+  Alert,
+} from 'react-native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { useNavigation } from '@react-navigation/native';
+import {APP_URLS} from '../../../utils/network/urls';
+import {useNavigation} from '@react-navigation/native';
 
-const UpiAddNewVPAScreen = ({route }) => {
-  const receivedData = route['params'];
-    console.log('UpiAddNewVPAScreen',receivedData);
+const UpiAddNewVPAScreen = ({route}) => {
+  const receivedData = route.params;
+  console.log('UpiAddNewVPAScreen', receivedData);
 
-    
   useEffect(() => {
-
-    console.log(route)
+    console.log(route);
     const fetchData = async () => {
       try {
-      
-          getSuffixData();
+        getSuffixData();
       } catch (error) {
-          console.error('Error fetching sender number:', error);
+        console.error('Error fetching sender number:', error);
       }
-  };
-  fetchData();
+    };
+    fetchData();
     getSuffixData();
-  }, [])
+  }, []);
   const navigation = useNavigation<any>();
 
-  const { post, get } = useAxiosHook();
+  const {post, get} = useAxiosHook();
   const [vpaid, setVpaid] = useState('');
   const [name, setName] = useState('');
   const [number, setnumber] = useState('');
@@ -36,31 +42,44 @@ const UpiAddNewVPAScreen = ({route }) => {
   const [numValid, setNumValid] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isSkip, setisSkip] = useState(false)
+  const [isSkip, setisSkip] = useState(false);
   const handleAddBeneficiary = async () => {
-
     console.log(number, name, vpaid);
     if (!vpaidValid || !nameValid) {
-      ToastAndroid.showWithGravity('Please enter valid VPA ID and name', ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+      ToastAndroid.showWithGravity(
+        translate('Please enter valid VPA ID and name'),
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
       return;
     }
     setIsLoading(true);
     try {
-      const res = await get({ url: `${APP_URLS.addUpiBen}senderno=${number}&account=${vpaid}&benname=${name}` });
+      const res = await get({
+        url: `${APP_URLS.addUpiBen}senderno=${number}&account=${vpaid}&benname=${name}`,
+      });
       console.log(res);
-      if (res['RESULT'] == '0') {
-        Alert.alert('Success', res['ADDINFO']['message'], [{ text: 'OK', onPress: () => { 
-          navigation.navigate("UpiGetBenificiaryScreen");
-
-        } }]);
-
-      } else if (res['RESULT'] == '1') {
-        Alert.alert('Error', res['ADDINFO']['message'], [{ text: 'OK', onPress: () => { } }]);
+      if (res.RESULT === '0') {
+        Alert.alert(translate('Success'), res.ADDINFO.message, [
+          {
+            text: translate('OK'),
+            onPress: () => {
+              navigation.navigate('UpiGetBenificiaryScreen');
+            },
+          },
+        ]);
+      } else if (res.RESULT === '1') {
+        Alert.alert(translate('Error'), res.ADDINFO.message, [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
       } else {
-
       }
-    } catch (error) {
-      ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+    } catch (error: any) {
+      ToastAndroid.showWithGravity(
+        error,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -68,56 +87,60 @@ const UpiAddNewVPAScreen = ({route }) => {
 
   const handleVerifyAccount = async () => {
     if (!vpaidValid || !nameValid) {
-      ToastAndroid.showWithGravity('Please enter valid VPA ID and name', ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+      ToastAndroid.showWithGravity(
+        translate('Please enter valid VPA ID and name'),
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+      );
       return;
     }
   };
-  const handleNumberChange = (text) => {
+  const handleNumberChange = text => {
     setnumber(text);
     setNumValid(text.length >= 10);
   };
   const [suffix, setsuffix] = useState([]);
   const Sx = [
-    "ibl",
-    "ybl",
-    "jio",
-    "paytm",
-    "waicici",
-    "slice",
-    "amazonpay",
-    "yapl",
-    "yesg",
-    "yesbank",
-    "apl",
-    "abfspay",
-    "axisb",
-    "okaxis",
-    "jupiteraxis",
-    "goaxb",
-    "naviaxis",
-    "waaxis",
-    "axl",
-    "pingpay",
-    "rmhdfcbank",
-    "okhdfcbank",
-    "hdfcbankjd",
-    "wahdfcbank",
-    "oksbi",
-    "wasbi",
-    "indus",
-    "ikwik",
-    "mbk",
-    "timecosmos",
-    "idfcbank",
-    "fbl",
-    "pinelabs",
-    "axisbank",
-    "kmbl"
-  ]
+    'ibl',
+    'ybl',
+    'jio',
+    'paytm',
+    'waicici',
+    'slice',
+    'amazonpay',
+    'yapl',
+    'yesg',
+    'yesbank',
+    'apl',
+    'abfspay',
+    'axisb',
+    'okaxis',
+    'jupiteraxis',
+    'goaxb',
+    'naviaxis',
+    'waaxis',
+    'axl',
+    'pingpay',
+    'rmhdfcbank',
+    'okhdfcbank',
+    'hdfcbankjd',
+    'wahdfcbank',
+    'oksbi',
+    'wasbi',
+    'indus',
+    'ikwik',
+    'mbk',
+    'timecosmos',
+    'idfcbank',
+    'fbl',
+    'pinelabs',
+    'axisbank',
+    'kmbl',
+  ];
   const getSuffixData = async () => {
     try {
       const url = `${APP_URLS.upiSuffix}`;
-      const res = await get({ url: url });
+      const res = await get({url: url});
       console.log(res);
 
       if (!res || res.length === 0) {
@@ -129,16 +152,15 @@ const UpiAddNewVPAScreen = ({route }) => {
       console.error('Error fetching data:', error);
     }
   };
-  const handleVpaidChange = (text) => {
+  const handleVpaidChange = text => {
     const isValid = new RegExp(`@(${suffix.join('|')})\\b`, 'i').test(text);
     setVpaidValid(isValid);
     setVpaid(text);
   };
   const handleSkip = () => {
     setisSkip(!isSkip);
-
-  }
-  const handleNameChange = (text) => {
+  };
+  const handleNameChange = text => {
     setName(text);
     setNameValid(/^[a-zA-Z\s]+$/.test(text));
   };
@@ -152,9 +174,9 @@ const UpiAddNewVPAScreen = ({route }) => {
           placeholder={translate('Mobile Number')}
           value={receivedData.senderNo}
           maxLength={10}
-          keyboardType='numeric'
+          keyboardType="numeric"
           onChangeText={handleNumberChange}
-          editable= {false}
+          editable={false}
         />
         <TextInput
           style={[styles.input, vpaidValid && styles.validInput]}
@@ -170,7 +192,7 @@ const UpiAddNewVPAScreen = ({route }) => {
           onChangeText={handleNameChange}
         />
         <Button
-          title={isLoading ? 'Adding...' : 'Add VPAID'}
+          title={isLoading ? translate('Adding') : translate('Add VPAID')}
           onPress={handleAddBeneficiary}
           disabled={isLoading || !vpaidValid || !nameValid}
         />
@@ -185,7 +207,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   buttonStyle: {
-    padding: hScale(10)
+    padding: hScale(10),
   },
   heading: {
     fontSize: wScale(15),
@@ -202,7 +224,7 @@ const styles = StyleSheet.create({
   },
   validInput: {
     borderColor: 'green',
-    borderWidth: 2
+    borderWidth: 2,
   },
 });
 

@@ -1,4 +1,4 @@
-package com.digitalindiapay.upi;
+package com.vrecharge.upi;
 
 import androidx.annotation.NonNull;
 

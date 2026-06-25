@@ -1,23 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, Alert,
-  ActivityIndicator, StyleSheet, ToastAndroid, Animated
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+  StyleSheet,
+  ToastAndroid,
+  Animated,
 } from 'react-native';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { hScale, SCREEN_HEIGHT, SCREEN_WIDTH, wScale } from '../../../utils/styles/dimensions';
-import { translate } from '../../../utils/languageUtils/I18n';
+import {APP_URLS} from '../../../utils/network/urls';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
 import LinearGradient from 'react-native-linear-gradient';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import FlotingInput from '../../drawer/securityPages/FlotingInput';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import DynamicButton from '../../drawer/button/DynamicButton';
-import { SvgXml } from 'react-native-svg';
 import OTPModal from '../../../components/OTPModal';
 import ShowLoader from '../../../components/ShowLoder';
 import CloseSvg from '../../drawer/svgimgcomponents/CloseSvg';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { BlurView } from '@react-native-community/blur';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // ─── GLASSMORPHISM TOKENS ───────────────────────────────────────────────────
 const GLASS = {
@@ -37,8 +41,8 @@ const GRADIENT_COLORS = ['#1a0533', '#0d1f4a', '#0a2a3d', '#0f3d2e'] as const;
 const BTN_GRADIENT = ['#7c3aed', '#4f46e5', '#0ea5e9'] as const;
 
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
-const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+const NumberRegisterScreen = ({Name, No, type, CName, onPress}) => {
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
   const [remitterOtp, setRemitterOtp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +51,7 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
   const [aadharnum, setaadharnum] = useState('');
   const [Pan, setPan] = useState('');
   const [otpDigits, setOtpDigits] = useState(['', '', '', '']);
-  const { post, get } = useAxiosHook();
+  const {post, get} = useAxiosHook();
   const otpRefs = useRef([]);
   const [adharData, setadharData] = useState({});
   const [remitterid, setRemitterid] = useState('');
@@ -63,12 +67,22 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
 
   useEffect(() => {
     Animated.parallel([
-      Animated.timing(fadeAnim, { toValue: 1, duration: 400, useNativeDriver: true }),
-      Animated.timing(slideAnim, { toValue: 0, duration: 400, useNativeDriver: true }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 400,
+        useNativeDriver: true,
+      }),
     ]).start();
-  }, [remitterOtp]);
+  }, [fadeAnim, remitterOtp, slideAnim]);
 
-  useEffect(() => { console.log(type); });
+  useEffect(() => {
+    console.log(type);
+  });
 
   // ── all original network logic kept exactly the same ──
 
@@ -76,49 +90,66 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
     setisload(true);
     try {
       const baseUrl = `${APP_URLS.addnewRemSendOtp}Mobile=${num}&Name=${name}&surname=tte&pincode=123456`;
-      const res = await post({ url: baseUrl });
+      const res = await post({url: baseUrl});
       if (res.RESULT === '1') {
         ToastAndroid.show(res.ADDINFO, ToastAndroid.LONG);
         setisload(false);
         return;
       }
-      const { status, statuscode, data } = res.ADDINFO;
-      const { remitter } = data || {};
+      const {status, statuscode, data} = res.ADDINFO;
+      const {remitter} = data || {};
       if (statuscode === 'TXN') {
         setIsLoading(false);
         setRemitterid(remitter?.id || '');
-        ToastAndroid.show(status || 'OTP sent successfully. Please check your phone.', ToastAndroid.LONG);
+        ToastAndroid.show(
+          status ||
+            translate('OTP sent successfully. Please check your phone.'),
+          ToastAndroid.LONG,
+        );
         setRemitterOtp(false);
-
       } else if (statuscode === 'ERR') {
         ToastAndroid.show(status, ToastAndroid.LONG);
       } else {
         setIsLoading(false);
-        Alert.alert('Error', res['ADDINFO'] || 'An unknown error occurred.', [{ text: 'OK' }]);
+        Alert.alert(
+          'Error',
+          res.ADDINFO || translate('An unknown error occurred.'),
+          [{text: 'OK'}],
+        );
       }
       setisload(false);
     } catch (error) {
-      Alert.alert('Error', 'Failed to send OTP. Please try again later.', [{ text: 'OK' }]);
+      Alert.alert(
+        translate('Error'),
+        translate('Failed to send OTP. Please try again later.'),
+        [{text: translate('OK')}],
+      );
       setIsLoading(false);
     }
   };
 
-  const checksendernumber = async (number) => {
+  const checksendernumber = async number => {
     setRemitterOtp(true);
     setisload(true);
     try {
       const url = `${APP_URLS.getCheckSenderNo}${number}`;
-      const res = await get({ url });
-      const addinfo = res['ADDINFO'];
+      const res = await get({url});
+      const addinfo = res.ADDINFO;
       if (res) {
         const status = addinfo?.statuscode;
         if (status === 'TXN') {
           settype2('AADHAROTP');
           setRemitterOtp(true);
-        } else if (['RNF','NUMBEROTP','AADHAROTP'].includes(addinfo.statuscode)) {
+        } else if (
+          ['RNF', 'NUMBEROTP', 'AADHAROTP'].includes(addinfo.statuscode)
+        ) {
           settype2('AADHAROTP');
         } else if (status === 'ERR') {
-          ToastAndroid.showWithGravity(addinfo, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+          ToastAndroid.showWithGravity(
+            addinfo,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+          );
         }
       }
       setisload(false);
@@ -127,58 +158,92 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
     }
   };
 
-  const sendAadharOtp = async (num) => {
+  const sendAadharOtp = async num => {
     setisload(true);
     try {
-      const { agentid, clientid } = adharData as any;
+      const {agentid, clientid} = adharData as any;
       const url = `${APP_URLS.Register_aadhar_new}mobile=${num}&aadharno=${aadharnum}&pancardnumber=${Pan}`;
       const url2 = `${APP_URLS.Verify_aadhar_new}mobile=${num}&otp=${mobileOtp}&aadhar=${aadharnum}&clientid=${clientid}&agentid=${agentid}`;
-      const res = await post({ url: isOtp ? url2 : url });
+      const res = await post({url: isOtp ? url2 : url});
       if (res) {
         if (isOtp) {
-          const otpMsg = res.ADDINFO?.msg || 'OTP Verification failed, please try again.';
-          if (res.ADDINFO?.stsmsg === true) { setisOtp(true); setOtpModalVisible(true); }
+          const otpMsg =
+            res.ADDINFO?.msg ||
+            translate('OTP Verification failed, please try again.');
+          if (res.ADDINFO?.stsmsg === true) {
+            setisOtp(true);
+            setOtpModalVisible(true);
+          }
           ToastAndroid.show(otpMsg, ToastAndroid.LONG);
         } else {
           setadharData(res.ADDINFO);
-          const aadharMsg = res.ADDINFO?.msg || 'Aadhar registration failed, please try again.';
-          if (res.ADDINFO?.stsmsg === true) { setisOtp(true); setOtpModalVisible(true); }
+          const aadharMsg =
+            res.ADDINFO?.msg ||
+            translate('Aadhar registration failed, please try again.');
+          if (res.ADDINFO?.stsmsg === true) {
+            setisOtp(true);
+            setOtpModalVisible(true);
+          }
           ToastAndroid.show(aadharMsg, ToastAndroid.LONG);
         }
       } else {
-        ToastAndroid.show('Error: No response from server', ToastAndroid.LONG);
+        ToastAndroid.show(
+          translate('Error: No response from server'),
+          ToastAndroid.LONG,
+        );
       }
       setisload(false);
     } catch (e) {
-      ToastAndroid.show('An error occurred. Please try again.', ToastAndroid.LONG);
+      ToastAndroid.show(
+        translate('An error occurred. Please try again.'),
+        ToastAndroid.LONG,
+      );
     }
   };
 
-  const verifyOtp = async (otp) => {
+  const verifyOtp = async otp => {
     try {
       const url = `${APP_URLS.verifynewRemSendOtp}Mobile=${sendNum}&OTP=${otp}&RequestId&remitterid=${remitterid}&beneficiaryid&Action=add`;
-      const res = await post({ url });
-      if (res['RESULT'] === '1') {
+      const res = await post({url});
+      if (res.RESULT === '1') {
         setIsLoading(false);
-        Alert.alert('Error', res['ADDINFO'], [{ text: 'OK', onPress: () => {} }]);
+        Alert.alert(translate('Error'), res.ADDINFO, [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
       } else {
-        const data = res['ADDINFO']?.['data'];
+        const data = res.ADDINFO?.data;
         if (data) {
-          if (data.status === 'OTP Verified') {
+          if (data.status === translate('OTP Verified')) {
             ToastAndroid.show(data.status, ToastAndroid.LONG);
-        onPress(false)
-
+            onPress(false);
           } else {
-            Alert.alert('Success', 'Transaction Successful', [{
-              text: 'OK', onPress: () => { checksendernumber(sendNum); }
-            }]);
+            Alert.alert(
+              translate('Success'),
+              translate('Transaction Successful'),
+              [
+                {
+                  text: translate('OK'),
+                  onPress: () => {
+                    checksendernumber(sendNum);
+                  },
+                },
+              ],
+            );
           }
         } else {
-          Alert.alert('Error', 'Invalid response from server. Please try again.', [{ text: 'OK', onPress: () => {} }]);
+          Alert.alert(
+            translate('Error'),
+            translate('Invalid response from server. Please try again.'),
+            [{text: translate('OK'), onPress: () => {}}],
+          );
         }
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to verify OTP. Please try again later.', [{ text: 'OK', onPress: () => {} }]);
+      Alert.alert(
+        translate('Error'),
+        translate('Failed to verify OTP. Please try again later.'),
+        [{text: translate('OK'), onPress: () => {}}],
+      );
       setIsLoading(false);
     }
   };
@@ -192,7 +257,9 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
         setisload(true);
         sendOtp(sendNum, remName);
       } else {
-        Alert.alert(translate('Info'), translate('Enter Remitter Name'), [{ text: 'OK', onPress: () => {} }]);
+        Alert.alert(translate('Info'), translate('Enter Remitter Name'), [
+          {text: translate('OK'), onPress: () => {}},
+        ]);
       }
     }
   };
@@ -200,8 +267,12 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
   const handleVerifyOtp = () => {
     const otp = otpDigits.join('');
     if (otp.length === 4) {
-       verifyOtp(otp); }
-    else { Alert.alert('Error', 'Please enter valid OTP.', [{ text: 'OK', onPress: () => {} }]); }
+      verifyOtp(otp);
+    } else {
+      Alert.alert(translate('Error'), translate('Please enter valid OTP.'), [
+        {text: translate('OK'), onPress: () => {}},
+      ]);
+    }
   };
 
   const handleChangeOtpDigit = (index, value) => {
@@ -214,7 +285,11 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
   };
 
   const handleKeyPress = (e, index) => {
-    if (e.nativeEvent.key === 'Backspace' && otpDigits[index] === '' && index > 0) {
+    if (
+      e.nativeEvent.key === 'Backspace' &&
+      otpDigits[index] === '' &&
+      index > 0
+    ) {
       otpRefs.current[index - 1].focus();
     }
   };
@@ -222,11 +297,10 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <LinearGradient
-      colors={[colorConfig.primaryColor,colorConfig.secondaryColor]}
-      start={{ x: 0.15, y: 0 }}
-      end={{ x: 0.85, y: 1 }}
-      style={styles.screenGradient}
-    >
+      colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+      start={{x: 0.15, y: 0}}
+      end={{x: 0.85, y: 1}}
+      style={styles.screenGradient}>
       {/* Decorative orbs */}
       <View style={styles.orbTopLeft} />
       <View style={styles.orbBottomRight} />
@@ -238,13 +312,22 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
         <View style={styles.header}>
           <View style={styles.securityBadge}>
             <View style={styles.badgeDot} />
-            <Text style={styles.badgeText}>SECURE REGISTRATION</Text>
+            <Text style={styles.badgeText}>
+              {translate('SECURE REGISTRATION')}
+            </Text>
           </View>
-          <Text style={styles.headerTitle}>{translate('Remitter_Number_Register')}</Text>
-          <Text style={styles.headerSub}>
-            {remitterOtp ? translate('Enter Remitter Name') : translate('Enter OTP')}
+          <Text style={styles.headerTitle}>
+            {translate('Remitter_Number_Register')}
           </Text>
-          <TouchableOpacity onPress={() => onPress()} style={styles.closeBtn} activeOpacity={0.7}>
+          <Text style={styles.headerSub}>
+            {remitterOtp
+              ? translate('Enter Remitter Name')
+              : translate('Enter OTP')}
+          </Text>
+          <TouchableOpacity
+            onPress={() => onPress()}
+            style={styles.closeBtn}
+            activeOpacity={0.7}>
             <CloseSvg />
           </TouchableOpacity>
         </View>
@@ -252,11 +335,17 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
         {/* ── Step indicator ── */}
         <View style={styles.stepRow}>
           {[1, 2].map(i => (
-            <View key={i} style={[
-              styles.stepDot,
-              (!remitterOtp ? i === 2 : i === 1) && styles.stepDotActive,
-            ]}>
-              <Text style={[styles.stepNum, (!remitterOtp ? i === 2 : i === 1) && styles.stepNumActive]}>
+            <View
+              key={i}
+              style={[
+                styles.stepDot,
+                (!remitterOtp ? i === 2 : i === 1) && styles.stepDotActive,
+              ]}>
+              <Text
+                style={[
+                  styles.stepNum,
+                  (!remitterOtp ? i === 2 : i === 1) && styles.stepNumActive,
+                ]}>
                 {i}
               </Text>
             </View>
@@ -268,13 +357,13 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
           enableOnAndroid
           extraScrollHeight={100}
           keyboardShouldPersistTaps="handled"
-          style={{ flex: 1 }}
-          showsVerticalScrollIndicator={false}
-        >
-          <Animated.View style={[
-            styles.bodyPad,
-            { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }
-          ]}>
+          style={{flex: 1}}
+          showsVerticalScrollIndicator={false}>
+          <Animated.View
+            style={[
+              styles.bodyPad,
+              {opacity: fadeAnim, transform: [{translateY: slideAnim}]},
+            ]}>
             {remitterOtp ? (
               <View>
                 <GlassInput
@@ -295,7 +384,9 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
 
                 {(type === 'AADHAROTP' || type2 === 'AADHAROTP') && (
                   <View style={styles.aadharSection}>
-                    <Text style={styles.aadharSectionLabel}>KYC VERIFICATION</Text>
+                    <Text style={styles.aadharSectionLabel}>
+                      {translate('KYC VERIFICATION')}
+                    </Text>
                     <GlassInput
                       label={translate('Aadhar')}
                       value={aadharnum}
@@ -313,26 +404,27 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
                   </View>
                 )}
 
-                <LinearGradient colors={BTN_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.ctaBtnWrap}>
+                <LinearGradient
+                  colors={BTN_GRADIENT}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 0}}
+                  style={styles.ctaBtnWrap}>
                   <TouchableOpacity
                     style={styles.ctaBtn}
                     onPress={handleRemitterNameNext}
                     disabled={isLoading || !remName}
-                    activeOpacity={0.85}
-                  >
+                    activeOpacity={0.85}>
                     <Text style={styles.ctaBtnText}>
                       {isLoading ? '...' : `${translate('Next')}  →`}
                     </Text>
                   </TouchableOpacity>
                 </LinearGradient>
-
-              
               </View>
             ) : (
               /* ── OTP Verification ── */
               <View>
                 <Text style={styles.otpHint}>
-                  {translate('Enter OTP')} sent to{' '}
+                  {translate('Enter OTP')} {translate('sent to')}{' '}
                   <Text style={styles.otpHintNum}>{sendNum}</Text>
                 </Text>
 
@@ -346,18 +438,34 @@ const NumberRegisterScreen = ({ Name, No, type, CName, onPress }) => {
                       onKeyPress={e => handleKeyPress(e, index)}
                       keyboardType="numeric"
                       maxLength={1}
-                      style={[styles.otpBox, digit && [styles.otpBoxFilled,{borderColor:colorConfig.primaryColor ,backgroundColor:colorConfig.secondaryColor}]]}
+                      style={[
+                        styles.otpBox,
+                        digit && [
+                          styles.otpBoxFilled,
+                          {
+                            borderColor: colorConfig.primaryColor,
+                            backgroundColor: colorConfig.secondaryColor,
+                          },
+                        ],
+                      ]}
                       selectionColor={GLASS.accentLight}
                     />
                   ))}
                 </View>
 
-<DynamicButton
-onPress={handleVerifyOtp}
-title =  {(type === 'AADHAROTP' || type2 === 'AADHAROTP')
-                        ? 'Verify Aadhar OTP  ✓'
-                        : 'Verify OTP  ✓'}/>
-                <LinearGradient colors={BTN_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.ctaBtnWrap}>
+                <DynamicButton
+                  onPress={handleVerifyOtp}
+                  title={
+                    type === 'AADHAROTP' || type2 === 'AADHAROTP'
+                      ? translate('Verify Aadhar OTP  ✓')
+                      : translate('Verify OTP  ✓')
+                  }
+                />
+                <LinearGradient
+                  colors={BTN_GRADIENT}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 0}}
+                  style={styles.ctaBtnWrap}>
                   {/* <TouchableOpacity
                     style={styles.ctaBtn}
                     onPress={handleVerifyOtp}
@@ -370,20 +478,29 @@ title =  {(type === 'AADHAROTP' || type2 === 'AADHAROTP')
                         : 'Verify OTP  ✓'}
                     </Text>
                   </TouchableOpacity> */}
-                  
                 </LinearGradient>
 
-                <TouchableOpacity style={styles.resendRow} onPress={() => sendOtp(sendNum, remName)}>
-                  <Text style={styles.resendText}>Didn't receive?  </Text>
-                  <Text style={styles.resendLink}>Resend OTP</Text>
+                <TouchableOpacity
+                  style={styles.resendRow}
+                  onPress={() => sendOtp(sendNum, remName)}>
+                  <Text style={styles.resendText}>
+                    {translate('Did not receive?')}{' '}
+                  </Text>
+                  <Text style={styles.resendLink}>
+                    {translate('Resend OTP')}
+                  </Text>
                 </TouchableOpacity>
               </View>
             )}
 
             {isLoading && !load && (
-              <ActivityIndicator size="large" color={GLASS.accentLight} style={{ marginTop: 20 }} />
+              <ActivityIndicator
+                size="large"
+                color={GLASS.accentLight}
+                style={{marginTop: 20}}
+              />
             )}
-            <View style={{ height: hScale(40) }} />
+            <View style={{height: hScale(40)}} />
           </Animated.View>
         </KeyboardAwareScrollView>
       </View>
@@ -404,7 +521,15 @@ title =  {(type === 'AADHAROTP' || type2 === 'AADHAROTP')
 };
 
 // ─── GLASS INPUT (local helper) ──────────────────────────────────────────────
-const GlassInput = ({ label, value, onChangeText, editable = true, keyboardType = 'default', maxLength, icon }: any) => (
+const GlassInput = ({
+  label,
+  value,
+  onChangeText,
+  editable = true,
+  keyboardType = 'default',
+  maxLength,
+  icon,
+}: any) => (
   <View style={styles.inputWrap}>
     <Text style={styles.floatLabel}>{label}</Text>
     <TextInput
@@ -433,21 +558,30 @@ const styles = StyleSheet.create({
 
   // orbs
   orbTopLeft: {
-    position: 'absolute', width: wScale(280), height: wScale(280),
+    position: 'absolute',
+    width: wScale(280),
+    height: wScale(280),
     borderRadius: wScale(140),
-    top: hScale(-80), left: wScale(-80),
+    top: hScale(-80),
+    left: wScale(-80),
   },
   orbBottomRight: {
-    position: 'absolute', width: wScale(220), height: wScale(220),
+    position: 'absolute',
+    width: wScale(220),
+    height: wScale(220),
     borderRadius: wScale(110),
     backgroundColor: 'rgba(20,140,200,0.22)',
-    bottom: hScale(-60), right: wScale(-60),
+    bottom: hScale(-60),
+    right: wScale(-60),
   },
   orbMid: {
-    position: 'absolute', width: wScale(160), height: wScale(160),
+    position: 'absolute',
+    width: wScale(160),
+    height: wScale(160),
     borderRadius: wScale(80),
     backgroundColor: 'rgba(0,210,180,0.15)',
-    bottom: hScale(120), left: wScale(20),
+    bottom: hScale(120),
+    left: wScale(20),
   },
 
   // card
@@ -459,7 +593,6 @@ const styles = StyleSheet.create({
     borderColor: GLASS.border,
     borderRadius: wScale(28),
     overflow: 'hidden',
-
   },
 
   // header
@@ -484,7 +617,8 @@ const styles = StyleSheet.create({
     gap: wScale(7),
   },
   badgeDot: {
-    width: wScale(7), height: wScale(7),
+    width: wScale(7),
+    height: wScale(7),
     borderRadius: wScale(3.5),
     backgroundColor: '#a78bfa',
   },
@@ -509,7 +643,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: wScale(20),
     top: hScale(20),
-    width: wScale(36), height: wScale(36),
+    width: wScale(36),
+    height: wScale(36),
     borderRadius: wScale(18),
     backgroundColor: 'rgba(255,255,255,0.1)',
     borderWidth: 1,
@@ -527,12 +662,14 @@ const styles = StyleSheet.create({
     gap: wScale(10),
   },
   stepLine: {
-    flex: 1, height: 1,
+    flex: 1,
+    height: 1,
     backgroundColor: 'rgba(255,255,255,0.1)',
     marginHorizontal: wScale(4),
   },
   stepDot: {
-    width: wScale(28), height: wScale(28),
+    width: wScale(28),
+    height: wScale(28),
     borderRadius: wScale(14),
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderWidth: 1,
@@ -544,11 +681,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(120,80,255,0.4)',
     borderColor: 'rgba(120,80,255,0.6)',
   },
-  stepNum: { fontSize: wScale(12), color: GLASS.textSecondary, fontWeight: '600' },
-  stepNumActive: { color: '#fff' },
+  stepNum: {
+    fontSize: wScale(12),
+    color: GLASS.textSecondary,
+    fontWeight: '600',
+  },
+  stepNumActive: {color: '#fff'},
 
   // body
-  bodyPad: { paddingHorizontal: wScale(24), paddingTop: hScale(10) },
+  bodyPad: {paddingHorizontal: wScale(24), paddingTop: hScale(10)},
 
   // glass input
   inputWrap: {
@@ -574,7 +715,7 @@ const styles = StyleSheet.create({
     color: GLASS.textPrimary,
     textAlign: 'center',
   },
-  glassInputDisabled: { opacity: 0.45 },
+  glassInputDisabled: {opacity: 0.45},
   inputIcon: {
     position: 'absolute',
     right: wScale(14),
@@ -606,7 +747,7 @@ const styles = StyleSheet.create({
     marginTop: hScale(8),
     elevation: 8,
     shadowColor: GLASS.accentPurple,
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: {width: 0, height: 8},
     shadowOpacity: 0.5,
     shadowRadius: 16,
   },
@@ -651,7 +792,8 @@ const styles = StyleSheet.create({
     marginBottom: hScale(28),
   },
   otpBox: {
-    width: wScale(56), height: hScale(62),
+    width: wScale(56),
+    height: hScale(62),
     backgroundColor: GLASS.inputBg,
     borderWidth: 1,
     borderColor: GLASS.inputBorder,
@@ -662,7 +804,7 @@ const styles = StyleSheet.create({
     color: GLASS.textPrimary,
   },
   otpBoxFilled: {
-    borderColor:'red',
+    borderColor: 'red',
     backgroundColor: 'rgba(255, 255, 255, 0.12)',
   },
 
@@ -672,8 +814,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: hScale(18),
   },
-  resendText: { fontSize: wScale(13), color: GLASS.textSecondary },
-  resendLink: { fontSize: wScale(13), color: GLASS.accentLight, fontWeight: '600' },
+  resendText: {fontSize: wScale(13), color: GLASS.textSecondary},
+  resendLink: {
+    fontSize: wScale(13),
+    color: GLASS.accentLight,
+    fontWeight: '600',
+  },
 });
 
 export default NumberRegisterScreen;

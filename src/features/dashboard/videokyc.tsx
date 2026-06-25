@@ -504,14 +504,16 @@ const VideoKYC = () => {
           {isRecording && (
             <View style={s.recIndicator}>
               <View style={s.recDot} />
-              <Text style={s.recText}>REC</Text>
+              <Text style={s.recText}>{translate('REC')}</Text>
             </View>
           )}
 
           {/* Bottom overlay */}
           <View style={s.cameraOverlay}>
             {!isRecording && (
-              <Text style={s.camLabel}>Position your face in frame</Text>
+              <Text style={s.camLabel}>
+                {translate('Position your face in frame')}
+              </Text>
             )}
           </View>
         </View>
@@ -571,7 +573,7 @@ const VideoKYC = () => {
                   uploadKYCVideo(videoBase64);
                 }
               }}>
-              <Text style={s.btnUploadText}>↑ Upload</Text>
+              <Text style={s.btnUploadText}>↑ {translate('Upload')}</Text>
             </TouchableOpacity>
           )}
         </View>

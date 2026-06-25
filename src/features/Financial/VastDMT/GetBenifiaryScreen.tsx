@@ -1,29 +1,37 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/no-unstable-nested-components */
+import React, {useEffect, useState} from 'react';
 import {
-  View, Text, TextInput, Button, ActivityIndicator, StyleSheet, ToastAndroid,  FlatList,
-  TouchableOpacity, Alert, ScrollView, Keyboard
+  View,
+  Text,
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  Keyboard,
 } from 'react-native';
-import { APP_URLS } from '../../../utils/network/urls';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { translate } from '../../../utils/languageUtils/I18n';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { useFocusEffect } from '@react-navigation/native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
+import {useFocusEffect} from '@react-navigation/native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import DynamicButton from '../../drawer/button/DynamicButton';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import LinearGradient from 'react-native-linear-gradient';
-import { FlashList } from '@shopify/flash-list';
-import { SvgXml } from 'react-native-svg';
-import { colors } from '../../../utils/styles/theme';
+import {FlashList} from '@shopify/flash-list';
+import {SvgXml} from 'react-native-svg';
+import {colors} from '../../../utils/styles/theme';
 import NumberRegisterScreen from './RegisternNewNumber';
-import { BottomSheet } from '@rneui/base';
+import {BottomSheet} from '@rneui/base';
 import AddNewBenificiaryScreen from './AddNewBenificiaryScreen';
 import ShowLoader from '../../../components/ShowLoder';
 
 const GetBenifiaryScreen = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const EditIcon = ` 
 
  <?xml version="1.0" encoding="UTF-8"?>
@@ -32,10 +40,6 @@ const GetBenifiaryScreen = () => {
 <path transform="translate(1360,1023)" d="m0 0h10l15 2 14 5 12 7 10 8 10 9 339 339v2h2l8 10 4 9 6 20 2 8v25l-3 10-9 19-9 11-349 349-12 9-11 6-15 5-12 2h-14l-17-3-12-5-12-7-12-11-9-10-9-15-6-16-2-14v-9l2-14 4-13 5-10 7-11 7-7 7-8 159-159h2l2-4 23-23h2v-2l-1168-1-14-2-15-5-14-8-13-12-7-10-8-16-4-17-1-9v-12l2-16 5-16 7-13 8-10 7-7 14-9 11-5 18-4h994l172-1 6 1-2-4-198-198-9-13-7-15-3-12-1-8v-11l3-16 4-12 8-14 7-9 11-11 15-10 15-6 9-2z"/>
 </svg>
 
-  
-  
-  
-  
   `;
   const [sendernum, setSendernum] = useState('');
   const [onTap, setOnTap] = useState(false);
@@ -43,12 +47,12 @@ const GetBenifiaryScreen = () => {
   const [nxtbtn, setNxtbtn] = useState(false);
   const [banklist, setBanklist] = useState([]);
   const [remid, setRemid] = useState('');
-  const { post, get } = useAxiosHook();
+  const {post, get} = useAxiosHook();
   const [isLoading, setisLoading] = useState(true);
   const navigation = useNavigation<any>();
   const [nodata, setnodata] = useState(false);
-  const [accHolder, setAccHolder] = useState('')
-  const [bankname, setBankName] = useState('')
+  const [accHolder, setAccHolder] = useState('');
+  const [bankname, setBankName] = useState('');
   const [ACCno, setAccNo] = useState('');
   const [ifsc, setIfsc] = useState('');
   const [editable, setEditable] = useState(false);
@@ -58,7 +62,7 @@ const GetBenifiaryScreen = () => {
   const [addinfo, setAddInfo] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [isVisible2, setIsVisible2] = useState(false);
-const [isload,setIsload]= useState(false)
+  const [isload, setIsload] = useState(false);
   useEffect(() => {
     getGenUniqueId();
   }, []);
@@ -66,37 +70,36 @@ const [isload,setIsload]= useState(false)
   useFocusEffect(
     React.useCallback(() => {
       // setBanklist([])
-    }, [])
+    }, []),
   );
 
-  const checksendernumber = async (number) => {
-    setIsload(true)
+  const checksendernumber = async number => {
+    setIsload(true);
     setisLoading(true);
 
     try {
       const url = `${APP_URLS.getCheckSenderNo}${number}`;
-      console.log("********^^*******",url)
-      const res = await get({ url: url });
+      console.log('********^^*******', url);
+      const res = await get({url: url});
       console.log('res', JSON.stringify(res));
 
-      const addinfo = res['ADDINFO'];
-      setAddInfo(addinfo)
+      const addinfo = res.ADDINFO;
+      setAddInfo(addinfo);
       console.log(addinfo, '*-*-');
 
       if (res) {
         setisLoading(false);
         const status = addinfo?.statuscode;
         setTXNP1(status);
-        if (status === "TXN") {
-
+        if (status === 'TXN') {
           setremitter(addinfo?.data?.remitter);
           setkyc(addinfo?.data?.remitter.kycdone);
 
-
-
           const remmname = addinfo?.data?.remitter?.name || '';
-          const consumelimit = addinfo?.data?.remitter?.consumedlimit?.toString() || '0';
-          const remainlimit = addinfo?.data?.remitter?.remaininglimit?.toString() || '0';
+          const consumelimit =
+            addinfo?.data?.remitter?.consumedlimit?.toString() || '0';
+          const remainlimit =
+            addinfo?.data?.remitter?.remaininglimit?.toString() || '0';
           const kycsts = addinfo?.data?.remitter?.kycdone?.toString() || '';
           const photo = addinfo?.data?.remitter?.Photo?.toString() || '';
           const beneficiary = addinfo?.data?.beneficiary || [];
@@ -112,51 +115,73 @@ const [isload,setIsload]= useState(false)
           } else {
             setnodata(false);
           }
-        } else if (addinfo.statuscode === "RNF" || addinfo.statuscode === "NUMBEROTP" || addinfo.statuscode === "AADHAROTP") {
-          setIsVisible(addinfo.statuscode === 'RNF' || addinfo.statuscode === 'NUMBEROTP' ||addinfo.statuscode === "AADHAROTP")
+        } else if (
+          addinfo.statuscode === 'RNF' ||
+          addinfo.statuscode === 'NUMBEROTP' ||
+          addinfo.statuscode === 'AADHAROTP'
+        ) {
+          setIsVisible(
+            addinfo.statuscode === 'RNF' ||
+              addinfo.statuscode === 'NUMBEROTP' ||
+              addinfo.statuscode === 'AADHAROTP',
+          );
 
-          if (addinfo.statuscode === "RNF" || addinfo.statuscode === "NUMBEROTP" || addinfo.statuscode === "AADHAROTP") {
+          if (
+            addinfo.statuscode === 'RNF' ||
+            addinfo.statuscode === 'NUMBEROTP' ||
+            addinfo.statuscode === 'AADHAROTP'
+          ) {
             Alert.alert(
-              addinfo.statuscode === "AADHAROTP" ? 'Aadhar Verification' : "User does not exist",
-              "",
+              addinfo.statuscode === 'AADHAROTP'
+                ? translate('Aadhar Verification')
+                : translate('User does not exist'),
+              '',
               [
                 {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
+                  text: translate('Cancel'),
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
                 },
                 {
-                  text: addinfo.statuscode === "AADHAROTP" ? 'Continue Aadhar Verification ' : "Register",
-                  onPress: () => 
-
-                    setIsVisible( addinfo.statuscode === 'RNF' || addinfo.statuscode === 'NUMBEROTP')
+                  text:
+                    addinfo.statuscode === 'AADHAROTP'
+                      ? translate('Continue Aadhar Verification')
+                      : translate('Register'),
+                  onPress: () =>
+                    setIsVisible(
+                      addinfo.statuscode === 'RNF' ||
+                        addinfo.statuscode === 'NUMBEROTP',
+                    ),
                   //  navigation.navigate("NumberRegisterScreen", { type: addinfo.statuscode, CName: addinfo.Name, No: number, Name: 'VASTWEB' })
-
                 },
               ],
-              { cancelable: false }
+              {cancelable: false},
             );
           }
-
         } else if (status === 'ERR') {
-          ToastAndroid.showWithGravity(addinfo, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+          ToastAndroid.showWithGravity(
+            addinfo,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+          );
         }
       } else if (res?.RESULT === '1') {
-        ToastAndroid.showWithGravity(addinfo, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+        ToastAndroid.showWithGravity(
+          addinfo,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
 
         const status = addinfo?.data?.statuscode;
-        console.log(addinfo.statuscode)
-        console.log(addinfo.data.status)
-
-
+        console.log(addinfo.statuscode);
+        console.log(addinfo.data.status);
 
         setisLoading(false);
       }
 
       setOnTap1(false);
       setOnTap(true);
-      setIsload(false)
-
+      setIsload(false);
     } catch (error) {
       setisLoading(false);
       console.error('Error:', error);
@@ -167,25 +192,24 @@ const [isload,setIsload]= useState(false)
   const [unqid, setUnqiD] = useState('');
   const getGenUniqueId = async () => {
     try {
-      const url = `${APP_URLS.getGenIMPSUniqueId}`
+      const url = `${APP_URLS.getGenIMPSUniqueId}`;
       console.log(url);
-      const res = await get({ url: url });
-      setUnqiD(res['Message']);
+      const res = await get({url: url});
+      setUnqiD(res.Message);
       setisLoading(false);
 
-
-      if (res['Response'] == 'Failed') {
+      if (res.Response === 'Failed') {
         ToastAndroid.showWithGravity(
-          res['Message'],
+          res.Message,
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
-        )
+        );
       } else {
         ToastAndroid.showWithGravity(
-          res['Response'],
+          res.Response,
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
-        )
+        );
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -199,65 +223,94 @@ const [isload,setIsload]= useState(false)
     }
   };
 
-  const handleImpsPress = async (item) => {
-    console.log(item)
+  const handleImpsPress = async item => {
+    console.log(item);
     console.log('IMPS pressed for:', item);
-    const bankname = item['bank'];
-    const ACCno = item['account'];
-    const accHolder = item['name'];
-    const ifsc = item['ifsc'];
+    const bankname = item.bank;
+    const ACCno = item.account;
+    const accHolder = item.name;
+    const ifsc = item.ifsc;
     console.log('**CHECK', bankname, ACCno, accHolder, ifsc);
-    setIfsc(item['ifsc']);
-    setAccHolder(item['name']);
-    setAccNo(item['account']);
-    setBankName(item['bank'])
+    setIfsc(item.ifsc);
+    setAccHolder(item.name);
+    setAccNo(item.account);
+    setBankName(item.bank);
 
-    navigation.navigate("toBankScreen", { bankname, ACCno, accHolder, ifsc, mode: 'IMPS', unqid, kyc, senderNo: sendernum, dmttype: 'VASTWEB', id: remid },);
-
+    navigation.navigate('toBankScreen', {
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'IMPS',
+      unqid,
+      kyc,
+      senderNo: sendernum,
+      dmttype: 'VASTWEB',
+      id: remid,
+    });
   };
 
-
-  const handleNeftPress = async (item) => {
-
-    await setIfsc(item['ifsc']);
-    await setAccHolder(item['name']);
-    await setAccNo(item['account']);
-    await setBankName(item['bank'])
-    const bankname = item['bank'];
-    const ACCno = item['account'];
-    const accHolder = item['name'];
-    const ifsc = item['ifsc'];
-    navigation.navigate("toBankScreen", { bankname, ACCno, accHolder, ifsc, mode: 'NEFT', unqid, dmttype: 'VASTWEB', id: remid },);
+  const handleNeftPress = async item => {
+    await setIfsc(item.ifsc);
+    await setAccHolder(item.name);
+    await setAccNo(item.account);
+    await setBankName(item.bank);
+    const bankname = item.bank;
+    const ACCno = item.account;
+    const accHolder = item.name;
+    const ifsc = item.ifsc;
+    navigation.navigate('toBankScreen', {
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'NEFT',
+      unqid,
+      dmttype: 'VASTWEB',
+      id: remid,
+    });
     console.log('NEFT pressed for:', item);
   };
 
-  const handleDeletePress = async (item) => {
+  const handleDeletePress = async item => {
     setisLoading(true);
     console.log('Delete pressed for:', item);
 
     Alert.alert(
-      'Delete Account',
-      `Account: ${item.account}\nBank: ${item.bank}\nID: ${item.id}\nIFSC: ${item.ifsc}\nName: ${item.name}`,
+      translate('Delete Account'),
+      `${translate('Account')}: ${item.account}\n${translate('Bank')}: ${
+        item.bank
+      }\n${translate('ID')}: ${item.id}\n${translate('IFSC')}: ${
+        item.ifsc
+      }\n${translate('Name')}: ${item.name}`,
       [
         {
-          text: 'Cancel',
+          text: translate('Cancel'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
-          text: 'Confirm',
+          text: translate('Confirm'),
           onPress: async () => {
             try {
               const res = await post({
-                url: `${APP_URLS.bankbenDelete}mobile=${item['mobile']}&ifsc=${item['ifsc']}&code&remitterid=${remid}&beneficiaryid=${item['id']}`,
+                url: `${APP_URLS.bankbenDelete}mobile=${item.mobile}&ifsc=${item.ifsc}&code&remitterid=${remid}&beneficiaryid=${item.id}`,
               });
               console.log(res);
-              if (res['RESULT'] === '1') {
-                ToastAndroid.showWithGravity(res['ADDINFO'], ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+              if (res.RESULT === '1') {
+                ToastAndroid.showWithGravity(
+                  res.ADDINFO,
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                );
               } else {
                 checksendernumber(sendernum);
-                const response = JSON.parse(res['ADDINFO']);
-                ToastAndroid.showWithGravity(response.status, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+                const response = JSON.parse(res.ADDINFO);
+                ToastAndroid.showWithGravity(
+                  response.status,
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                );
                 console.log(response);
               }
             } catch (error) {
@@ -266,159 +319,173 @@ const [isload,setIsload]= useState(false)
           },
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
-
-
   const toggleEditable = () => {
     setEditable(!editable);
-
-  }
+  };
 
   const [searchText, setSearchText] = useState('');
-const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
-useEffect(() => {
-  filterData(searchText);
-}, [searchText,  banklist]);
+  useEffect(() => {
+    filterData(searchText);
+  }, [searchText, banklist]);
 
-const filterData = (text) => {
-  const dataToFilter =  banklist;
+  const filterData = text => {
+    const dataToFilter = banklist;
 
-  if (!text.trim()) {
-    setFilteredData(dataToFilter);
-  } else {
-    const filtered = dataToFilter.filter(item =>
-      item.name?.toLowerCase().includes(text.toLowerCase()) ||
-      item.account?.toString().includes(text)
-    );
-    setFilteredData(filtered);
-    
-  }
-};
+    if (!text.trim()) {
+      setFilteredData(dataToFilter);
+    } else {
+      const filtered = dataToFilter.filter(
+        item =>
+          item.name?.toLowerCase().includes(text.toLowerCase()) ||
+          item.account?.toString().includes(text),
+      );
+      setFilteredData(filtered);
+    }
+  };
 
- const BeneficiaryList = () => {
-    console.log("************^#%%%%%%%%%", filteredData);
- 
+  const BeneficiaryList = () => {
+    console.log('************^#%%%%%%%%%', filteredData);
+
     return (
       <FlashList
         data={filteredData}
         keyExtractor={item => item.id}
         estimatedItemSize={160}
-        contentContainerStyle={{ paddingHorizontal: wScale(12), paddingVertical: hScale(8) }}
-        renderItem={({ item }) => (
+        contentContainerStyle={{
+          paddingHorizontal: wScale(12),
+          paddingVertical: hScale(8),
+        }}
+        renderItem={({item}) => (
           <View style={styles.itemContainer}>
- 
             {/* Bank Down Warning */}
             {item.isbankdown && (
               <View style={styles.warningBanner}>
                 <Text style={styles.warningIcon}>⚠️</Text>
                 <Text style={styles.noteText} numberOfLines={2}>
-                  {translate("Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime")}
+                  {translate(
+                    'Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime',
+                  )}
                 </Text>
               </View>
             )}
- 
+
             {/* Top: Avatar + Name + IFSC */}
             <View style={styles.cardTop}>
-              <View style={[styles.avatar, { backgroundColor: `${colorConfig.secondaryColor}18` }]}>
-                <Text style={[styles.avatarText, { color: colorConfig.secondaryColor }]}>
+              <View
+                style={[
+                  styles.avatar,
+                  {backgroundColor: `${colorConfig.secondaryColor}18`},
+                ]}>
+                <Text
+                  style={[
+                    styles.avatarText,
+                    {color: colorConfig.secondaryColor},
+                  ]}>
                   {item.name?.charAt(0)?.toUpperCase() ?? '?'}
                 </Text>
               </View>
- 
+
               <View style={styles.cardTopInfo}>
-                <Text style={styles.nameText} numberOfLines={1}>{item.name}</Text>
+                <Text style={styles.nameText} numberOfLines={1}>
+                  {item.name}
+                </Text>
                 <View style={styles.ifscBadge}>
-                  <Text style={styles.ifscLabel}>{translate("IFSC_Code")}  </Text>
+                  <Text style={styles.ifscLabel}>
+                    {translate('IFSC_Code')}{' '}
+                  </Text>
                   <Text style={styles.ifscValue}>{item.ifsc}</Text>
                 </View>
               </View>
             </View>
- 
+
             {/* Divider */}
             <View style={styles.divider} />
- 
+
             {/* Middle: Bank + Account */}
             <View style={styles.infoGrid}>
               <View style={styles.infoCell}>
-                <Text style={styles.cellLabel}>{translate("Bank_Name")}</Text>
-                <Text style={styles.cellValue} numberOfLines={1} ellipsizeMode="tail">{item.bank}</Text>
+                <Text style={styles.cellLabel}>{translate('Bank_Name')}</Text>
+                <Text
+                  style={styles.cellValue}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {item.bank}
+                </Text>
               </View>
               <View style={styles.infoCellDivider} />
-              <View style={[styles.infoCell, { alignItems: 'flex-end' }]}>
-                <Text style={styles.cellLabel}>{translate("Account")}</Text>
-                <Text style={styles.cellValue} numberOfLines={1} ellipsizeMode="tail">{item.account}</Text>
+              <View style={[styles.infoCell, {alignItems: 'flex-end'}]}>
+                <Text style={styles.cellLabel}>{translate('Account')}</Text>
+                <Text
+                  style={styles.cellValue}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {item.account}
+                </Text>
               </View>
             </View>
- 
+
             {/* Divider */}
             <View style={styles.divider} />
- 
+
             {/* Bottom: Action Buttons */}
             <View style={styles.btnRow}>
               <TouchableOpacity
-                style={[styles.actionChip, { backgroundColor: '#1D6FE8' }]}
+                style={[styles.actionChip, {backgroundColor: '#1D6FE8'}]}
                 onPress={() => handleImpsPress(item)}
-                activeOpacity={0.82}
-              >
-                <Text style={styles.chipText}>{translate("IMPS")}</Text>
+                activeOpacity={0.82}>
+                <Text style={styles.chipText}>{translate('IMPS')}</Text>
               </TouchableOpacity>
- 
+
               <TouchableOpacity
-                style={[styles.actionChip, { backgroundColor: '#16A34A' }]}
+                style={[styles.actionChip, {backgroundColor: '#16A34A'}]}
                 onPress={() => handleNeftPress(item)}
-                activeOpacity={0.82}
-              >
-                <Text style={styles.chipText}>{translate("NEFT")}</Text>
+                activeOpacity={0.82}>
+                <Text style={styles.chipText}>{translate('NEFT')}</Text>
               </TouchableOpacity>
- 
+
               <View style={styles.chipSpacer} />
- 
+
               <TouchableOpacity
                 style={[styles.actionChip, styles.deleteChip]}
                 onPress={() => handleDeletePress(item)}
-                activeOpacity={0.82}
-              >
-                <Text style={styles.deleteChipText}>{translate("Delete")}</Text>
+                activeOpacity={0.82}>
+                <Text style={styles.deleteChipText}>{translate('Delete')}</Text>
               </TouchableOpacity>
             </View>
- 
           </View>
         )}
       />
     );
   };
- 
- 
-
-
-
 
   return (
     <View style={styles.main}>
-
-      {isload && <ShowLoader/>}
-      <LinearGradient colors={[colorConfig.primaryColor, colorConfig.secondaryColor]} style={styles.lineargradient}>
-        <View style={styles.container} >
-          {sendernum.length === 10 && <TextInput
-            placeholder="Search by Name or Account No"
-            value={searchText}
-            onChangeText={setSearchText}
-            style={styles.inputstyle}
-            placeholderTextColor="#888"
-          />
-          }
+      {isload && <ShowLoader />}
+      <LinearGradient
+        colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+        style={styles.lineargradient}>
+        <View style={styles.container}>
+          {sendernum.length === 10 && (
+            <TextInput
+              placeholder={translate('Search by Name or Account No')}
+              value={searchText}
+              onChangeText={setSearchText}
+              style={styles.inputstyle}
+              placeholderTextColor="#888"
+            />
+          )}
 
           <View>
             <TextInput
-              placeholder='Enter Remitter Registered  Number'
+              placeholder={translate('Enter Remitter Registered  Number')}
               placeholderTextColor={colors.black75}
-              style={styles.inputstyle
-
-              }
+              style={styles.inputstyle}
               maxLength={10}
               keyboardType="number-pad"
               value={sendernum}
@@ -431,35 +498,42 @@ const filterData = (text) => {
               // }}
               editable={banklist.length === 0 ? true : editable}
               onChangeText={text => {
-                setSendernum(text)
+                setSendernum(text);
                 if (text.length === 10) {
                   setNxtbtn(true);
                   setOnTap(false);
                   setOnTap1(true);
                   checksendernumber(text);
                   Keyboard.dismiss();
-
                 } else {
                   setNxtbtn(false);
                   setOnTap(true);
                   setOnTap1(false);
                 }
               }}
-            />{
-              banklist.length === 0 ? null :
-                <View style={[styles.righticon2]}>
-                  <TouchableOpacity style={{ backgroundColor: colorConfig.secondaryColor, paddingVertical: hScale(4) }}
-                    onPress={toggleEditable}>
-                    <SvgXml xml={EditIcon} width={wScale(40)} height={wScale(28)} />
-                  </TouchableOpacity>
-                </View>
-            }
+            />
+            {banklist.length === 0 ? null : (
+              <View style={[styles.righticon2]}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: colorConfig.secondaryColor,
+                    paddingVertical: hScale(4),
+                  }}
+                  onPress={toggleEditable}>
+                  <SvgXml
+                    xml={EditIcon}
+                    width={wScale(40)}
+                    height={wScale(28)}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
 
-          {remitter === null ? null :
-            <View style={[styles.limitview, { flexDirection: 'row' }]}>
+          {remitter === null ? null : (
+            <View style={[styles.limitview, {flexDirection: 'row'}]}>
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Consume_limit")}</Text>
+                <Text style={styles.label}>{translate('Consume_limit')}</Text>
                 <Text style={styles.value}>
                   {remitter === null ? '0000' : remitter.consumedlimit}
                 </Text>
@@ -467,114 +541,132 @@ const filterData = (text) => {
               <View style={styles.borderview} />
 
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Remain_limit")}</Text>
-                <Text style={[styles.value, { textAlign: 'center' }]}>
+                <Text style={styles.label}>{translate('Remain_limit')}</Text>
+                <Text style={[styles.value, {textAlign: 'center'}]}>
                   {remitter === null ? '0000' : remitter.remaininglimit}
                 </Text>
               </View>
               <View style={styles.borderview} />
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Per_txn_limit")}</Text>
-                <Text style={[styles.value, { textAlign: 'right' }]}>
+                <Text style={styles.label}>{translate('Per_txn_limit')}</Text>
+                <Text style={[styles.value, {textAlign: 'right'}]}>
                   {remitter === null ? '0000' : remitter.perm_txn_limit}
                 </Text>
               </View>
             </View>
-          }
-          {isTXNP1 === 'TXN' && <DynamicButton
-            title={onTap1 ? <ActivityIndicator size={'large'} color={colorConfig.labelColor} /> : banklist.length === 0 ? "Next" : "add_acc"}
-            disabled={!nxtbtn}
-            onPress={() => {
-              if (banklist.length === 0) {
-                handleNextButtonPress();
-              } else {
-
-                setIsVisible2(true)
-                // navigation.navigate("AddNewBenificiaryScreen", { no: sendernum });
+          )}
+          {isTXNP1 === 'TXN' && (
+            <DynamicButton
+              title={
+                onTap1 ? (
+                  <ActivityIndicator
+                    size={'large'}
+                    color={colorConfig.labelColor}
+                  />
+                ) : banklist.length === 0 ? (
+                  'Next'
+                ) : (
+                  'add_acc'
+                )
               }
-            }}
-          />}
+              disabled={!nxtbtn}
+              onPress={() => {
+                if (banklist.length === 0) {
+                  handleNextButtonPress();
+                } else {
+                  setIsVisible2(true);
+                  // navigation.navigate("AddNewBenificiaryScreen", { no: sendernum });
+                }
+              }}
+            />
+          )}
         </View>
       </LinearGradient>
 
       <ScrollView>
-
-        {banklist.length === 0 ?
+        {banklist.length === 0 ? (
           <View style={styles.container}>
-            <Text style={styles.titletext}>{translate("Very_Important_Notice")}</Text>
-            <View style={styles.textview} >
+            <Text style={styles.titletext}>
+              {translate('Very_Important_Notice')}
+            </Text>
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('SP1')}</Text>
             </View>
 
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('SP2')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('SP3')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('SP4')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('SP5')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('SP6')}</Text>
             </View>
           </View>
-          :
-
-          <View style={{
-            paddingTop: hScale(20),
-          }}>
+        ) : (
+          <View
+            style={{
+              paddingTop: hScale(20),
+            }}>
             <BeneficiaryList />
-
-
           </View>
-          
-        }
-        </ScrollView>
-        <ScrollView>
-        {nodata ? <View style={styles.container}>
-          <Text style={styles.title}>{translate('No Data Found')}</Text>
+        )}
+      </ScrollView>
+      <ScrollView>
+        {nodata ? (
+          <View style={styles.container}>
+            <Text style={styles.title}>{translate('No Data Found')}</Text>
 
-          <DynamicButton title={'ADD ACC'} onPress={() => {
-            setIsVisible2(true)
-            //  navigation.navigate("AddNewBenificiaryScreen", { no: sendernum });
-
-          }} />
-
-        </View>
-          : <></>
-        }
-        {(addinfo && addinfo.statuscode === 'RNF' || addinfo.statuscode === 'NUMBEROTP' ||addinfo.statuscode === 'AADHAROTP') &&
-
-
-          <BottomSheet animationType="none"   onBackdropPress={() => { setIsVisible(false) }} isVisible={isVisible}>
-
+            <DynamicButton
+              title={'ADD ACC'}
+              onPress={() => {
+                setIsVisible2(true);
+                //  navigation.navigate("AddNewBenificiaryScreen", { no: sendernum });
+              }}
+            />
+          </View>
+        ) : (
+          <></>
+        )}
+        {((addinfo && addinfo.statuscode === 'RNF') ||
+          addinfo.statuscode === 'NUMBEROTP' ||
+          addinfo.statuscode === 'AADHAROTP') && (
+          <BottomSheet
+            animationType="none"
+            onBackdropPress={() => {
+              setIsVisible(false);
+            }}
+            isVisible={isVisible}>
             <NumberRegisterScreen
               type={addinfo.statuscode}
               CName={addinfo.Name}
               No={sendernum}
               Name={'VASTWEB'}
-              onPress={(v) => {
+              onPress={v => {
                 setIsVisible(v);
               }}
             />
           </BottomSheet>
-        }
+        )}
 
-
-
-        <BottomSheet animationType="none"   
-        onBackdropPress={() => {  setIsVisible2(false) }} isVisible={isVisible2}>
-
+        <BottomSheet
+          animationType="none"
+          onBackdropPress={() => {
+            setIsVisible2(false);
+          }}
+          isVisible={isVisible2}>
           <AddNewBenificiaryScreen
             Name={''}
             Name2={''}
@@ -586,15 +678,13 @@ const filterData = (text) => {
             onPress2={() => {
               setisLoading(true);
 
-              checksendernumber(sendernum)
+              checksendernumber(sendernum);
               setIsVisible2(false);
             }}
-
           />
-
         </BottomSheet>
       </ScrollView>
-    </View >
+    </View>
   );
 };
 
@@ -603,7 +693,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   lineargradient: {
-    paddingTop: hScale(10)
+    paddingTop: hScale(10),
   },
   container: {
     paddingHorizontal: wScale(10),
@@ -615,29 +705,29 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: hScale(15),
     fontSize: wScale(18),
-    color: '#000'
+    color: '#000',
   },
 
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "78%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '78%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
 
   title: {
     fontWeight: 'bold',
-    color: '#000'
+    color: '#000',
   },
   titletext: {
     color: 'red',
     fontSize: wScale(18),
     paddingBottom: hScale(15),
-    paddingTop: hScale(5)
+    paddingTop: hScale(5),
   },
   bulletPoint: {
     backgroundColor: 'red',
@@ -649,13 +739,13 @@ const styles = StyleSheet.create({
   },
   textview: {
     flexDirection: 'row',
-    paddingBottom: hScale(10)
+    paddingBottom: hScale(10),
   },
   textstyle: {
     fontSize: wScale(14),
     flex: 1,
     textAlign: 'justify',
-    color: colors.black75
+    color: colors.black75,
   },
   itemContainer: {
     flex: 1,
@@ -664,13 +754,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 2,
     marginBottom: hScale(10),
-    marginHorizontal: wScale(10)
+    marginHorizontal: wScale(10),
   },
 
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   itemLabel: {
     fontSize: wScale(16),
@@ -680,12 +770,13 @@ const styles = StyleSheet.create({
   itemValue: {
     fontSize: wScale(16),
     color: '#555',
-    flex: 1, textAlign: 'right'
+    flex: 1,
+    textAlign: 'right',
   },
   noteText: {
     fontSize: wScale(14),
     color: '#d9534f',
-    marginBottom: hScale(10)
+    marginBottom: hScale(10),
   },
 
   button: {
@@ -728,17 +819,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#fff'
+    color: '#fff',
   },
   value: {
     fontSize: 14,
-    color: '#fff'
-
+    color: '#fff',
   },
   borderview: {
     height: '100%',
     width: wScale(0.7),
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
 
   warningBanner: {
@@ -751,9 +841,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#FED7AA',
     gap: wScale(6),
   },
-  warningIcon: { fontSize: wScale(13), marginTop: 1 },
- 
- 
+  warningIcon: {fontSize: wScale(13), marginTop: 1},
+
   // Card Top
   cardTop: {
     flexDirection: 'row',
@@ -774,7 +863,7 @@ const styles = StyleSheet.create({
     fontSize: wScale(20),
     fontWeight: '800',
   },
-  cardTopInfo: { flex: 1 },
+  cardTopInfo: {flex: 1},
   nameText: {
     fontSize: wScale(15),
     fontWeight: '700',
@@ -798,7 +887,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 0.3,
   },
- 
+
   // Info Grid
   divider: {
     height: 1,
@@ -811,7 +900,7 @@ const styles = StyleSheet.create({
     paddingVertical: hScale(10),
     alignItems: 'center',
   },
-  infoCell: { flex: 1 },
+  infoCell: {flex: 1},
   infoCellDivider: {
     width: 1,
     height: hScale(30),
@@ -831,7 +920,7 @@ const styles = StyleSheet.create({
     color: '#1F2937',
     fontWeight: '600',
   },
- 
+
   // Buttons
   btnRow: {
     flexDirection: 'row',
@@ -853,7 +942,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.3,
   },
-  chipSpacer: { flex: 1 },
+  chipSpacer: {flex: 1},
   deleteChip: {
     backgroundColor: '#FEF2F2',
     borderWidth: 1,

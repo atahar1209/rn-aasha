@@ -1,4 +1,4 @@
-package com.digitalindiapay.location;
+package com.vrecharge.location;
 
 import android.Manifest;
 import android.app.Activity;

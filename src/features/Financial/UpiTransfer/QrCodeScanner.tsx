@@ -1,5 +1,5 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useEffect, useState, useRef } from "react";
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -11,29 +11,27 @@ import {
   StatusBar,
   Alert,
   AppState,
-} from "react-native";
+} from 'react-native';
 import {
   Camera,
   useCameraDevice,
   useCodeScanner,
   useCameraPermission,
-} from "react-native-vision-camera";
-import { useIsFocused } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/Ionicons";
-import { useNavigation } from "../../../utils/navigation/NavigationService";
+} from 'react-native-vision-camera';
+import {useIsFocused} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
 
-const { width } = Dimensions.get("window");
+const {width} = Dimensions.get('window');
 const SCAN_SIZE = width * 0.75;
-
 const QRScanScreen = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const device = useCameraDevice("back");
-
-  const { hasPermission, requestPermission } = useCameraPermission();
+  const device = useCameraDevice('back');
+  const {hasPermission, requestPermission} = useCameraPermission();
   const [permissionChecked, setPermissionChecked] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
-  const [flash, setFlash] = useState("off");
+  const [flash, setFlash] = useState('off');
 
   const scanAnim = useRef(new Animated.Value(0)).current;
 
@@ -47,27 +45,26 @@ const QRScanScreen = () => {
 
     if (!result) {
       Alert.alert(
-        "Camera Permission Required",
-        "Camera access is needed to scan QR code.",
+        translate('Camera Permission Required'),
+        translate('Camera access is needed to scan QR code.'),
         [
-          { text: "Cancel", style: "cancel" },
+          {text: translate('Cancel'), style: 'cancel'},
           {
-            text: "Open Settings",
+            text: translate('Open Settings'),
             onPress: () => Linking.openSettings(),
           },
-        ]
+        ],
       );
     } else {
       setIsCameraActive(true);
     }
-
     setPermissionChecked(true);
   };
 
   // ================= APP RESUME CHECK =================
   useEffect(() => {
-    const sub = AppState.addEventListener("change", (state) => {
-      if (state === "active") {
+    const sub = AppState.addEventListener('change', state => {
+      if (state === 'active') {
         checkPermission();
       }
     });
@@ -89,18 +86,18 @@ const QRScanScreen = () => {
             duration: 2000,
             useNativeDriver: true,
           }),
-        ])
+        ]),
       ).start();
     }
-  }, [isFocused, isCameraActive, hasPermission]);
+  }, [isFocused, isCameraActive, hasPermission, scanAnim]);
 
   // ================= CODE SCANNER =================
   const codeScanner = useCodeScanner({
-    codeTypes: ["qr"],
-    onCodeScanned: (codes) => {
+    codeTypes: ['qr'],
+    onCodeScanned: codes => {
       if (codes.length > 0 && isCameraActive) {
         setIsCameraActive(false);
-        navigation.navigate("ShowUPIData", { upi: codes[0].value });
+        navigation.navigate('ShowUPIData', {upi: codes[0].value});
       }
     },
   });
@@ -110,14 +107,17 @@ const QRScanScreen = () => {
     return (
       <View style={styles.permissionContainer}>
         <Icon name="camera-outline" size={70} color="#999" />
-        <Text style={styles.permissionTitle}>{translate("Camera_Access_Needed")}</Text>
-        <Text style={styles.permissionSubtitle}>{translate("key_pleaseena_152")}</Text>
+        <Text style={styles.permissionTitle}>
+          {translate('Camera_Access_Needed')}
+        </Text>
+        <Text style={styles.permissionSubtitle}>
+          {translate('key_pleaseena_152')}
+        </Text>
 
         <TouchableOpacity
           style={styles.settingsBtn}
-          onPress={() => Linking.openSettings()}
-        >
-          <Text style={styles.settingsText}>{translate("Open_Settings")}</Text>
+          onPress={() => Linking.openSettings()}>
+          <Text style={styles.settingsText}>{translate('Open_Settings')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -126,7 +126,7 @@ const QRScanScreen = () => {
   if (!device) {
     return (
       <View style={styles.permissionContainer}>
-        <Text style={{ color: "#fff" }}>{translate("No_Camera_Found")}</Text>
+        <Text style={{color: '#fff'}}>{translate('No_Camera_Found')}</Text>
       </View>
     );
   }
@@ -146,18 +146,13 @@ const QRScanScreen = () => {
       {/* Overlay */}
       <View style={styles.overlay}>
         <View style={styles.topMask} />
-
         <View style={styles.middleRow}>
           <View style={styles.sideMask} />
-
           <View style={styles.scanBox}>
             <View style={styles.border} />
 
             <Animated.View
-              style={[
-                styles.scanLine,
-                { transform: [{ translateY: scanAnim }] },
-              ]}
+              style={[styles.scanLine, {transform: [{translateY: scanAnim}]}]}
             />
           </View>
 
@@ -165,18 +160,17 @@ const QRScanScreen = () => {
         </View>
 
         <View style={styles.bottomMask}>
-          <Text style={styles.title}>{translate("Scan_QR_Code")}</Text>
-          <Text style={styles.subtitle}>{translate("Position_the_QR_inside_the_frame")}</Text>
+          <Text style={styles.title}>{translate('Scan_QR_Code')}</Text>
+          <Text style={styles.subtitle}>
+            {translate('Position_the_QR_inside_the_frame')}
+          </Text>
 
           {/* Flash Button */}
           <TouchableOpacity
             style={styles.flashBtn}
-            onPress={() =>
-              setFlash(flash === "off" ? "on" : "off")
-            }
-          >
+            onPress={() => setFlash(flash === 'off' ? 'on' : 'off')}>
             <Icon
-              name={flash === "off" ? "flash-off" : "flash"}
+              name={flash === 'off' ? 'flash-off' : 'flash'}
               size={22}
               color="#000"
             />
@@ -185,55 +179,53 @@ const QRScanScreen = () => {
           {/* Close Button */}
           <TouchableOpacity
             style={styles.closeBtn}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={{ fontSize: 18 }}>{translate("Close")}</Text>
+            onPress={() => navigation.goBack()}>
+            <Text style={{fontSize: 18}}>{translate('Close')}</Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
-
 export default QRScanScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000" },
+  container: {flex: 1, backgroundColor: '#000'},
 
   permissionContainer: {
     flex: 1,
-    backgroundColor: "#111",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#111',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 30,
   },
   permissionTitle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: '600',
     marginTop: 20,
   },
   permissionSubtitle: {
-    color: "#aaa",
-    textAlign: "center",
+    color: '#aaa',
+    textAlign: 'center',
     marginVertical: 15,
   },
   settingsBtn: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingHorizontal: 40,
     paddingVertical: 14,
     borderRadius: 25,
   },
-  settingsText: { fontWeight: "600" },
+  settingsText: {fontWeight: '600'},
 
-  overlay: { flex: 1 },
-  topMask: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)" },
-  middleRow: { flexDirection: "row", height: SCAN_SIZE },
-  sideMask: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)" },
+  overlay: {flex: 1},
+  topMask: {flex: 1, backgroundColor: 'rgba(0,0,0,0.6)'},
+  middleRow: {flexDirection: 'row', height: SCAN_SIZE},
+  sideMask: {flex: 1, backgroundColor: 'rgba(0,0,0,0.6)'},
   bottomMask: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    alignItems: "center",
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
     paddingTop: 30,
   },
 
@@ -241,27 +233,27 @@ const styles = StyleSheet.create({
     width: SCAN_SIZE,
     height: SCAN_SIZE,
     borderRadius: 25,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   border: {
     ...StyleSheet.absoluteFillObject,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: '#fff',
   },
   scanLine: {
-    position: "absolute",
-    width: "100%",
+    position: 'absolute',
+    width: '100%',
     height: 2,
-    backgroundColor: "#00FFB3",
+    backgroundColor: '#00FFB3',
   },
 
-  title: { color: "#fff", fontSize: 22, fontWeight: "600" },
-  subtitle: { color: "#ccc", marginTop: 8 },
+  title: {color: '#fff', fontSize: 22, fontWeight: '600'},
+  subtitle: {color: '#ccc', marginTop: 8},
 
   flashBtn: {
     marginTop: 25,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 15,
     borderRadius: 30,
   },

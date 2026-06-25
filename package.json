@@ -1,6 +1,6 @@
 {
-  "name": "digitalindiapay",
-  "version": "3.0.3",
+  "name": "vrecharge",
+  "version": "4",
   "private": true,
   "scripts": {
     "adb-wifi": "node adb-wifi.js",

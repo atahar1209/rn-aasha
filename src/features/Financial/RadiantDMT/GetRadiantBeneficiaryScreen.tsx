@@ -1,24 +1,35 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {
-  View, Text, TextInput, Button, ActivityIndicator, StyleSheet, ToastAndroid, TouchableOpacity, Alert, ScrollView, Keyboard
+  View,
+  Text,
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  Keyboard,
 } from 'react-native';
-import { APP_URLS } from '../../../utils/network/urls';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { translate } from '../../../utils/languageUtils/I18n';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { useFocusEffect } from '@react-navigation/native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
+import {useFocusEffect} from '@react-navigation/native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import DynamicButton from '../../drawer/button/DynamicButton';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
 import LinearGradient from 'react-native-linear-gradient';
-import { FlashList } from '@shopify/flash-list';
-import { SvgXml } from 'react-native-svg';
-import TabBar from '../../Recharge/TabView/TabBarView';
+import {FlashList} from '@shopify/flash-list';
+import {SvgXml} from 'react-native-svg';
 
-const RadiantGetBenifiaryScreen = (route) => {
-  const { colorConfig, Loc_Data } = useSelector((state: RootState) => state.userInfo);
+const RadiantGetBenifiaryScreen = route => {
+  const {colorConfig, Loc_Data} = useSelector(
+    (state: RootState) => state.userInfo,
+  );
   const EditIcon = ` 
 
  <?xml version="1.0" encoding="UTF-8"?>
@@ -35,12 +46,12 @@ const RadiantGetBenifiaryScreen = (route) => {
   const [banklist, setBanklist] = useState([]);
   const [beneficiaryData, setBeneficiaryData] = useState([]);
   const [remid, setRemid] = useState('');
-  const { post, get } = useAxiosHook();
+  const {post, get} = useAxiosHook();
   const [isLoading, setisLoading] = useState(true);
   const navigation = useNavigation<any>();
   const [nodata, setnodata] = useState(false);
-  const [accHolder, setAccHolder] = useState('')
-  const [bankname, setBankName] = useState('')
+  const [accHolder, setAccHolder] = useState('');
+  const [bankname, setBankName] = useState('');
   const [ACCno, setAccNo] = useState('');
   const [ifsc, setIfsc] = useState('');
   const [editable, setEditable] = useState(false);
@@ -55,26 +66,26 @@ const RadiantGetBenifiaryScreen = (route) => {
   useEffect(() => {
     getGenUniqueId();
     console.log(Name);
-    setIsR(Name == 'RADIANT');
+    setIsR(Name === 'RADIANT');
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       // setBanklist([])
-    }, [])
+    }, []),
   );
-  const checkvast = async (res) => {
+  const checkvast = async res => {
     const addinfo = res?.ADDINFO;
     if (res?.RESULT === '0') {
       setisLoading(false);
       const rem = addinfo?.data;
-      console.log(rem.remitter, '============')
+      console.log(rem.remitter, '============');
 
       setremitter(rem?.remitter);
 
       const status = addinfo?.statuscode;
 
-      if (status === "TXN") {
+      if (status === 'TXN') {
         const beneficiary = addinfo?.data?.beneficiary || [];
         const remid = addinfo?.data?.remitter?.id || '';
         setRemid(remid);
@@ -90,51 +101,52 @@ const RadiantGetBenifiaryScreen = (route) => {
         } else {
           setnodata(false);
         }
-      } else if (status === "RNF") {
-
-
+      } else if (status === 'RNF') {
       } else if (status === 'ERR') {
-        ToastAndroid.showWithGravity(addinfo, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+        ToastAndroid.showWithGravity(
+          addinfo,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
       }
     } else if (res?.RESULT == 1) {
       const status = addinfo?.data?.statuscode;
-      console.log(addinfo.statuscode)
-      console.log(addinfo.data.status)
-      if (addinfo.statuscode == "RNF") {
+      console.log(addinfo.statuscode);
+      console.log(addinfo.data.status);
+      if (addinfo.statuscode == 'RNF') {
         Alert.alert(
-          addinfo?.data?.status || "User does not exist",
-          "",
+          addinfo?.data?.status || translate('User does not exist'),
+          '',
           [
             {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
+              text: translate('Cancel'),
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
             },
             {
-              text: "Register",
-              onPress: () => navigation.navigate("NumberRegisterScreen", { Name: Name })
-              ,
+              text: translate('Register'),
+              onPress: () =>
+                navigation.navigate('NumberRegisterScreen', {Name: Name}),
             },
           ],
-          { cancelable: false }
+          {cancelable: false},
         );
       } else {
         Alert.alert(
           res.ADDINFO,
-          "",
+          '',
           [
             {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
+              text: translate('Cancel'),
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
             },
             {
-              text: "",
-              onPress: () => { }
-              ,
+              text: '',
+              onPress: () => {},
             },
           ],
-          { cancelable: false }
+          {cancelable: false},
         );
       }
 
@@ -142,24 +154,23 @@ const RadiantGetBenifiaryScreen = (route) => {
     } else {
       Alert.alert(
         res.ADDINFO,
-        "",
+        '',
         [
           {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
+            text: translate('Cancel'),
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
           },
           {
-            text: "",
-            onPress: () => { }
-            ,
+            text: '',
+            onPress: () => {},
           },
         ],
-        { cancelable: false }
+        {cancelable: false},
       );
     }
-  }
-  const checkRadiant = (res) => {
+  };
+  const checkRadiant = res => {
     console.log(res.ADDINFO);
     const ADDINFO = res.ADDINFO;
     if (res.RESULT == 0) {
@@ -169,7 +180,7 @@ const RadiantGetBenifiaryScreen = (route) => {
 
       if (ADDINFO.sts == 'TXN') {
         setBanklist(benes);
-        console.log(benes.length)
+        console.log(benes.length);
       } else {
         setBanklist(null);
       }
@@ -182,42 +193,43 @@ const RadiantGetBenifiaryScreen = (route) => {
       }
     } else {
       Alert.alert(
-        res.ADDINFO || "User does not exist",
-        "",
+        res.ADDINFO || translate('User does not exist'),
+        '',
         [
           {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
+            text: translate('Cancel'),
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
           },
           {
-            text: "Register",
-            onPress: () => navigation.navigate("RadiantNumberRegisterScreen", { Name: Name, sendernum })
-            ,
+            text: translate('Register'),
+            onPress: () =>
+              navigation.navigate('RadiantNumberRegisterScreen', {
+                Name: Name,
+                sendernum,
+              }),
           },
         ],
-        { cancelable: false }
+        {cancelable: false},
       );
-
-
     }
-  }
-  const checksendernumber = async (number) => {
+  };
+  const checksendernumber = async number => {
     setBanklist([]);
     setisLoading(true);
     console.log(number);
     try {
       const url2 = `${APP_URLS.getCheckSenderNo}${number}`;
       const url = `Money/api/Radiant/GetBeneficiaryList?sender_number=${number}`;
-      const res = await get({ url: Name == 'RADIANT' ? url : url2 });
+      const res = await get({url: Name == 'RADIANT' ? url : url2});
       console.log('Radiant checksendernumber', res);
       setOnTap1(false);
-      if (Name == 'RADIANT') {
+      if (Name === 'RADIANT') {
         checkRadiant(res);
         setisLoading(false);
         return;
       } else {
-        checkvast(res)
+        checkvast(res);
       }
 
       console.log(url);
@@ -226,7 +238,6 @@ const RadiantGetBenifiaryScreen = (route) => {
       console.log(res);
       setOnTap1(false);
       setOnTap(true);
-
     } catch (error) {
       setisLoading(false);
       console.error('Error:', error);
@@ -236,27 +247,26 @@ const RadiantGetBenifiaryScreen = (route) => {
   const [unqid, setUnqiD] = useState('');
   const getGenUniqueId = async () => {
     try {
-      const url = `${APP_URLS.getGenIMPSUniqueId}`
+      const url = `${APP_URLS.getGenIMPSUniqueId}`;
       console.log(url);
-      const res = await get({ url: url });
-      const res1 = await get({ url: 'Retailer/api/data/DMTStatusCheck1' });
-      console.log(res1)
-      setUnqiD(res['Message']);
+      const res = await get({url: url});
+      const res1 = await get({url: 'Retailer/api/data/DMTStatusCheck1'});
+      console.log(res1);
+      setUnqiD(res.Message);
       setisLoading(false);
 
-
-      if (res['Response'] == 'Failed') {
+      if (res.Response === 'Failed') {
         ToastAndroid.showWithGravity(
-          res['Message'],
+          res.Message,
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
-        )
+        );
       } else {
         ToastAndroid.showWithGravity(
-          res['Response'],
+          res.Response,
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
-        )
+        );
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -270,91 +280,139 @@ const RadiantGetBenifiaryScreen = (route) => {
     }
   };
 
-  const handleImpsPress2 = async (item) => {
+  const handleImpsPress2 = async item => {
     console.log('IMPS pressed for:', item);
-    const bankname = item['bankname'];
-    const ACCno = item['AccountNumber'];
-    const accHolder = item['fname'];
-    const ifsc = item['ifsc'];
-    await setIfsc(item['ifsc']);
-    await setAccHolder(item['fname']);
-    await setAccNo(item['AccountNumber']);
-    await setBankName(item['bankname']);
-    const BeneficiaryMobile = item['BeneficiaryMobile'];
+    const bankname = item.bankname;
+    const ACCno = item.AccountNumber;
+    const accHolder = item.fname;
+    const ifsc = item.ifsc;
+    await setIfsc(item.ifsc);
+    await setAccHolder(item.fname);
+    await setAccNo(item.AccountNumber);
+    await setBankName(item.bankname);
+    const BeneficiaryMobile = item.BeneficiaryMobile;
     const remid = customerDet.id;
-    navigation.navigate("toBankScreen", {
-      BeneficiaryMobile, remid, bankname, ACCno, accHolder, ifsc, mode: 'IMPS', unqid, kyc
-    },);
+    navigation.navigate('toBankScreen', {
+      BeneficiaryMobile,
+      remid,
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'IMPS',
+      unqid,
+      kyc,
+    });
   };
-  const handleImpsPress = async (item) => {
+  const handleImpsPress = async item => {
     console.log('IMPS pressed for:', item);
-    const bankname = item['bank'];
-    const ACCno = item['account'];
-    const accHolder = item['name'];
-    const ifsc = item['ifsc'];
-    await setIfsc(item['ifsc']);
-    await setAccHolder(item['name']);
-    await setAccNo(item['account']);
-    await setBankName(item['bank'])
-    navigation.navigate("toBankScreen", { bankname, ACCno, accHolder, ifsc, mode: 'IMPS', unqid, kyc, sendernum, dmttype: Name },);
-
+    const bankname = item.bank;
+    const ACCno = item.account;
+    const accHolder = item.name;
+    const ifsc = item.ifsc;
+    await setIfsc(item.ifsc);
+    await setAccHolder(item.name);
+    await setAccNo(item.account);
+    await setBankName(item.bank);
+    navigation.navigate('toBankScreen', {
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'IMPS',
+      unqid,
+      kyc,
+      sendernum,
+      dmttype: Name,
+    });
   };
-  const handleNeftPress = async (item) => {
-    const bankname = item['bank'];
-    const ACCno = item['account'];
-    const accHolder = item['name'];
+  const handleNeftPress = async item => {
+    const bankname = item.bank;
+    const ACCno = item.account;
+    const accHolder = item.name;
 
-    const ifsc = item['ifsc'];
-    await setIfsc(item['ifsc']);
-    await setAccHolder(item['name']);
-    await setAccNo(item['account']);
-    await setBankName(item['bank'])
-    navigation.navigate("toBankScreen", { bankname, ACCno, accHolder, ifsc, mode: 'NEFT', unqid, kyc, sendernum, dmttype: Name },);
+    const ifsc = item.ifsc;
+    await setIfsc(item.ifsc);
+    await setAccHolder(item.name);
+    await setAccNo(item.account);
+    await setBankName(item.bank);
+    navigation.navigate('toBankScreen', {
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'NEFT',
+      unqid,
+      kyc,
+      sendernum,
+      dmttype: Name,
+    });
     console.log('NEFT pressed for:', item);
   };
 
-  const handleNeftPress2 = async (item) => {
-    const bankname = item['bank'];
-    const ACCno = item['account'];
-    const accHolder = item['name'];
-    await setIfsc(item['ifsc']);
-    await setAccHolder(item['name']);
-    await setAccNo(item['account']);
-    await setBankName(item['bank'])
-    const BeneficiaryMobile = item['BeneficiaryMobile'];
+  const handleNeftPress2 = async item => {
+    const bankname = item.bank;
+    const ACCno = item.account;
+    const accHolder = item.name;
+    await setIfsc(item.ifsc);
+    await setAccHolder(item.name);
+    await setAccNo(item.account);
+    await setBankName(item.bank);
+    const BeneficiaryMobile = item.BeneficiaryMobile;
 
     const remid = customerDet.id;
-    navigation.navigate("toBankScreen", { BeneficiaryMobile, remid, bankname, ACCno, accHolder, ifsc, mode: 'NEFT', unqid, kyc },);
-
+    navigation.navigate('toBankScreen', {
+      BeneficiaryMobile,
+      remid,
+      bankname,
+      ACCno,
+      accHolder,
+      ifsc,
+      mode: 'NEFT',
+      unqid,
+      kyc,
+    });
   };
 
-  const handleDeletePress2 = async (item) => {
+  const handleDeletePress2 = async item => {
     setisLoading(true);
     console.log('Delete pressed for:', item);
 
     Alert.alert(
-      'Delete Account',
-      `Account: ${item.account}\nBank: ${item.bank}\nID: ${item.id}\nIFSC: ${item.ifsc}\nName: ${item.name}`,
+      translate('Delete Account'),
+      `${translate('Account')}: ${item.account}\n${translate('Bank')}: ${
+        item.bank
+      }\n${translate('ID')}: ${item.id}\n${translate('IFSC')}: ${
+        item.ifsc
+      }\n${translate('Name')}: ${item.name}`,
       [
         {
-          text: 'Cancel',
+          text: translate('Cancel'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
-          text: 'Confirm',
+          text: translate('Confirm'),
           onPress: async () => {
             try {
               const res = await post({
-                url: `${APP_URLS.bankbenDelete}mobile=${item['mobile']}&ifsc=${item['ifsc']}&code&remitterid=${remid}&beneficiaryid=${item['id']}`,
+                url: `${APP_URLS.bankbenDelete}mobile=${item.mobile}&ifsc=${item.ifsc}&code&remitterid=${remid}&beneficiaryid=${item.id}`,
               });
               console.log(res);
-              if (res['RESULT'] === '1') {
-                ToastAndroid.showWithGravity(res['ADDINFO'], ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+              if (res.RESULT === '1') {
+                ToastAndroid.showWithGravity(
+                  res.ADDINFO,
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                );
               } else {
                 checksendernumber(sendernum);
-                const response = JSON.parse(res['ADDINFO']);
-                ToastAndroid.showWithGravity(response.status, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+                const response = JSON.parse(res.ADDINFO);
+                ToastAndroid.showWithGravity(
+                  response.status,
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                );
                 console.log(response);
               }
             } catch (error) {
@@ -363,39 +421,53 @@ const RadiantGetBenifiaryScreen = (route) => {
           },
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
-  const handleDeletePress = async (item) => {
+  const handleDeletePress = async item => {
     setisLoading(true);
     console.log('Delete pressed for:', item);
 
     Alert.alert(
-      'Delete Account',
-      `Account: ${item.AccountNumber}\nBank: ${item.bankname}\nID: ${item.id}\nIFSC: ${item.ifsc}\nName: ${item.fname}`,
+      translate('Delete Account'),
+      `${translate('Account')}: ${item.AccountNumber}\n${translate('Bank')}: ${
+        item.bankname
+      }\n${translate('ID')}: ${item.id}\n${translate('IFSC')}: ${
+        item.ifsc
+      }\n${translate('Name')}: ${item.fname}`,
       [
         {
-          text: 'Cancel',
+          text: translate('Cancel'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
-          text: 'Confirm',
+          text: translate('Confirm'),
           onPress: async () => {
             try {
               const res = await get({
-                url: `Money/api/Radiant/DeleteBeneficiary?sender_number=${sendernum}&Id=${item.id.toString()}`
+                url: `Money/api/Radiant/DeleteBeneficiary?sender_number=${sendernum}&Id=${item.id.toString()}`,
                 // url: `${APP_URLS.bankbenDelete}mobile=${item['mobile']}&ifsc=${item['ifsc']}&code&remitterid=${remid}&beneficiaryid=${item['id']}`,
               });
-              console.log(`Money/api/Radiant/DeleteBeneficiary?sender_number=${sendernum}&Id=${customerDet.id.toString()}`)
+              console.log(
+                `Money/api/Radiant/DeleteBeneficiary?sender_number=${sendernum}&Id=${customerDet.id.toString()}`,
+              );
               console.log(res);
-              if (res['RESULT'] === '1') {
-                ToastAndroid.showWithGravity(res['ADDINFO'], ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+              if (res.RESULT === '1') {
+                ToastAndroid.showWithGravity(
+                  res.ADDINFO,
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                );
               } else {
                 checksendernumber(sendernum);
-                const response = JSON.parse(res['ADDINFO']);
-                ToastAndroid.showWithGravity(response.status, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+                const response = JSON.parse(res.ADDINFO);
+                ToastAndroid.showWithGravity(
+                  response.status,
+                  ToastAndroid.SHORT,
+                  ToastAndroid.BOTTOM,
+                );
                 console.log(response);
               }
             } catch (error) {
@@ -404,45 +476,43 @@ const RadiantGetBenifiaryScreen = (route) => {
           },
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
-  const handleVerifyPress = async (item) => {
-
+  const handleVerifyPress = async item => {
     try {
-      const res = await post({ url: `${APP_URLS.verifyBank}sender_number=${sendernum}&Accountnumber=${item['account']}&bankname=${item['bank']}&benIFSC=${item['ifsc']}&Name=${item['name']}&Id=${item['id']}uniqueid=${unqid}` })
+      const res = await post({
+        url: `${APP_URLS.verifyBank}sender_number=${sendernum}&Accountnumber=${item.account}&bankname=${item.bank}&benIFSC=${item.ifsc}&Name=${item.name}&Id=${item.id}uniqueid=${unqid}`,
+      });
 
       console.log(res);
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
-  const handleVerifyPress2 = async (item) => {
+  const handleVerifyPress2 = async item => {
     console.log(item);
     try {
-      const url = `Money/api/Radiant/VerifyBeneficiary?sender_number=${sendernum}&Accountnumber=${item.AccountNumber}&bankname=${item.bankname}&benIFSC=${item.ifsc}&Name=${item.fname}&Id=${customerDet.id}&uniqueid=${unqid}`
-      console.log(`Money/api/Radiant/VerifyBeneficiary?sender_number&Accountnumber&bankname&benIFSC&Name&Id&uniqueid=${unqid}`)
+      const url = `Money/api/Radiant/VerifyBeneficiary?sender_number=${sendernum}&Accountnumber=${item.AccountNumber}&bankname=${item.bankname}&benIFSC=${item.ifsc}&Name=${item.fname}&Id=${customerDet.id}&uniqueid=${unqid}`;
+      console.log(
+        `Money/api/Radiant/VerifyBeneficiary?sender_number&Accountnumber&bankname&benIFSC&Name&Id&uniqueid=${unqid}`,
+      );
 
-      console.log(url)
-      const res = await post({ url: url })
+      console.log(url);
+      const res = await post({url: url});
 
       if (res.RESULT === '1') {
-        alert(res.ADDINFO)
+        Alert.alert(res.ADDINFO);
       } else {
-        alert(res.ADDINFO)
+        Alert.alert(res.ADDINFO);
       }
 
       console.log(res);
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
 
   const toggleEditable = () => {
     setEditable(!editable);
-
-  }
+  };
 
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState([]);
@@ -451,15 +521,16 @@ const RadiantGetBenifiaryScreen = (route) => {
     filterData(searchText);
   }, [searchText, isR, beneficiaryData, banklist]);
 
-  const filterData = (text) => {
+  const filterData = text => {
     const dataToFilter = isR ? beneficiaryData : banklist;
 
     if (!text.trim()) {
       setFilteredData(dataToFilter);
     } else {
-      const filtered = dataToFilter.filter(item =>
-        item.name?.toLowerCase().includes(text.toLowerCase()) ||
-        item.account?.toString().includes(text)
+      const filtered = dataToFilter.filter(
+        item =>
+          item.name?.toLowerCase().includes(text.toLowerCase()) ||
+          item.account?.toString().includes(text),
       );
       setFilteredData(filtered);
     }
@@ -470,58 +541,77 @@ const RadiantGetBenifiaryScreen = (route) => {
       <FlashList
         data={filteredData}
         keyExtractor={item => item.id || item.name.toString()}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <View style={styles.itemContainer}>
-
-
             {item.isbankdown ? (
-              <Text style={styles.noteText}>{translate("Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime")}</Text>
+              <Text style={styles.noteText}>
+                {translate(
+                  'Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime',
+                )}
+              </Text>
             ) : null}
 
-            <View style={{
-              borderBottomWidth: wScale(.5), borderBottomColor: '#000',
+            <View
+              style={{
+                borderBottomWidth: wScale(0.5),
+                borderBottomColor: '#000',
 
-              marginBottom: hScale(8), paddingBottom: hScale(5)
-            }}>
-
+                marginBottom: hScale(8),
+                paddingBottom: hScale(5),
+              }}>
               <View style={styles.row}>
-                <Text style={styles.itemLabel}>{translate("Name")}</Text>
+                <Text style={styles.itemLabel}>{translate('Name')}</Text>
                 <Text style={styles.itemValue}>{item.name}</Text>
               </View>
 
               <View style={styles.row}>
-                <Text style={styles.itemLabel}>{translate("IFSC_Code")}</Text>
+                <Text style={styles.itemLabel}>{translate('IFSC_Code')}</Text>
                 <Text style={styles.itemValue}>{item.ifsc}</Text>
               </View>
             </View>
 
-            <View style={[styles.row,]}>
-              <Text style={styles.itemLabel}>{translate("Bank_Name")}</Text>
-              <Text style={styles.itemValue} numberOfLines={1} ellipsizeMode='tail'>{item.bank}</Text>
+            <View style={[styles.row]}>
+              <Text style={styles.itemLabel}>{translate('Bank_Name')}</Text>
+              <Text
+                style={styles.itemValue}
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {item.bank}
+              </Text>
             </View>
-            <View style={{
-              borderTopWidth: wScale(.5), borderTopColor: '#000',
-              marginTop: hScale(8)
-            }}>
-
-              <View style={[styles.row, { marginTop: hScale(8), }]}>
-                <View >
-                  <Text style={styles.itemLabel}>{translate("Account")}</Text>
-                  <Text style={[styles.itemValue, { textAlign: 'left' }]} numberOfLines={1} ellipsizeMode='tail'>{item.account}</Text>
+            <View
+              style={{
+                borderTopWidth: wScale(0.5),
+                borderTopColor: '#000',
+                marginTop: hScale(8),
+              }}>
+              <View style={[styles.row, {marginTop: hScale(8)}]}>
+                <View>
+                  <Text style={styles.itemLabel}>{translate('Account')}</Text>
+                  <Text
+                    style={[styles.itemValue, {textAlign: 'left'}]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {item.account}
+                  </Text>
                 </View>
-                <TouchableOpacity style={[styles.button, styles.impsButton]} onPress={() => handleImpsPress(item)}>
-                  <Text style={styles.buttonText}>{translate("IMPS")}</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.impsButton]}
+                  onPress={() => handleImpsPress(item)}>
+                  <Text style={styles.buttonText}>{translate('IMPS')}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.neftButton]} onPress={() => handleNeftPress(item)}>
-                  <Text style={styles.buttonText}>{translate("NEFT")}</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.neftButton]}
+                  onPress={() => handleNeftPress(item)}>
+                  <Text style={styles.buttonText}>{translate('NEFT')}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={() => handleDeletePress(item)}>
-                  <Text style={styles.buttonText} >{translate("Delete")}</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.deleteButton]}
+                  onPress={() => handleDeletePress(item)}>
+                  <Text style={styles.buttonText}>{translate('Delete')}</Text>
                 </TouchableOpacity>
-
               </View>
             </View>
-
           </View>
         )}
         keyExtractor={item => item.name}
@@ -530,69 +620,77 @@ const RadiantGetBenifiaryScreen = (route) => {
     );
   };
 
-
-
   return (
     <View style={styles.main}>
       {/* <AppBarSecond title={Name} /> */}
-      <LinearGradient colors={[colorConfig.primaryColor, colorConfig.secondaryColor]} style={styles.lineargradient}>
-        <View style={styles.container} >
-
-          {sendernum.length === 10 && <TextInput
-            placeholder="Search by Name or Account No"
-            value={searchText}
-            onChangeText={setSearchText}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 8,
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              marginVertical: 10,
-              color: '#000'
-            }}
-            placeholderTextColor="#888"
-          />
-          }
-
-          <View style={{
-            marginTop: hScale(10)
-          }}>
+      <LinearGradient
+        colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+        style={styles.lineargradient}>
+        <View style={styles.container}>
+          {sendernum.length === 10 && (
             <TextInput
-              placeholder='Enter Remitter Registered  Number'
+              placeholder={translate('Search by Name or Account No')}
+              value={searchText}
+              onChangeText={setSearchText}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 8,
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                marginVertical: 10,
+                color: '#000',
+              }}
+              placeholderTextColor="#888"
+            />
+          )}
+
+          <View
+            style={{
+              marginTop: hScale(10),
+            }}>
+            <TextInput
+              placeholder={translate('Enter Remitter Registered  Number')}
               style={styles.inputstyle}
               maxLength={10}
               keyboardType="number-pad"
               value={sendernum}
               onChangeText={text => {
-                setSendernum(text)
+                setSendernum(text);
                 if (text.length === 10) {
                   setNxtbtn(true);
                   setOnTap(false);
                   setOnTap1(true);
                   checksendernumber(text);
                   Keyboard.dismiss();
-
                 } else {
                   setNxtbtn(false);
                   setOnTap(true);
                   setOnTap1(false);
                 }
               }}
-            />{
-              banklist == null ? null :
-                <View style={[styles.righticon2]}>
-                  <TouchableOpacity style={{ backgroundColor: colorConfig.secondaryColor, paddingVertical: hScale(4) }}
-                    onPress={toggleEditable}>
-                    <SvgXml xml={EditIcon} width={wScale(40)} height={wScale(28)} />
-                  </TouchableOpacity>
-                </View>
-            }
+            />
+            {banklist == null ? null : (
+              <View style={[styles.righticon2]}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: colorConfig.secondaryColor,
+                    paddingVertical: hScale(4),
+                  }}
+                  onPress={toggleEditable}>
+                  <SvgXml
+                    xml={EditIcon}
+                    width={wScale(40)}
+                    height={wScale(28)}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
 
-          {remitter === null ? null :
-            <View style={[styles.limitview, { flexDirection: 'row' }]}>
+          {remitter === null ? null : (
+            <View style={[styles.limitview, {flexDirection: 'row'}]}>
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Consume_limit")}</Text>
+                <Text style={styles.label}>{translate('Consume_limit')}</Text>
                 <Text style={styles.value}>
                   {remitter === null ? '0000' : remitter.consumedlimit}
                 </Text>
@@ -600,89 +698,117 @@ const RadiantGetBenifiaryScreen = (route) => {
               <View style={styles.borderview} />
 
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Remain_limit")}</Text>
-                <Text style={[styles.value, { textAlign: 'center' }]}>
+                <Text style={styles.label}>{translate('Remain_limit')}</Text>
+                <Text style={[styles.value, {textAlign: 'center'}]}>
                   {remitter === null ? '0000' : remitter.remaininglimit}
                 </Text>
               </View>
               <View style={styles.borderview} />
               <View style={styles.limitcolum}>
-                <Text style={styles.label}>{translate("Per_txn_limit")}</Text>
-                <Text style={[styles.value, { textAlign: 'right' }]}>
+                <Text style={styles.label}>{translate('Per_txn_limit')}</Text>
+                <Text style={[styles.value, {textAlign: 'right'}]}>
                   {remitter === null ? '0000' : remitter.perm_txn_limit}
                 </Text>
               </View>
             </View>
-          }
+          )}
 
-          {remitter === null ? null :
-            <Text style={[styles.limittext, { color: colorConfig.labelColor }]}>
+          {remitter === null ? null : (
+            <Text style={[styles.limittext, {color: colorConfig.labelColor}]}>
               {remitter === null
                 ? '0000'
-                : `Consume limit: ${remitter.consumedlimit}, Remain limit: ${remitter.remaininglimit}, Per txn limit: ${remitter.perm_txn_limit}`}
-            </Text>}
+                : `${translate('Consume limit')}: ${
+                    remitter.consumedlimit
+                  }, ${translate('Remain limit')}: ${
+                    remitter.remaininglimit
+                  }, ${translate('Per txn limit')}: ${remitter.perm_txn_limit}`}
+            </Text>
+          )}
           <DynamicButton
-            title={onTap1 ? <ActivityIndicator size={'large'} color={colorConfig.labelColor} /> : banklist == null ? "Next" : "Add Acount"}
+            title={
+              onTap1 ? (
+                <ActivityIndicator
+                  size={'large'}
+                  color={colorConfig.labelColor}
+                />
+              ) : banklist == null ? (
+                'Next'
+              ) : (
+                'Add Acount'
+              )
+            }
             disabled={!nxtbtn}
             onPress={() => {
               if (banklist == null) {
                 handleNextButtonPress();
               } else {
-                navigation.navigate("AddNewBenificiaryScreen", { no: sendernum, remid: remid, Name: Name });
+                navigation.navigate('AddNewBenificiaryScreen', {
+                  no: sendernum,
+                  remid: remid,
+                  Name: Name,
+                });
               }
             }}
           />
         </View>
-
       </LinearGradient>
 
       <ScrollView>
-
-        {banklist.length == 0 ?
+        {banklist.length == 0 ? (
           <View style={styles.container}>
-            <Text style={styles.titletext}>{translate("Very_Important_Notice")}</Text>
-            <View style={styles.textview} >
+            <Text style={styles.titletext}>
+              {translate('Very_Important_Notice')}
+            </Text>
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('first')}</Text>
             </View>
 
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('thNotice')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('secondNotice')}</Text>
             </View>
           </View>
-          : <View style={{
-            paddingTop: hScale(20),
-          }}>
+        ) : (
+          <View
+            style={{
+              paddingTop: hScale(20),
+            }}>
             <BeneficiaryList />
           </View>
-        }
+        )}
 
-        {nodata ? <View style={styles.container}>
-          <Text style={styles.title}>{translate('No Data Found')}</Text>
+        {nodata ? (
+          <View style={styles.container}>
+            <Text style={styles.title}>{translate('No Data Found')}</Text>
 
-          <DynamicButton title={'ADD ACC'} onPress={() => {
-
-            navigation.navigate("AddNewBenificiaryScreen", { no: sendernum, remid: remid, Name: Name });
-
-          }} />
-
-        </View>
-          : <></>
-        }
+            <DynamicButton
+              title={'ADD ACC'}
+              onPress={() => {
+                navigation.navigate('AddNewBenificiaryScreen', {
+                  no: sendernum,
+                  remid: remid,
+                  Name: Name,
+                });
+              }}
+            />
+          </View>
+        ) : (
+          <></>
+        )}
       </ScrollView>
-    </View >
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    paddingBottom: hScale(0)
+    paddingBottom: hScale(0),
   },
   lineargradient: {
     // paddingTop: hScale(10)
@@ -701,13 +827,13 @@ const styles = StyleSheet.create({
   },
 
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "78%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '78%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
 
@@ -715,13 +841,13 @@ const styles = StyleSheet.create({
     fontSize: wScale(24),
     fontWeight: 'bold',
     marginBottom: hScale(20),
-    color: '#000'
+    color: '#000',
   },
   titletext: {
     color: 'red',
     fontSize: wScale(18),
     paddingBottom: hScale(15),
-    paddingTop: hScale(5)
+    paddingTop: hScale(5),
   },
   bulletPoint: {
     backgroundColor: 'red',
@@ -733,14 +859,13 @@ const styles = StyleSheet.create({
   },
   textview: {
     flexDirection: 'row',
-    paddingBottom: hScale(10)
+    paddingBottom: hScale(10),
   },
   textstyle: {
     color: 'black',
     fontSize: wScale(14),
     flex: 1,
     textAlign: 'justify',
-
   },
   itemContainer: {
     flex: 1,
@@ -749,13 +874,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 2,
     marginBottom: hScale(10),
-    marginHorizontal: wScale(10)
+    marginHorizontal: wScale(10),
   },
 
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   itemLabel: {
     fontSize: wScale(16),
@@ -765,12 +890,13 @@ const styles = StyleSheet.create({
   itemValue: {
     fontSize: wScale(16),
     color: '#555',
-    flex: 1, textAlign: 'right'
+    flex: 1,
+    textAlign: 'right',
   },
   noteText: {
     fontSize: wScale(14),
     color: '#d9534f',
-    marginBottom: hScale(10)
+    marginBottom: hScale(10),
   },
 
   button: {
@@ -806,7 +932,7 @@ const styles = StyleSheet.create({
   },
   tabstyle: {
     paddingVertical: hScale(10),
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     marginBottom: hScale(10),
     borderRadius: 5,
   },
@@ -833,8 +959,8 @@ const styles = StyleSheet.create({
   borderview: {
     height: '100%',
     width: wScale(0.7),
-    backgroundColor: "#fff",
-  }
+    backgroundColor: '#fff',
+  },
 });
 
 export default RadiantGetBenifiaryScreen;

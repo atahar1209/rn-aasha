@@ -1,4 +1,4 @@
-package com.digitalindiapay;
+package com.vrecharge;
 
 import android.app.Activity;
 import android.content.Intent;

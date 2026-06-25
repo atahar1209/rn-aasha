@@ -1,4 +1,4 @@
-package com.digitalindiapay.security;
+package com.vrecharge.security;
 
 import android.app.Activity;
 import android.app.KeyguardManager;

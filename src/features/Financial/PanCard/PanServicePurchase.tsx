@@ -1,23 +1,36 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, Linking, ToastAndroid, Alert, ScrollView, TouchableOpacity } from 'react-native';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-unstable-nested-components */
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  Linking,
+  ToastAndroid,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import FlotingInput from '../../drawer/securityPages/FlotingInput';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { ALERT_TYPE, AlertNotificationRoot, Dialog, Toast } from 'react-native-alert-notification';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import ServicepurchaseScreen from '../VastDMT/ServicepurchaseScreen';
-import { useNavigation } from '../../../utils/navigation/NavigationService';
-import { Icon } from 'react-native-vector-icons/Icon';
+import {APP_URLS} from '../../../utils/network/urls';
+import {
+  ALERT_TYPE,
+  AlertNotificationRoot,
+  Dialog,
+} from 'react-native-alert-notification';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
+import {useNavigation} from '../../../utils/navigation/NavigationService';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
 import DynamicButton from '../../drawer/button/DynamicButton';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import { SvgXml } from 'react-native-svg';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {SvgXml} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
 
-const PanCardScreen = ({ }) => {
-  const { colorConfig } = useSelector((status: RootState) => status.userInfo)
+const PanCardScreen = ({}) => {
+  const {colorConfig} = useSelector((status: RootState) => status.userInfo);
   const color1 = `${colorConfig.primaryColor}20`;
   const Pen = `
   <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="_Linear1" gradientTransform="matrix(0 21.878 -29.833 0 19.281 5)" gradientUnits="userSpaceOnUse" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#04beff"/><stop offset="1" stop-color="#555cff"/></linearGradient><path d="m31 8c0-.796-.316-1.559-.879-2.121-.562-.563-1.325-.879-2.121-.879-5.154 0-18.846 0-24 0-.796 0-1.559.316-2.121.879-.563.562-.879 1.325-.879 2.121v16c0 .796.316 1.559.879 2.121.562.563 1.325.879 2.121.879h24c.796 0 1.559-.316 2.121-.879.563-.562.879-1.325.879-2.121zm-23.904 7.749c-1.846 1.024-3.096 2.993-3.096 5.251 0 .552.448 1 1 1s1-.448 1-1c0-2.208 1.792-4 4-4s4 1.792 4 4c0 .552.448 1 1 1s1-.448 1-1c0-2.258-1.25-4.227-3.096-5.251.679-.717 1.096-1.685 1.096-2.749 0-2.208-1.792-4-4-4s-4 1.792-4 4c0 1.065.417 2.033 1.096 2.749zm11.903 5.251 4 .003c.552.001 1.001-.447 1.001-.999s-.447-1-.999-1.001l-4-.003c-.552 0-1.001.447-1.001.999s.447 1.001.999 1.001zm.001-4 7 .003c.551 0 1-.447 1-.999s-.448-1.001-1-1.001l-7-.003c-.551 0-1 .448-1 1 0 .551.448 1 1 1zm-9-2c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm9-2 7 .003c.551 0 1-.447 1-.999s-.448-1.001-1-1.001l-7-.003c-.551 0-1 .448-1 1 0 .551.448 1 1 1z" fill="url(#_Linear1)"/></svg> `;
@@ -30,74 +43,71 @@ const PanCardScreen = ({ }) => {
   const [amount, setAmount] = useState('');
   const [loader, setLoader] = useState(false);
   const [psaId, setPsaId] = useState('');
-  const { get, post } = useAxiosHook()
+  const {get, post} = useAxiosHook();
   const [serviceVisi, setServiceVisi] = useState(true);
   const [ResgisteredSts, SetResgisteredSts] = useState('BOTHNOTDONE');
   const navigation = useNavigation();
   const [isnotReg, setIsnotReg] = useState(false);
   const pancardStatus = async () => {
     try {
-      const response = await get({ url: `${APP_URLS.panCardStatusCheck}` });
-  
+      const response = await get({url: `${APP_URLS.panCardStatusCheck}`});
+
       console.log('pancardStatus', response);
       const status = response.Response;
       SetResgisteredSts(status);
-      const msz = response['Message'];
+      const msz = response.Message;
       setPsaId(msz);
-  
-      if (status === 'BOTHNOTDONE' || status === 'NOTOK' || status === 'ALLNOTDONE') {
+
+      if (
+        status === 'BOTHNOTDONE' ||
+        status === 'NOTOK' ||
+        status === 'ALLNOTDONE'
+      ) {
         setServiceVisi(true);
       } else if (status === 'Registered') {
         // Handle Registered case if necessary
       } else if (status === 'NOTRegistered' || status === 'PENDING') {
         setIsnotReg(status === 'NOTRegistered' || status === 'PENDING');
-        navigation.navigate('Registerpancard', { status: status });
+        navigation.navigate('Registerpancard', {status: status});
       } else if (status === 'FAILED') {
-        Alert.alert(
-          msz + ' !!!',
-          '',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('Dashboard'),
-            },
-          ]
-        );
+        Alert.alert(msz + ' !!!', '', [
+          {
+            text: translate('OK'),
+            onPress: () => navigation.navigate('Dashboard'),
+          },
+        ]);
       } else {
-        Alert.alert(
-          msz + ' !!!',
-          '',
-          [
-            {
-              text: 'OK',
-              onPress: () => console.log('OK Pressed'), // Default action for other status
-            },
-          ]
-        );
+        Alert.alert(msz + ' !!!', '', [
+          {
+            text: translate('OK'),
+            onPress: () => console.log('OK Pressed'), // Default action for other status
+          },
+        ]);
       }
-  
     } catch (error) {
       console.error(error);
     }
   };
-  
-  
+
   useEffect(() => {
-     pancardStatus();
+    pancardStatus();
   }, []);
 
   const handleNavigation = () => {
-    if (status === 'BOTHNOTDONE' || status === 'NOTOK' || status === 'ALLNOTDONE') {
-      navigation.navigate('ServicePurchasePage', { typename: 'PANCARD' });
+    if (
+      status === 'BOTHNOTDONE' ||
+      status === 'NOTOK' ||
+      status === 'ALLNOTDONE'
+    ) {
+      navigation.navigate('ServicePurchasePage', {typename: 'PANCARD'});
     } else if (status === 'Registered') {
-      navigation.navigate('PanAmount', { psaid: msz });
+      navigation.navigate('PanAmount', {psaid: msz});
     } else if (status === 'NOTRegistered' || status === 'PENDING') {
-
-      navigation.navigate('RegisterPanCard', { status });
+      navigation.navigate('RegisterPanCard', {status});
     } else {
     }
   };
-  const Registerpancard = ({ status }) => {
+  const Registerpancard = ({status}) => {
     const [pending, setPending] = useState(false);
     const _launchURL = async () => {
       const url = 'https://www.psaonline.utiitsl.com/psaonline/';
@@ -111,39 +121,44 @@ const PanCardScreen = ({ }) => {
 
     const checkpanlivestatus = async () => {
       try {
-        const response = post({ url: `${APP_URLS.checkLivePanStatus}` });
+        const response = post({url: `${APP_URLS.checkLivePanStatus}`});
         ToastAndroid.showWithGravity(
-          response['Message'],
+          response.Message,
           ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
+          ToastAndroid.BOTTOM,
         );
-
-      } catch (error) {
-      }
+      } catch (error) {}
     };
     return (
-      <View style={{ top: 30, borderWidth: 2, borderColor: 'red', borderRadius: 5, height: 700 }}>
+      <View
+        style={{
+          top: 30,
+          borderWidth: 2,
+          borderColor: 'red',
+          borderRadius: 5,
+          height: 700,
+        }}>
         {/* {ResgisteredSts === 'Registered' ?  */}
         <View>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{}}>{status}</Text>
           </View>
-          <View style={{ paddingHorizontal: 10 }}>
-            <Text style={{ color: 'red', textAlign: 'center' }}>{translate("You_are_Not_Registered_with_Pancard_Service")}</Text>
+          <View style={{paddingHorizontal: 10}}>
+            <Text style={{color: 'red', textAlign: 'center'}}>
+              {translate('You_are_Not_Registered_with_Pancard_Service')}
+            </Text>
             <Button
-              title="Click TO Register At UTI"
+              title={translate('"Click TO Register At UTI"')}
               onPress={() => navigation.navigate('Registerform')}
             />
           </View>
         </View>
         {/* // : <></>} */}
-
       </View>
     );
   };
 
-
-  const PeddingRegistration = ({ status }) => {
+  const PeddingRegistration = ({status}) => {
     const [pending, setPending] = useState(false);
     const _launchURL = async () => {
       const url = 'https://www.psaonline.utiitsl.com/psaonline/';
@@ -157,202 +172,237 @@ const PanCardScreen = ({ }) => {
 
     const checkpanlivestatus = async () => {
       try {
-        const response = await post({ url: `${APP_URLS.checkLivePanStatus}` });
+        const response = await post({url: `${APP_URLS.checkLivePanStatus}`});
         ToastAndroid.showWithGravity(
-          response['Message'],
+          response.Message,
           ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
+          ToastAndroid.BOTTOM,
         );
-
-      } catch (error) {
-
-      }
+      } catch (error) {}
     };
     return (
-      <View style={{flex:1}}>
-        <LinearGradient colors={[colorConfig.primaryColor,
-        colorConfig.secondaryColor]} start={{ x: 0, y: 0.5 }} end={{ x: 1, y: 0.5 }}
+      <View style={{flex: 1}}>
+        <LinearGradient
+          colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+          start={{x: 0, y: 0.5}}
+          end={{x: 1, y: 0.5}}
           style={styles.linear}>
           <View style={styles.psaidrow}>
-            <Text style={styles.psaidtext}>{translate("PSA_ID")}</Text>
+            <Text style={styles.psaidtext}>{translate('PSA_ID')}</Text>
             <Text style={styles.paddingheadar}>
-              {status === 'PENDING' ? 'User Registration Pending' : 'UnRegistred User'}
+              {status === 'PENDING'
+                ? translate('User Registration Pending')
+                : translate('UnRegistred User')}
             </Text>
           </View>
-          <View style={{ flex: 1 }}>
-            <DynamicButton title={'Login UTR'} />
-
-
+          <View style={{flex: 1}}>
+            <DynamicButton
+              title={'Login UTR'}
+              onPress={function (): void {
+                throw new Error(translate('Function not implemented.'));
+              }}
+            />
           </View>
         </LinearGradient>
 
         <View style={styles.container}>
           <View style={styles.svgimg}>
-            <SvgXml xml={Padding} width={wScale(150)}
-              height={hScale(150)} />
+            <SvgXml xml={Padding} width={wScale(150)} height={hScale(150)} />
           </View>
 
-          <Text style={styles.titletext}>{status === 'PENDING' ? 'PENDING' : 'Not Registred'}</Text>
-          <Text style={styles.description}>{status === 'PENDING' ? translate('key_yourpanc_115') : translate('key_youareno_151')}</Text>
-          <View style={styles.btnrow
-          }>
+          <Text style={styles.titletext}>
+            {status === 'PENDING'
+              ? translate('PENDING')
+              : translate('Not Registred')}
+          </Text>
+          <Text style={styles.description}>
+            {status === 'PENDING'
+              ? translate('key_yourpanc_115')
+              : translate('key_youareno_151')}
+          </Text>
+          <View style={styles.btnrow}>
             <View style={styles.checkstatus}>
-              <DynamicButton title={"Back"} onPress={() => navigation.goBack()} />
-
+              <DynamicButton
+                title={'Back'}
+                onPress={() => navigation.goBack()}
+              />
             </View>
             <View style={styles.checkstatus}>
-              <DynamicButton styleoveride={{paddingHorizontal:hScale(7)}}
-                title={status === 'PENDING' ? 'Check Live Status' : 'Click TO Register At UTI'}
-                onPress={status === 'PENDING' ? checkpanlivestatus : () => navigation.navigate('Registerform')}
+              <DynamicButton
+                styleoveride={{paddingHorizontal: hScale(7)}}
+                title={
+                  status === 'PENDING'
+                    ? translate('Check Live Status')
+                    : translate('Click TO Register At UTI')
+                }
+                onPress={
+                  status === 'PENDING'
+                    ? checkpanlivestatus
+                    : () => navigation.navigate('Registerform')
+                }
               />
-
-
             </View>
           </View>
         </View>
       </View>
-
     );
   };
 
-
-
-  const openURL = (url) => {
+  const openURL = url => {
     Linking.openURL(url)
-      .then((supported) => {
+      .then(supported => {
         if (!supported) {
           console.log("Can't handle url: " + url);
         } else {
           return Linking.openURL(url);
         }
       })
-      .catch((err) => console.error('An error occurred', err));
+      .catch(err => console.error('An error occurred', err));
   };
-  const purchasePan = useCallback(async (amount) => {
-    const url = `${APP_URLS.purchasePanc}${amount}`;
-    console.log(url)
-    try {
-      const response = await post({ url: `${APP_URLS.purchasePanc}${amount}` });
-      console.log(response);
-      if (response.Response === 'Success') {
-        Dialog.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: 'SUCCESS',
-          textBody: 'Purchase Successfully',
-          button: 'OK',
-          onPressButton: () => {
-            Dialog.hide();
-          },
-        });
-      } else {
-        Dialog.show({
-          type: ALERT_TYPE.DANGER,
-          title: response.Response === 'Failed' ? response.Response : response.Message,
-          textBody: '',
-          button: 'OK',
-          onPressButton: () => {
-            Dialog.hide();
-          },
-        });
+  const purchasePan = useCallback(
+    async amount => {
+      const url = `${APP_URLS.purchasePanc}${amount}`;
+      console.log(url);
+      try {
+        const response = await post({url: `${APP_URLS.purchasePanc}${amount}`});
+        console.log(response);
+        if (response.Response === 'Success') {
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: translate('SUCCESS'),
+            textBody: translate('Purchase Successfully'),
+            button: translate('OK'),
+            onPressButton: () => {
+              Dialog.hide();
+            },
+          });
+        } else {
+          Dialog.show({
+            type: ALERT_TYPE.DANGER,
+            title:
+              response.Response === translate('Failed')
+                ? response.Response
+                : response.Message,
+            textBody: '',
+            button: translate('OK'),
+            onPressButton: () => {
+              Dialog.hide();
+            },
+          });
+        }
+      } catch (error) {
+        console.error('Error occurred:', error);
       }
-    } catch (error) {
-      console.error("Error occurred:", error);
-    }
-  }, [amount]);
-
+    },
+    [amount],
+  );
 
   return (
-
-    <View style={{flex:1,}}>
-
-
-      
-{/*     {ResgisteredSts === 'BOTHNOTDONE' || ResgisteredSts === 'NOTOK' || ResgisteredSts === 'BOTHNOTDONE' ?
+    <View style={{flex: 1}}>
+      {/*     {ResgisteredSts === 'BOTHNOTDONE' || ResgisteredSts === 'NOTOK' || ResgisteredSts === 'BOTHNOTDONE' ?
 
           <ServicepurchaseScreen route={'PANCARD'} /> : <></>} */}
 
-    
-{ResgisteredSts === 'Registered' ?
-  <View style={styles.main}>
-    <AppBarSecond
-      title={'Pan Card Purchase'}
-      actionButton={
-        <Text style={styles.loginButton}>{translate("Login_UTI")}</Text>
-      }
-      onActionPress={() => { openURL('https://www.psaonline.utiitsl.com/psapanservices/forms/login.html/loginHome') }}
-    />
-
-
-    <View style={styles.container}>
-
-      <View>
-        <View style={styles.svgimg}>
-          <SvgXml xml={Pen} width={wScale(87)} height={hScale(87)} />
-        </View>
-        <View style={[styles.psaIdContainer, { backgroundColor: color1 }]}>
-          <Text style={[styles.psaIdLabel, { color: colorConfig.primaryColor }]}>{translate("PSA_ID")}</Text>
-          <Text style={[styles.psaIdValue, { color: colorConfig.secondaryColor }]}>{loader ? translate('Loading...') : psaId}</Text>
-        </View>
-        <FlotingInput
-          label={'Enter Amount'}
-          value={amount}
-          onChangeTextCallback={setAmount}
-          keyboardType="number-pad"
-        />
-
-        <AlertNotificationRoot>
-          {/* Your AlertNotification code here */}
-        </AlertNotificationRoot>
-
-        <View style={styles.empty} />
-
-
-        <DynamicButton
-          title={'Purchase'}
-          onPress={() => {
-            if (amount === "" || amount === '0') {
-              ToastAndroid.showWithGravity(
-                'Enter Valid Amount',
-                ToastAndroid.SHORT,
-                ToastAndroid.BOTTOM
-              );
-            } else {
-              purchasePan(amount);
+      {ResgisteredSts === 'Registered' ? (
+        <View style={styles.main}>
+          <AppBarSecond
+            title={'Pan Card Purchase'}
+            actionButton={
+              <Text style={styles.loginButton}>{translate('Login_UTI')}</Text>
             }
-          }}
-        />
-      </View>
-    </View>
-  </View>
-  : <></>}
+            onActionPress={() => {
+              openURL(
+                'https://www.psaonline.utiitsl.com/psapanservices/forms/login.html/loginHome',
+              );
+            }}
+          />
 
+          <View style={styles.container}>
+            <View>
+              <View style={styles.svgimg}>
+                <SvgXml xml={Pen} width={wScale(87)} height={hScale(87)} />
+              </View>
+              <View style={[styles.psaIdContainer, {backgroundColor: color1}]}>
+                <Text
+                  style={[
+                    styles.psaIdLabel,
+                    {color: colorConfig.primaryColor},
+                  ]}>
+                  {translate('PSA_ID')}
+                </Text>
+                <Text
+                  style={[
+                    styles.psaIdValue,
+                    {color: colorConfig.secondaryColor},
+                  ]}>
+                  {loader ? translate('Loading') : psaId}
+                </Text>
+              </View>
+              <FlotingInput
+                label={translate('Enter Amount')}
+                value={amount}
+                onChangeTextCallback={setAmount}
+                keyboardType="number-pad"
+                inputstyle={undefined}
+                labelinputstyle={undefined}
+              />
 
-        {/* <View>
+              <AlertNotificationRoot children={undefined}>
+                {/* Your AlertNotification code here */}
+              </AlertNotificationRoot>
+
+              <View style={styles.empty} />
+
+              <DynamicButton
+                title={'Purchase'}
+                onPress={() => {
+                  if (amount === '' || amount === '0') {
+                    ToastAndroid.showWithGravity(
+                      'Enter Valid Amount',
+                      ToastAndroid.SHORT,
+                      ToastAndroid.BOTTOM,
+                    );
+                  } else {
+                    purchasePan(amount);
+                  }
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      ) : (
+        <></>
+      )}
+
+      {/* <View>
           {ResgisteredSts === 'Registered' || ResgisteredSts === 'NOTOK' || ResgisteredSts === 'ALLNOTDONE' ? <Registerpancard status={ResgisteredSts} /> : <PeddingRegistration />
           }
         </View> */}
-    <View style={{flex:1}}>
-          {ResgisteredSts === "PENDING" || ResgisteredSts === 'NOTRegistered' ? <PeddingRegistration status={ResgisteredSts}/> : <></>}
-        </View>
-
-        <TouchableOpacity
-          style={styles.manuallyButton}
-          onPress={() => {
-            // Navigate to 'PancardManual' screen
-            navigation.navigate('PancardManual');
-          }}
-        >
-          <Text style={styles.manuallyButtonText}>{translate("Manually_Pan_Form")}</Text>
-        </TouchableOpacity>
+      <View style={{flex: 1}}>
+        {ResgisteredSts === translate('PENDING') ||
+        ResgisteredSts === translate('NOTRegistered') ? (
+          <PeddingRegistration status={ResgisteredSts} />
+        ) : (
+          <></>
+        )}
       </View>
 
-   
-
+      <TouchableOpacity
+        style={styles.manuallyButton}
+        onPress={() => {
+          // Navigate to 'PancardManual' screen
+          navigation.navigate('PancardManual');
+        }}>
+        <Text style={styles.manuallyButtonText}>
+          {translate('Manually_Pan_Form')}
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 const styles = StyleSheet.create({
   manuallyButton: {
-    backgroundColor: '#007bff', 
+    backgroundColor: '#007bff',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -375,9 +425,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: wScale(10),
-    paddingVertical: hScale(15)
+    paddingVertical: hScale(15),
   },
-  svgimg: { alignItems: 'center', paddingBottom: hScale(10), paddingTop: hScale(10) },
+  svgimg: {
+    alignItems: 'center',
+    paddingBottom: hScale(10),
+    paddingTop: hScale(10),
+  },
   psaidrow: {
     flexDirection: 'row',
     backgroundColor: '#fff',
@@ -386,14 +440,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: wScale(8),
     marginRight: wScale(10),
     height: '100%',
-    borderRadius: 5
+    borderRadius: 5,
   },
   paddingheadar: {
     fontSize: wScale(16),
     paddingVertical: hScale(10),
-    fontWeight: 'bold', color: '#000'
+    fontWeight: 'bold',
+    color: '#000',
   },
-  psaidtext: { color: '#000', fontSize: wScale(16) },
+  psaidtext: {color: '#000', fontSize: wScale(16)},
 
   titletext: {
     fontSize: wScale(20),
@@ -401,30 +456,30 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#d5c64a',
     paddingTop: hScale(10),
-    paddingBottom: hScale(20)
+    paddingBottom: hScale(20),
   },
   description: {
     fontSize: wScale(20),
     color: '#000',
     textAlign: 'justify',
     width: '100%',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   btnrow: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     justifyContent: 'space-between',
-     alignItems: 'center',
+    alignItems: 'center',
     paddingTop: hScale(20),
   },
   checkstatus: {
-    minWidth:'30%',
-    maxWidth:'70%',
+    minWidth: '30%',
+    maxWidth: '70%',
   },
-  empty: { marginBottom: hScale(40) },
+  empty: {marginBottom: hScale(40)},
   loginButton: {
     fontSize: wScale(13),
     color: '#fff',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   psaIdContainer: {
     flexDirection: 'row',
@@ -442,9 +497,7 @@ const styles = StyleSheet.create({
     fontSize: wScale(20),
     fontWeight: 'bold',
     textAlign: 'left',
-    flex: 1
+    flex: 1,
   },
 });
 export default PanCardScreen;
-
-

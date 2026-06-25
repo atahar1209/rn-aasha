@@ -1,5 +1,5 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   View,
   Text,
@@ -14,24 +14,27 @@ import {
   Easing,
   Platform,
 } from 'react-native';
-import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import {
+  Camera,
+  useCameraDevice,
+  useCodeScanner,
+} from 'react-native-vision-camera';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const frameSize = width * 0.72;
 
 const QRScanScreen = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(true);
 
-  const { colorConfig } = useSelector((state) => state.userInfo);
+  const {colorConfig} = useSelector(state => state.userInfo);
   const {
-    primaryColor ,
-    secondaryColor ,
-    primaryButtonColor ,
-    secondaryButtonColor,
+    primaryColor,
+    secondaryColor,
+    primaryButtonColor,
     labelColor = '#2ECC71',
   } = colorConfig || {};
 
@@ -53,7 +56,7 @@ const QRScanScreen = () => {
       duration: 600,
       useNativeDriver: true,
     }).start();
-  }, []);
+  }, [fadeAnim]);
 
   useEffect(() => {
     if (isCameraActive) {
@@ -64,7 +67,7 @@ const QRScanScreen = () => {
           duration: 2200,
           easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
-        })
+        }),
       ).start();
 
       Animated.loop(
@@ -81,25 +84,31 @@ const QRScanScreen = () => {
             easing: Easing.inOut(Easing.ease),
             useNativeDriver: true,
           }),
-        ])
+        ]),
       ).start();
     }
-  }, [isCameraActive]);
+  }, [isCameraActive, pulseAnim, scanAnim]);
 
   const translateY = scanAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [0, frameSize - 4],
   });
 
-  const parseUPIData = (data) => {
-    if (!data || !data.startsWith('upi://')) return null;
+  const parseUPIData = data => {
+    if (!data || !data.startsWith('upi://')) {
+      return null;
+    }
     try {
       const obj = {};
       const queryString = data.split('?')[1];
-      if (!queryString) return null;
-      queryString.split('&').forEach((item) => {
+      if (!queryString) {
+        return null;
+      }
+      queryString.split('&').forEach(item => {
         const [key, value] = item.split('=');
-        if (key && value) obj[key] = decodeURIComponent(value);
+        if (key && value) {
+          obj[key] = decodeURIComponent(value);
+        }
       });
       return obj;
     } catch {
@@ -118,12 +127,14 @@ const QRScanScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (isFocused) checkPermission();
+    if (isFocused) {
+      checkPermission();
+    }
   }, [isFocused, checkPermission]);
 
   const codeScanner = useCodeScanner({
     codeTypes: ['qr'],
-    onCodeScanned: (codes) => {
+    onCodeScanned: codes => {
       if (codes.length > 0 && isCameraActive && !isProcessing.current) {
         const data = codes[0].value;
         isProcessing.current = true;
@@ -131,17 +142,21 @@ const QRScanScreen = () => {
 
         const parsed = parseUPIData(data);
         if (parsed) {
-          navigation.navigate('ShowUPIData', { upi: parsed });
+          navigation.navigate('ShowUPIData', {upi: parsed});
         } else {
-          Alert.alert(translate("Invalid_QR"), translate("Not_a_valid_UPI_QR"), [
-            {
-              text: translate("OK"),
-              onPress: () => {
-                isProcessing.current = false;
-                setIsCameraActive(true);
+          Alert.alert(
+            translate('Invalid_QR'),
+            translate('Not_a_valid_UPI_QR'),
+            [
+              {
+                text: translate('OK'),
+                onPress: () => {
+                  isProcessing.current = false;
+                  setIsCameraActive(true);
+                },
               },
-            },
-          ]);
+            ],
+          );
         }
       }
     },
@@ -152,28 +167,33 @@ const QRScanScreen = () => {
     return (
       <LinearGradient
         colors={['#0a0a1a', '#12122a', '#0d0d20']}
-        style={[styles.container, styles.centered]}
-      >
+        style={[styles.container, styles.centered]}>
         <View style={styles.permissionCard}>
           <LinearGradient
-            colors={[`${primaryColor}22`, `${secondaryColor}18`, 'rgba(255,255,255,0.06)']}
-            start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-            style={styles.permissionCardInner}
-          >
+            colors={[
+              `${primaryColor}22`,
+              `${secondaryColor}18`,
+              'rgba(255,255,255,0.06)',
+            ]}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={styles.permissionCardInner}>
             <Text style={styles.permissionIcon}>📷</Text>
-            <Text style={[styles.permissionTitle, { color: '#fff' }]}>
-              {translate("Camera_access_required")}
+            <Text style={[styles.permissionTitle, {color: '#fff'}]}>
+              {translate('Camera_access_required')}
             </Text>
             <Text style={styles.permissionSubtitle}>
-              {translate("Camera_permission_subtitle")}
+              {translate('Camera_permission_subtitle')}
             </Text>
             <TouchableOpacity
-              style={[styles.permissionBtn, { backgroundColor: primaryButtonColor }]}
+              style={[
+                styles.permissionBtn,
+                {backgroundColor: primaryButtonColor},
+              ]}
               onPress={checkPermission}
-              activeOpacity={0.85}
-            >
-              <Text style={[styles.permissionBtnText, { color: '#000' }]}>
-                {translate("Allow_Permission")}
+              activeOpacity={0.85}>
+              <Text style={[styles.permissionBtnText, {color: '#000'}]}>
+                {translate('Allow_Permission')}
               </Text>
             </TouchableOpacity>
           </LinearGradient>
@@ -185,10 +205,12 @@ const QRScanScreen = () => {
   // ─── No device ───────────────────────────────────────────────────────────────
   if (!device) {
     return (
-      <LinearGradient colors={['#0a0a1a', '#12122a']} style={[styles.container, styles.centered]}>
+      <LinearGradient
+        colors={['#0a0a1a', '#12122a']}
+        style={[styles.container, styles.centered]}>
         <ActivityIndicator size="large" color={primaryColor} />
-        <Text style={[styles.loadingText, { color: primaryColor }]}>
-          {translate("Initializing_Camera")}
+        <Text style={[styles.loadingText, {color: primaryColor}]}>
+          {translate('Initializing_Camera')}
         </Text>
       </LinearGradient>
     );
@@ -196,125 +218,145 @@ const QRScanScreen = () => {
 
   // ─── Main Screen ─────────────────────────────────────────────────────────────
   return (
-<View style={styles.container}>
-  <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+    <View style={styles.container}>
+      <StatusBar
+        barStyle="light-content"
+        translucent
+        backgroundColor="transparent"
+      />
 
-  {/* Camera */}
-  <Camera
-    style={StyleSheet.absoluteFill}
-    device={device}
-    isActive={isFocused && isCameraActive}
-    codeScanner={codeScanner}
-  />
+      {/* Camera */}
+      <Camera
+        style={StyleSheet.absoluteFill}
+        device={device}
+        isActive={isFocused && isCameraActive}
+        codeScanner={codeScanner}
+      />
 
-  {/* Dark overlay */}
-  <LinearGradient
-    colors={['rgba(0,0,0,0.75)', 'rgba(0,0,0,0.2)', 'rgba(0,0,0,0.75)']}
-    style={StyleSheet.absoluteFill}
-    pointerEvents="none"
-  />
+      {/* Dark overlay */}
+      <LinearGradient
+        colors={['rgba(0,0,0,0.75)', 'rgba(0,0,0,0.2)', 'rgba(0,0,0,0.75)']}
+        style={StyleSheet.absoluteFill}
+        pointerEvents="none"
+      />
 
-  <View style={styles.safeWrapper}>
-    <SafeAreaView style={styles.overlay}>
-
-      {/* Top Card */}
-      <View style={styles.topCard}>
-        <LinearGradient
-          colors={[`${primaryColor}33`, `${secondaryColor}22`, 'rgba(255,255,255,0.05)']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.topCardGradient}
-        >
-          <View style={[styles.topBadge, { backgroundColor: `${labelColor}22`, borderColor: `${labelColor}55` }]}>
-            <View style={[styles.liveDot, { backgroundColor: labelColor }]} />
-            <Text style={[styles.liveBadgeText, { color: labelColor }]}>
-              {translate("Scan & Pay")}
-            </Text>
-          </View>
-        </LinearGradient>
-      </View>
-
-      {/* Scanner Frame */}
-      <View style={styles.scannerWrapper}>
-
-        {/* No animation glow ring */}
-        <View style={[styles.glowRing, { borderColor: `${primaryColor}55` }]} />
-
-        <View style={styles.scannerFrame}>
-          <LinearGradient
-            colors={[`${primaryColor}08`, `${secondaryColor}08`]}
-            style={StyleSheet.absoluteFill}
-          />
-
-          {/* ✅ ONLY THIS ANIMATION */}
-          <Animated.View style={{ transform: [{ translateY }] }}>
+      <View style={styles.safeWrapper}>
+        <SafeAreaView style={styles.overlay}>
+          {/* Top Card */}
+          <View style={styles.topCard}>
             <LinearGradient
-              colors={['transparent', primaryColor, 'transparent']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.scanLine}
-            />
-          </Animated.View>
-
-          {/* Corners */}
-          <View style={[styles.cornerTL, { borderColor: primaryColor }]} />
-          <View style={[styles.cornerTR, { borderColor: primaryColor }]} />
-          <View style={[styles.cornerBL, { borderColor: primaryColor }]} />
-          <View style={[styles.cornerBR, { borderColor: primaryColor }]} />
-
-          {/* Dots */}
-          <View style={[styles.dotTL, { backgroundColor: primaryColor }]} />
-          <View style={[styles.dotTR, { backgroundColor: primaryColor }]} />
-          <View style={[styles.dotBL, { backgroundColor: primaryColor }]} />
-          <View style={[styles.dotBR, { backgroundColor: primaryColor }]} />
-        </View>
-
-      </View>
-
-      {/* Bottom Panel */}
-      <View style={styles.bottomPanel}>
-        <LinearGradient
-          colors={[`${secondaryColor}33`, `${primaryColor}22`, 'rgba(0,0,0,0.6)']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.bottomPanelInner}
-        >
-          {isCameraActive ? (
-            <View style={styles.scanningRow}>
-              <ActivityIndicator size="small" color={primaryColor} style={{ marginRight: 10 }} />
-              <Text style={[styles.scanningText, { color: '#fff' }]}>
-                {translate("Scanning")}
-              </Text>
-            </View>
-          ) : (
-            <TouchableOpacity
-              style={[styles.scanAgainBtn, { borderColor: primaryButtonColor }]}
-              onPress={() => {
-                isProcessing.current = false;
-                setIsCameraActive(true);
-              }}
-              activeOpacity={0.8}
-            >
-              <LinearGradient
-                colors={[primaryButtonColor, `${primaryButtonColor}cc`]}
-                style={styles.scanAgainGradient}
-              >
-                <Text style={styles.scanAgainText}>
-                  {translate("Tap_to_Scan_Again")}
+              colors={[
+                `${primaryColor}33`,
+                `${secondaryColor}22`,
+                'rgba(255,255,255,0.05)',
+              ]}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}
+              style={styles.topCardGradient}>
+              <View
+                style={[
+                  styles.topBadge,
+                  {
+                    backgroundColor: `${labelColor}22`,
+                    borderColor: `${labelColor}55`,
+                  },
+                ]}>
+                <View style={[styles.liveDot, {backgroundColor: labelColor}]} />
+                <Text style={[styles.liveBadgeText, {color: labelColor}]}>
+                  {translate('Scan & Pay')}
                 </Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          )}
+              </View>
+            </LinearGradient>
+          </View>
 
-          <Text style={[styles.footerNote, { color: `${labelColor}99` }]}>
-            {translate("UPI_QR_only")}
-          </Text>
-        </LinearGradient>
+          {/* Scanner Frame */}
+          <View style={styles.scannerWrapper}>
+            {/* No animation glow ring */}
+            <View
+              style={[styles.glowRing, {borderColor: `${primaryColor}55`}]}
+            />
+
+            <View style={styles.scannerFrame}>
+              <LinearGradient
+                colors={[`${primaryColor}08`, `${secondaryColor}08`]}
+                style={StyleSheet.absoluteFill}
+              />
+
+              {/* ✅ ONLY THIS ANIMATION */}
+              <Animated.View style={{transform: [{translateY}]}}>
+                <LinearGradient
+                  colors={['transparent', primaryColor, 'transparent']}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 0}}
+                  style={styles.scanLine}
+                />
+              </Animated.View>
+
+              {/* Corners */}
+              <View style={[styles.cornerTL, {borderColor: primaryColor}]} />
+              <View style={[styles.cornerTR, {borderColor: primaryColor}]} />
+              <View style={[styles.cornerBL, {borderColor: primaryColor}]} />
+              <View style={[styles.cornerBR, {borderColor: primaryColor}]} />
+
+              {/* Dots */}
+              <View style={[styles.dotTL, {backgroundColor: primaryColor}]} />
+              <View style={[styles.dotTR, {backgroundColor: primaryColor}]} />
+              <View style={[styles.dotBL, {backgroundColor: primaryColor}]} />
+              <View style={[styles.dotBR, {backgroundColor: primaryColor}]} />
+            </View>
+          </View>
+
+          {/* Bottom Panel */}
+          <View style={styles.bottomPanel}>
+            <LinearGradient
+              colors={[
+                `${secondaryColor}33`,
+                `${primaryColor}22`,
+                'rgba(0,0,0,0.6)',
+              ]}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}
+              style={styles.bottomPanelInner}>
+              {isCameraActive ? (
+                <View style={styles.scanningRow}>
+                  <ActivityIndicator
+                    size="small"
+                    color={primaryColor}
+                    style={{marginRight: 10}}
+                  />
+                  <Text style={[styles.scanningText, {color: '#fff'}]}>
+                    {translate('Scanning')}
+                  </Text>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={[
+                    styles.scanAgainBtn,
+                    {borderColor: primaryButtonColor},
+                  ]}
+                  onPress={() => {
+                    isProcessing.current = false;
+                    setIsCameraActive(true);
+                  }}
+                  activeOpacity={0.8}>
+                  <LinearGradient
+                    colors={[primaryButtonColor, `${primaryButtonColor}cc`]}
+                    style={styles.scanAgainGradient}>
+                    <Text style={styles.scanAgainText}>
+                      {translate('Tap_to_Scan_Again')}
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              )}
+
+              <Text style={[styles.footerNote, {color: `${labelColor}99`}]}>
+                {translate('UPI_QR_only')}
+              </Text>
+            </LinearGradient>
+          </View>
+        </SafeAreaView>
       </View>
-
-    </SafeAreaView>
-  </View>
-</View>
+    </View>
   );
 };
 
@@ -325,10 +367,10 @@ const CORNER_SIZE = 28;
 const BORDER_W = 4;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#000' },
-  centered: { justifyContent: 'center', alignItems: 'center' },
-  safeWrapper: { flex: 1 },
-  overlay: { flex: 1, justifyContent: 'space-between', alignItems: 'center' },
+  container: {flex: 1, backgroundColor: '#000'},
+  centered: {justifyContent: 'center', alignItems: 'center'},
+  safeWrapper: {flex: 1},
+  overlay: {flex: 1, justifyContent: 'space-between', alignItems: 'center'},
 
   // ── Permission ──
   permissionCard: {
@@ -343,14 +385,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 32,
   },
-  permissionIcon: { fontSize: 52, marginBottom: 16 },
-  permissionTitle: { fontSize: 20, fontWeight: '700', marginBottom: 8, textAlign: 'center' },
-  permissionSubtitle: { fontSize: 14, color: 'rgba(255,255,255,0.55)', textAlign: 'center', marginBottom: 24, lineHeight: 20 },
-  permissionBtn: { paddingVertical: 14, paddingHorizontal: 36, borderRadius: 50 },
-  permissionBtnText: { fontWeight: '700', fontSize: 15 },
+  permissionIcon: {fontSize: 52, marginBottom: 16},
+  permissionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  permissionSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.55)',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  permissionBtn: {paddingVertical: 14, paddingHorizontal: 36, borderRadius: 50},
+  permissionBtnText: {fontWeight: '700', fontSize: 15},
 
   // ── Loading ──
-  loadingText: { marginTop: 16, fontSize: 14, fontWeight: '500', letterSpacing: 0.5 },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0.5,
+  },
 
   // ── Top Card ──
   topCard: {
@@ -376,13 +434,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
   },
-  liveDot: { width: 7, height: 7, borderRadius: 4, marginRight: 6 },
-  liveBadgeText: { fontSize: 11, fontWeight: '700', letterSpacing: 1, textTransform: 'uppercase' },
-  title: { fontSize: 22, fontWeight: '800', color: '#fff', letterSpacing: 0.3 },
-  subtitle: { fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 4 },
+  liveDot: {width: 7, height: 7, borderRadius: 4, marginRight: 6},
+  liveBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  title: {fontSize: 22, fontWeight: '800', color: '#fff', letterSpacing: 0.3},
+  subtitle: {fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 4},
 
   // ── Scanner ──
-  scannerWrapper: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  scannerWrapper: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   glowRing: {
     position: 'absolute',
     width: frameSize + 40,
@@ -404,35 +467,79 @@ const styles = StyleSheet.create({
 
   // corners
   cornerTL: {
-    position: 'absolute', top: 0, left: 0,
-    width: CORNER_SIZE, height: CORNER_SIZE,
-    borderTopWidth: BORDER_W, borderLeftWidth: BORDER_W,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: CORNER_SIZE,
+    height: CORNER_SIZE,
+    borderTopWidth: BORDER_W,
+    borderLeftWidth: BORDER_W,
     borderTopLeftRadius: 18,
   },
   cornerTR: {
-    position: 'absolute', top: 0, right: 0,
-    width: CORNER_SIZE, height: CORNER_SIZE,
-    borderTopWidth: BORDER_W, borderRightWidth: BORDER_W,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: CORNER_SIZE,
+    height: CORNER_SIZE,
+    borderTopWidth: BORDER_W,
+    borderRightWidth: BORDER_W,
     borderTopRightRadius: 18,
   },
   cornerBL: {
-    position: 'absolute', bottom: 0, left: 0,
-    width: CORNER_SIZE, height: CORNER_SIZE,
-    borderBottomWidth: BORDER_W, borderLeftWidth: BORDER_W,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: CORNER_SIZE,
+    height: CORNER_SIZE,
+    borderBottomWidth: BORDER_W,
+    borderLeftWidth: BORDER_W,
     borderBottomLeftRadius: 18,
   },
   cornerBR: {
-    position: 'absolute', bottom: 0, right: 0,
-    width: CORNER_SIZE, height: CORNER_SIZE,
-    borderBottomWidth: BORDER_W, borderRightWidth: BORDER_W,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: CORNER_SIZE,
+    height: CORNER_SIZE,
+    borderBottomWidth: BORDER_W,
+    borderRightWidth: BORDER_W,
     borderBottomRightRadius: 18,
   },
 
   // corner glow dots
-  dotTL: { position: 'absolute', top: -2, left: -2, width: 8, height: 8, borderRadius: 4 },
-  dotTR: { position: 'absolute', top: -2, right: -2, width: 8, height: 8, borderRadius: 4 },
-  dotBL: { position: 'absolute', bottom: -2, left: -2, width: 8, height: 8, borderRadius: 4 },
-  dotBR: { position: 'absolute', bottom: -2, right: -2, width: 8, height: 8, borderRadius: 4 },
+  dotTL: {
+    position: 'absolute',
+    top: -2,
+    left: -2,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  dotTR: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  dotBL: {
+    position: 'absolute',
+    bottom: -2,
+    left: -2,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  dotBR: {
+    position: 'absolute',
+    bottom: -2,
+    right: -2,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
 
   helperChip: {
     marginTop: 16,
@@ -444,7 +551,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.15)',
     backgroundColor: 'rgba(255,255,255,0.08)',
   },
-  helperText: { fontSize: 12, fontWeight: '500', letterSpacing: 0.3 },
+  helperText: {fontSize: 12, fontWeight: '500', letterSpacing: 0.3},
 
   // ── Bottom Panel ──
   bottomPanel: {
@@ -462,8 +569,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     alignItems: 'center',
   },
-  scanningRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  scanningText: { fontSize: 16, fontWeight: '600', letterSpacing: 0.5 },
+  scanningRow: {flexDirection: 'row', alignItems: 'center', marginBottom: 10},
+  scanningText: {fontSize: 16, fontWeight: '600', letterSpacing: 0.5},
   scanAgainBtn: {
     borderRadius: 50,
     overflow: 'hidden',
@@ -476,6 +583,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 50,
   },
-  scanAgainText: { color: '#000', fontWeight: '800', fontSize: 15, letterSpacing: 0.3 },
-  footerNote: { fontSize: 11, marginTop: 6, letterSpacing: 0.2 },
+  scanAgainText: {
+    color: '#000',
+    fontWeight: '800',
+    fontSize: 15,
+    letterSpacing: 0.3,
+  },
+  footerNote: {fontSize: 11, marginTop: 6, letterSpacing: 0.2},
 });

@@ -1,21 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, ActivityIndicator, StyleSheet, ToastAndroid, FlatList, TouchableOpacity, Alert, ScrollView, Keyboard } from 'react-native';
-import { APP_URLS } from '../../../utils/network/urls';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  Keyboard,
+} from 'react-native';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { translate } from '../../../utils/languageUtils/I18n';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {translate} from '../../../utils/languageUtils/I18n';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import DynamicButton from '../../drawer/button/DynamicButton';
 import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
 import LinearGradient from 'react-native-linear-gradient';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../reduxUtils/store';
-import { FlashList } from '@shopify/flash-list';
-import { SvgXml } from 'react-native-svg';
-import { colors } from '../../../utils/styles/theme';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../reduxUtils/store';
+import {FlashList} from '@shopify/flash-list';
+import {SvgXml} from 'react-native-svg';
+import {colors} from '../../../utils/styles/theme';
 
 const UpiGetBenifiaryScreen = () => {
-  const { colorConfig } = useSelector((state: RootState) => state.userInfo);
+  const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const EditIcon = ` 
 
  <?xml version="1.0" encoding="UTF-8"?>
@@ -31,14 +42,13 @@ const UpiGetBenifiaryScreen = () => {
   const [nxtbtn, setNxtbtn] = useState(false);
   const [banklist, setBanklist] = useState([]);
   const [remid, setRemid] = useState('');
-  const { post, get } = useAxiosHook();
+  const {post, get} = useAxiosHook();
   const [isLoading, setisLoading] = useState(true);
 
   const [nodata, setnodata] = useState(false);
   const [editable, setEditable] = useState(false);
 
   const navigation = useNavigation<any>();
-
 
   useEffect(() => {
     getGenUniqueId();
@@ -47,45 +57,42 @@ const UpiGetBenifiaryScreen = () => {
   useFocusEffect(
     React.useCallback(() => {
       // setBanklist([])
-    }, [])
+    }, []),
   );
 
-
   const [unqid, setUnqiD] = useState('');
-  const upiList = async (number) => {
+  const upiList = async number => {
     try {
-      const url = `${APP_URLS.getupiList}${number}`
+      const url = `${APP_URLS.getupiList}${number}`;
       console.log(url);
-      const res = await get({ url: url });
+      const res = await get({url: url});
       console.log(res);
 
-      const addinfo = res['ADDINFO'];
-      if (addinfo['statuscode'] === 'TXN') {
-        setBanklist(res['ADDINFO']['Response']);
-        if (res['ADDINFO']['Response'].length === 0) {
-          console.log(res['ADDINFO']['Response'].length);
-          navigation.navigate("UpiAddNewVPAScreen", { senderNo: number });
+      const addinfo = res.ADDINFO;
+      if (addinfo.statuscode === 'TXN') {
+        setBanklist(res.ADDINFO.Response);
+        if (res.ADDINFO.Response.length === 0) {
+          console.log(res.ADDINFO.Response.length);
+          navigation.navigate('UpiAddNewVPAScreen', {senderNo: number});
         }
-      } else if (addinfo['statuscode'] === 'RNF') {
-        navigation.navigate("UpiNumberRegisterScreen", { data: number });
-
+      } else if (addinfo.statuscode === 'RNF') {
+        navigation.navigate('UpiNumberRegisterScreen', {data: number});
       } else {
         Alert.alert(
-          addinfo['Response'],
-          "",
+          addinfo.Response,
+          '',
           [
             {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
+              text: translate('Cancel'),
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
             },
             {
-              text: "ok",
-              onPress: () => console.log
-              ,
+              text: translate('ok'),
+              onPress: () => console.log,
             },
           ],
-          { cancelable: false }
+          {cancelable: false},
         );
       }
     } catch (error) {
@@ -94,30 +101,26 @@ const UpiGetBenifiaryScreen = () => {
   };
   const getGenUniqueId = async () => {
     try {
-      const url = `${APP_URLS.getGenIMPSUniqueId}`
+      const url = `${APP_URLS.getGenIMPSUniqueId}`;
       console.log(url);
-      const res = await get({ url: url });
+      const res = await get({url: url});
 
-
-
-      if (res['Response'] == 'Failed') {
+      if (res.Response === 'Failed') {
         ToastAndroid.showWithGravity(
-          res['Message'],
+          res.Message,
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
-        )
+        );
       } else {
-        setUnqiD(res['Message']);
+        setUnqiD(res.Message);
         console.log(res);
         setisLoading(false);
         ToastAndroid.showWithGravity(
-          res['Response'],
+          res.Response,
           ToastAndroid.SHORT,
           ToastAndroid.BOTTOM,
-        )
+        );
       }
-
-
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -130,42 +133,48 @@ const UpiGetBenifiaryScreen = () => {
       setOnTap1(false);
     }
   };
-  const handleImpsPress = async (item) => {
-    const upiUname = await item['BenName'].toString();
-    const UpiId = await item['UPIID'].toString();
-    const senderNo = await item['senderno'].toString();
+  const handleImpsPress = async item => {
+    const upiUname = await item.BenName.toString();
+    const UpiId = await item.UPIID.toString();
+    const senderNo = await item.senderno.toString();
 
-
-    navigation.navigate("UpiDmtScreen", { upiUname, UpiId, senderNo, unqid },);
+    navigation.navigate('UpiDmtScreen', {upiUname, UpiId, senderNo, unqid});
 
     console.log('IMPS pressed for:', item);
   };
 
-
-
-
-  const handleDeletePress = async (item) => {
-    const id = item['idno'];
+  const handleDeletePress = async item => {
+    const id = item.idno;
     // {"ADDINFO": {"sts": true}, "RESULT": "0"}
     console.log('handleDeletePress:', id);
     try {
-      const res = await get({ url: `${APP_URLS.deleteUpiBef}idno=${id}` });
+      const res = await get({url: `${APP_URLS.deleteUpiBef}idno=${id}`});
       console.log('res', res);
 
-
       if (res.RESULT === '0') {
-        ToastAndroid.showWithGravity('Delete SuccessFully', ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+        ToastAndroid.showWithGravity(
+          translate('Delete SuccessFully'),
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
       } else {
-        ToastAndroid.showWithGravity('Error', ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+        ToastAndroid.showWithGravity(
+          translate('Error'),
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
 
         upiList(sendernum);
 
         let response;
         try {
-        } catch (parseError) {
-        }
+        } catch (parseError) {}
 
-        ToastAndroid.showWithGravity(response.status, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+        ToastAndroid.showWithGravity(
+          response.status,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
         console.log(response);
       }
     } catch (error) {
@@ -175,64 +184,76 @@ const UpiGetBenifiaryScreen = () => {
 
   const toggleEditable = () => {
     setEditable(!editable);
-  }
+  };
 
-
-
-
+  // eslint-disable-next-line react/no-unstable-nested-components
   const BeneficiaryList2 = () => {
     return (
       <FlashList
         data={banklist}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <View style={styles.itemContainer}>
-
             {item.isbankdown ? (
-              <Text style={styles.noteText}>{translate("Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime")}</Text>
+              <Text style={styles.noteText}>
+                {translate(
+                  'Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime',
+                )}
+              </Text>
             ) : null}
 
-            <View style={{
-              borderBottomWidth: wScale(.5), borderBottomColor: '#000',
+            <View
+              style={{
+                borderBottomWidth: wScale(0.5),
+                borderBottomColor: '#000',
 
-              marginBottom: hScale(8), paddingBottom: hScale(5)
-            }}>
-
+                marginBottom: hScale(8),
+                paddingBottom: hScale(5),
+              }}>
               <View style={styles.row}>
-                <Text style={styles.itemLabel}>{translate("Name")}</Text>
-                <Text style={styles.itemValue}>{item['BenName']}</Text>
+                <Text style={styles.itemLabel}>{translate('Name')}</Text>
+                <Text style={styles.itemValue}>{item.BenName}</Text>
               </View>
-
-
             </View>
 
-            <View style={[styles.row,]}>
-              <Text style={styles.itemLabel}>{translate("UPIID")}</Text>
-              <Text style={[styles.itemValue, { flex: 1 }]}
-                numberOfLines={1} ellipsizeMode='tail'>{item['UPIID']}</Text>
+            <View style={[styles.row]}>
+              <Text style={styles.itemLabel}>{translate('UPIID')}</Text>
+              <Text
+                style={[styles.itemValue, {flex: 1}]}
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {item.UPIID}
+              </Text>
             </View>
-            <View style={{
-              borderTopWidth: wScale(.5), borderTopColor: '#000',
-              marginTop: hScale(8)
-            }}>
-
+            <View
+              style={{
+                borderTopWidth: wScale(0.5),
+                borderTopColor: '#000',
+                marginTop: hScale(8),
+              }}>
               <View style={styles.row}>
                 <View>
-                  <Text style={styles.itemLabel}>{translate("IDno")}</Text>
-                  <Text style={[styles.itemValue, { width: wScale(100), textAlign: 'left' }]}>{item['idno']}</Text>
+                  <Text style={styles.itemLabel}>{translate('IDno')}</Text>
+                  <Text
+                    style={[
+                      styles.itemValue,
+                      {width: wScale(100), textAlign: 'left'},
+                    ]}>
+                    {item.idno}
+                  </Text>
                 </View>
-                <TouchableOpacity style={[styles.button, styles.impsButton]} onPress={() => handleImpsPress(item)}>
-                  <Text style={styles.buttonText}>{translate("Transfer")}</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.impsButton]}
+                  onPress={() => handleImpsPress(item)}>
+                  <Text style={styles.buttonText}>{translate('Transfer')}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.button, styles.deleteButton]}
+                <TouchableOpacity
+                  style={[styles.button, styles.deleteButton]}
                   onPress={() => handleDeletePress(item)}>
-                  <Text style={styles.buttonText}>{translate("Delete")}</Text>
-
+                  <Text style={styles.buttonText}>{translate('Delete')}</Text>
                 </TouchableOpacity>
-
               </View>
             </View>
-
           </View>
         )}
         keyExtractor={item => item.idno}
@@ -241,27 +262,30 @@ const UpiGetBenifiaryScreen = () => {
     );
   };
 
-
   return (
-
     <View style={styles.main}>
       <AppBarSecond title={'Upi'} />
-      <LinearGradient colors={[colorConfig.primaryColor, colorConfig.secondaryColor]} style={styles.lineargradient}>
-        <View style={styles.container} >
-
+      <LinearGradient
+        colors={[colorConfig.primaryColor, colorConfig.secondaryColor]}
+        style={styles.lineargradient}>
+        <View style={styles.container}>
           <View>
             <TextInput
-              placeholder='Enter Remitter Registered  Number'
+              placeholder={translate('Enter Remitter Registered  Number')}
               placeholderTextColor={colors.black75}
-              style={banklist.length === 0 ? styles.inputstyle : (editable
-                ? styles.inputstyle :
-                StyleSheet.flatten([styles.inputstyle, { fontWeight: 'bold', fontSize: wScale(25) }]))
+              style={
+                banklist.length === 0
+                  ? styles.inputstyle
+                  : editable
+                  ? styles.inputstyle
+                  : StyleSheet.flatten([
+                      styles.inputstyle,
+                      {fontWeight: 'bold', fontSize: wScale(25)},
+                    ])
               }
               maxLength={10}
               keyboardType="number-pad"
-              value={
-                editable ? "" :
-                  sendernum}
+              value={editable ? '' : sendernum}
               editable={banklist.length === 0 ? true : editable}
               onChangeText={text => {
                 setSendernum(text);
@@ -277,26 +301,44 @@ const UpiGetBenifiaryScreen = () => {
                   setOnTap1(false);
                 }
               }}
-            />{
-              banklist.length === 0 ? null :
-                <View style={[styles.righticon2]}>
-                  <TouchableOpacity style={{ backgroundColor: colorConfig.secondaryColor, paddingVertical: hScale(4) }}
-                    onPress={toggleEditable}>
-                    <SvgXml xml={EditIcon} width={wScale(40)} height={wScale(28)} />
-                  </TouchableOpacity>
-                </View>
-            }
+            />
+            {banklist.length === 0 ? null : (
+              <View style={[styles.righticon2]}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: colorConfig.secondaryColor,
+                    paddingVertical: hScale(4),
+                  }}
+                  onPress={toggleEditable}>
+                  <SvgXml
+                    xml={EditIcon}
+                    width={wScale(40)}
+                    height={wScale(28)}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
 
           <DynamicButton
-            title={isLoading ? <ActivityIndicator size={'large'} color={colorConfig.labelColor} /> :
-              banklist.length === 0 ? "Next" : "Vpa ID"}
+            title={
+              isLoading ? (
+                <ActivityIndicator
+                  size={'large'}
+                  color={colorConfig.labelColor}
+                />
+              ) : banklist.length === 0 ? (
+                'Next'
+              ) : (
+                'Vpa ID'
+              )
+            }
             disabled={!nxtbtn}
             onPress={() => {
               if (banklist.length === 0) {
                 handleNextButtonPress();
               } else {
-                navigation.navigate("AddNewBenificiaryScreen", { no: sendernum });
+                navigation.navigate('AddNewBenificiaryScreen', {no: sendernum});
               }
             }}
           />
@@ -304,59 +346,59 @@ const UpiGetBenifiaryScreen = () => {
       </LinearGradient>
 
       <ScrollView>
-
-        {banklist.length === 0 ?
+        {banklist.length === 0 ? (
           <View style={styles.container}>
-            <Text style={styles.titletext}>{translate("Very_Important_Notice")}</Text>
-            <View style={styles.textview} >
+            <Text style={styles.titletext}>
+              {translate('Very_Important_Notice')}
+            </Text>
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('first')}</Text>
             </View>
 
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('thNotice')}</Text>
             </View>
-            <View style={styles.textview} >
+            <View style={styles.textview}>
               <View style={styles.bulletPoint} />
               <Text style={styles.textstyle}> {translate('secondNotice')}</Text>
             </View>
           </View>
-          :
-
-          <View style={{
-            paddingTop: hScale(20),
-          }}>
+        ) : (
+          <View
+            style={{
+              paddingTop: hScale(20),
+            }}>
             <BeneficiaryList2 />
-
-
           </View>
-        }
-        {nodata ? <View style={styles.container}>
-          <Text style={styles.title}>{translate('No Data Found')}</Text>
+        )}
+        {nodata ? (
+          <View style={styles.container}>
+            <Text style={styles.title}>{translate('No Data Found')}</Text>
 
-          <DynamicButton title={'ADD ACC'} onPress={() => {
-
-            navigation.navigate("AddNewBenificiaryScreen", { no: sendernum });
-
-          }} />
-
-        </View>
-          : <></>
-        }
+            <DynamicButton
+              title={'ADD ACC'}
+              onPress={() => {
+                navigation.navigate('AddNewBenificiaryScreen', {no: sendernum});
+              }}
+            />
+          </View>
+        ) : (
+          <></>
+        )}
       </ScrollView>
-    </View >
-
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    paddingBottom: hScale(20)
+    paddingBottom: hScale(20),
   },
   lineargradient: {
-    paddingTop: hScale(10)
+    paddingTop: hScale(10),
   },
   container: {
     paddingHorizontal: wScale(10),
@@ -368,17 +410,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: hScale(15),
     fontSize: wScale(20),
-    color: '#000'
+    color: '#000',
   },
 
   righticon2: {
-    position: "absolute",
-    left: "auto",
+    position: 'absolute',
+    left: 'auto',
     right: wScale(0),
     top: hScale(0),
-    height: "78%",
-    alignItems: "flex-end",
-    justifyContent: "center",
+    height: '78%',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
     paddingRight: wScale(12),
   },
 
@@ -386,13 +428,13 @@ const styles = StyleSheet.create({
     fontSize: wScale(24),
     fontWeight: 'bold',
     marginBottom: hScale(20),
-    color: '#000'
+    color: '#000',
   },
   titletext: {
     color: 'red',
     fontSize: wScale(18),
     paddingBottom: hScale(15),
-    paddingTop: hScale(5)
+    paddingTop: hScale(5),
   },
   bulletPoint: {
     backgroundColor: 'red',
@@ -404,13 +446,13 @@ const styles = StyleSheet.create({
   },
   textview: {
     flexDirection: 'row',
-    paddingBottom: hScale(10)
+    paddingBottom: hScale(10),
   },
   textstyle: {
     fontSize: wScale(14),
     flex: 1,
     textAlign: 'justify',
-    color: colors.black75
+    color: colors.black75,
   },
   itemContainer: {
     flex: 1,
@@ -419,13 +461,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 2,
     marginBottom: hScale(10),
-    marginHorizontal: wScale(10)
+    marginHorizontal: wScale(10),
   },
 
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   itemLabel: {
     fontSize: wScale(16),
@@ -436,12 +478,12 @@ const styles = StyleSheet.create({
     fontSize: wScale(16),
     color: '#555',
     flex: 1,
-    textAlign: 'right'
+    textAlign: 'right',
   },
   noteText: {
     fontSize: wScale(14),
     color: '#d9534f',
-    marginBottom: hScale(10)
+    marginBottom: hScale(10),
   },
 
   button: {
@@ -451,7 +493,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: wScale(8),
     marginTop: hScale(8),
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   impsButton: {
     backgroundColor: '#007bff',

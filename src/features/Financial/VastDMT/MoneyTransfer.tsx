@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -6,18 +6,17 @@ import {
   useColorScheme,
   ActivityIndicator,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { APP_URLS } from '../../../utils/network/urls';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
-import AppBarSecond from '../../drawer/headerAppbar/AppBarSecond';
+import {APP_URLS} from '../../../utils/network/urls';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 import DmtTabScreen from '../Dmt/DmtTabScreen';
-import { translate } from '../../../utils/languageUtils/I18n';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 const MoneyTransferScreen = () => {
   const navigation = useNavigation<any>();
   const colorScheme = useColorScheme();
-  const { get } = useAxiosHook();
+  const {get} = useAxiosHook();
 
   // 3 states: 'loading' | 'ok' | 'failed'
   const [status, setStatus] = useState<'loading' | 'ok' | 'failed'>('loading');
@@ -27,14 +26,13 @@ const MoneyTransferScreen = () => {
     const CheckDmtStatus = async () => {
       try {
         const url = `${APP_URLS.Dmtstatus}`;
-        const response = await get({ url });
+        const response = await get({url});
         console.log(response, '******************');
 
-        const { Message, Response } = response;
+        const {Message, Response} = response;
 
         if (Response === 'Success') {
           setStatus('ok');
-
         } else if (
           Response === 'BOTHNOTDONE' ||
           Response === 'NOTOK' ||
@@ -43,17 +41,15 @@ const MoneyTransferScreen = () => {
           Response === 'OTPREQUIRED'
         ) {
           // Navigate away, no UI needed here
-          navigation.navigate('ServicepurchaseScreen', { typename: 'DMT' });
-
+          navigation.navigate('ServicepurchaseScreen', {typename: 'DMT'});
         } else {
           // Covers 'Failed', unknown responses, etc.
-          setMessage(Message || 'Something went wrong.');
+          setMessage(Message || translate('Something went wrong.'));
           setStatus('failed');
         }
-
       } catch (error) {
         console.log(error);
-        setMessage('Network error. Please try again.');
+        setMessage(translate('Network error. Please try again.'));
         setStatus('failed');
       }
     };
@@ -66,7 +62,7 @@ const MoneyTransferScreen = () => {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#FF6B35" />
-        <Text style={styles.loadingText}>Please wait...</Text>
+        <Text style={styles.loadingText}>{translate('Please wait')}</Text>
       </View>
     );
   }
@@ -75,15 +71,17 @@ const MoneyTransferScreen = () => {
   if (status === 'failed') {
     return (
       <View style={styles.centered}>
-        
-
- <Text style={styles.warningIcon}>⚠️</Text>
+        <Text style={styles.warningIcon}>⚠️</Text>
 
         <Text style={styles.errorMessage}>{message}</Text>
 
-       {message !=='No Api Open' && <Text style={styles.helpText}>
-          {translate("Please complete your KYC verification to use Money Transfer services.")}
-        </Text>}
+        {message !== translate('No Api Open') && (
+          <Text style={styles.helpText}>
+            {translate(
+              'Please complete your KYC verification to use Money Transfer services.',
+            )}
+          </Text>
+        )}
       </View>
     );
   }
@@ -115,7 +113,7 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     fontSize: hScale(15),
-    color: '#E53935',       // red for the API message
+    color: '#E53935', // red for the API message
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: hScale(12),

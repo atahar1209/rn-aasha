@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Button, Image, PermissionsAndroid, Platform } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Button, Image, PermissionsAndroid, Platform} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import {translate} from '../../utils/languageUtils/I18n';
 
 const ImageUpload = () => {
   const [image, setImage] = useState(null);
@@ -18,9 +19,12 @@ const ImageUpload = () => {
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         ]);
         if (
-          granted['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED
+          granted['android.permission.CAMERA'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          granted['android.permission.READ_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED
         ) {
           console.log('Permissions granted');
         } else {
@@ -46,9 +50,12 @@ const ImageUpload = () => {
   // };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={image} style={{ width: 200, height: 200 }} />}
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Button
+        title={translate('Pick an image from camera roll')}
+        onPress={pickImage}
+      />
+      {image && <Image source={image} style={{width: 200, height: 200}} />}
     </View>
   );
 };

@@ -1,10 +1,10 @@
-import { translate } from "../../../utils/languageUtils/I18n";
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import {translate} from '../../../utils/languageUtils/I18n';
+import React, {useState} from 'react';
+import {View, Text, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const Aadharkyc = ({ sendernum }) => {
+const Aadharkyc = ({sendernum}) => {
   const [isloading, setIsLoading] = useState(false);
   const [aadharnum, setAadharnum] = useState('');
   const [otp, setOtp] = useState('');
@@ -21,7 +21,7 @@ const Aadharkyc = ({ sendernum }) => {
             Authorization: `Bearer ${token}`,
           },
           timeout: 12000,
-        }
+        },
       );
 
       console.log(response);
@@ -34,13 +34,13 @@ const Aadharkyc = ({ sendernum }) => {
           sendotpaadhar();
         } else {
           setIsLoading(false);
-          Alert.alert('Invalid Aadhar Number', '!!!');
+          Alert.alert(translate('Invalid Aadhar Number'), '!!!');
         }
       } else if (response.status === 401) {
         await AsyncStorage.clear();
         // Navigate to login page
       } else {
-        throw new Error('Failed to load themes');
+        throw new Error(translate('Failed to load themes'));
       }
     } catch (error) {
       console.error(error);
@@ -63,7 +63,7 @@ const Aadharkyc = ({ sendernum }) => {
             Authorization: `Bearer ${token}`,
           },
           timeout: 15000,
-        }
+        },
       );
 
       console.log(response);
@@ -83,7 +83,7 @@ const Aadharkyc = ({ sendernum }) => {
         await AsyncStorage.clear();
         // Navigate to login page
       } else {
-        throw new Error('Failed to load themes');
+        throw new Error(translate('Failed to load themes'));
       }
     } catch (error) {
       console.error(error);
@@ -109,7 +109,7 @@ const Aadharkyc = ({ sendernum }) => {
             Authorization: `Bearer ${token}`,
           },
           timeout: 15000,
-        }
+        },
       );
 
       console.log(response);
@@ -121,9 +121,9 @@ const Aadharkyc = ({ sendernum }) => {
         const message = data.Message;
 
         if (status === true) {
-          Alert.alert('Success', message, [
+          Alert.alert(translate('Success'), message, [
             {
-              text: 'OK',
+              text: translate('OK'),
               onPress: () => {
                 // Navigate to dashboard
               },
@@ -136,7 +136,7 @@ const Aadharkyc = ({ sendernum }) => {
         await AsyncStorage.clear();
         // Navigate to login page
       } else {
-        throw new Error('Failed to load themes');
+        throw new Error(translate('Failed to load themes'));
       }
     } catch (error) {
       console.error(error);
@@ -145,40 +145,38 @@ const Aadharkyc = ({ sendernum }) => {
 
   return (
     <View style={styles.container}>
-    <View style={styles.headerContainer}>
-      <View style={styles.headerIcon}>
-        {/* Icon component */}
+      <View style={styles.headerContainer}>
+        <View style={styles.headerIcon}>{/* Icon component */}</View>
+        <Text style={styles.headerText}>{translate('Aadhaar_KYC_Due')}</Text>
       </View>
-      <Text style={styles.headerText}>{translate("Aadhaar_KYC_Due")}</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoText}>{translate('key_ifthesen_153')}</Text>
+        <Text style={styles.infoText}>{translate('key_fordoing_154')}</Text>
+        <Text style={styles.infoText}>{translate('key_aadhaarky_155')}</Text>
+      </View>
+      {otpvisioff ? (
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder={translate('Enter Your Aadhaar Number')}
+            keyboardType="number-pad"
+            onChangeText={text => setAadharnum(text)}
+            value={aadharnum}
+          />
+          <Button
+            title={translate('Verify Now')}
+            onPress={checkaadhar}
+            disabled={isloading}
+            color="#841584"
+          />
+        </View>
+      ) : (
+        <View style={styles.inputContainer}>
+          {/* OTP input fields and resend OTP button */}
+          {/* Submit OTP button */}
+        </View>
+      )}
     </View>
-    <View style={styles.infoContainer}>
-      <Text style={styles.infoText}>{translate("key_ifthesen_153")}</Text>
-      <Text style={styles.infoText}>{translate("key_fordoing_154")}</Text>
-      <Text style={styles.infoText}>{translate("key_aadhaarky_155")}</Text>
-    </View>
-    {otpvisioff ? (
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Your Aadhaar Number"
-          keyboardType="number-pad"
-          onChangeText={(text) => setAadharnum(text)}
-          value={aadharnum}
-        />
-        <Button
-          title="Verify Now"
-          onPress={checkaadhar}
-          disabled={isloading}
-          color="#841584"
-        />
-      </View>
-    ) : (
-      <View style={styles.inputContainer}>
-        {/* OTP input fields and resend OTP button */}
-        {/* Submit OTP button */}
-      </View>
-    )}
-  </View>
   );
 };
 
