@@ -273,7 +273,7 @@ const RechargeUtilitisR = () => {
 
   useEffect(() => {
     fetchTransactions(selectedDate.from, selectedDate.to, selectedStatus);
-  }, [selectedDate, selectedStatus]);
+  }, [fetchTransactions, selectedDate, selectedStatus]);
 
   // ── Render item ───────────────────────────────────────────────────────────
   const renderItem = useCallback(
@@ -284,7 +284,7 @@ const RechargeUtilitisR = () => {
         onPress={() => navigation.navigate('RechargeHistory', {...item})}
       />
     ),
-    [colorConfig.secondaryColor],
+    [colorConfig.secondaryColor, navigation],
   );
 
   // ── List header ───────────────────────────────────────────────────────────

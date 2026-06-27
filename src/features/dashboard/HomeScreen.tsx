@@ -216,15 +216,13 @@ const HomeScreen = () => {
   }, [scaleValue]);
 
   const Newssms = async () => {
+    const res = await get({url: APP_URLS.getProfile});
+    if (res.data) {
+      JSON.parse(decryptData(res.value1, res.value2, res.data));
+    }
     try {
-      const res = await get({url: APP_URLS.getProfile});
-      if (res && res.data) {
-        JSON.parse(decryptData(res.value1, res.value2, res.data));
-      }
       const response = await get({url: APP_URLS.NewsNotifaction});
-      if (response && response.Status) {
-        setNewsData(response.data);
-      }
+      if (response.Status) setNewsData(response.data);
     } catch (_) {}
   };
 
@@ -239,17 +237,15 @@ const HomeScreen = () => {
 
       if (userData === date.toUTCString()) {
         Alert.alert(
-          translate('Session Expired'),
+          'Session Expired',
           userData,
-          [{text: translate('OK'), onPress: () => dispatch(reset())}],
+          [{text: 'OK', onPress: () => dispatch(reset())}],
           {cancelable: false},
         );
         setRefreshing(false);
         return;
       }
-      if (storedItems) {
-        setSavedItems(JSON.parse(storedItems));
-      }
+      if (storedItems) setSavedItems(JSON.parse(storedItems));
 
       let backendTime = null;
 
@@ -257,6 +253,7 @@ const HomeScreen = () => {
         const themeResponse = await post({
           url: APP_URLS.ThemeChangeTime,
         });
+
         backendTime = themeResponse?.FullDateTime;
       } catch (error) {
         console.log('ThemeChangeTime API not available, skipping cache check');
@@ -267,7 +264,6 @@ const HomeScreen = () => {
       console.log('====================================');
       console.log(backendTime, localTime);
       console.log('====================================');
-
       if (
         backendTime &&
         backendTime === localTime &&
@@ -290,34 +286,23 @@ const HomeScreen = () => {
         return;
       }
 
-      // ─── FIX: Promise.allSettled को Promise.all से बदला ताकि पुराने डिवाइसेज पर क्रैश न हो ───
-      const [rRes, fRes, oRes, tRes, cRes] = await Promise.all([
-        post({url: APP_URLS.getRechargeSectionImages}).catch(err => {
-          console.log('Recharge API Error:', err);
-          return [];
-        }),
-        post({url: APP_URLS.getFinanceSectionImages}).catch(err => {
-          console.log('Finance API Error:', err);
-          return [];
-        }),
-        post({url: APP_URLS.getOtherSectionImages}).catch(err => {
-          console.log('Other API Error:', err);
-          return [];
-        }),
-        post({url: APP_URLS.getTravelSectionImages}).catch(err => {
-          console.log('Travel API Error:', err);
-          return [];
-        }),
-        post({url: APP_URLS.getcmsSectionImages}).catch(err => {
-          console.log('CMS API Error:', err);
-          return [];
-        }),
+      const results = await Promise.allSettled([
+        post({url: APP_URLS.getRechargeSectionImages}),
+        post({url: APP_URLS.getFinanceSectionImages}),
+        post({url: APP_URLS.getOtherSectionImages}),
+        post({url: APP_URLS.getTravelSectionImages}),
+        post({url: APP_URLS.getcmsSectionImages}),
       ]);
+
+      const rRes = results[0].status === 'fulfilled' ? results[0].value : [];
+      const fRes = results[1].status === 'fulfilled' ? results[1].value : [];
+      const oRes = results[2].status === 'fulfilled' ? results[2].value : [];
+      const tRes = results[3].status === 'fulfilled' ? results[3].value : [];
+      const cRes = results[4].status === 'fulfilled' ? results[4].value : [];
 
       const filtered = rRes?.filter((i: any) => i.name !== 'Hide More1') || [];
       const first7 = filtered.slice(0, 7);
       const vmItem = filtered.find((i: any) => i.name === 'View More');
-
       setRechargeSectionData(vmItem ? [...first7, vmItem] : first7);
       setRechargeViewMoreData(filtered);
       setFinanceSectionData(fRes || []);
@@ -334,7 +319,6 @@ const HomeScreen = () => {
           cmsSectionData: cRes || [],
         }),
       );
-
       if (backendTime) {
         dispatch(setThemeChangeTime({themeUpdateTime: backendTime}));
       }
@@ -353,33 +337,21 @@ const HomeScreen = () => {
   useEffect(() => {
     setViewMoreStatus(false);
     const getData = async () => {
-      try {
-        await post({
-          url: `Retailer/api/data/Rem_CallAutofundtransfer?userid=${userId}`,
-        });
-        const userInfo = await get({url: APP_URLS.getUserInfo});
-        if (userInfo && userInfo.data) {
-          const data = userInfo.data;
-          setFirmDet(decryptData(data.vvvv, data.kkkk, data.frmanems));
-          setAdminFirmDet(
-            decryptData(data.vvvv, data.kkkk, data.adminfarmname),
-          );
-          await AsyncStorage.setItem(
-            'adminFarmData',
-            JSON.stringify({
-              adminFarmName: decryptData(
-                data.vvvv,
-                data.kkkk,
-                data.adminfarmname,
-              ),
-              frmanems: decryptData(data.vvvv, data.kkkk, data.frmanems),
-              photoss: decryptData(data.vvvv, data.kkkk, data.photoss),
-            }),
-          );
-        }
-      } catch (error) {
-        console.error('Error in getData init:', error);
-      }
+      await post({
+        url: `Retailer/api/data/Rem_CallAutofundtransfer?userid=${userId}`,
+      });
+      const userInfo = await get({url: APP_URLS.getUserInfo});
+      const data = userInfo.data;
+      setFirmDet(decryptData(data.vvvv, data.kkkk, data.frmanems));
+      setAdminFirmDet(decryptData(data.vvvv, data.kkkk, data.adminfarmname));
+      await AsyncStorage.setItem(
+        'adminFarmData',
+        JSON.stringify({
+          adminFarmName: decryptData(data.vvvv, data.kkkk, data.adminfarmname),
+          frmanems: decryptData(data.vvvv, data.kkkk, data.frmanems),
+          photoss: decryptData(data.vvvv, data.kkkk, data.photoss),
+        }),
+      );
     };
     Promise.all([getData(), fetchData()]).then(() => setRefreshing(false));
     adharpanStatus();
@@ -388,24 +360,24 @@ const HomeScreen = () => {
   const adharpanStatus = async () => {
     try {
       const userInfo = await get({url: APP_URLS.getUserInfo});
-      if (userInfo && userInfo.data) {
-        dispatch(setIsDemoUser(userInfo));
-        setId_Demo(userInfo.data.Demo_User);
-        const APstatus = await get({
-          url: `${APP_URLS.AddharPanStatus}=${userId}`,
-        });
-        if (!APstatus) {
-          return;
-        }
-        let isVerify = true;
-        if (APstatus.verify_type === 'all') {
-          isVerify = APstatus.aadhar_status && APstatus.pan_status;
-        } else if (APstatus.verify_type === 'aadhar') {
-          isVerify = APstatus.aadhar_status === true;
-        } else if (APstatus.verify_type === 'pan') {
-          isVerify = APstatus.pan_status === true;
-        }
-      }
+      dispatch(setIsDemoUser(userInfo));
+      setId_Demo(userInfo.data.Demo_User);
+      const APstatus = await get({
+        url: `${APP_URLS.AddharPanStatus}=${userId}`,
+      });
+      if (!APstatus) return;
+      let isVerify = true;
+      if (APstatus.verify_type === 'all')
+        isVerify = APstatus.aadhar_status && APstatus.pan_status;
+      else if (APstatus.verify_type === 'aadhar')
+        isVerify = APstatus.aadhar_status === true;
+      else if (APstatus.verify_type === 'pan')
+        isVerify = APstatus.pan_status === true;
+      // if (!isVerify) {
+      //   navigation.replace("AadhrPanVerify", {
+      //     aadharcard: APstatus.aadhar, pancard: APstatus.pan, verify_type: APstatus.verify_type,
+      //   });
+      // }
     } catch (e) {
       console.error('Error in adharpanStatus:', e);
     }
@@ -433,8 +405,10 @@ const HomeScreen = () => {
 
       <DashboardHeader refreshPress={onRefresh} />
 
-      {/* News ticker */}
+      {/* News ticker (non-Divyanshi) */}
+      {/* { newsData?.length > 0 && ( */}
       <NewsSlider data={newsData} />
+      {/* )} */}
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -494,15 +468,8 @@ const HomeScreen = () => {
             <View style={styles.sectionContent}>
               <IconButtons
                 buttonData={
-                  savedItems?.length > 0
-                    ? savedItems
-                    : APP_URLS.AppName === 'World Pay One'
-                    ? financeSectionData
-                    : otherSectionData
+                  savedItems?.length > 0 ? savedItems : otherSectionData
                 }
-                getItem={undefined}
-                isQuickAccess={undefined}
-                iconButtonstyle={undefined}
               />
             </View>
           </View>
@@ -513,7 +480,6 @@ const HomeScreen = () => {
           <CarouselView />
         </View>
 
-        {/* ── Recharge Section ── */}
         <GlassSection
           title={translate('Recharge_Pay_Bill')}
           rightElement={
@@ -528,9 +494,7 @@ const HomeScreen = () => {
             }
             showViewMoreButton
             setViewMoreStatus={setViewMoreStatus}
-            buttonTitle={
-              viewMoreStatus ? translate('Hide More') : translate('View More')
-            }
+            buttonTitle={viewMoreStatus ? 'Hide More' : 'View More'}
             getItem={undefined}
             isQuickAccess={undefined}
             iconButtonstyle={undefined}
@@ -557,31 +521,29 @@ const HomeScreen = () => {
         )}
 
         {/* ── Financial Services ── */}
-        {APP_URLS.AppName !== 'World Pay One' && (
-          <GlassSection
-            title={translate('Financial_Services')}
-            rightElement={
-              <LottieView
-                autoPlay
-                loop
-                style={styles.lotiRight}
-                source={require('../../utils/lottieIcons/Money-bag2')}
-              />
-            }>
-            {financeSectionData.length === 4 && (
-              <Animated.Text
-                style={[styles.newBadge, {transform: [{scale: scaleValue}]}]}>
-                New
-              </Animated.Text>
-            )}
-            <IconButtons
-              buttonData={financeSectionData}
-              getItem={undefined}
-              isQuickAccess={undefined}
-              iconButtonstyle={undefined}
+        <GlassSection
+          title={translate('Financial_Services')}
+          rightElement={
+            <LottieView
+              autoPlay
+              loop
+              style={styles.lotiRight}
+              source={require('../../utils/lottieIcons/Money-bag2')}
             />
-          </GlassSection>
-        )}
+          }>
+          {financeSectionData.length === 4 && (
+            <Animated.Text
+              style={[styles.newBadge, {transform: [{scale: scaleValue}]}]}>
+              New
+            </Animated.Text>
+          )}
+          <IconButtons
+            buttonData={financeSectionData}
+            getItem={undefined}
+            isQuickAccess={undefined}
+            iconButtonstyle={undefined}
+          />
+        </GlassSection>
 
         {/* ── Travel ── */}
         {!is_demo && APP_URLS.AppName !== 'Divyanshi Pay' && (
@@ -595,24 +557,14 @@ const HomeScreen = () => {
                 source={require('../../utils/lottieIcons/Travel.json')}
               />
             }>
-            <IconButtons
-              buttonData={travelSectionData}
-              getItem={undefined}
-              isQuickAccess={undefined}
-              iconButtonstyle={undefined}
-            />
+            <IconButtons buttonData={travelSectionData} />
           </GlassSection>
         )}
 
         {/* ── Other Section ── */}
         {!is_demo && APP_URLS.AppName !== 'Divyanshi Pay' && (
           <GlassSection title={translate('Other_Section')}>
-            <IconButtons
-              buttonData={otherSectionData}
-              getItem={undefined}
-              isQuickAccess={undefined}
-              iconButtonstyle={undefined}
-            />
+            <IconButtons buttonData={otherSectionData} />
           </GlassSection>
         )}
       </ScrollView>
@@ -632,6 +584,7 @@ const styles = StyleSheet.create({
     paddingBottom: hScale(80),
   },
 
+  // ── Quick action row ──
   quickRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -677,6 +630,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
   },
 
+  // ── Glass section card ──
   glassSection: {
     borderRadius: 18,
     overflow: 'hidden',
@@ -715,6 +669,7 @@ const styles = StyleSheet.create({
     paddingTop: hScale(10),
   },
 
+  // ── Quick Access card ──
   quickAccessHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -753,17 +708,18 @@ const styles = StyleSheet.create({
   },
   lotiSmall: {height: hScale(18), width: wScale(18)},
 
+  // ── Carousel ──
   carouselWrap: {marginVertical: hScale(0)},
 
+  // ── Logos ──
   bblogo: {height: wScale(25), width: wScale(20)},
   cmsLogo: {height: wScale(25), width: wScale(25)},
   lotiRight: {
     height: hScale(46),
     width: wScale(38),
-    position: 'absolute',
-    right: wScale(10),
   },
 
+  // ── New badge ──
   newBadge: {
     backgroundColor: 'red',
     position: 'absolute',

@@ -4983,7 +4983,6 @@
   "Please fill out all fields.": "Please fill out all fields.",
   "Invalid Mobile Number": "Invalid Mobile Number",
   "Please enter a valid 10-digit mobile number.": "Please enter a valid 10-digit mobile number.",
-
   "PANCARD REGISTER FORM": "PANCARD REGISTER FORM",
   "User Registration Pending": "User Registration Pending",
   "UnRegistred User": "UnRegistered User",
@@ -5109,5 +5108,34 @@
   "GST (Optional)": "GST (Optional)",
   "Permissions granted": "Permissions granted",
   "All required permissions not granted": "All required permissions not granted",
-  "User cancelled image picker": "User cancelled image picker"
+  "User cancelled image picker": "User cancelled image picker",
+
+  "REQ ID-": "REQ ID-",
+  "Hci Slip-": "HCI Slip-",
+  "Mini Success": "Mini Success",
+  "Mini Failed": "Mini Failed",
+  "Bal Enquiry": "Balance Enquiry",
+  "Account / Aadhaar": "Account / Aadhaar",
+  "Balance Enquiry": "Balance Enquiry",
+  "Your transaction is": "Your transaction is",
+  "Request Date": "Request Date",
+  "Fino Cms Report": "Fino CMS Report",
+  "Proccessed": "Processed",
+  "Cash Deposit Successful": "Cash Deposit Successful",
+  "Cash Deposit Failed": "Cash Deposit Failed",
+  "Cash Deposit Pending": "Cash Deposit Pending",
+  "Cash Deposit Report": "Cash Deposit Report",
+  "Could not generate PDF.": "Could not generate PDF.",
+  "Firm  Name": "Firm Name",
+  "try again ": "Try Again",
+  "Submitting": "Submitting",
+
+  "Success Amt": "Success Amount",
+  "REFUND": "REFUND",
+  "Failed to fetch report": "Failed to fetch report",
+  "Network detect failed": "Network detect failed",
+  "VIDEO_KYC_PENDING": "VIDEO_KYC_PENDING",
+  "Opening OTP Modal": "Opening OTP Modal",
+  "Video KYC Uploaded. Wait for admin approval.": "Video KYC Uploaded. Wait for admin approval.",
+  "NA": "NA"
 }

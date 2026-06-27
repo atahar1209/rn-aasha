@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {translate} from '../../utils/languageUtils/I18n';
 import React, {useEffect, useState} from 'react';
 import {
@@ -38,7 +39,7 @@ const finocmsReport = () => {
       console.log('finocmsReport', response);
 
       if (response.status === 'SUCCESS') {
-        const transactionsData = response['Response'] || [];
+        const transactionsData = response.Response || [];
         setTransactions(transactionsData);
       } else {
         setTransactions([]);

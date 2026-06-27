@@ -5,9 +5,9 @@ export const APP_URLS = {
   retailerlist: 'api/data/retailer_list',
   LoginDetailsRetailer: 'Retailer/api/data/LoginDetailsRetailer',
   LoginDetailsDealer: 'api/data/LoginDetails',
-  baseapiurl: 'http://native.vrecharge.com/',
+  baseapiurl: 'http://native.vreacharge.in//',
   // baseWebUrl: 'vastwebindia.com/',
-  baseWebUrl: 'vrecharge.com/',
+  baseWebUrl: 'vreacharge.in//',
 
   AppName: 'V Recharge',
   app_logo: 'paypointsindia.png',

@@ -152,7 +152,9 @@ const RetailerCard = React.memo(
       try {
         const uri = await captureRef(capRef, {format: 'jpg', quality: 0.7});
         await Share.open({
-          message: translate(`key_hiiams_47 ${APP_URLS.AppName} App.`),
+          message: translate(
+            `key_hiiams_47 ${APP_URLS.AppName} ${translate('App')}.`,
+          ),
           url: uri,
         });
       } catch {
@@ -161,7 +163,7 @@ const RetailerCard = React.memo(
           ToastAndroid.SHORT,
         );
       }
-    }, []);
+    }, [capRef]);
 
     return (
       <ViewShot
@@ -202,7 +204,7 @@ const RetailerCard = React.memo(
             <View style={rc.midRow}>
               <View style={{flex: 1}}>
                 <Text style={rc.micro}>
-                  {translate(`${translate('Bank RRN')} ${item.PG_TYPE}`)}
+                  `${translate('Bank RRN')} ${item.PG_TYPE}`
                 </Text>
                 <Text style={rc.micro2}>
                   {item.bankrrnno ? item.bankrrnno : translate('BankRRN')}
@@ -530,7 +532,7 @@ const DealerCard = React.memo(
                   onPress={handleChangeStatus}
                   activeOpacity={0.8}>
                   <Text style={dc.submitTxt}>
-                    {loading ? translate('Submitting...') : translate('Submit')}
+                    {loading ? translate('Submitting') : translate('Submit')}
                   </Text>
                 </TouchableOpacity>
               </View>

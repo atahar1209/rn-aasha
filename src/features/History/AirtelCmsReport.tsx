@@ -39,7 +39,7 @@ const AirtelcmsReport = () => {
       console.log('AirtelcmsReport', response);
 
       if (response.status === 'SUCCESS') {
-        const transactionsData = response['Response'] || [];
+        const transactionsData = response.Response || [];
         setTransactions(transactionsData);
       } else {
         setTransactions([]);
@@ -64,13 +64,13 @@ const AirtelcmsReport = () => {
             <Text style={styles.text}>{`${translate('Operator Name')}: ${
               item.optcode
             }`}</Text>
-            <Text style={styles.text}>{`Request Date: ${
+            <Text style={styles.text}>{`${translate('Request Date')}: ${
               item.req_time ? item.req_time : '0 0 0'
             }`}</Text>
             <Text style={styles.text}>{`${translate('Mobile Number')}: ${
               item.number
             }`}</Text>
-            <Text style={styles.text}>{`Status: ${
+            <Text style={styles.text}>{`${translate('Status')}: ${
               item.sts ? item.sts : '0 0 0'
             }`}</Text>
             <Text style={styles.text}>{`${translate('Pre Balance')}: ₹ ${

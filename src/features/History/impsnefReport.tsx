@@ -819,7 +819,6 @@ const ImpsNeftScreen = () => {
     </View>
   );
 };
-
 export default ImpsNeftScreen;
 
 const styles = StyleSheet.create({

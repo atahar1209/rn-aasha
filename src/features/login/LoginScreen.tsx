@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-unreachable */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -26,7 +27,7 @@ import {useNavigation} from '@react-navigation/native';
 import {translate} from '../../utils/languageUtils/I18n';
 import LinearGradient from 'react-native-linear-gradient';
 import {hScale, wScale} from '../../utils/styles/dimensions';
-import {APP_URLS, IMAGE_BASE_URL, logoUrl} from '../../utils/network/urls';
+import {APP_URLS} from '../../utils/network/urls';
 import {
   setAuthToken,
   setColorConfig,
@@ -38,28 +39,19 @@ import {
 import useAxiosHook from '../../utils/network/AxiosClient';
 import {useLocationHook} from '../../hooks/useLocationHook';
 import {useDeviceInfoHook} from '../../utils/hooks/useDeviceInfoHook';
-import DeviceInfo, {
+import {
   getBrand,
-  getBuildId,
-  getBuildNumber,
   getCarrier,
-  getDevice,
-  getDeviceId,
-  getDeviceName,
   getIpAddress,
   getModel,
-  getSerialNumber,
-  getSystemName,
   getSystemVersion,
-  getUniqueId,
-  getVersion,
 } from 'react-native-device-info';
 import ShowEye from '../drawer/HideShowImgBtn/ShowEye';
 import ForgotPasswordModal from '../../components/ForgotPassword';
 import {SvgUri} from 'react-native-svg';
 import OTPModal from '../../components/OTPModal';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
-import registerNotification, {
+import {
   listenFCMDeviceToken,
   onReceiveNotification2,
 } from '../../utils/NotificationService';
@@ -70,7 +62,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LanguageButton from '../../components/LanguageButton';
 import CheckSvg from '../drawer/svgimgcomponents/CheckSvg';
-import FastImage from 'react-native-fast-image';
 const LoginScreen = () => {
   const {colorConfig, Loc_Data, deviceInfo, signUpId, signUpPassword, logoUrl} =
     useSelector((state: RootState) => state.userInfo);
@@ -216,7 +207,15 @@ const LoginScreen = () => {
       }
     };
     fetchData();
-  }, [authToken, dispatch, get, navigation]);
+  }, [
+    authToken,
+    checkNotificationPermission,
+    dispatch,
+    get,
+    getDeviceInfo,
+    navigation,
+    post,
+  ]);
 
   const {getMobileDeviceId} = useDeviceInfoHook();
 
@@ -370,7 +369,7 @@ const LoginScreen = () => {
         } catch (e) {
           addDebugStep('NETWORK_FAILED', {
             status: 'ERROR',
-            message: 'Network detect failed',
+            message: translate('Network detect failed'),
             error: e?.message,
           });
         }
@@ -764,7 +763,6 @@ const LoginScreen = () => {
 
         // 🔥 FINAL SAVE
         await saveDebugToStorage(debug);
-
         setIsLoading(false);
       }
     },
@@ -1528,5 +1526,4 @@ const styles = StyleSheet.create({
     marginHorizontal: wScale(8),
   },
 });
-
 export default LoginScreen;

@@ -28,7 +28,7 @@ const DeviceLockScreen = () => {
 
   useEffect(() => {
     authenticateFingerprint();
-  }, []);
+  }, [authenticateFingerprint]);
 
   return (
     <TouchableOpacity

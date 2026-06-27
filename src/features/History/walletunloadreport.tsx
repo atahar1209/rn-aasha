@@ -39,7 +39,7 @@ const getStatusCfg = (s: string) => {
   return {color: '#2563EB', bg: '#DBEAFE'};
 };
 
-// ─── Skeleton Card ─────────────────────────────────────────────────────────────
+// ─── Skeleton Card ──────
 const SkeletonCard = ({highlight}: {highlight: string}) => (
   <SkeletonPlaceholder
     borderRadius={16}
@@ -293,7 +293,7 @@ const card = StyleSheet.create({
   },
 });
 
-// ─── Main Screen ──────────────────────────────────────────────────────────────
+// ─── Main Screen ───────────
 const Walletunloadreport = () => {
   const {colorConfig, IsDealer} = useSelector(
     (state: RootState) => state.userInfo,
@@ -396,7 +396,6 @@ const Walletunloadreport = () => {
     </View>
   );
 };
-
 export default Walletunloadreport;
 
 const styles = StyleSheet.create({

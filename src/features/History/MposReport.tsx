@@ -80,12 +80,10 @@ const buildRetailerHTML = (item: any) => {
     .join('');
   return `<html><head><meta name="viewport" content="width=device-width"/>
     <style>body{font-family:sans-serif;margin:0;background:#F9FAFB}h2{text-align:center;padding:20px;color:#1D4ED8;margin:0}table{width:100%;border-collapse:collapse}tr:nth-child(even){background:#F3F4F6}td{border-bottom:1px solid #E5E7EB}.footer{text-align:center;padding:20px;color:#9CA3AF;font-size:12px}</style>
-    </head><body><h2>mPOS Receipt — ${
-      APP_URLS.AppName
-    }</h2><table>${rows}</table>
-    <div class="footer">${translate(
+    </head><body><h2>mPOS Receipt — ${APP_URLS.AppName}</h2><table>${rows}</table>
+    <div class="footer">
       'Thank you for choosing our service!',
-    )}</div></body></html>`;
+    </div></body></html>`;
 };
 
 // ─── Receipt HTML (dealer) ────────────────────────────────────────────────────
@@ -107,12 +105,10 @@ const buildDealerHTML = (item: any) => {
     .join('');
   return `<html><head><meta name="viewport" content="width=device-width"/>
     <style>body{font-family:sans-serif;margin:0;background:#F9FAFB}h2{text-align:center;padding:20px;color:#1D4ED8;margin:0}table{width:100%;border-collapse:collapse}tr:nth-child(even){background:#F3F4F6}td{border-bottom:1px solid #E5E7EB}.footer{text-align:center;padding:20px;color:#9CA3AF;font-size:12px}</style>
-    </head><body><h2>mPOS Receipt — ${
-      APP_URLS.AppName
-    }</h2><table>${rows}</table>
-    <div class="footer">${translate(
+    </head><body><h2>mPOS Receipt — ${APP_URLS.AppName}</h2><table>${rows}</table>
+    <div class="footer">
       'Thank you for choosing our service!',
-    )}</div></body></html>`;
+   </div></body></html>`;
 };
 
 const sharePDF = async (html: string, fileName: string) => {

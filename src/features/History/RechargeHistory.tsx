@@ -60,7 +60,7 @@ const RechargeHistory = ({route}) => {
       APP_URLS.AppName === 'Smart Pay Money' ? Recharge_number : Operatorid,
     );
     ToastAndroid.show(
-      translate('Copied to clipboard!  : ' + Operatorid),
+      `${translate('Copied to clipboard!')} : ${Operatorid}`,
       ToastAndroid.LONG,
     );
   };
@@ -111,7 +111,9 @@ const RechargeHistory = ({route}) => {
       });
 
       await Share.open({
-        message: translate(translate(`key_hiiams_47 ${APP_URLS.AppName} App.`)),
+        message: `${translate('key_hiiams_47')} ${APP_URLS.AppName} ${translate(
+          'App',
+        )}.`,
         url: uri,
         filename: filename,
       });
@@ -162,7 +164,7 @@ const RechargeHistory = ({route}) => {
 
           <View style={[styles.detailContainer, {alignItems: 'flex-end'}]}>
             <View>
-              <Text style={styles.label}>{'Transaction ID'}</Text>
+              <Text style={styles.label}>{translate('Transaction ID')}</Text>
               <Text style={styles.value}>{Request_ID}</Text>
             </View>
             <TouchableOpacity onPress={copyto}>

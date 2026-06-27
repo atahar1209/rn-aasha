@@ -288,12 +288,12 @@ const TxnCard = React.memo(
           <View style={card.midRow}>
             {!isDealer && (
               <View>
-                <Text style={card.micro}>Mobile</Text>
+                <Text style={card.micro}>{translate('Mobile')}</Text>
                 <Text style={card.micro2}>{item.Mobile || '—'}</Text>
               </View>
             )}
             <View style={{alignItems: 'flex-end', flex: 1}}>
-              <Text style={card.micro}>Consumer Aadhaar</Text>
+              <Text style={card.micro}>{translate('Consumer Aadhaar')}</Text>
               <Text style={card.micro2}>{aadhar}</Text>
             </View>
             <Text
@@ -345,7 +345,7 @@ const TxnCard = React.memo(
                 <Text style={card.micro2}>{item.MerchantTxnId || '—'}</Text>
               </View>
               <View style={{flex: 1, alignItems: 'flex-end'}}>
-                <Text style={card.micro}>Mode</Text>
+                <Text style={card.micro}>{translate('Mode')}</Text>
                 <Text style={card.micro2}>
                   {item.TYPE}
                   {item.TransactionType ? ` · ${item.TransactionType}` : ''}
@@ -360,21 +360,21 @@ const TxnCard = React.memo(
                 <View style={card.balRow}>
                   {[
                     {
-                      l: 'Pre Bal',
+                      l: translate('Pre Bal'),
                       v: item.REM_Remain_Pre,
                       c: '#1D4ED8',
                       bg: '#EFF6FF',
                     },
                     {l: 'Net Amt', v: item.Total, c: '#D97706', bg: '#FEF3C7'},
                     {
-                      l: 'Earn',
+                      l: translate('Earn'),
                       v: item.Rem_Income,
                       c: '#7C3AED',
                       bg: '#F5F3FF',
                     },
                     {l: 'Cr/Dr', v: item.CR, c: '#DC2626', bg: '#FEE2E2'},
                     {
-                      l: 'Post Bal',
+                      l: translate('Post Bal'),
                       v: item.REM_Remain_Post,
                       c: '#16A34A',
                       bg: '#DCFCE7',

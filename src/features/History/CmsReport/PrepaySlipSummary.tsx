@@ -136,14 +136,14 @@ const PrepaySlipSummary = ({route}) => {
             <View style={styles.row}>
               <Text style={styles.time}>
                 {slipData.hcislipallow === 'NotAllow'
-                  ? 'REQ ID- '
-                  : 'Hci Slip- '}
+                  ? translate('REQ ID-')
+                  : translate('Hci Slip-')}
                 <Text style={{color: '#191970'}}>
                   {slipData.hcl_no || '---'}
                 </Text>
               </Text>
               <Text style={[styles.time]}>
-                Pickup Time: {slipData.trans_date || '---'}
+                {translate('Pickup Time')}: {slipData.trans_date || '---'}
               </Text>
             </View>
 

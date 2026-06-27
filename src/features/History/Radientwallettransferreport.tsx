@@ -23,7 +23,7 @@ if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
 }
 
-// ─── Status config ─────────────────────────────────────────────────────────────
+// ─── Status config ─────────
 const getStatusCfg = (s: string) => {
   const st = s?.toLowerCase();
   if (['success', 'done'].includes(st)) {
@@ -46,7 +46,7 @@ const fmtDate = (d: string) => {
   }
 };
 
-// ─── Skeleton Card ─────────────────────────────────────────────────────────────
+// ─── Skeleton Card ───────
 const SkeletonCard = ({highlight}: {highlight: string}) => (
   <SkeletonPlaceholder
     borderRadius={16}

@@ -17,7 +17,7 @@ import AppBarSecond from '../drawer/headerAppbar/AppBarSecond';
 import NoDatafound from '../drawer/svgimgcomponents/Nodatafound';
 import DynamicButton from '../drawer/button/DynamicButton';
 import {RootState} from '../../reduxUtils/store';
-import {colors, FontSize} from '../../utils/styles/theme';
+import {FontSize} from '../../utils/styles/theme';
 import DateRangePicker from '../../components/DateRange';
 import OnelineDropdownSvg from '../drawer/svgimgcomponents/simpledropdown';
 import ShareSvg from '../drawer/svgimgcomponents/sharesvg';
@@ -487,11 +487,7 @@ const MatmReport = () => {
   return (
     <View style={styles.main}>
       <AppBarSecond
-        title={
-          !IsDealer
-            ? translate('m-ATM History')
-            : translate('Micro ATM Rental Report')
-        }
+        title={!IsDealer ? 'm-ATM History' : 'Micro ATM Rental Report'}
       />
 
       <DateRangePicker

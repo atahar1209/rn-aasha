@@ -213,7 +213,7 @@ const TxnCard = React.memo(({item, expanded, onToggle}: any) => {
             <Text style={card.sub}>
               {translate('PassengerName')}:{' '}
               {item.PassengerName === ''
-                ? 'No Name'
+                ? translate('No Name')
                 : item.PassengerName || '—'}
             </Text>
           </View>
@@ -234,7 +234,7 @@ const TxnCard = React.memo(({item, expanded, onToggle}: any) => {
             <Text style={card.micro}>{translate('TicketStatus')}</Text>
             <Text style={card.micro2}>
               {item.TicketStatus === ''
-                ? 'Ticket Status Not available'
+                ? translate('Ticket Status Not available')
                 : item.TicketStatus || '—'}
             </Text>
           </View>
@@ -256,10 +256,10 @@ const TxnCard = React.memo(({item, expanded, onToggle}: any) => {
       <View style={[card.banner, {backgroundColor: st.bg}]}>
         <Text style={[card.bannerTxt, {color: st.color}]}>
           {st.label === 'Success'
-            ? '✓ Flight Booking Successful'
+            ? translate('Flight Booking Successful')
             : st.label === 'Failed'
-            ? '✕ Flight Booking Failed'
-            : `⏳ Status: ${st.label}`}
+            ? translate('Flight Booking Failed')
+            : `⏳ ${translate('Status')}: ${st.label}`}
         </Text>
       </View>
 

@@ -38,9 +38,9 @@ const BusBookReport = () => {
       console.log(url);
 
       const response = await post({url: url});
-      console.log('BusBookReport', response['Content']['ADDINFO']['Data']);
+      console.log('BusBookReport', response.Content.ADDINFO.Data);
 
-      const transactionsData = response['Content']['ADDINFO']['Data'] || [];
+      const transactionsData = response.Content.ADDINFO.Data || [];
       setTransactions(transactionsData);
 
       if (transactionsData.length === 0) {
@@ -66,12 +66,17 @@ const BusBookReport = () => {
       <View style={styles.card}>
         <View style={styles.tileHeader}>
           <View style={styles.tileTitle}>
-            <Text
-              style={styles.text}>{`AirlineName: ${item.AirlineName}`}</Text>
-            <Text style={styles.textBold}>{`PNR: ${item.PNR}`}</Text>
-            <Text style={styles.text}>{`Offer Fare: ${item.OfferedFare}`}</Text>
-            <Text style={styles.text}>{`TicketStatus: ${
-              item.TicketStatus == ''
+            <Text style={styles.text}>{`${translate('AirlineName')}: ${
+              item.AirlineName
+            }`}</Text>
+            <Text style={styles.textBold}>{`${translate('PNR')}: ${
+              item.PNR
+            }`}</Text>
+            <Text style={styles.text}>{`${translate('Offer Fare')}: ${
+              item.OfferedFare
+            }`}</Text>
+            <Text style={styles.text}>{`${translate('TicketStatus')}: ${
+              item.TicketStatus === ''
                 ? translate('Ticket Status Not available')
                 : item.TicketStatus
             }`}</Text>
@@ -116,21 +121,25 @@ const BusBookReport = () => {
           <View style={styles.tileStatus}>
             <Icon
               name={
-                item.status === 'Success' || item.status === 'SUCCESS'
+                item.status === translate('Success') ||
+                item.status === translate('SUCCESS')
                   ? 'checkmark-circle'
-                  : item.status === 'Proccessed'
+                  : item.status === translate('Proccessed')
                   ? 'time'
-                  : item.status === 'Failed' || item.status === 'FAILED'
+                  : item.status === translate('Failed') ||
+                    item.status === translate('FAILED')
                   ? 'close-circle'
                   : 'cash'
               }
               size={14}
               color={
-                item.status === 'Success' || item.status === 'SUCCESS'
+                item.status === translate('Success') ||
+                item.status === translate('SUCCESS')
                   ? 'green'
-                  : item.status === 'Proccessed'
+                  : item.status === translate('Proccessed')
                   ? 'yellow'
-                  : item.status === 'Failed' || item.status === 'FAILED'
+                  : item.status === translate('Failed') ||
+                    item.status === translate('FAILED')
                   ? 'red'
                   : 'orange'
               }

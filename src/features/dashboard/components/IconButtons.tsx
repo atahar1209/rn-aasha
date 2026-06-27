@@ -1,223 +1,100 @@
-// features/dashboard/components/IconButtons.tsx
 import React, {memo, useEffect, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
+  Pressable,
   TouchableOpacity,
   ToastAndroid,
   Alert,
 } from 'react-native';
-import {SvgXml} from 'react-native-svg';
+import {SvgUri} from 'react-native-svg';
 import {FlashList} from '@shopify/flash-list';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../reduxUtils/store';
 import {hScale, wScale} from '../../../utils/styles/dimensions';
+import BackArrow from '../../../utils/svgUtils/BackArrow';
 import {sectionData} from '../utils';
 import {useNavigation} from '@react-navigation/native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {colors} from '../../../utils/styles/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import OnelineDropdownSvg from '../../drawer/svgimgcomponents/simpledropdown';
 import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
 import {translate} from '../../../utils/languageUtils/I18n';
-import FastImage from 'react-native-fast-image';
-import {
-  logSectionDataReceived,
-  logIconRender,
-  logSvgSuccess,
-  logSvgError,
-  logSvgMissingUrl,
-} from '../../../utils/SvgLogger';
 
 const loader = [{id: '1'}, {id: '2'}, {id: '3'}, {id: '4'}];
 const MAX_ITEMS = 4;
-
-// ─── SVG fetch cache — एक बार fetch होने के बाद मेमोरी से तुरंत लोड होगा ───
-const svgCache: Record<string, string> = {};
-
-// ─── Remote Fallback URL (लोकल require एसेट्स पूरी तरह हटा दिए गए हैं) ───
-const REMOTE_FALLBACK_URL = `http://native.${APP_URLS.baseWebUrl}//SvgOperatorImage/exclamation-mark.png`;
-
-// ─── Per-item SVG Component ────────────────────────────────────────────────
-interface TrackedSvgIconProps {
-  item: sectionData;
-  section: string;
-  fallbackLogoUrl?: string;
-}
-
-const TrackedSvgIcon = memo(
-  ({item, section, fallbackLogoUrl}: TrackedSvgIconProps) => {
-    const [xmlContent, setXmlContent] = useState<string | null>(null);
-    const [failed, setFailed] = useState(false);
-
-    useEffect(() => {
-      if (!item.svg) {
-        logSvgMissingUrl(item.name, section);
-        setFailed(true);
-        return;
-      }
-
-      logIconRender(item.name, item.svg, section);
-
-      if (svgCache[item.svg]) {
-        setXmlContent(svgCache[item.svg]);
-        logSvgSuccess(item.name, item.svg);
-        return;
-      }
-
-      // HTTP to HTTPS secure protocol auto-conversion
-      const secureSvgUrl = item.svg.startsWith('http://')
-        ? item.svg.replace('http://', 'https://')
-        : item.svg;
-
-      let cancelled = false;
-
-      // 🔥 Added Custom User-Agent & Accept headers to avoid 403 blocks
-      fetch(secureSvgUrl, {
-        method: 'GET',
-        headers: {
-          Accept: 'image/svg+xml, application/xml, text/xml, */*',
-          'User-Agent': 'Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36',
-        },
-      })
-        .then(res => {
-          if (!res.ok) {
-            throw new Error(`${translate('HTTP Error')}: ${res.status}`);
-          }
-          return res.text();
-        })
-        .then(xml => {
-          if (cancelled) {
-            return;
-          }
-
-          // Block HTML error responses returning instead of actual raw xml
-          if (
-            xml.trim().startsWith('<html') ||
-            xml.trim().startsWith('<!DOCTYPE html')
-          ) {
-            throw new Error(
-              translate(
-                'Server returned an HTML page instead of valid SVG payload.',
-              ),
-            );
-          }
-
-          svgCache[item.svg] = xml;
-          setXmlContent(xml);
-          logSvgSuccess(item.name, item.svg);
-        })
-        .catch(err => {
-          if (cancelled) {
-            return;
-          }
-          setFailed(true); // Trigger immediate fallback
-          logSvgError(item.name, item.svg, err);
-        });
-
-      return () => {
-        cancelled = true;
-      };
-    }, [item.name, item.svg, section]);
-
-    // इमेज सोर्स लॉजिक: पहले Redux का logoUrl चेक करेगा, खाली होने पर फॉलबैक यूआरएल लेगा
-    const imageSource = fallbackLogoUrl
-      ? {uri: fallbackLogoUrl, priority: FastImage.priority.normal}
-      : {uri: REMOTE_FALLBACK_URL, priority: FastImage.priority.normal};
-
-    // 1. ERROR/MISSING STATE
-    if (failed || (!xmlContent && !item.svg)) {
-      return (
-        <View style={styles.InputImage}>
-          <FastImage
-            source={imageSource}
-            style={styles.defaultImageStyle}
-            resizeMode={FastImage.resizeMode.contain}
-          />
-        </View>
-      );
-    }
-
-    // 2. LOADING STATE
-    if (!xmlContent) {
-      return (
-        <View style={styles.InputImage}>
-          <FastImage
-            source={imageSource}
-            style={[styles.defaultImageStyle, {opacity: 0.6}]}
-            resizeMode={FastImage.resizeMode.contain}
-          />
-        </View>
-      );
-    }
-
-    // 3. SUCCESS STATE
-    return (
-      <View style={styles.InputImage}>
-        <SvgXml xml={xmlContent} height={wScale(50)} width={wScale(50)} />
-      </View>
-    );
-  },
-);
-
-// ─── Main Component ──────────────────────────────────────────────────────────
 const IconButtons = ({
   getItem,
   isQuickAccess,
   iconButtonstyle,
   buttonData,
-  section = 'unknown',
   showViewMoreButton = false,
   setViewMoreStatus = (p0: (prev: any) => boolean) => {},
   buttonTitle = '',
 }) => {
-  const {isDemoUser, logoUrl} = useSelector(
+  const {appLanguage, isDemoUser, colorConfig} = useSelector(
     (state: RootState) => state.userInfo,
   );
-  const {post} = useAxiosHook();
+  const [Radius1, setRadius1] = useState(Number);
+  const [rotation, setRotation] = useState(false);
+  const [showAllItems, setShowAllItems] = useState(false);
+  const {post, get} = useAxiosHook();
   const navigation = useNavigation();
-  const [Radius1, setRadius1] = useState(0);
-
+  const [view, setview] = useState('');
   useEffect(() => {
-    if (buttonData?.length > 0) {
-      logSectionDataReceived(section, buttonData.length, buttonData[0]?.svg);
-    }
-  }, [buttonData, section]);
-
-  useEffect(() => {
-    (async () => {
+    async function fetchData() {
       try {
-        const res = await post({url: APP_URLS.signUpSvg});
-        if (res?.[0]?.Radius1) {
-          setRadius1(res[0].Radius1);
+        const response = await post({url: APP_URLS.signUpSvg});
+        const rechargeSectionResponse = await post({
+          url: APP_URLS.getRechargeSectionImages,
+        });
+        const viewMoreData = rechargeSectionResponse.filter(
+          item => item.name === 'View More' || item.name === 'Hide More',
+        );
+        setview(viewMoreData[0]);
+        console.log(
+          viewMoreData[1],
+          '*************icon buttons*********************************',
+        );
+        setRadius1(response[0].Radius1);
+        if (response && Array.isArray(response)) {
         }
-      } catch (e) {
-        console.error('Radius fetch error:', e);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
-    })();
-  }, []);
-
-  const saveItemToStorage = async (item: sectionData) => {
+    }
+    fetchData();
+  }, [post, setview]);
+  const saveItemToStorage = async item => {
     try {
-      const saved = await AsyncStorage.getItem('quickAccessItems');
-      let arr = saved ? JSON.parse(saved) : [];
-      if (arr.some((x: sectionData) => x.name === item.name)) {
+      const savedItems = await AsyncStorage.getItem('quickAccessItems');
+      let itemsArray = savedItems ? JSON.parse(savedItems) : [];
+      const isItemExist = itemsArray.some(
+        existingItem => existingItem.name === item.name,
+      );
+      if (isItemExist) {
         ToastAndroid.show(
           item.name + ' ' + translate('is_already_exists'),
           ToastAndroid.SHORT,
         );
         return;
       }
-      arr.unshift(item);
-      if (arr.length > MAX_ITEMS) {
-        arr.pop();
+      itemsArray.unshift(item);
+      if (itemsArray.length > MAX_ITEMS) {
+        itemsArray.pop();
       }
-      await AsyncStorage.setItem('quickAccessItems', JSON.stringify(arr));
-      getItem?.();
-    } catch (e) {
-      console.error('AsyncStorage error:', e);
+      await AsyncStorage.setItem(
+        'quickAccessItems',
+        JSON.stringify(itemsArray),
+      );
+      getItem();
+    } catch (error) {
+      console.error('Error saving item to AsyncStorage:', error);
     }
   };
-
   const comingSoon = [
     'BusinessCardScreen',
     'GiftCardScreen',
@@ -228,93 +105,116 @@ const IconButtons = ({
     'BusScreen',
   ];
 
-  const loaderImageSource = logoUrl
-    ? {uri: logoUrl, priority: FastImage.priority.low}
-    : {uri: REMOTE_FALLBACK_URL, priority: FastImage.priority.low};
-
   return (
-    <FlashList
-      style={[
-        iconButtonstyle,
-        {justifyContent: 'space-between', alignSelf: 'stretch'},
-      ]}
-      data={buttonData}
-      // eslint-disable-next-line react/no-unstable-nested-components
-      ListEmptyComponent={() => (
-        <View style={{flexDirection: 'row', alignSelf: 'stretch'}}>
-          {loader.map(item => (
-            <View key={item.id} style={styles.element}>
+    <>
+      <FlashList
+        style={[
+          iconButtonstyle,
+          {justifyContent: 'space-between', alignSelf: 'stretch'},
+        ]}
+        data={buttonData}
+        ListEmptyComponent={() => (
+          <View style={{flexDirection: 'row'}}>
+            {loader.map(item => (
+              <View key={item.id} style={{marginHorizontal: wScale(18)}}>
+                <SkeletonPlaceholder
+                  speed={1200}
+                  backgroundColor={colors.gray}
+                  borderRadius={4}>
+                  <SkeletonPlaceholder.Item alignItems="center">
+                    <SkeletonPlaceholder.Item
+                      width={wScale(45)}
+                      height={wScale(45)}
+                      borderRadius={wScale(45)}
+                    />
+                    <SkeletonPlaceholder.Item
+                      margin={wScale(10)}
+                      width={wScale(40)}
+                      height={wScale(10)}
+                    />
+                  </SkeletonPlaceholder.Item>
+                </SkeletonPlaceholder>
+              </View>
+            ))}
+          </View>
+        )}
+        numColumns={4}
+        estimatedItemSize={20}
+        renderItem={({item, index}: {item: sectionData; index: number}) => (
+          <>
+            <TouchableOpacity
+              onPress={() => {
+                console.log(isDemoUser);
+                // Block AEPS for demo users
+                const isComingSoon = comingSoon.includes(item.ScreenName);
+                console.log(isComingSoon);
+                if (isComingSoon) {
+                  Alert.alert(
+                    'Coming Soon',
+                    'This feature is currently under development.\nIt will be available soon.',
+                    [{text: 'OK'}],
+                  );
+                  return;
+                }
+
+                if (item.ScreenName === 'AepsScreen' && isDemoUser === true) {
+                  Alert.alert(
+                    'Demo Account',
+                    'This is a demo account. Live AEPS transactions not enabled.',
+                  );
+                  return;
+                }
+
+                if (isQuickAccess) {
+                  saveItemToStorage(item);
+                  return;
+                }
+
+                switch (item.ScreenName) {
+                  case 'HideMoreScreen':
+                    setViewMoreStatus(prev => !prev);
+                    break;
+
+                  case 'ViewMoreScreen':
+                    setViewMoreStatus(true);
+                    break;
+
+                  default:
+                    navigation.navigate(item.ScreenName);
+                    break;
+                }
+              }}
+              style={styles.element}>
               <View style={styles.InputImage}>
-                <FastImage
-                  source={loaderImageSource}
-                  style={[styles.defaultImageStyle, {opacity: 0.3}]}
-                  resizeMode={FastImage.resizeMode.contain}
+                <SvgUri
+                  height={wScale(50)}
+                  width={wScale(50)}
+                  uri={item.svg}
+                  onError={() => <BackArrow />}
                 />
               </View>
-              <View style={styles.textPlaceholder} />
-            </View>
-          ))}
-        </View>
-      )}
-      numColumns={4}
-      estimatedItemSize={20}
-      renderItem={({item, index}: {item: sectionData; index: number}) => (
-        <TouchableOpacity
-          onPress={() => {
-            if (comingSoon.includes(item.ScreenName)) {
-              Alert.alert(
-                translate('Coming Soon'),
-                translate(
-                  'This feature is currently under development.\nIt will be available soon.',
-                ),
-                [{text: translate('OK')}],
-              );
-              return;
-            }
-            if (item.ScreenName === 'AepsScreen' && isDemoUser === true) {
-              Alert.alert(
-                translate('Demo Account'),
-                translate(
-                  'This is a demo account. Live AEPS transactions not enabled.',
-                ),
-              );
-              return;
-            }
-            if (isQuickAccess) {
-              saveItemToStorage(item);
-              return;
-            }
-
-            switch (item.ScreenName) {
-              case 'HideMoreScreen':
-                setViewMoreStatus(p => !p);
-                break;
-              case 'ViewMoreScreen':
-                setViewMoreStatus(true);
-                break;
-              default:
-                navigation.navigate(item.ScreenName as never);
-                break;
-            }
-          }}
-          style={styles.element}>
-          <TrackedSvgIcon
-            item={item}
-            section={section}
-            fallbackLogoUrl={logoUrl}
-          />
-
-          <Text style={styles.screeitemname} numberOfLines={2}>
-            {translate(item.name)}
-          </Text>
-        </TouchableOpacity>
-      )}
-    />
+              <View key={item.name}>
+                <Text
+                  style={[styles.screeitemname, {color: 'white'}]}
+                  numberOfLines={2}>
+                  {translate(item.name)}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </>
+        )}
+      />
+    </>
   );
 };
+
 export default memo(IconButtons);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   element: {
     paddingHorizontal: wScale(2),
     paddingVertical: wScale(8),
@@ -329,18 +229,22 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  defaultImageStyle: {
-    width: wScale(50),
+  morebtn: {
+    paddingVertical: wScale(8),
+    padding: wScale(7),
+    alignItems: 'center',
+    width: '100%',
+  },
+  imgview: {
+    // backgroundColor: "#fff",
     height: wScale(50),
-  },
-  textPlaceholder: {
-    width: wScale(40),
-    height: hScale(8),
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 4,
-    marginTop: hScale(8),
+    width: wScale(50),
+    shadowRadius: 3,
+    elevation: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // transform: [{ rotate: '90deg' }]
   },
   screeitemname: {
     color: 'white',
