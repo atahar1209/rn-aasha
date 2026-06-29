@@ -58,8 +58,8 @@ const Availabilitybusiness = () => {
     Dialog.show({
       type: status === 'Pending' ? ALERT_TYPE.INFO : ALERT_TYPE.SUCCESS,
       title: status,
-      textBody: message,
-      button: 'OK',
+      textBody: translate(message),
+      button: translate('OK'),
       onPressButton: () => {
         Dialog.hide();
         handleGoBack2();

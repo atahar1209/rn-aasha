@@ -14,13 +14,6 @@ import {RootState} from '../../../reduxUtils/store';
 import {useFocusEffect} from '@react-navigation/native';
 import BorderLine from '../../../components/BorderLine';
 import CheckSvg from '../../drawer/svgimgcomponents/CheckSvg';
-import WalletCard from '../RadiantTrxn/WalletCard';
-import DynamicButton from '../../drawer/button/DynamicButton';
-import ImagePreviewModal from '../Radiantregister/ImagePreviewModal';
-import {tr} from 'date-fns/locale';
-import ShareSvg from '../../drawer/svgimgcomponents/sharesvg';
-import ViewShot, {captureRef} from 'react-native-view-shot';
-import Share from 'react-native-share';
 
 const RadiantLedger = () => {
   const {colorConfig} = useSelector((state: RootState) => state.userInfo);
@@ -224,7 +217,6 @@ const RadiantLedger = () => {
     </View>
   );
 };
-
 export default RadiantLedger;
 
 const styles = StyleSheet.create({

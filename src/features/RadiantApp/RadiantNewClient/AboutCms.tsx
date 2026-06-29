@@ -166,7 +166,7 @@ const AboutCms = () => {
                 size={'large'}
               />
             ) : (
-              translate('Yes, how can i work?')
+              'Yes, how can i work?'
             )
           }
         />

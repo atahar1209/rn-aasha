@@ -32,7 +32,14 @@ const DropdownInput: React.FC<Props> = ({label, value, data, onSelect}) => {
     <>
       {/* Input */}
       <TouchableOpacity onPress={() => setVisible(true)}>
-        <FlotingInput label={label} value={value} editable={false} />
+        <FlotingInput
+          label={translate(label)}
+          value={value}
+          editable={false}
+          inputstyle={undefined}
+          labelinputstyle={undefined}
+          onChangeTextCallback={undefined}
+        />
         <View style={commonStyles.righticon2}>
           <OnelineDropdownSvg />
         </View>
@@ -76,7 +83,6 @@ const DropdownInput: React.FC<Props> = ({label, value, data, onSelect}) => {
     </>
   );
 };
-
 export default DropdownInput;
 
 export const styles = StyleSheet.create({

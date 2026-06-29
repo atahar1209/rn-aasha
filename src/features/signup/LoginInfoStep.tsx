@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
-
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -9,8 +7,6 @@ import {
   Alert,
   ToastAndroid,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-
 import {useNavigation} from '@react-navigation/native';
 import {colors} from '../../utils/styles/theme';
 import {hScale, wScale} from '../../utils/styles/dimensions';
@@ -22,7 +18,6 @@ import ShowLoader from '../../components/ShowLoder';
 import DynamicButton from '../drawer/button/DynamicButton';
 import ShowEye from '../drawer/HideShowImgBtn/ShowEye';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
-import {RootState} from '../../reduxUtils/store';
 import {SvgUri} from 'react-native-svg';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {translate} from '../../utils/languageUtils/I18n';
@@ -53,8 +48,6 @@ const LoginInfoStep = () => {
     setVerifyPassword,
     setCurrentPage,
     currentPage,
-    stateId,
-    setStateid,
     svg,
     Radius2,
   } = useContext(SignUpContext);
@@ -131,32 +124,35 @@ const LoginInfoStep = () => {
 
     return emailRegex.test(email);
   };
-  const checkEmail = useCallback(async email => {
-    if (!isValidEmail(email)) {
-      return;
-    }
+  const checkEmail = useCallback(
+    async email => {
+      if (!isValidEmail(email)) {
+        return;
+      }
 
-    setShowLoader(true);
-    const url = `${baseUrl}${APP_URLS.joinNumCheck}email=${email}&mobile=''`;
+      setShowLoader(true);
+      const url = `${baseUrl}${APP_URLS.joinNumCheck}email=${email}&mobile=''`;
 
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-        },
-      });
-      setShowLoader(false);
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        setShowLoader(false);
 
-      const responseData = await response.json();
-      console.log(responseData);
+        const responseData = await response.json();
+        console.log(responseData);
 
-      handleResponse(responseData, 'email');
-    } catch (error) {
-      console.error(error);
-      Alert.alert(translate('Error'), translate('Something went wrong'));
-    }
-  }, []);
+        handleResponse(responseData, 'email');
+      } catch (error) {
+        console.error(error);
+        Alert.alert(translate('Error'), translate('Something went wrong'));
+      }
+    },
+    [baseUrl],
+  );
 
   const checkMobileNumber = useCallback(async num => {
     setShowLoader(true);
@@ -273,7 +269,7 @@ const LoginInfoStep = () => {
     if (type === 'email') {
       const {emailmsg, emailstatus} = responseData;
 
-      Alert.alert('Message', emailmsg, [{text: 'OK'}]);
+      Alert.alert(translate('Message'), emailmsg, [{text: translate('OK')}]);
       if (emailstatus === 'Success') {
         setEditable(true);
         setOtpModalVisible1(false);
@@ -443,7 +439,7 @@ const LoginInfoStep = () => {
           {verifyPassword.length >= 5 && (
             <View style={styles.righticon}>
               <TouchableOpacity onPressOut={ToggleSecureEntry}>
-                <ShowEye />
+                <ShowEye color1={undefined} color2={undefined} />
               </TouchableOpacity>
             </View>
           )}
@@ -458,6 +454,7 @@ const LoginInfoStep = () => {
           setMobileOtp={setMobileOtp}
           disabled={mobileOtp.length !== 4}
           verifyOtp={() => verifyMobileOtp(mobileOtp, mobileNumber)}
+          inputCount={0}
         />
 
         <OTPModal
@@ -466,11 +463,12 @@ const LoginInfoStep = () => {
           setEmailOtp={setMailOtp}
           disabled={MailOtp.length !== 4}
           verifyOtp={() => verifyEmailOtp(MailOtp, email)}
+          inputCount={0}
         />
 
         <DynamicButton
           styleoveride={{marginTop: 20}}
-          title={translate('Next')}
+          title={'Next'}
           onPress={() => {
             if (password.length <= 5 || verifyPassword.length <= 5) {
               ToastAndroid.show(
@@ -478,7 +476,10 @@ const LoginInfoStep = () => {
                 ToastAndroid.SHORT,
               );
             } else if (password !== verifyPassword) {
-              ToastAndroid.show('Passwords do not match', ToastAndroid.SHORT);
+              ToastAndroid.show(
+                translate('Passwords do not match'),
+                ToastAndroid.SHORT,
+              );
             } else {
               OnLogin();
             }

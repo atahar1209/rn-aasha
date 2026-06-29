@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import {translate} from '../../../utils/languageUtils/I18n';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
@@ -73,7 +74,6 @@ const Radiantregister = ({response}) => {
     Pancardstatus,
     Policverificationstatus,
     VoterorDrivingstatus,
-    sts,
   } = response?.Content?.ADDINFO || {};
   const handleDocTypeSelect = (docType: string) => {
     setData({
@@ -84,14 +84,13 @@ const Radiantregister = ({response}) => {
       DocName: docType,
     });
     setVoterId('');
-
     setVoterId64('');
     setDrivingLicense64('');
     setSelectedDocType(docType);
     setDoctype(false);
   };
 
-  const {post, get} = useAxiosHook();
+  const {post} = useAxiosHook();
 
   useEffect(() => {
     const Retailrinfo = async () => {
@@ -349,7 +348,7 @@ const Radiantregister = ({response}) => {
       // {"Content": {"ADDINFO": {"sts": true},
       // "ResponseCode": 1}, "StatusCode":
       // 200, "Version": "1.0"}
-      if (res?.StatusCode == 200) {
+      if (res?.StatusCode === 200) {
         if (res?.Content?.ADDINFO?.sts) {
           Dialog.show({
             type: ALERT_TYPE.SUCCESS,
@@ -387,17 +386,6 @@ const Radiantregister = ({response}) => {
         Dialog.hide();
       },
     });
-  };
-
-  const saveData = async (key, value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem(key, jsonValue);
-      console.log('Data saved successfully');
-    } catch (e) {
-      // saving error
-      console.error('Failed to save the data to the storage', e);
-    }
   };
 
   const handleImageSelect = async (side: string) => {
@@ -624,7 +612,7 @@ const Radiantregister = ({response}) => {
         <View style={styles.inputGroup}>
           <FlotingInput
             value={data.Aadharcardnumber}
-            onChangeTextCallback={t => {
+            onChangeTextCallback={(t: any) => {
               setData({...data, Aadharcardnumber: t});
             }}
             label={translate('Enter Aadhar Card Number')}
@@ -654,7 +642,7 @@ const Radiantregister = ({response}) => {
           <View style={styles.inputGroup}>
             <FlotingInput
               value={data.DrivinglicenceNumber}
-              onChangeTextCallback={t => {
+              onChangeTextCallback={(t: any) => {
                 setData({...data, DrivinglicenceNumber: t});
               }}
               label={selectedDocType}
@@ -695,7 +683,7 @@ const Radiantregister = ({response}) => {
           <FlotingInput
             label={translate('Police Verification')}
             editable={false}
-            value={data.Policverificationcopy ? 'File Selected' : ''}
+            value={data.Policverificationcopy ? translate('File Selected') : ''}
             inputstyle={undefined}
             labelinputstyle={undefined}
             onChangeTextCallback={undefined}
@@ -731,7 +719,7 @@ const Radiantregister = ({response}) => {
           <FlotingInput
             label={translate('Security Cheque')}
             editable={false}
-            value={data.CheckCopy ? 'File Selected' : ''}
+            value={data.CheckCopy ? translate('File Selected') : ''}
             inputstyle={undefined}
             labelinputstyle={undefined}
             onChangeTextCallback={undefined}
@@ -766,11 +754,9 @@ const Radiantregister = ({response}) => {
           <DynamicButton title="Submit" onPress={() => uploadDoCx()} />
         </View>
 
-        {/* Extra space to ensure the last input isn't hidden by the keyboard */}
         <View style={{height: 50}} />
       </KeyboardAwareScrollView>
 
-      {/* MODALS & BOTTOMSHEETS (Keep outside ScrollView) */}
       <BottomSheet
         animationType="none"
         isVisible={doctype}
@@ -998,5 +984,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
 export default Radiantregister;

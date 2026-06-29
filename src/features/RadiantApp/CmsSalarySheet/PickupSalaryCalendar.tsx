@@ -103,7 +103,7 @@ const ActionBanner = ({
                 'Submit or cancel by clicking the date before 10:00 AM',
               )}{' '}
               <Text style={{color: T.warning, fontWeight: '700'}}>
-                10:00 AM
+                {translate('10:00 AM')}
               </Text>
               .
             </Text>

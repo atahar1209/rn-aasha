@@ -20,7 +20,7 @@ const RadiantWellCome = () => {
       }
     };
     fetchVersion();
-  }, []);
+  }, [get]);
   useEffect(() => {
     const timer = setTimeout(() => {
       Animated.timing(scaleAnim, {
@@ -31,7 +31,7 @@ const RadiantWellCome = () => {
     }, 0); // Delay before zoom starts
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [scaleAnim]);
   useEffect(() => {
     let index = 0;
     const totalDuration = 500;
@@ -40,7 +40,9 @@ const RadiantWellCome = () => {
     const interval = setInterval(() => {
       setDisplayedText(prev => prev + fullText[index]);
       index++;
-      if (index === fullText.length) clearInterval(interval);
+      if (index === fullText.length) {
+        clearInterval(interval);
+      }
     }, intervalTime);
 
     return () => clearInterval(interval);
@@ -75,14 +77,13 @@ const RadiantWellCome = () => {
           <Animated.Text style={styles.text2}>{fullText}</Animated.Text>
         </Animated.View>
       </View>
-      <View></View>
+      <View />
       <Text style={styles.prevText}>
         {translate('App Version')} : V{latestVersion}
       </Text>
     </View>
   );
 };
-
 export default RadiantWellCome;
 
 const styles = StyleSheet.create({

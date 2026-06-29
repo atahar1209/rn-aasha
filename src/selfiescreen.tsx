@@ -257,8 +257,8 @@ const SelfieScreen: React.FC = () => {
         );
       } else {
         Alert.alert(
-          'Failed',
-          res?.Content?.ADDINFO?.message || 'Upload failed',
+          translate('Failed'),
+          res?.Content?.ADDINFO?.message || translate('Upload failed'),
         );
       }
     } catch (error) {
@@ -278,7 +278,9 @@ const SelfieScreen: React.FC = () => {
       await Share.open({
         title: translate('GPS Photo'),
         url: finalImageUri,
-        message: `GPS Photo\nLatitude: ${latitude}\nLongitude: ${longitude}`,
+        message: `${translate('GPS Photo')}\n${translate(
+          'Latitude',
+        )}: ${latitude}\n${translate('Longitude')}: ${longitude}`,
       });
     } catch {}
   };

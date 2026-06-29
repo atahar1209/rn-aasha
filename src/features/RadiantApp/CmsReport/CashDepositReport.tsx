@@ -86,7 +86,9 @@ const CashDepositReport = () => {
   const onShare = useCallback(async () => {
     try {
       await Share.open({
-        message: translate(`key_hiiams_47 ${APP_URLS.AppName} App.`),
+        message: `${translate('key_hiiams_47')} ${APP_URLS.AppName} ${translate(
+          'App',
+        )}.`,
         url: selectedImageUri,
       });
     } catch (e) {
@@ -206,7 +208,7 @@ const CashDepositReport = () => {
                       message: translate(
                         `${translate('key_hiiams_47')} ${
                           APP_URLS.AppName
-                        } App.`,
+                        } ${translate('App')}.`,
                       ),
                       url: item.DepositeSlip,
                     });
@@ -299,7 +301,6 @@ const CashDepositReport = () => {
     </View>
   );
 };
-
 export default CashDepositReport;
 
 const styles = StyleSheet.create({

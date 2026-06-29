@@ -3,6 +3,7 @@
 
 import firestore from '@react-native-firebase/firestore';
 import DeviceInfo from 'react-native-device-info';
+import {translate} from './languageUtils/I18n';
 
 type LogLevel = 'info' | 'warn' | 'error';
 
@@ -20,7 +21,9 @@ interface SvgLogPayload {
 let cachedDevice: {model: string; android: string; uid: string} | null = null;
 
 const getDeviceInfo = async () => {
-  if (cachedDevice) return cachedDevice;
+  if (cachedDevice) {
+    return cachedDevice;
+  }
   cachedDevice = {
     model: DeviceInfo.getModel(),
     android: DeviceInfo.getSystemVersion(),
@@ -50,11 +53,21 @@ export const logSvgEvent = async (payload: SvgLogPayload) => {
       timestamp: new Date().toISOString(),
     };
 
-    if (payload.iconName) entry.iconName = payload.iconName;
-    if (payload.svgUrl) entry.svgUrl = payload.svgUrl;
-    if (payload.section) entry.section = payload.section;
-    if (payload.error) entry.error = payload.error;
-    if (payload.extra) entry.extra = payload.extra;
+    if (payload.iconName) {
+      entry.iconName = payload.iconName;
+    }
+    if (payload.svgUrl) {
+      entry.svgUrl = payload.svgUrl;
+    }
+    if (payload.section) {
+      entry.section = payload.section;
+    }
+    if (payload.error) {
+      entry.error = payload.error;
+    }
+    if (payload.extra) {
+      entry.extra = payload.extra;
+    }
 
     // Device ka ek hi document — uid se identify
     await firestore()
@@ -139,18 +152,18 @@ export const logSvgSuccess = (iconName: string, svgUrl: string) =>
 export const logSvgError = (iconName: string, svgUrl: string, error: any) => {
   const errStr = error?.message || String(error) || 'Unknown';
   const diagnosis = errStr.includes('CLEARTEXT')
-    ? 'CLEARTEXT_BLOCKED'
+    ? translate('CLEARTEXT_BLOCKED')
     : errStr.includes('SSL')
-    ? 'SSL_CERTIFICATE_ERROR'
+    ? translate('SSL_CERTIFICATE_ERROR')
     : errStr.includes('timeout')
-    ? 'NETWORK_TIMEOUT'
+    ? translate('NETWORK_TIMEOUT')
     : errStr.includes('404')
-    ? 'FILE_NOT_FOUND_404'
+    ? translate('FILE_NOT_FOUND_404')
     : errStr.includes('Network')
-    ? 'NETWORK_ERROR'
+    ? translate('NETWORK_ERROR')
     : errStr.includes('connect')
-    ? 'CONNECTION_REFUSED'
-    : 'UNKNOWN_ERROR';
+    ? translate('CONNECTION_REFUSED')
+    : translate('UNKNOWN_ERROR');
   return logSvgEvent({
     step: 'STEP4_SVG_LOAD_FAILED',
     level: 'error',

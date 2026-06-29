@@ -329,7 +329,7 @@ export default function PassportPhotoScreen({onContinue}: Props) {
         }),
       ]),
     ).start();
-  }, []);
+  }, [ovalAnim]);
 
   // Capture button pulse when face is ok
   useEffect(() => {

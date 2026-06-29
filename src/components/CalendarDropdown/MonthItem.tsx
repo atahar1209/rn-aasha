@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {hScale, wScale} from '../../utils/styles/dimensions';
+import {translate} from '../../utils/languageUtils/I18n';
 
 interface MonthItemProps {
   label: string;
@@ -10,7 +11,7 @@ interface MonthItemProps {
 export const MonthItem = ({label, onPress}: MonthItemProps) => {
   return (
     <TouchableOpacity style={styles.item} onPress={onPress}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={styles.label}>{translate(label)}</Text>
     </TouchableOpacity>
   );
 };

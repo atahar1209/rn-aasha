@@ -62,7 +62,7 @@ const OtherPayMent = ({route}) => {
     if (Platform.OS === 'android') {
       ToastAndroid.show(message, ToastAndroid.SHORT);
     } else {
-      Alert.alert(message);
+      Alert.alert(translate(message));
     }
   };
   const validateForm = () => {
@@ -205,11 +205,11 @@ const OtherPayMent = ({route}) => {
   };
 
   const paymentModes = [
-    'IMPS',
-    'NEFT',
-    'RTGS',
-    'Branch Cash Deposit',
-    'ATM Cash Deposit',
+    translate('IMPS'),
+    translate('NEFT'),
+    translate('RTGS'),
+    translate('Branch Cash Deposit'),
+    translate('ATM Cash Deposit'),
   ];
   return (
     <View style={[commonStyles.screenContainer, styles.main]}>
@@ -224,7 +224,7 @@ const OtherPayMent = ({route}) => {
       </View>
       <View style={commonStyles.contentContainer}>
         <DropdownInput
-          label="Payment Mode"
+          label={translate('Payment Mode')}
           value={rePtype}
           data={paymentModes}
           onSelect={setRePtype}
@@ -325,6 +325,7 @@ const OtherPayMent = ({route}) => {
   );
 };
 export default OtherPayMent;
+
 const styles = StyleSheet.create({
   main: {
     backgroundColor: '#fff',

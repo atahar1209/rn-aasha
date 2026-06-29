@@ -28,7 +28,9 @@ export const shareSlipImage = async (viewRef: any) => {
 
     // ✅ Share
     const res = await Share.open({
-      message: `${translate('key_hiiams_47')} ${APP_URLS.AppName} App.`,
+      message: `${translate('key_hiiams_47')} ${APP_URLS.AppName} ${translate(
+        'App',
+      )}.`,
       url: uri,
       type: 'image/jpeg',
       failOnCancel: false, // 🔥 MOST IMPORTANT (prevents crash)

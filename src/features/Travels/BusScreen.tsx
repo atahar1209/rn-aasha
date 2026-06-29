@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import {translate} from '../../utils/languageUtils/I18n';
 import React, {useState, useEffect} from 'react';
 import {
@@ -143,10 +144,7 @@ const BusScreen = () => {
 
         <View style={{alignItems: 'center', paddingTop: 50}}>
           <View style={styles.btn}>
-            <DynamicButton
-              title={translate('Search')}
-              onPress={handleOpenBottomSheet}
-            />
+            <DynamicButton title={'Search'} onPress={handleOpenBottomSheet} />
           </View>
         </View>
       </View>

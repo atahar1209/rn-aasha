@@ -90,11 +90,11 @@ export default function AddMoneyPayResponse() {
   const statusRaw = inforeport?.status;
   const status = statusRaw?.toLowerCase() || '';
   const color =
-    status === translate('pending')
+    status === 'pending'
       ? '#fa9507'
-      : status === translate('failed')
+      : status === 'failed'
       ? 'red'
-      : status === translate('success')
+      : status === 'success'
       ? 'green'
       : '#ddd';
 
@@ -243,11 +243,7 @@ export default function AddMoneyPayResponse() {
         <ShareGoback
           onShare={onShare}
           goBackIcon={status === translate('success') ? null : 'chevron-back'}
-          goBackTitle={
-            status === translate('success')
-              ? translate('OK')
-              : translate('Go Back')
-          }
+          goBackTitle={status === 'success' ? 'OK' : 'Go Back'}
           onHome={onPressHome}
           onGoBack={onPressGoBack}
           onRefresh={() => fetchAddMReport(selectedDate.from, selectedDate.to)}

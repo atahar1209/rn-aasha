@@ -521,10 +521,10 @@ const Totalpayreport = ({route}) => {
                   setBName(item.BankName);
 
                   const detailsArray = [
-                    `Client Name : ${item.ClientName}`,
-                    `Bank Name : ${item.BankName}`,
-                    `Account Number : ${item.AccountNumber}`,
-                    `Bank Ifsc Code : ${item.IfscCode}`,
+                    `${translate('Client Name')} : ${item.ClientName}`,
+                    `${translate('Bank Name')} : ${item.BankName}`,
+                    `${translate('Account Number')} : ${item.AccountNumber}`,
+                    `${translate('Bank Ifsc Code')} : ${item.IfscCode}`,
                   ];
 
                   setSelectedAccountDetails(detailsArray);

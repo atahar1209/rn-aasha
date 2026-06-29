@@ -73,7 +73,7 @@ const ConfirmSubmitSheet: React.FC<ConfirmSubmitSheetProps> = ({
                     color="#16A34A"
                     style={s.checkIcon} // ← marginRight add hua
                   />
-                  <Text style={s.checkText}>{item}</Text>
+                  <Text style={s.checkText}>{translate(item)}</Text>
                 </View>
               ))}
             </View>

@@ -57,7 +57,9 @@ const AadharCardUpload = ({route}) => {
 
     if (cameraStatus !== RESULTS.GRANTED) {
       const result = await request(PERMISSIONS.ANDROID.CAMERA);
-      if (result !== RESULTS.GRANTED) return;
+      if (result !== RESULTS.GRANTED) {
+        return;
+      }
     }
 
     // ✅ Options
@@ -211,7 +213,7 @@ const AadharCardUpload = ({route}) => {
   return (
     <View style={{flexDirection: 'column', flex: 1}}>
       <AppBarSecond
-        title="Aadhar Card "
+        title="Aadhar Card"
         onPressBack={() => {
           navigation.navigate('HomeScreen');
         }}

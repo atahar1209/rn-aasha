@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Button,
   Modal,
-  Platform,
 } from 'react-native';
 import {BottomSheet} from '@rneui/themed';
 

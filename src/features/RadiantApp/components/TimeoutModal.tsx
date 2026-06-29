@@ -79,7 +79,6 @@ const TimeoutAlertModal = ({
     </Modal>
   );
 };
-
 export default TimeoutAlertModal;
 
 const tm = StyleSheet.create({

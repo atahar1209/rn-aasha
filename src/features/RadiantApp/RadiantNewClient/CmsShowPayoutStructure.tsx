@@ -22,7 +22,6 @@ import {getAssetSource} from '../../../utils/network/NetWorkImages';
 
 const CmsShowPayoutStructure = () => {
   const {colorConfig} = useSelector((state: RootState) => state.userInfo);
-
   const [addInfo, setAddInfo] = useState(null);
   const {post} = useAxiosHook();
   const navigation = useNavigation<any>();
@@ -63,7 +62,7 @@ const CmsShowPayoutStructure = () => {
             icon={() => <BackSvg size={15} color={colorConfig.primaryColor} />}>
             <Text
               style={[styles.goBackText, {color: colorConfig.primaryColor}]}>
-              {'Go Back'}
+              {translate('Go Back')}
             </Text>
           </Button>
 

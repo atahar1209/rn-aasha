@@ -52,9 +52,14 @@ const StatusCalendar = ({onSearch}) => {
 
   useEffect(() => {
     onSearch({from: fromDate, to: toDate, status});
-  }, [fromDate, toDate, status]);
+  }, [fromDate, toDate, status, onSearch]);
 
-  const crStatus = ['All Transaction', 'Success', 'Pending', 'Failed'];
+  const crStatus = [
+    translate('All Transaction'),
+    translate('Success'),
+    translate('Pending'),
+    translate('Failed'),
+  ];
   return (
     <View>
       <LinearGradient
@@ -130,7 +135,6 @@ const StatusCalendar = ({onSearch}) => {
     </View>
   );
 };
-
 export default StatusCalendar;
 
 const styles = StyleSheet.create({

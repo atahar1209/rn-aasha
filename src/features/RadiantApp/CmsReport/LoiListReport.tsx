@@ -64,7 +64,7 @@ const LoiListReport = () => {
     } finally {
       setLoading(false);
     }
-  }, []); // Empty dependency array ensures fetchReport is defined only once
+  }, [post]); // Empty dependency array ensures fetchReport is defined only once
 
   // Fetch report on component mount
   useEffect(() => {
@@ -333,7 +333,6 @@ const LoiListReport = () => {
     </View>
   );
 };
-
 export default LoiListReport;
 
 const styles = StyleSheet.create({

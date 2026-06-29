@@ -251,7 +251,7 @@ export const SectionCard = ({
         {icon && (
           <MaterialCommunityIcons name={icon} size={15} color={iconColor} />
         )}
-        <Text style={[sc.title, {color: iconColor}]}>{title}</Text>
+        <Text style={[sc.title, {color: iconColor}]}>{translate(title)}</Text>
       </View>
     )}
     {children}
@@ -341,7 +341,7 @@ export const AppInput: React.FC<
 
   return (
     <View style={ai.wrap}>
-      <Text style={ai.label}>{label}</Text>
+      <Text style={ai.label}>{translate(label)}</Text>
 
       {/* --- Ye raha wo updated block --- */}
       <View
@@ -390,7 +390,7 @@ export const AppInput: React.FC<
             size={12}
             color={colors.error}
           />
-          <Text style={ai.errorText}>{error}</Text>
+          <Text style={ai.errorText}>{translate(error)}</Text>
         </View>
       )}
     </View>
@@ -474,7 +474,7 @@ export const SelectPicker = ({
             size={12}
             color={colors.error}
           />
-          <Text style={ai.errorText}>{error}</Text>
+          <Text style={ai.errorText}>{translate(error)}</Text>
         </View>
       )}
 
@@ -488,7 +488,7 @@ export const SelectPicker = ({
           <View style={sp.sheet}>
             {/* Header */}
             <View style={sp.sheetHeader}>
-              <Text style={sp.sheetTitle}>{label}</Text>
+              <Text style={sp.sheetTitle}>{translate(label)}</Text>
               <TouchableOpacity
                 onPress={() => setOpen(false)}
                 activeOpacity={0.7}>
@@ -675,7 +675,7 @@ export const AppButton: React.FC<AppButtonProps> = ({
               style={{marginRight: 6}}
             />
           )}
-          <Text style={[bt.text, {color: textC}]}>{title}</Text>
+          <Text style={[bt.text, {color: textC}]}>{translate(title)}</Text>
           {icon && iconRight && (
             <MaterialCommunityIcons
               name={icon}
@@ -797,7 +797,7 @@ export const AppToggle: React.FC<AppToggleProps> = ({
   onChange,
 }) => (
   <View style={tog.row}>
-    <Text style={ai.label}>{label}</Text>
+    <Text style={ai.label}>{translate(label)}</Text>
     <Switch
       value={value}
       onValueChange={onChange}

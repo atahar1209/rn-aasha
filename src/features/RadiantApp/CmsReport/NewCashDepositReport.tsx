@@ -80,10 +80,12 @@ const NewCashDepositReport = () => {
       setSelectedTxn(reportData[0]);
       setShowResult(true);
     }
-  }, [reportData, cmsAddMFrom]);
+  }, [reportData, cmsAddMFrom, showResult]);
 
   const buildImageUrl = path => {
-    if (!path) return '';
+    if (!path) {
+      return '';
+    }
     return `http://native.${APP_URLS.baseWebUrl + path}`;
   };
   console.log();
@@ -220,7 +222,7 @@ const NewCashDepositReport = () => {
 
             <View style={styles.row}>
               <View style={styles.item}>
-                <Text style={styles.label}>{translate('IFS_Code')}</Text>
+                <Text style={styles.label}>{translate('IFSC_Code')}</Text>
               </View>
               <View style={styles.item2}>
                 <Text style={[styles.value, styles.textUpper]}>
@@ -375,7 +377,6 @@ const NewCashDepositReport = () => {
     </View>
   );
 };
-
 export default NewCashDepositReport;
 
 const styles = StyleSheet.create({

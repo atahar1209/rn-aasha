@@ -1,25 +1,26 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import 'react-native-gesture-handler';
-import React, { useEffect, useRef, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { ToastProvider, useToast } from 'react-native-toast-notifications';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import React, {useEffect, useRef, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {Provider, useDispatch, useSelector} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {ToastProvider, useToast} from 'react-native-toast-notifications';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import 'react-native-reanimated';
-import { store, persistor } from './src/reduxUtils/store';
+import {store, persistor} from './src/reduxUtils/store';
 import RNBootSplash from 'react-native-bootsplash';
-import { AppContainer } from './src/AppContainer';
-import { navigationRef } from './src/utils/navigation/NavigationService';
-import { setUnlocked } from './src/reduxUtils/store/userInfoSlice';
-import { PaperProvider } from 'react-native-paper';
+import {AppContainer} from './src/AppContainer';
+import {navigationRef} from './src/utils/navigation/NavigationService';
+import {setUnlocked} from './src/reduxUtils/store/userInfoSlice';
+import {PaperProvider} from 'react-native-paper';
 import OtUpdate from 'react-native-ota-hot-update';
 import ReactNativeBlobUtil from 'react-native-blob-util';
-import { Alert, AppState } from 'react-native';
-import { FormProvider } from './src/features/RadiantApp/Radiantregister/NewForm/FormContext';
-import { APP_URLS } from './src/utils/network/urls';
+import {Alert, AppState} from 'react-native';
+import {FormProvider} from './src/features/RadiantApp/Radiantregister/NewForm/FormContext';
+import {APP_URLS} from './src/utils/network/urls';
 import OtaUpdateModal from './src/components/OtaUpdateModal';
 import firestore from '@react-native-firebase/firestore';
 const AppContent = () => {
@@ -27,74 +28,65 @@ const AppContent = () => {
   const dispatch = useDispatch();
   // ── State add karo AppContent ke andar ──
   const [otaProgress, setOtaProgress] = useState(0);
-  const [otaStatus, setOtaStatus] = useState<'idle' | 'downloading' | 'installing' | 'success' | 'failed'>('idle');
+  const [otaStatus, setOtaStatus] = useState<
+    'idle' | 'downloading' | 'installing' | 'success' | 'failed'
+  >('idle');
   const language = useSelector((state: any) => state.userInfo.appLanguage);
   const authToken = useSelector((state: any) => state.userInfo.authToken);
   const formatted = APP_URLS.AppName.toLowerCase().replace(/\s+/g, '');
   const isUpdating = useRef(false);
-  const VERSION_URL =
-    `https://raw.githubusercontent.com/Vwi-app/Ota-bundles/main/${formatted}/version.json`;
+  const VERSION_URL = `https://raw.githubusercontent.com/Vwi-app/Ota-bundles/main/${formatted}/version.json`;
   const appState = useRef(AppState.currentState);
   console.log('OTA URL:', VERSION_URL);
-const fetchOtaDetails = async () => {
-  try {
-    const documentSnapshot = await firestore()
-      .collection('otaData')
-      .doc('otadata')
-      .collection('rechargedrishti')
-      .doc('ota')
-      .get();
+  const fetchOtaDetails = async () => {
+    try {
+      const documentSnapshot = await firestore()
+        .collection('otaData')
+        .doc('otadata')
+        .collection('rechargedrishti')
+        .doc('ota')
+        .get();
 
-    if (!documentSnapshot.exists) {
-      console.log('OTA document not found');
+      if (!documentSnapshot.exists) {
+        console.log('OTA document not found');
+        return null;
+      }
+
+      return documentSnapshot.data();
+    } catch (error) {
+      console.log('Firestore Error:', error);
       return null;
     }
+  };
+  const checkOta = async () => {
+    try {
+      const data = await fetchOtaDetails();
+      if (!data) {
+        return;
+      }
+      const installed = Number(await OtUpdate.getCurrentVersion()) || 0;
+      const latest = Number(data.version);
+      console.log('Installed Version:', installed);
+      console.log('Firebase Version:', latest);
+      console.log('Bundle URL:', data.url);
 
-    return documentSnapshot.data();
-  } catch (error) {
-    console.log('Firestore Error:', error);
-    return null;
-  }
-};
-const checkOta = async () => {
-  try {
-    const data = await fetchOtaDetails();
+      if (!latest || isNaN(latest)) {
+        return;
+      }
+      if (latest > installed && data.status === true && data.url) {
+        console.log('🚀 New OTA update found');
 
-    if (!data) {
-      return;
+        startUpdate({
+          version: latest,
+          bundle_url: data.url,
+        });
+      } else {
+        //Alert.alert('✅ Already latest version');
+      }
+    } catch (error) {
+      console.log('OTA Check Failed:', error);
     }
-
-    const installed =
-      Number(await OtUpdate.getCurrentVersion()) || 0;
-
-    const latest = Number(data.version);
-
-    console.log('Installed Version:', installed);
-    console.log('Firebase Version:', latest);
-    console.log('Bundle URL:', data.url);
-
-    if (!latest || isNaN(latest)) {
-      return;
-    }
-
-    if (
-      latest > installed &&
-      data.status === true &&
-      data.url
-    ) {
-      console.log('🚀 New OTA update found');
-
-      startUpdate({
-        version: latest,
-        bundle_url: data.url,
-      });
-    } else {
-      //Alert.alert('✅ Already latest version');
-    }
-  } catch (error) {
-    console.log('OTA Check Failed:', error);
-  }
-};
+  };
 
   // ✅ START UPDATE
   const startUpdate = async (data: any) => {
@@ -131,13 +123,11 @@ const checkOta = async () => {
 
           progress(received, total) {
             if (total > 0) {
-              const percent = Math.floor(
-                (received / total) * 100
-              );
+              const percent = Math.floor((received / total) * 100);
               setOtaProgress(percent);
             }
           },
-        }
+        },
       );
     } catch (error) {
       console.log('OTA error:', error);
@@ -150,12 +140,12 @@ const checkOta = async () => {
   // ✅ INITIAL + LOGIN CHANGE
   useEffect(() => {
     dispatch(setUnlocked(false));
-  }, [language, authToken]);
+  }, [language, authToken, dispatch]);
 
   // ✅ APP RESUME CHECK
   useEffect(() => {
     checkOta(); // ✅ App open hone pe bhi check karo
-fetchOtaDetails()
+    fetchOtaDetails();
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (
         appState.current.match(/inactive|background/) &&
@@ -169,7 +159,7 @@ fetchOtaDetails()
     });
 
     return () => subscription.remove();
-  }, []);
+  }, [checkOta]);
 
   return (
     <>
@@ -177,9 +167,7 @@ fetchOtaDetails()
       <NavigationContainer
         key={language}
         ref={navigationRef}
-        onReady={() => RNBootSplash.hide({ fade: true })}
-      >
-
+        onReady={() => RNBootSplash.hide({fade: true})}>
         <AppContainer />
       </NavigationContainer>
     </>
@@ -198,18 +186,16 @@ function App() {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
         <BottomSheetModalProvider>
           <ToastProvider>
             <Provider store={store}>
               <PaperProvider>
                 <PersistGate loading={null} persistor={persistor}>
-
                   <FormProvider>
                     <AppContent />
                   </FormProvider>
-
                 </PersistGate>
               </PaperProvider>
             </Provider>

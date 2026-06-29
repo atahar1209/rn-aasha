@@ -13,7 +13,9 @@ import NoDatafound from '../../drawer/svgimgcomponents/Nodatafound';
 const Table = ({title, data, showNote}) => {
   const {colorConfig} = useSelector((state: RootState) => state.userInfo);
 
-  if (!data || data.length === 0) return null;
+  if (!data || data.length === 0) {
+    return null;
+  }
 
   return (
     <View style={styles.tableContainer}>
@@ -22,7 +24,7 @@ const Table = ({title, data, showNote}) => {
           styles.tableTitle,
           {backgroundColor: `${colorConfig.secondaryColor}80`},
         ]}>
-        {title}
+        {translate(title)}
       </Text>
 
       {showNote && (
@@ -92,11 +94,9 @@ const Table = ({title, data, showNote}) => {
 
 const CmsPayoutStructure = () => {
   const {colorConfig} = useSelector((state: RootState) => state.userInfo);
-
   const [addInfo, setAddInfo] = useState(null);
   const {post} = useAxiosHook();
   const navigation = useNavigation<any>();
-
   const fetchData = async () => {
     try {
       const url = APP_URLS.RCEPayoutStructure;
@@ -161,6 +161,7 @@ const CmsPayoutStructure = () => {
             <Table
               title={translate('Granted RCE Minimum Fixed Payout')}
               data={addInfo.MinimumPayout}
+              showNote={undefined}
             />
 
             <Table
@@ -172,10 +173,12 @@ const CmsPayoutStructure = () => {
             <Table
               title={translate('Leave and Penalty Provisions')}
               data={addInfo.LeaveAndPenaltyRules}
+              showNote={undefined}
             />
             <Table
               title={translate('Verification Fees')}
               data={addInfo.verificationFees}
+              showNote={undefined}
             />
           </View>
         )}
@@ -183,7 +186,6 @@ const CmsPayoutStructure = () => {
     </View>
   );
 };
-
 export default CmsPayoutStructure;
 
 const styles = StyleSheet.create({

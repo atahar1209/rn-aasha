@@ -38,7 +38,7 @@ const Table: React.FC<TableProps> = ({
               {translate(row.label1)}
             </Text>
             <Text style={[styles.value, valueStyle, row.valueStyle1]}>
-              {row.value1}
+              {translate(row.value1)}
             </Text>
           </View>
           {row.label2 && (
@@ -47,7 +47,7 @@ const Table: React.FC<TableProps> = ({
                 {translate(row.label2)}
               </Text>
               <Text style={[styles.value, valueStyle, row.valueStyle2]}>
-                {row.value2}
+                {translate(row.value2)}
               </Text>
             </View>
           )}
@@ -56,7 +56,6 @@ const Table: React.FC<TableProps> = ({
     </View>
   );
 };
-
 export default Table;
 
 const styles = StyleSheet.create({

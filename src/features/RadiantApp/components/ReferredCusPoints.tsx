@@ -430,6 +430,7 @@ const ReferredCusPoints = () => {
   );
 };
 export default ReferredCusPoints;
+
 const styles = StyleSheet.create({
   checkRow: {
     flexDirection: 'row',

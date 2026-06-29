@@ -2,7 +2,6 @@ import React, {useContext, useState} from 'react';
 import {View, StyleSheet, ToastAndroid} from 'react-native';
 import {hScale, wScale} from '../../utils/styles/dimensions';
 import {SignUpContext} from './SignUpContext';
-import {launchImageLibrary} from 'react-native-image-picker';
 import DynamicButton from '../drawer/button/DynamicButton';
 import FlotingInput from '../drawer/securityPages/FlotingInput';
 import {SvgUri} from 'react-native-svg';
@@ -21,22 +20,9 @@ const SignUpKyc = () => {
     setPersonalPAN,
     gst,
     setGST,
-    videoKyc,
-    setVideoKyc,
-    currentPage,
     setCurrentPage,
-    aadharFront,
-    setAadharFront,
-    aadharBack,
-    setAadharBack,
-    panImg,
-    setPanImg,
-    gstImg,
-    setGstImg,
     svg,
     Radius2,
-    distid,
-    setDistid,
   } = useContext(SignUpContext);
   const KycStep = () => {
     // Trim values (extra spaces remove)
@@ -76,37 +62,6 @@ const SignUpKyc = () => {
   const [aadharb, setAdharb] = useState<any>(null);
   const [PanImage, setPanImage] = useState<any>(null);
   const [gstImage, setgstImage] = useState<any>(null);
-  const uploadImage = async (setImage, image) => {
-    const result = await launchImageLibrary({
-      selectionLimit: 1,
-      mediaType: 'photo',
-      includeBase64: true,
-    });
-    console.log(result);
-    if (result?.assets && result?.assets.length > 0) {
-      const base64Image = result?.assets[0]?.base64;
-      switch (image) {
-        case translate('Aadhar Front'):
-          setAadharFront(base64Image);
-          setAdharf(base64Image);
-          break;
-        case translate('Aadhar Back'):
-          setAadharBack(base64Image);
-          setAdharb(base64Image);
-          break;
-        case translate('GST Image'):
-          setGstImg(base64Image);
-          setgstImage(base64Image);
-          break;
-        case translate('PAN Card'):
-          setPanImg(base64Image);
-          setPanImage(base64Image);
-          break;
-        default:
-          break;
-      }
-    }
-  };
 
   return (
     <KeyboardAwareScrollView
@@ -202,7 +157,7 @@ const SignUpKyc = () => {
         </View>
 
         <DynamicButton
-          title={translate('Next')}
+          title={'Next'}
           onPress={KycStep}
           styleoveride={{marginTop: 10}}
         />

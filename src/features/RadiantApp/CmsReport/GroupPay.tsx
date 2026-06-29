@@ -15,10 +15,10 @@ import DynamicButton from '../../drawer/button/DynamicButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const paymentOptions = [
-  'Barer Cash Deposit',
-  'Client Cash Deposit',
-  'Online Transfer',
-  'Wallet Transfer',
+  translate('Barer Cash Deposit'),
+  translate('Client Cash Deposit'),
+  translate('Online Transfer'),
+  translate('Wallet Transfer'),
 ];
 
 const GroupPay = () => {

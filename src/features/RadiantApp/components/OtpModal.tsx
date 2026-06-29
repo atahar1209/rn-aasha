@@ -166,7 +166,7 @@ const OtpModal: React.FC<OtpModalProps> = ({
               </View>
               <Text style={s.successTitle}>{translate('Verified!')}</Text>
               <Text style={s.successSub}>
-                {type === 'mobile'
+                {type === translate('mobile')
                   ? translate('Mobile number')
                   : translate('Email address')}{' '}
                 {translate('verified successfully')}
@@ -184,7 +184,9 @@ const OtpModal: React.FC<OtpModalProps> = ({
               </View>
               <Text style={s.title}>
                 {translate('Verify')}{' '}
-                {type === 'mobile' ? translate('Mobile') : translate('Email')}
+                {type === translate('mobile')
+                  ? translate('Mobile')
+                  : translate('Email')}
               </Text>
               <Text style={s.sub}>
                 {translate('OTP sent to')}{' '}
@@ -231,7 +233,7 @@ const OtpModal: React.FC<OtpModalProps> = ({
                     size={14}
                     color={COLORS.error}
                   />
-                  <Text style={s.errorText}>{error}</Text>
+                  <Text style={s.errorText}>{translate(error)}</Text>
                 </View>
               )}
 
@@ -276,7 +278,6 @@ const OtpModal: React.FC<OtpModalProps> = ({
     </Modal>
   );
 };
-
 export default OtpModal;
 
 const s = StyleSheet.create({
