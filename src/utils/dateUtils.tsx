@@ -1,16 +1,18 @@
+import {translate} from './languageUtils/I18n';
+
 export const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  translate('January'),
+  translate('February'),
+  translate('March'),
+  translate('April'),
+  translate('May'),
+  translate('June'),
+  translate('July'),
+  translate('August'),
+  translate('September'),
+  translate('October'),
+  translate('November'),
+  translate('December'),
 ];
 
 export interface MonthYearItem {

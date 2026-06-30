@@ -459,11 +459,11 @@ const MobileRecharge = () => {
               <Text style={{color: 'green', fontSize: 30}}>₹</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter Amount"
+                placeholder={translate('Enter Amount')}
                 placeholderTextColor="black"
                 onChangeText={text => {
                   setAmount(text);
-                  if (Amount == '') {
+                  if (Amount === '') {
                     setisDetailButton(false);
                   } else {
                     updateProceedButtonVisibility();
@@ -504,7 +504,7 @@ const MobileRecharge = () => {
                   fontSize: 18,
                   alignItems: 'center',
                 }}>
-                Proceed{' '}
+                {translate('Proceed')}{' '}
               </Text>
             </View>
           )}

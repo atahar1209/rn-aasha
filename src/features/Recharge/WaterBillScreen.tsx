@@ -35,12 +35,11 @@ const WaterBillScreen = () => {
   const [maxLen, setMaxLen] = useState(10);
   const [isInfo, setIsInfo] = useState(true);
   const [FastagOpt, setFastagOpt] = useState(translate('Select Your Operator'));
-
   const [datatype, setDataType] = useState('');
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
@@ -48,7 +47,9 @@ const WaterBillScreen = () => {
   const [CustomerName, setCustomerName] = useState(translate('Name'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [waterBillOperator, setWaterBillOperator] = useState('Select Operator');
+  const [waterBillOperator, setWaterBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [waterBillOperators, setWaterBillOperators] = useState([]);
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -85,7 +86,7 @@ const WaterBillScreen = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -101,7 +102,7 @@ const WaterBillScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -109,7 +110,7 @@ const WaterBillScreen = () => {
   const day = ('0' + currentDate.getDate()).slice(-2);
 
   const formattedDate = `${year}-${month}-${day}`;
-  const [dueDate, setDueDate] = useState('Date');
+  const [dueDate, setDueDate] = useState(translate('Date'));
 
   const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
@@ -346,6 +347,7 @@ const WaterBillScreen = () => {
       console.log('📥 BillInfo Response:', res);
 
       if (res?.RESULT === 0) {
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         const billInfo = res?.ADDINFO?.BillInfo;
 
         if (billInfo) {
@@ -404,7 +406,7 @@ const WaterBillScreen = () => {
   const [accntvisivility, setAccntvisivility] = useState(false);
   const [firsttexthint, setFirsttexthint] = useState('');
   const [key1, setKey1] = useState('');
-  const [keyType1, setKeyType1] = useState('default');
+  const [keyType1, setKeyType1] = useState(translate('default'));
   const [accnumhint2, setAccnumhint2] = useState('');
   const [accmaxlength2, setAccmaxlength2] = useState(0);
   const [key3, setKey3] = useState('');
@@ -417,7 +419,7 @@ const WaterBillScreen = () => {
     setDataType('');
     setMinLength(0);
     setOptional('');
-    setParamName('Customer ID');
+    setParamName(translate('Customer ID'));
     setValues('');
     setRegx('');
     setVisibility(false);

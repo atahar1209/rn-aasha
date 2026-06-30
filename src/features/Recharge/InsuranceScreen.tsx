@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
@@ -74,16 +75,18 @@ const InsuranceScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
-  const [CustomerName, setCustomerName] = useState('Consumer No');
+  const [dueDate, setDueDate] = useState(translate('Date'));
+  const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
@@ -94,7 +97,7 @@ const InsuranceScreen = () => {
 
   useEffect(() => {
     InsuranceOpt('Insurance');
-  }, []);
+  }, [InsuranceOpt]);
   const navigation = useNavigation<any>();
 
   const handleItemPress = item => {
@@ -243,19 +246,15 @@ const InsuranceScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}`;
 
     let status, Message;
@@ -276,7 +275,7 @@ const InsuranceScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -289,8 +288,8 @@ const InsuranceScreen = () => {
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '',
       Amount: amount ?? 0,
-      operator: selectedOpt ?? 'N/A',
-      status: status ?? 'Unknown',
+      operator: selectedOpt ?? translate('N/A'),
+      status: status ?? translate('Unknown'),
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
       Message: Message ?? translate('No message available'),
@@ -407,13 +406,13 @@ const InsuranceScreen = () => {
   }
 
   const validateFields = () => {
-    if (paramname === 'Consumer Number') {
+    if (paramname === translate('Consumer Number')) {
       ToastAndroid.showWithGravity(
         `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (selectedOpt === 'Select Your Operator') {
+    } else if (selectedOpt === translate('Select Your Operator')) {
       ToastAndroid.showWithGravity(
         translate('Please Select an Operator'),
         ToastAndroid.SHORT,
@@ -421,7 +420,7 @@ const InsuranceScreen = () => {
       );
     } else if (
       !amount ||
-      amount === 'Enter Amount' ||
+      amount === translate('Enter Amount') ||
       parseFloat(amount) <= 0
     ) {
       ToastAndroid.showWithGravity(
@@ -434,10 +433,10 @@ const InsuranceScreen = () => {
       billInfo();
     }
   };
-  const [dob, setDob] = useState('Select DOB');
+
+  const [dob, setDob] = useState(translate('Select DOB'));
   const [email, setEmail] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
-
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -493,7 +492,7 @@ const InsuranceScreen = () => {
           </View>
         )}
 
-        {selectedOpt2.toLowerCase() == 'lifeinsurancecorporation' && (
+        {selectedOpt2.toLowerCase() === 'lifeinsurancecorporation' && (
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <FlotingInput
               label={translate('Enter Date of Birth (DD/MM/YYYY)')}

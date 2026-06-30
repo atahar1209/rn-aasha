@@ -102,19 +102,19 @@ export const logSectionDataReceived = (
   firstUrl?: string,
 ) =>
   logSvgEvent({
-    step: 'STEP1_API_DATA_RECEIVED',
+    step: translate('STEP1_API_DATA_RECEIVED'),
     level: count > 0 ? 'info' : 'warn',
     section,
     extra: {
       count,
-      firstSvgUrl: firstUrl ?? 'N/A',
+      firstSvgUrl: firstUrl ?? translate('N/A'),
       urlStatus: !firstUrl
-        ? 'MISSING'
+        ? translate('MISSING')
         : firstUrl.startsWith('https')
-        ? 'HTTPS_OK'
+        ? translate('HTTPS_OK')
         : firstUrl.startsWith('http')
-        ? 'HTTP_CLEARTEXT'
-        : 'UNKNOWN_SCHEME',
+        ? translate('HTTP_CLEARTEXT')
+        : translate('UNKNOWN_SCHEME'),
     },
   });
 
@@ -125,24 +125,24 @@ export const logIconRender = (
   section: string,
 ) =>
   logSvgEvent({
-    step: 'STEP2_ICON_RENDER_ATTEMPT',
+    step: translate('STEP2_ICON_RENDER_ATTEMPT'),
     level: 'info',
     iconName,
     svgUrl,
     section,
     extra: {
       urlScheme: svgUrl?.startsWith('https')
-        ? 'HTTPS'
+        ? translate('HTTPS')
         : svgUrl?.startsWith('http')
-        ? 'HTTP'
-        : 'OTHER',
+        ? translate('HTTP')
+        : translate('OTHER'),
     },
   });
 
 // ─── Step 3: SVG load success ─────────────────────────────────────────────────
 export const logSvgSuccess = (iconName: string, svgUrl: string) =>
   logSvgEvent({
-    step: 'STEP3_SVG_LOAD_SUCCESS',
+    step: translate('STEP3_SVG_LOAD_SUCCESS'),
     level: 'info',
     iconName,
     svgUrl,
@@ -151,7 +151,7 @@ export const logSvgSuccess = (iconName: string, svgUrl: string) =>
 // ─── Step 4: SVG load FAILED ──────────────────────────────────────────────────
 export const logSvgError = (iconName: string, svgUrl: string, error: any) => {
   const errStr = error?.message || String(error) || 'Unknown';
-  const diagnosis = errStr.includes('CLEARTEXT')
+  const diagnosis = errStr.includes(translate('CLEARTEXT'))
     ? translate('CLEARTEXT_BLOCKED')
     : errStr.includes('SSL')
     ? translate('SSL_CERTIFICATE_ERROR')
@@ -165,14 +165,16 @@ export const logSvgError = (iconName: string, svgUrl: string, error: any) => {
     ? translate('CONNECTION_REFUSED')
     : translate('UNKNOWN_ERROR');
   return logSvgEvent({
-    step: 'STEP4_SVG_LOAD_FAILED',
+    step: translate('STEP4_SVG_LOAD_FAILED'),
     level: 'error',
     iconName,
     svgUrl,
     error: errStr,
     extra: {
       diagnosis,
-      svgUrlScheme: svgUrl?.startsWith('https') ? 'HTTPS' : 'HTTP',
+      svgUrlScheme: svgUrl?.startsWith('https')
+        ? translate('HTTPS')
+        : translate('HTTP'),
     },
   });
 };
@@ -180,29 +182,29 @@ export const logSvgError = (iconName: string, svgUrl: string, error: any) => {
 // ─── Step 5: SVG URL missing ──────────────────────────────────────────────────
 export const logSvgMissingUrl = (iconName: string, section: string) =>
   logSvgEvent({
-    step: 'STEP5_SVG_URL_MISSING',
+    step: translate('STEP5_SVG_URL_MISSING'),
     level: 'warn',
     iconName,
     section,
-    error: 'svg field is null or undefined in API response',
+    error: translate('svg field is null or undefined in API response'),
   });
 
 // ─── Step 0: API call fail ────────────────────────────────────────────────────
 export const logApiFailed = (section: string, reason: any) =>
   logSvgEvent({
-    step: 'STEP0_API_CALL_FAILED',
+    step: translate('STEP0_API_CALL_FAILED'),
     level: 'error',
     section,
     error: String(reason),
     extra: {
       diagnosis: String(reason).includes('401')
-        ? 'UNAUTHORIZED'
+        ? translate('UNAUTHORIZED')
         : String(reason).includes('403')
-        ? 'FORBIDDEN'
+        ? translate('FORBIDDEN')
         : String(reason).includes('500')
-        ? 'SERVER_ERROR'
+        ? translate('SERVER_ERROR')
         : String(reason).includes('timeout')
-        ? 'TIMEOUT'
-        : 'UNKNOWN',
+        ? translate('TIMEOUT')
+        : translate('UNKNOWN'),
     },
   });

@@ -1,11 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import StepIndicator from 'react-native-step-indicator';
-
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Linking} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {RootState} from '../../reduxUtils/store';
-import {useNavigation} from '@react-navigation/native';
 import {translate} from '../../utils/languageUtils/I18n';
 import {StepIndicatorStyle} from './stepIndicatorStyle';
 import PersonalInfoStep from './PersonalInfoStep';
@@ -24,8 +22,6 @@ const SignUpScreen = ({route}) => {
   const [password, setPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const dispatch = useDispatch();
-  const navigation = useNavigation<any>();
   const [mobileNumber, setMobileNumber] = useState('');
   const [username, setUsername] = useState('');
   const [addressState, setAddressState] = useState('');
@@ -70,7 +66,7 @@ const SignUpScreen = ({route}) => {
     if (currentPage === 3) {
       return <VerifyInfoStep svg={svg} Radius2={Radius2} />;
     }
-  }, [currentPage]);
+  }, [Radius2, currentPage, svg]);
 
   return (
     <SignUpContext.Provider
@@ -131,7 +127,7 @@ const SignUpScreen = ({route}) => {
       <>
         <View style={{flex: 1, backgroundColor: colors.base}}>
           <AppBarSecond
-            title={translate('SIGN UP NOW !')}
+            title={'SIGN UP NOW !'}
             titlestyle={{}}
             actionButton={translate('From Web')}
             onActionPress={() => {
@@ -142,9 +138,8 @@ const SignUpScreen = ({route}) => {
           />
           {/* <Header
             LeftAction={'none'}
-            
             HeaderContent={
-            
+
               <View
                 style={{
                   marginLeft: wScale(20),
@@ -157,7 +152,7 @@ const SignUpScreen = ({route}) => {
                     fontStyle: 'italic',
                     fontWeight: 'bold',
                   }}>
-                  {'SignUp'}
+                  {translate('SignUp')}
                 </Text>
               </View>
             }

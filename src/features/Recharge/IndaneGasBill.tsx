@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {translate} from '../../utils/languageUtils/I18n';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
@@ -64,20 +65,22 @@ const IndaneGasBill = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
+  const [dueDate, setDueDate] = useState(translate('Date'));
   const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   useEffect(() => {
     Statelist();
-  }, []);
+  }, [Statelist]);
 
   const handleItemPress = item => {
     setAccntvisivility(false);
@@ -136,7 +139,6 @@ const IndaneGasBill = () => {
         setAccntvisivility2(false);
       }
     }
-
     console.log(item);
   };
 
@@ -144,7 +146,6 @@ const IndaneGasBill = () => {
     useDeviceInfoHook();
   const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
   const {latitude, longitude} = useLocationHook();
-
   const onRechargePress = useCallback(async () => {
     const mobileNetwork = await getNetworkCarrier();
     const ip = await getMobileIp();
@@ -172,19 +173,15 @@ const IndaneGasBill = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&circle=Maharashtra`;
 
     const res = await post({
@@ -197,7 +194,9 @@ const IndaneGasBill = () => {
     });
 
     if (!res.ok) {
-      Alert.alert(res.Response, res.Message, [{text: 'OK', onPress: () => {}}]);
+      Alert.alert(res.Response, res.Message, [
+        {text: translate('OK'), onPress: () => {}},
+      ]);
     }
 
     console.log('onRechargePress', res);
@@ -242,7 +241,6 @@ const IndaneGasBill = () => {
     console.log(stateName, district);
     try {
       const url = `${APP_URLS.getIndaneAgency}statename=${stateName}&District=${district}`;
-
       const res = await post({url: url});
       console.log(res);
 
@@ -277,7 +275,7 @@ const IndaneGasBill = () => {
     } catch (error) {}
   }
 
-  const [agencies, setagencies] = useState('Select Your Agency');
+  const [agencies, setagencies] = useState(translate('Select Your Agency'));
   const [Isagencies, setIsagencies] = useState([]);
   const [distributorId, setdistributorId] = useState('');
   const [showdist, setshowdist] = useState(true);
@@ -454,7 +452,7 @@ const IndaneGasBill = () => {
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (selectedOpt === 'Select Your State') {
+    } else if (selectedOpt === translate('Select Your State')) {
       ToastAndroid.showWithGravity(
         translate('Please Select an Operator'),
         ToastAndroid.SHORT,
@@ -462,7 +460,7 @@ const IndaneGasBill = () => {
       );
     } else if (
       !amount ||
-      amount === 'Enter Amount' ||
+      amount === translate('Enter Amount') ||
       parseFloat(amount) <= 0
     ) {
       ToastAndroid.showWithGravity(

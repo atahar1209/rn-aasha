@@ -38,21 +38,22 @@ const LoanScreen = () => {
   const [maxLen, setMaxLen] = useState(10);
   const [isInfo, setIsInfo] = useState(false);
   const [FastagOpt, setFastagOpt] = useState(translate('Select Your Operator'));
-
   const [datatype, setDataType] = useState('');
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
-  const [CustomerName, setCustomerName] = useState('N/A');
+  const [dueDate, setDueDate] = useState(translate('Date'));
+  const [CustomerName, setCustomerName] = useState(translate('N/A'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -65,7 +66,6 @@ const LoanScreen = () => {
     getLoanBillOperators();
   }, [getLoanBillOperators]);
   const navigation = useNavigation<any>();
-
   const selectOperator = selectedOperator => {
     console.log('Selected Operator:', selectedOperator);
     setFastagOpt(selectedOperator);
@@ -99,7 +99,7 @@ const LoanScreen = () => {
 
   async function getLoanBillOperators() {
     try {
-      const token = await APP_URLS.getToke;
+      const token = await APP_URLS.getToken;
       const url = `${APP_URLS.getDthOperator}Loan`;
       const response = await get({url: url});
       setLoanBillOperators(response.myprop2Items);
@@ -143,19 +143,15 @@ const LoanScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}`;
     let status, Message;
     try {

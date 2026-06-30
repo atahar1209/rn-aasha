@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {colors} from '../../utils/styles/theme';
 import {hScale, wScale} from '../../utils/styles/dimensions';
-import {FlashList} from '@shopify/flash-list';
 import {APP_URLS} from '../../utils/network/urls';
 import useAxiosHook from '../../utils/network/AxiosClient';
 import {translate} from '../../utils/languageUtils/I18n';
@@ -66,17 +65,16 @@ const MunicipalTaxScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
+  const [dueDate, setDueDate] = useState(translate('Date'));
   const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
   const [ismuniciple, setismuniciple] = useState(true);
-
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
   const [reqId, setReqId] = useState('');
@@ -99,7 +97,7 @@ const MunicipalTaxScreen = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -112,23 +110,18 @@ const MunicipalTaxScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
   const day = ('0' + currentDate.getDate()).slice(-2);
-
   const formattedDate = `${year}-${month}-${day}`;
-
-  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
-    useDeviceInfoHook();
+  const {getNetworkCarrier, getMobileIp} = useDeviceInfoHook();
   const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
   const {latitude, longitude} = useLocationHook();
-
   const onRechargePress = useCallback(async () => {
     setShowLoader(true);
-
     const mobileNetwork = await getNetworkCarrier();
     const ip = await getMobileIp();
     const encryption = await encrypt([
@@ -138,7 +131,6 @@ const MunicipalTaxScreen = () => {
       amount,
       Loc_Data.latitude,
       Loc_Data.longitude,
-
       'city',
       'address',
       'postcode',
@@ -155,19 +147,15 @@ const MunicipalTaxScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}`;
 
     //   const res = await post({
@@ -205,7 +193,7 @@ const MunicipalTaxScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -304,29 +292,6 @@ const MunicipalTaxScreen = () => {
     console.log(item);
   };
 
-  const clearState = () => {
-    setDataType('');
-    setMaxLength(0);
-    setMinLength(0);
-    setOptional('');
-    // setParamName(translate('Consumer Number'));
-    setValues('');
-    setRegx('');
-    setVisibility(false);
-    setOptCode('');
-    setFirsttexthint('');
-    setKey1('');
-    setKeyType1('default');
-    setAccnumhint('');
-    setAccmaxlength(0);
-    setKey2('');
-    setKeyType2('default');
-    setAccnumhint2('');
-    setAccmaxlength2(0);
-    setKey3('');
-    setKeyType3('default');
-  };
-
   async function CreditCardOpt(opttype) {
     try {
       const url = `${APP_URLS.getDthOperator}${opttype}`;
@@ -340,40 +305,6 @@ const MunicipalTaxScreen = () => {
     }
   }
 
-  const showBottomSheetList = () => {
-    return (
-      <View style={{marginVertical: wScale(8), marginHorizontal: wScale(24)}}>
-        <FlashList
-          style={{marginBottom: wScale(50), marginHorizontal: wScale(24)}}
-          data={ismuniciple ? insuranceOptList : municipletaxoplist}
-          renderItem={({item}) => {
-            return (
-              <View
-                style={{
-                  marginVertical: wScale(8),
-                  marginHorizontal: wScale(24),
-                }}>
-                <TouchableWithoutFeedback
-                  onPress={async () => {
-                    handleItemPress(item);
-                    setOptCode(item.OPtCode);
-                    setselectedOpt(item.Operatorname);
-                    setIsOperatorList(false);
-                    ViewbillInfoStatus();
-                    console.log(item.OPtCode);
-                  }}>
-                  <Text style={{color: '#ff4670', fontSize: 18}}>
-                    {item.Operatorname}
-                  </Text>
-                </TouchableWithoutFeedback>
-              </View>
-            );
-          }}
-          estimatedItemSize={30}
-        />
-      </View>
-    );
-  };
   async function billInfo() {
     try {
       const url = `${APP_URLS.rechargeViewBill}billnumber=${consumerNo}&Operator=${optcode}&billunit=&ProcessingCycle&acno&lt&ViewBill=Y`;
@@ -547,7 +478,7 @@ const MunicipalTaxScreen = () => {
             />
 
             <TouchableOpacity>
-              <Text style={{}}></Text>
+              <Text style={{}} />
             </TouchableOpacity>
           </View>
         )}

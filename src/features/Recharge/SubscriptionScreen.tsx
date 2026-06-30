@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable dot-notation */
 import React, {useCallback, useEffect, useState} from 'react';
 import {
@@ -63,7 +64,7 @@ const SubscriptionScreen = () => {
   const [accntvisivility, setAccntvisivility] = useState(false);
   const [firsttexthint, setFirsttexthint] = useState('');
   const [key1, setKey1] = useState('');
-  const [keyType1, setKeyType1] = useState('default');
+  const [keyType1, setKeyType1] = useState(translate('default'));
   const [accnumhint2, setAccnumhint2] = useState('');
   const [accmaxlength2, setAccmaxlength2] = useState(0);
   const [key3, setKey3] = useState('');
@@ -73,13 +74,13 @@ const SubscriptionScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('N/A');
-  const [CustomerName, setCustomerName] = useState('N/A');
+  const [dueDate, setDueDate] = useState(translate('N/A'));
+  const [CustomerName, setCustomerName] = useState(translate('N/A'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
   const [reqTime, setReqTime] = useState('');
@@ -92,7 +93,7 @@ const SubscriptionScreen = () => {
 
   useEffect(() => {
     SubscriptionOpt('Subscription');
-  }, []);
+  }, [SubscriptionOpt]);
 
   const selectOperator = selectedOperator => {
     console.log(latitude, longitude);
@@ -106,7 +107,7 @@ const SubscriptionScreen = () => {
     recenttransactions();
     console.log(latitude, longitude);
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -119,7 +120,7 @@ const SubscriptionScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -127,8 +128,7 @@ const SubscriptionScreen = () => {
   const day = ('0' + currentDate.getDate()).slice(-2);
 
   const formattedDate = `${year}-${month}-${day}`;
-  const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
-    useDeviceInfoHook();
+  const {getNetworkCarrier, getMobileIp} = useDeviceInfoHook();
   const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
   const {latitude, longitude} = useLocationHook();
 
@@ -161,19 +161,15 @@ const SubscriptionScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${agencyCode}&bu=${agencyCode2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&circle=Maharashtra`;
 
     let status, Message;
@@ -280,7 +276,6 @@ const SubscriptionScreen = () => {
           custparam[2]['dataType'] === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
-
         setAccntvisivility2(true);
       } else {
         setAccntvisivility(false);
@@ -289,29 +284,6 @@ const SubscriptionScreen = () => {
     }
 
     console.log(item);
-  };
-
-  const clearState = () => {
-    setDataType('');
-    setMaxLength(0);
-    setMinLength(0);
-    setOptional('');
-    // setParamName(translate('Consumer Number'));
-    setValues('');
-    setRegx('');
-    setVisibility(false);
-    setOptCode('');
-    setFirsttexthint('');
-    setKey1('');
-    setKeyType1('default');
-    setAccnumhint('');
-    setAccmaxlength(0);
-    setKey2('');
-    setKeyType2('default');
-    setAccnumhint2('');
-    setAccmaxlength2(0);
-    setKey3('');
-    setKeyType3('default');
   };
 
   async function SubscriptionOpt(opttype) {
@@ -364,11 +336,6 @@ const SubscriptionScreen = () => {
   };
   async function billInfo() {
     try {
-      const config = {
-        headers: {
-          Authorization: 'Bearer',
-        },
-      };
       const data = {
         billnumber: CustomerID,
         Operator: optcode,
@@ -400,9 +367,6 @@ const SubscriptionScreen = () => {
   async function ViewbillInfoStatus() {
     console.log(optcode);
     try {
-      const data = {
-        Operatorcode: optcode,
-      };
       const url = `${APP_URLS.viewbillstatuscheck}${optcode}`;
       const res = await post({url: url});
 
@@ -418,13 +382,13 @@ const SubscriptionScreen = () => {
   }
 
   const validateFields = () => {
-    if (paramname == 'Consumer Number') {
+    if (paramname === translate('Consumer Number')) {
       ToastAndroid.showWithGravity(
         `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (selectedOpt === 'Select Your Operator') {
+    } else if (selectedOpt === translate('Select Your Operator')) {
       ToastAndroid.showWithGravity(
         translate('Please Select an Operator'),
         ToastAndroid.SHORT,
@@ -432,7 +396,7 @@ const SubscriptionScreen = () => {
       );
     } else if (
       !amount ||
-      amount === 'Enter Amount' ||
+      amount === translate('Enter Amount') ||
       parseFloat(amount) <= 0
     ) {
       ToastAndroid.showWithGravity(
@@ -584,17 +548,17 @@ const SubscriptionScreen = () => {
           details={[
             {
               label: translate('User Name'),
-              value2: CustomerName === '' ? 'N/A' : CustomerName,
+              value2: CustomerName === '' ? translate('N/A') : CustomerName,
             },
             {label: translate('Customer ID'), value: consumerNo},
             {
               label: translate('Due Date'),
-              value2: dueDate === '' ? 'N/A' : dueDate,
+              value2: dueDate === '' ? translate('N/A') : dueDate,
             },
             {label: translate('Operator Name'), value2: selectedOpt},
             {
               label: translate('Customer Status'),
-              value2: Status === '' ? 'N/A' : Status,
+              value2: Status === '' ? translate('N/A') : Status,
             },
           ]}
           lastlabel={translate('Transaction Amount')}

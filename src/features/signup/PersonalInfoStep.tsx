@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Platform} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useCallback, useContext, useState} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {useSelector} from 'react-redux';
 import {RootState} from '../../reduxUtils/store';
 import {colors} from '../../utils/styles/theme';
 import {hScale, SCREEN_HEIGHT, wScale} from '../../utils/styles/dimensions';
 import {SignUpContext} from './SignUpContext';
-import {SvgUri, SvgXml} from 'react-native-svg';
+import {SvgUri} from 'react-native-svg';
 import {FlashList} from '@shopify/flash-list';
 import {stateData} from '../../utils/stateData';
 import {BottomSheet} from '@rneui/themed';
@@ -23,7 +23,6 @@ const PersonalInfoStep = () => {
   const color1 = `${colorConfig.secondaryColor}20`;
   // const [userEmail, setUserEmail] = useState('');
   // const [userPassword, setUserPassword] = useState('');
-  const dispatch = useDispatch();
   const [ismobile, setIsMobile] = useState(false);
   const [showStateList, setShowStateList] = useState(false);
   const [districtData, setDistrictData] = useState([]);
@@ -40,7 +39,6 @@ const PersonalInfoStep = () => {
     setDistrict,
     currentPage,
     setCurrentPage,
-    stateId,
     setStateid,
     pincode,
     setPincode,

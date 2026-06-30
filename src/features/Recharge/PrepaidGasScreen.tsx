@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
@@ -62,7 +64,7 @@ const PrepaidGasScreen1 = () => {
   const [accntvisivility, setAccntvisivility] = useState(false);
   const [firsttexthint, setFirsttexthint] = useState('');
   const [key1, setKey1] = useState('');
-  const [keyType1, setKeyType1] = useState('default');
+  const [keyType1, setKeyType1] = useState(translate('default'));
   const [accnumhint2, setAccnumhint2] = useState(translate(''));
   const [accmaxlength2, setAccmaxlength2] = useState(0);
   const [key3, setKey3] = useState('');
@@ -72,16 +74,18 @@ const PrepaidGasScreen1 = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('LPG ID');
+  const [paramname, setParamName] = useState(translate('LPG ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
-  const [CustomerName, setCustomerName] = useState('N/A');
+  const [dueDate, setDueDate] = useState(translate('Date'));
+  const [CustomerName, setCustomerName] = useState(translate('N/A'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -92,7 +96,7 @@ const PrepaidGasScreen1 = () => {
 
   useEffect(() => {
     Statelist();
-  }, []);
+  }, [Statelist]);
   const navigation = useNavigation<any>();
 
   const handleItemPress = item => {
@@ -223,7 +227,7 @@ const PrepaidGasScreen1 = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -236,24 +240,20 @@ const PrepaidGasScreen1 = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
   const day = ('0' + currentDate.getDate()).slice(-2);
-
   const formattedDate = `${year}-${month}-${day}`;
-
   const {getNetworkCarrier, getMobileDeviceId, getMobileIp} =
     useDeviceInfoHook();
   const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
   const {latitude, longitude} = useLocationHook();
-
   const onRechargePress = useCallback(async () => {
     setShowLoader(true);
     setBottomSheetVisible(false);
-
     const mobileNetwork = await getNetworkCarrier();
     const ip = await getMobileIp();
     const encryption = await encrypt([
@@ -280,19 +280,15 @@ const PrepaidGasScreen1 = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&circle=Maharashtra`;
 
     let status, Message;
@@ -313,7 +309,7 @@ const PrepaidGasScreen1 = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -326,8 +322,8 @@ const PrepaidGasScreen1 = () => {
     navigation.navigate('Rechargedetails', {
       mobileNumber: mobileNumber ?? '',
       Amount: amount ?? 0,
-      operator: 'Bhart Gas',
-      status: status ?? 'Unknown',
+      operator: translate('Bharat Gas'),
+      status: status ?? translate('Unknown'),
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
       Message: Message ?? translate('No message available'),
@@ -594,7 +590,7 @@ const PrepaidGasScreen1 = () => {
               onChangeText={text => setdistributorId(text)}
             /> */}
             <FlotingInput
-              label={translate('Agenct Code')}
+              label={translate('Agent Code')}
               onChangeTextCallback={text => setdistributorId(text)}
               value={distributorId}
               inputstyle={undefined}
@@ -623,7 +619,7 @@ const PrepaidGasScreen1 = () => {
                 {showLoader2 ? (
                   <ActivityIndicator size={'large'} />
                 ) : (
-                  <Text style={[styles.infobtntex]}>Info</Text>
+                  <Text style={[styles.infobtntex]}>{translate('Info')}</Text>
                 )}
               </TouchableOpacity>
             )}

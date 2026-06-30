@@ -116,7 +116,7 @@ const LoginInfoStep = () => {
     } catch (error) {
       console.error('Error fetching dealer token status:', error);
     }
-  }, []);
+  }, [post]);
 
   const isValidEmail = email => {
     // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+ /;
@@ -206,64 +206,70 @@ const LoginInfoStep = () => {
     }
   };
 
-  const verifyEmailOtp = useCallback(async (emailOtp, email) => {
-    console.log('emailOtp', emailOtp, 'email', email);
+  const verifyEmailOtp = useCallback(
+    async (emailOtp, email) => {
+      console.log('emailOtp', emailOtp, 'email', email);
 
-    if (!isValidEmail(email)) {
-      ToastAndroid.showWithGravity(
-        translate('Please Enter a Valid Email Id'),
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-      );
-      return;
-    }
+      if (!isValidEmail(email)) {
+        ToastAndroid.showWithGravity(
+          translate('Please Enter a Valid Email Id'),
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+        );
+        return;
+      }
 
-    setShowLoader(true);
-    const url = `${baseUrl}${APP_URLS.joinEMverifyOtp}hdemailotp=${emailOtp}&email=${email}`;
-    console.log(url);
+      setShowLoader(true);
+      const url = `${baseUrl}${APP_URLS.joinEMverifyOtp}hdemailotp=${emailOtp}&email=${email}`;
+      console.log(url);
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-      });
-      const responseData = await response.json();
-      console.log(responseData);
-      handleotpResponse(responseData, 'email');
-    } catch (error) {
-      console.error(error);
-      Alert.alert(translate('Error'), translate('Something went wrong'));
-    } finally {
-      setShowLoader(false);
-    }
-  }, []);
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        const responseData = await response.json();
+        console.log(responseData);
+        handleotpResponse(responseData, 'email');
+      } catch (error) {
+        console.error(error);
+        Alert.alert(translate('Error'), translate('Something went wrong'));
+      } finally {
+        setShowLoader(false);
+      }
+    },
+    [baseUrl],
+  );
 
-  const verifyMobileOtp = useCallback(async (numOtp, mobileNumber) => {
-    console.log('numOtp', numOtp, 'mobileNumber', mobileNumber);
+  const verifyMobileOtp = useCallback(
+    async (numOtp, mobileNumber) => {
+      console.log('numOtp', numOtp, 'mobileNumber', mobileNumber);
 
-    setShowLoader(true);
-    const url = `${baseUrl}${APP_URLS.joinEMverifyOtp}hdmobileotp=${numOtp}&mobile=${mobileNumber}`;
-    console.log(url);
+      setShowLoader(true);
+      const url = `${baseUrl}${APP_URLS.joinEMverifyOtp}hdmobileotp=${numOtp}&mobile=${mobileNumber}`;
+      console.log(url);
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-      });
-      const responseData = await response.json();
-      console.log('mobile', responseData);
-      handleotpResponse(responseData, 'mobile');
-    } catch (error) {
-      console.error(error);
-      Alert.alert(translate('Error'), translate('Something went wrong'));
-    } finally {
-      setShowLoader(false);
-    }
-  }, []);
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        const responseData = await response.json();
+        console.log('mobile', responseData);
+        handleotpResponse(responseData, 'mobile');
+      } catch (error) {
+        console.error(error);
+        Alert.alert(translate('Error'), translate('Something went wrong'));
+      } finally {
+        setShowLoader(false);
+      }
+    },
+    [baseUrl],
+  );
 
   const handleotpResponse = (responseData, type) => {
     if (type === 'email') {

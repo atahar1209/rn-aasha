@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   TextInput,
@@ -47,7 +48,6 @@ const PrepaidGasScreen = () => {
   );
   const [district, setdistrict] = useState('');
   const [DistList, setDistList] = useState([]);
-
   const [accnumhint, setAccnumhint] = useState('');
   const [accmaxlength, setAccmaxlength] = useState(0);
   const [key2, setKey2] = useState('');
@@ -55,7 +55,7 @@ const PrepaidGasScreen = () => {
   const [accntvisivility, setAccntvisivility] = useState(false);
   const [firsttexthint, setFirsttexthint] = useState('');
   const [key1, setKey1] = useState('');
-  const [keyType1, setKeyType1] = useState('default');
+  const [keyType1, setKeyType1] = useState(translate('default'));
   const [accnumhint2, setAccnumhint2] = useState('');
   const [accmaxlength2, setAccmaxlength2] = useState(0);
   const [key3, setKey3] = useState('');
@@ -65,25 +65,26 @@ const PrepaidGasScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
+  const [dueDate, setDueDate] = useState(translate('Date'));
   const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   useEffect(() => {
-    CreditCardOpt('Gas');
-  }, []);
+    CreditCardOpt(translate('Gas'));
+  }, [CreditCardOpt]);
 
   const handleItemPress = item => {
     setAccntvisivility(false);
     setAccntvisivility2(false);
-
     setDataType('');
     setMaxLen(0);
     setMinLength(0);
@@ -97,7 +98,6 @@ const PrepaidGasScreen = () => {
       //clearState();
     } else {
       const custparam = item.customerparams;
-
       setDataType(custparam[0].dataType);
       setMaxLength(custparam[0].maxLength);
       setMinLength(custparam[0].minLength);
@@ -130,7 +130,6 @@ const PrepaidGasScreen = () => {
           custparam[2].dataType === 'ALPHANUMERIC' ? 'default' : 'numeric',
         );
         setAccntvisivility(true);
-
         setAccntvisivility2(true);
       } else {
         setAccntvisivility(false);
@@ -147,7 +146,6 @@ const PrepaidGasScreen = () => {
   const readLatLongFromStorage = async () => {
     try {
       const locationData = await AsyncStorage.getItem('locationData');
-
       if (locationData !== null) {
         const {latitude, longitude} = JSON.parse(locationData);
         console.log('Latitude:', latitude, 'Longitude:', longitude);
@@ -187,21 +185,16 @@ const PrepaidGasScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}`;
-
     const res = await post({
       url: url,
     });

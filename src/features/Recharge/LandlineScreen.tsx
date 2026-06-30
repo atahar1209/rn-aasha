@@ -69,16 +69,18 @@ const LandlineScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
-  const [CustomerName, setCustomerName] = useState('N/A');
+  const [dueDate, setDueDate] = useState(translate('Date'));
+  const [CustomerName, setCustomerName] = useState(translate('N/A'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
@@ -102,7 +104,7 @@ const LandlineScreen = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -115,7 +117,7 @@ const LandlineScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -286,8 +288,8 @@ const LandlineScreen = () => {
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '',
       Amount: amount ?? 0,
-      operator: selectedOpt ?? 'N/A',
-      status: status ?? 'Unknown',
+      operator: selectedOpt ?? translate('N/A'),
+      status: status ?? translate('Unknown'),
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
       Message: Message ?? translate('No message available'),
@@ -339,7 +341,7 @@ const LandlineScreen = () => {
         //setstatus(res["customerStatus"])
       } else {
         Alert.alert(res.ADDINFO, res.Message, [
-          {text: 'OK', onPress: () => {}},
+          {text: translate('OK'), onPress: () => {}},
         ]);
       }
 
@@ -378,7 +380,7 @@ const LandlineScreen = () => {
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (selectedOpt === 'Select Your Operator') {
+    } else if (selectedOpt === translate('Select Your Operator')) {
       ToastAndroid.showWithGravity(
         translate('Please Select an Operator'),
         ToastAndroid.SHORT,
@@ -386,7 +388,7 @@ const LandlineScreen = () => {
       );
     } else if (
       !amount ||
-      amount === 'Enter Amount' ||
+      amount === translate('Enter Amount') ||
       parseFloat(amount) <= 0
     ) {
       ToastAndroid.showWithGravity(
@@ -398,6 +400,7 @@ const LandlineScreen = () => {
       setBottomSheetVisible(true);
     }
   };
+
   return (
     <View style={styles.main}>
       <AppBarSecond title={'Landline Screen'} />

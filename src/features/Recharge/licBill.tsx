@@ -30,7 +30,9 @@ const LICBill = () => {
   const [textInput4, setTextInput4] = useState('');
   const [insuranceOptList, setInsuranceOptList] = useState([]);
   const [isOperatorList, setIsOperatorList] = useState(false);
-  const [selectedOpt, setselectedOpt] = useState('Life Insurance Corporation');
+  const [selectedOpt, setselectedOpt] = useState(
+    translate('Life Insurance Corporation'),
+  );
   const [CustomerID, setCustomerID] = useState('');
   const [amount, setAmount] = useState('');
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
@@ -61,16 +63,18 @@ const LICBill = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
-  const [optcode, setOptCode] = useState('LIC');
-  const [dueDate, setDueDate] = useState('Date');
+  const [optcode, setOptCode] = useState(translate('LIC'));
+  const [dueDate, setDueDate] = useState(translate('Date'));
   const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   useEffect(() => {
     InsuranceOpt('Insurance');

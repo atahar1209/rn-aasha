@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable no-sequences */
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {BottomSheet, Image} from '@rneui/themed';
 import LottieView from 'lottie-react-native';
@@ -74,7 +76,7 @@ const RechargeScreen = () => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [isStateModalVisible, setStateModalVisible] = useState(false);
   const [operator, setOperator] = useState(
-    'RechargeScreen.Select Operator & Circle',
+    translate('RechargeScreen.Select Operator & Circle'),
   );
   const [state, setState] = useState(translate('Select Your Circle'));
   const [stateslist, setstateslist] = useState([]);
@@ -252,7 +254,7 @@ const RechargeScreen = () => {
 
       const rechargePlansUrl = `${APP_URLS.getRechargePlans}optname=${operator}&circlename=${circle}&type=mobile`;
       const bestPlansUrl = `${APP_URLS.bestplanOffers}optname=${
-        operator === 'BSNL' ? 'operator' : operator
+        operator === 'BSNL' ? translate('operator') : operator
       }&mobileno=${mobileNumber}`;
 
       console.log(rechargePlansUrl);
@@ -278,7 +280,7 @@ const RechargeScreen = () => {
         bestPlansRes?.Response?.length > 0
       ) {
         const bestPlansSection = {
-          key: 'Best Plans Offers',
+          key: translate('Best Plans Offers'),
           value: {
             Response: bestPlansRes.Response,
           },
@@ -301,9 +303,9 @@ const RechargeScreen = () => {
 
   useEffect(() => {
     Rechargepin();
-  }, []);
+  }, [Rechargepin]);
 
-  const getOperator = async (mo: any) => {
+  const getOperator = useCallback(async (mo: any) => {
     isOperatorFetched.current = false;
     intervalRef.current = setInterval(() => {
       if (isOperatorFetched.current) {
@@ -376,7 +378,7 @@ const RechargeScreen = () => {
       setisLoading(false);
       // setOperatorModalVisible(true);
     }
-  };
+  });
   const requestContactPermission = useCallback(async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -505,7 +507,7 @@ const RechargeScreen = () => {
       console.log('Picker Error:', error);
       setisLoading(false); // reset on unexpected errors
     }
-  }, [getOperator]);
+  }, [ContactPicker, getOperator]);
   useEffect(() => {
     if (contacts) {
       const filtered = contacts.filter(item =>
@@ -517,7 +519,7 @@ const RechargeScreen = () => {
 
       setFilteredData(filtered);
     }
-  }, [searchText]);
+  }, [contacts, searchText]);
 
   const toggleStateModal = () => {
     setStateModalVisible(!isStateModalVisible);
@@ -540,10 +542,10 @@ const RechargeScreen = () => {
   const updateProceedButtonVisibility = () => {
     const isValid =
       mobileNumber.length >= 10 &&
-      operator !== 'Select eScreen.Operator' &&
-      state !== 'Select Your Circle' &&
+      operator !== translate('Select eScreen.Operator') &&
+      state !== translate('Select Your Circle') &&
       Amount !== '' &&
-      Amount !== 'Enter Amount';
+      Amount !== translate('Enter Amount');
     if (isValid) {
       setisDetailButton(true);
       console.log('y');
@@ -618,8 +620,8 @@ const RechargeScreen = () => {
 
       console.log('Recharge URL:', url);
 
-      let status = 'Failed';
-      let Message = 'Recharge failed, please try again';
+      let status = translate('Failed');
+      let Message = translate('Recharge failed, please try again');
 
       // 🔄 Recharge API Call
       const res = await post({url});
@@ -632,13 +634,14 @@ const RechargeScreen = () => {
           ToastAndroid.BOTTOM,
         );
       } else {
-        status = res?.Response || 'Success';
-        Message = res?.Message || res?.message || 'Recharge successful';
+        status = res?.Response || translate('Success');
+        Message =
+          res?.Message || res?.message || translate('Recharge successful');
       }
 
       // 🧹 Clear input fields
       setMobileNumber('');
-      setOperator('Select Operator & Circle');
+      setOperator(translate('Select Operator & Circle'));
       setState('');
       setCircle('');
       setAmount('');
@@ -655,19 +658,19 @@ const RechargeScreen = () => {
       // 🚀 Navigate to Recharge Details Screen
       navigation.navigate('Rechargedetails', {
         Amount,
-        rechType: ispost ? 'Postpaid' : 'Prepaid',
+        rechType: ispost ? translate('Postpaid') : translate('Prepaid'),
         operator,
         mobileNumber,
         status,
-        reqTime: latest?.Reqesttime || 'N/A',
+        reqTime: latest?.Reqesttime || translate('N/A'),
         Message,
-        reqId: latest?.Request_ID || 'N/A',
-        idno: latest?.Idno || 'N/A',
+        reqId: latest?.Request_ID || translate('N/A'),
+        idno: latest?.Idno || translate('N/A'),
       });
     } catch (error) {
       console.error('Recharge failed:', error);
       ToastAndroid.showWithGravity(
-        'Recharge failed. Please check your network or try again.',
+        translate('Recharge failed. Please check your network or try again.'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -675,20 +678,23 @@ const RechargeScreen = () => {
       setShowLoader(false);
     }
   }, [
-    Amount,
-    getMobileIp,
-    getNetworkCarrier,
-    latitude,
-    longitude,
     mobileNumber,
     operatorcode,
-    post,
+    Loc_Data,
+    latitude,
+    longitude,
+    getMobileDeviceId,
+    getNetworkCarrier,
+    getMobileIp,
     userId,
+    Amount,
     state,
+    post,
+    formattedDate,
+    get,
+    navigation,
     ispost,
     operator,
-    navigation,
-    Loc_Data,
   ]);
 
   // const onRechargePress = useCallback(async () => {
@@ -903,7 +909,7 @@ const RechargeScreen = () => {
         estimatedItemSize={200}
       />
     );
-  }, [contacts, filteredData]);
+  }, [contacts.length, filteredData, keyExtractor, renderContactItem]);
 
   const [amountSearch, setAmountSearch] = useState(''); // New state for search query
 
@@ -946,11 +952,11 @@ const RechargeScreen = () => {
                       color:
                         item[translate('RechargeScreen.Status')] ===
                         translate('RechargeScreen.SUCCESS')
-                          ? translate('RechargeScreen.green')
+                          ? 'green'
                           : item[translate('RechargeScreen.Status')] ===
                             translate('RechargeScreen.FAILED')
-                          ? translate('RechargeScreen.red')
-                          : translate('RechargeScreen.#a89b0a'),
+                          ? 'red'
+                          : '#a89b0a',
                     },
                   ]}>
                   {item[translate('RechargeScreen.Status')]}
@@ -985,6 +991,8 @@ const RechargeScreen = () => {
             getopertaorlist(translate('RechargeScreen.Prepaid'));
             setispost(false);
           }}
+          tabButtonstyle={undefined}
+          tabTextstyle={undefined}
         />
       </View>
 
@@ -999,7 +1007,7 @@ const RechargeScreen = () => {
         )}
         <View>
           <FlotingInput
-            label={'RechargeScreen.Mobile Number'}
+            label={translate('RechargeScreen.Mobile Number')}
             value={mobileNumber}
             autoFocus={false}
             inputstyle={styles.inputstyle}
@@ -1036,6 +1044,7 @@ const RechargeScreen = () => {
               setAutoplay(true);
             }}
             keyboardType="number-pad"
+            labelinputstyle={undefined}
           />
           <View style={[styles.righticon2]}>
             {isLoading ? (
@@ -1068,14 +1077,16 @@ const RechargeScreen = () => {
             label={operator}
             onBlur={() => setIsFocused(true)}
             labelinputstyle={[
-              operator === 'Select Operator & Circle'
+              operator === translate('Select Operator & Circle')
                 ? null
                 : styles.labelinputstyle,
             ]}
             editable={false}
             keyboardType="number-pad"
+            inputstyle={undefined}
+            onChangeTextCallback={undefined}
           />
-          {state === 'Select Your Circle' ? null : (
+          {state === translate('Select Your Circle') ? null : (
             <Text
               style={[styles.circletext, {color: colorConfig.primaryColor}]}>
               {state}
@@ -1083,7 +1094,7 @@ const RechargeScreen = () => {
           )}
 
           <View style={[styles.righticon2]}>
-            {operator === 'Select Operator & Circle' ? (
+            {operator === translate('Select Operator & Circle') ? (
               <SvgXml xml={dropdown} />
             ) : path === null ? (
               <SvgXml xml={dropdown} />
@@ -1097,7 +1108,7 @@ const RechargeScreen = () => {
             Text={Amount}
             value={`${Amount}`}
             autoFocus={isAmountFocused}
-            label={'RechargeScreen.Enter Amount'}
+            label={translate('RechargeScreen.Enter Amount')}
             maxLength={4}
             onChangeTextCallback={text => {
               setAmount(text);
@@ -1114,7 +1125,7 @@ const RechargeScreen = () => {
             inputstyle={undefined}
             labelinputstyle={undefined}
           />
-          {APP_URLS.AppName != 'World Pay One' && (
+          {APP_URLS.AppName !== 'World Pay One' && (
             <View style={[styles.righticon2]}>
               {isViewPlans && (
                 <TouchableOpacity
@@ -1131,7 +1142,7 @@ const RechargeScreen = () => {
                       styles.viewplantext,
                       {color: colorConfig.secondaryColor},
                     ]}>
-                    {translate('RechargeScreen.View \n Plans')}
+                    {translate('View \n Plans')}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -1297,14 +1308,14 @@ const RechargeScreen = () => {
                     style={[styles.itemContainer, {backgroundColor: color3}]}>
                     <View style={styles.innerContainer}>
                       <Text style={styles.priceText}>
-                        ₹ {item.price ?? 'N/A'}
+                        ₹ {item.price ?? translate('N/A')}
                       </Text>
                       <View>
                         <Text style={styles.validityText}>
                           {translate('Validity')}
                         </Text>
                         <Text style={styles.validityvalue}>
-                          {item.Validity ?? 'N/A'}
+                          {item.Validity ?? translate('N/A')}
                         </Text>
                       </View>
                     </View>
@@ -1321,11 +1332,14 @@ const RechargeScreen = () => {
           isModalVisible={isDetail}
           onBackdropPress={() => setIsDetail(false)}
           details={[
-            {label: 'Recharge Type', value2: ispost ? 'Postpaid' : 'Prepaid'},
-            {label: 'Mobile', value: mobileNumber},
-            {label: 'Operator Name', value2: operator},
+            {
+              label: translate('Recharge Type'),
+              value2: ispost ? translate('Postpaid') : translate('Prepaid'),
+            },
+            {label: translate('Mobile'), value: mobileNumber},
+            {label: translate('Operator Name'), value2: operator},
           ]}
-          lastlabel={'Transaction Amount'}
+          lastlabel={translate('Transaction Amount')}
           lastvalue={Amount}
           onRechargedetails={() => {
             onRechargePress();
@@ -1388,7 +1402,7 @@ const RechargeScreen = () => {
             }
           }}
           styleoveride={{
-            top: APP_URLS.AppName == 'World Pay One' ? hScale(-20) : 0,
+            top: APP_URLS.AppName === 'World Pay One' ? hScale(-20) : 0,
           }}
         />
         <View>
@@ -1409,7 +1423,7 @@ const RechargeScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {APP_URLS.AppName == 'Pc Pay' && !isKeyboardVisible && (
+      {APP_URLS.AppName === 'Pc Pay' && !isKeyboardVisible && (
         <Recenttransactionlist />
       )}
 
@@ -1516,14 +1530,14 @@ const RechargeScreen = () => {
                   style={[styles.itemContainer, {backgroundColor: color3}]}>
                   <View style={styles.innerContainer}>
                     <Text style={styles.priceText}>
-                      ₹ {item.price ?? 'N/A'}
+                      ₹ {item.price ?? translate('N/A')}
                     </Text>
                     <View>
                       <Text style={styles.validityText}>
                         {translate('Validity')}
                       </Text>
                       <Text style={styles.validityvalue}>
-                        {item.Validity ?? 'N/A'}
+                        {item.Validity ?? translate('N/A')}
                       </Text>
                     </View>
                   </View>
@@ -1547,12 +1561,12 @@ const styles = StyleSheet.create({
   },
   tabview: {
     paddingHorizontal: wScale(20),
-    paddingTop: hScale(APP_URLS.AppName == 'World Pay One' ? 7 : 10),
+    paddingTop: hScale(APP_URLS.AppName === 'World Pay One' ? 7 : 10),
   },
   container: {
     paddingHorizontal: wScale(20),
     flex: 1,
-    paddingTop: hScale(APP_URLS.AppName == 'World Pay One' ? 11 : 30),
+    paddingTop: hScale(APP_URLS.AppName === 'World Pay One' ? 11 : 30),
   },
   righticon2: {
     position: 'absolute',
