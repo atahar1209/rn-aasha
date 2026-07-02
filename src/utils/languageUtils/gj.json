@@ -3234,7 +3234,6 @@
   "Note_Currently_the_beneficiary_banks_server_is_down_or_busy_please_try_after_sometime": "નોંધ: હાલમાં લાભાર્થી બેંકનું સર્વર ડાઉન અથવા વ્યસ્ત છે, કૃపా કરીને થોડા સમય પછી પ્રયાસ કરો",
   "key_forcomp_189": "2. તમારું E-KYC પૂર્ણ કરવા માટે, કૃપા કરીને 'Ok' બટન પર ક્લિક કરો, ક્લિક કર્યા પછી તમને તમારા રજીસ્ટર્ડ મોબાઈલ નંબર પર એક OTP મળશે",
   "key_forcomp_190": "2. તમારું EKYC પૂર્ણ કરવા માટે, કૃપા કરીને 'OK' બటન પર ક્લિક કરો, ક્લિક કર્યા પછી તમને તમારા રજીસ્ટર્ડ મોબાઈલ નંબર પર એક OTP મળશે",
-
   "dematAccounts": "ડિમેટ એકાઉન્ટ્સ (DEMAT ACCOUNTS)",
   "3FaceAuthenticationIsDisabled": "3. 2FA વેરિફિકેશન માટે બેંક તરફથી ફેસ ઓથેન્ટિકેશન નિષ્ક્રિય કરવામાં આવ્યું છે.",
   "insertTime": "સમય દાખલ કરો",
@@ -3253,7 +3252,6 @@
   "retailerName": "રીટેલરનું નામ",
   "addsubmitReferralData": "રેફરલ ડેટા ઉમેરો/સબમિટ કરો",
   "ifYouWantToAdd": "જો તમે નવો કસ્ટમર પોઈન્ટ ઉમેરવા માંગતા હોવ અથવા રેફરલ કરવા માંગતા હોવ, તો કૃપા કરીને આ ટેબ પર ક્લિક કરો...",
-
   "banks found": "બેંક મળી",
   "Last_5_recharges": "છેલ્લા 5 રિચાર્જ",
   "No_transactions_yet": "હજુ સુધી કોઈ ટ્રાન્ઝેક્શન નથી",
@@ -3380,13 +3378,11 @@
   "Banking Name": "બેંકિંગ નામ",
   "Bank Ref ID": "બેંક રેફરન્સ આઈડી",
   "Remarks": "નોંધ (Remarks)",
-
   "Please allow camera access from settings": "કૃપા કરીને સેટિંગ્સમાંથી કેમેરા એક્સેસની મંજૂરી આપો",
   "Please choose an option to upload image": "કૃપા કરીને ઇમેજ અપલોડ કરવા માટે એક વિકલ્પ પસંદ કરો",
   "Please select front side of aadhar card": "કૃપા કરીને આધાર કાર્ડની આગળની બાજુ પસંદ કરો",
   "Please select back side of aadhar card": "કૃપા કરીને આધાર કાર્ડની પાછળની બાજુ પસંદ કરો",
   "Go to Home": "હોમ પર જાઓ",
-
   "mainwallet": "મુખ્ય વોલેટ (Main Wallet)",
   "posbalance": "પોસ બેલેન્સ (POS Balance)",
   "cmsremainbal": "સીએમએસ બેલેન્સ (CMS Balance)",
@@ -3395,16 +3391,13 @@
   "networkError": "નેટવર્ક ભૂલ",
   "pleaseCheckInternetConnection": "કૃપા કરીને તમારું ઇન્ટરનેટ કનેક્શન તપાસો.",
   "somethingWentWrong": "કાંઈક ગડબડ થઈ છે. કૃપા કરીને ફરી પ્રયાસ કરો.",
-
   "No_banks_found": "કોઈ બેંક મળી નથી",
   "Try_a_different_search_term": "કૃપા કરીને કંઈક અલગ લખીને શોધવાનો પ્રયત્ન કરો.",
   "Search_placeholder": "શોધો...",
   "banks_found": "બેંક મળી",
-
   "select_bank": "બેંક પસંદ કરો",
   "search_bank_name": "બેંકનું નામ શોધો",
   "no_results_found": "કોઈ પરિણામ મળ્યા નથી",
-
   "SECURITY_CHECK": "સુરક્ષા ચકાસણી",
   "PLEASE_AUTHENTICATE": "એપ્લિકેશન અનલૉક કરવા માટે કૃપા કરીને પ્રમાણિત કરો.",
   "VERIFYING_DEVICE_SECURITY": "ડિવાઇસ સુરક્ષાની ચકાસણી થઈ રહી છે...",
@@ -3473,7 +3466,6 @@
   "Manage Account": "એકાઉન્ટ મેનેજ કરો",
   "Wallet Unload A/c": "વૉલેટ અનલોડ એકાઉન્ટ",
   "For Aeps Activetion A/c": "AEPS સક્રિયકરણ એકાઉન્ટ માટે",
-
   "Daywise Commission": "દિવસવાર કમિશન",
   "Day Wise Commission": "દિવસવાર કમિશન",
   "Day wise commission of user slab": "યુઝર સ્લેબનું દિવસવાર કમિશન",
@@ -3493,26 +3485,22 @@
   "Select Commission": "કમિશન પસંદ કરો",
   "True": "સાચું",
   "False": "ખોટું",
-
   "Remaining": "બાકી",
   "Spent": "ખર્ચ થયું",
   "What did you buy?": "તમે શું ખરીદ્યું?",
   "Please enter a valid amount": "કૃપા કરીને માન્ય રકમ દાખલ કરો",
   "Hold on!": "જરા થોભો!",
   "Please fill in all fields": "કૃપા કરીને તમામ ફીલ્ડ ભરો",
-
   "Unable_to_open_link": "લિંક ખોલી શકાઈ નથી",
   "Digital_Services": "ડિજિટલ સેવાઓ",
   "Important_Links": "મહત્વપૂર્ણ લિંક્સ",
   "Savings_Accounts": "બચત ખાતાઓ",
   "Resources": "સ્રોતો",
   "Demat_Accounts": "ડિમેટ ખાતાઓ",
-
   "Aadhar_Face_Driver": "આધાર ફેસ ડ્રાઈવર",
   "Startek_L1": "સ્ટારટેક L1",
   "Mantra_MFS110_L1": "મંત્રા MFS110 L1",
   "Morpho_L1": "મોર્ફો L1",
-
   "ICICI_Bank": "આઈસીઆઈસીઆઈ બેંક",
   "Axis_Bank": "એક્સિસ બેંક",
   "IDFC_First_Bank": "આઈડીએફસી ફર્સ્ટ બેંક",
@@ -3520,10 +3508,8 @@
   "Union_Bank_of_India": "યુનિયન બેંક ઓફ ઈન્ડિયા",
   "HDFC_Bank": "એચડીએફસી બેંક",
   "State_Bank_of_India": "સ્ટેટ બેંક ઓફ ઈન્ડિયા",
-
   "Motilal_Oswal": "મોતિલાલ ઓસવાલ",
   "Angel_One": "એન્જલ વન",
-
   "Please enter a valid amount.": "કૃપા કરીને માન્ય રકમ દાખલ કરો.",
   "Missing Info": "માહિતી ગાયબ છે",
   "Please select a bank account and enter your PIN.": "કૃપા કરીને બેંક ખાતું પસંદ કરો અને તમારો પિન દાખલ કરો.",
@@ -3535,9 +3521,7 @@
   "Choose Account": "ખાતું પસંદ કરો",
   "POS BALANCE": "પીઓએસ બેલેન્સ",
   "MAIN WALLET": "મુખ્ય વોલેટ",
-
   "Purchase_Orders_Report": "ખરીદી ઓર્ડર રિપોર્ટ",
-
   "Old_Credit": "જૂનું ક્રેડિટ",
   "Net_Transfer": "નેટ ટ્રાન્સફર",
   "Fund_Transfer_Report": "ફંડ ટ્રાન્સફર રિપોર્ટ",
@@ -3545,13 +3529,11 @@
   "No_Data": "—",
   "Not_Available": "ઉપલબ્ધ નથી",
   "Net_T_F": "નેટ ટી/એફ",
-
   "R_To_R_Fund_Transfer": "આર ટુ આર ફંડ ટ્રાન્સફર",
   "Enter_Retailer_ID": "રિટેલર આઈડી દાખલ કરો",
   "Re_Amount": "ફરી રકમ",
   "Fund_Transfer": "ફંડ ટ્રાન્સફર",
   "Amount_Label": "રકમ",
-
   "UPI_APPS": "યુપીઆઈ એપ્સ",
   "Go_to_Dashboard": "ડેશબોર્ડ પર જાઓ",
   "Is_VPA_Valid": "VPA માન્ય છે કે નહીં",
@@ -3559,7 +3541,6 @@
   "Error_validateVPA": "VPA ચકાસવામાં ભૂલ",
   "An_error_occurred_while_processing_the_request": "રીક્વેસ્ટ પ્રોસેસ કરતી વખતે ભૂલ આવી",
   "Invalid_response_from_server": "સર્વર તરફથી અમાન્ય પ્રતિસાદ",
-
   "UPI_Payment_Instruction": "નીચે તમારા વૉલેટમાં UPI પેમેન્ટ ઉમેરવાના બે રસ્તા આપવામાં આવ્યા છે. કૃપા કરીને જે પદ્ધતિ દ્વારા પેમેન્ટ ઉમેરવું હોય તે પસંદ કરો. QR મોડમાં એક QR કોડ ખુલશે જે માત્ર 1 મિનિટ માટે જ માન્ય રહેશે. ઇન્ટેન્ટ મોડમાં તમે તમારા મોબાઇલમાં ઇન્સ્ટોલ કરેલી કોઈપણ UPI એપ્લિકેશનમાંથી સીધી ચુકવણી કરી શકશો.",
   "UPI Intent": "યુપીઆઈ ઇન્ટેન્ટ",
   "Other_Manual_Payment_Options": "અન્ય મેન્યુઅલ પેમેન્ટ વિકલ્પો",
@@ -3572,15 +3553,12 @@
   "CDMA": "CDMA",
   "ATM Cash Deposit": "ATM રોકડ જમા",
   "Branch Cash Deposit": "શાખામાં રોકડ જમા",
-
   "your_QR_is_expired": "તમારો QR સમાપ્ત થઈ ગયો છે",
   "Regenerate The QR CODE if You Need to add a New Payment": "જો તમને નવી ચુકવણી ઉમેરવાની જરૂર હોય તો QR કોડ ફરીથી જનરેટ કરો",
   "Submit_Payment": "ચુકવણી સબમિટ કરો",
-
   "QR_code_has_expired.": "কিউআর কোডের মেয়াদ শেষ হয়ে গেছে।",
   "Create": "তৈরি করুন",
   "Your payment was completed successfully. Thank you for your transaction!": "আপনার পেমেন্ট সফলভাবে সম্পন্ন হয়েছে। আপনার লেনদেনের জন্য ধন্যবাদ!",
-
   "Select_Payment_Type": "ચુકવણીનો પ્રકાર પસંદ કરો",
   "Select Pay Type": "ચુકવણીનો પ્રકાર પસંદ કરો",
   "YES": "હા",
@@ -3595,27 +3573,22 @@
   "VASTBAZAAR": "વસ્તુબઝાર",
   "Invalid QR Type Selected!": "અમાન્ય QR પ્રકાર પસંદ કરવામાં આવ્યો છે!",
   "Something went wrong while generating QR!": "QR જનરેટ કરતી વખતે કંઈક ખોટું થયું!",
-
   "All fields must be filled": "બધા ફીલ્ડ્સ ભરવા જરૂરી છે",
   "Enter valid 12 digit Aadhar number": "માન્ય 12 અંકનો આધાર નંબર દાખલ કરો",
   "Enter valid PAN (e.g. ABCDE1234F)": "માન્ય PAN દાખલ કરો (ઉદાહરણ: ABCDE1234F)",
   "Aadhar Front": "આધારનો આગળનો ભાગ",
   "Aadhar Back": "આધારનો પાછળનો ભાગ",
   "GST Image": "GST છબી",
-
   "Password must be 5 digits long": "પાસવર્ડ ઓછામાં ઓછો 5 અંકનો હોવો જોઈએ",
   "Passwords do not match": "પાસવર્ડ મેળ ખાતા નથી",
   "Not Having Retailer Create Token Contact to Your Dealer": "રિટેલર ક્રિએટ ટોકન ઉપલબ્ધ નથી. કૃપા કરીને તમારા ડીલરનો સંપર્ક કરો",
-
   "From Web": "વેબ પરથી",
   "Kyc": "કેવાયસી",
-
   "Validation Error": "વેલિડેશન ભૂલ",
   "Please fill out the": "કૃપા કરીને ભરો",
   "Server side issue occurred.": "સર્વર સાઇડ પર સમસ્યા આવી છે.",
   "Go to Login Screen": "લૉગિન સ્ક્રીન પર જાઓ",
   "Join Now": "હવે જોડાઓ",
-
   "Welcome back.": "પાછા આવવા બદલ સ્વાગત છે.",
   "Please enter valid User ID and Password, you cannot leave it blank": "કૃપા કરીને માન્ય યુઝર આઈડી અને પાસવર્ડ દાખલ કરો, તમે તેને ખાલી રાખી શકતા નથી",
   "or": "અથવા",
@@ -3651,13 +3624,11 @@
   "Location fetch failed. Please try again.": "સ્થાન મેળવવામાં નિષ્ફળતા આવી. કૃપા કરીને ફરી પ્રયાસ કરો.",
   "Unknown API Error": "અજાણી API ભૂલ",
   "No Role Found": "કોઈ રોલ મળ્યો નથી",
-
   "Notification Permission": "સૂચના અનુમતિ",
   "Enable notifications to stay updated.": "અપડેટ રહેવા માટે સૂચનાઓ સક્રિય કરો.",
   "CMS Balance": "CMS બેલેન્સ",
   "Hold & Lean": "હોલ્ડ અને લિયન",
   "to Wallet": "વૉલેટમાં",
-
   "This feature is currently under development.": "આ સુવિધા હાલમાં વિકાસ હેઠળ છે.",
   "It will be available soon.": "આ ટૂંક સમયમાં ઉપલબ્ધ થશે.",
   "Demo Account": "ડેમો એકાઉન્ટ",
@@ -3670,9 +3641,7 @@
   "TrainScreen": "ટ્રેન સ્ક્રીન",
   "HotelScreen": "હોટેલ સ્ક્રીન",
   "BusScreen": "બસ સ્ક્રીન",
-
   "Restricted": "પ્રતિબંધિત",
-
   "App Install Info": "એપ ઇન્સ્ટોલ માહિતી",
   "First Install": "પ્રથમ ઇન્સ્ટોલ",
   "Last Update": "છેલ્લું અપડેટ",
@@ -3682,16 +3651,12 @@
   "Could not download APK.": "APK ડાઉનલોડ કરી શકાયું નથી.",
   "What's new in this version?": "આ વર્ઝનમાં શું નવું છે?",
   "Downloading": "ડાઉનલોડ થઈ રહ્યું છે",
-
   "Hi.": "હાય.",
   "Session Expired": "સત્ર સમાપ્ત થઈ ગયું છે",
-
   "DR": "ડેબિટ",
   "Comm": "કમિશન",
   "Bal": "બેલેન્સ",
-
   "DealerRechargeHistory": "ડિલર રિચાર્જ ઇતિહાસ",
-
   "Camera not ready": "કેમેરા તૈયાર નથી",
   "Recording Complete!": "રેકોર્ડિંગ પૂર્ણ થયું!",
   "Microphone Permission Required": "માઇક્રોફોનની પરવાનગી જરૂરી છે",
@@ -3705,15 +3670,12 @@
   "REC": "રેક",
   "Position your face in frame": "તમારો ચહેરો ફ્રેમની અંદર રાખો",
   "Please record video first": "કૃપા કરીને પહેલા વિડિયો રેકોર્ડ કરો",
-
   "status is  OK.": "સ્ટેટસ ઠીક છે.",
   "Something went wrong:": "કંઈક ખોટું થયું છે:",
-
   "ImagePicker Error": "ઇમેજ પિકર ભૂલ",
   "Upload successful": "અપલોડ સફળ થયું",
   "Profile image": "પ્રોફાઇલ છબી",
   "Registratidon Certificate": "નોંધણી પ્રમાણપત્ર",
-
   "API Error": "API ભૂલ",
   "Lat": "અક્ષાંશ",
   "Lng": "રેખાંશ",
@@ -3722,29 +3684,21 @@
   "Submit & Generate": "સબમિટ કરો અને જનરેટ કરો",
   "Take GPS Photo": "GPS ફોટો લો",
   "Unable to fetch GPS location. Please enable location.": "GPS સ્થાન મેળવવામાં અસમર્થ. કૃપા કરીને સ્થાન સેવા સક્રિય કરો.",
-
   "Search by Name /Firm name/ Mobile": "નામ / ફર્મ નામ / મોબાઇલ દ્વારા શોધો",
-
   "User Status Update": "વપરાશકર્તા સ્થિતિ અપડેટ",
-
   "Password should be at least 6 characters long!": "પાસવર્ડ ઓછામાં ઓછો 6 અક્ષર લાંબો હોવો જોઈએ!",
   "Close Tips": "બંધ કરો",
   "Your password has been changed successfully.": "તમારો પાસવર્ડ સફળતાપૂર્વક બદલવામાં આવ્યો છે.",
-
   "Unable to open maps": "નકશો ખોલવામાં અસમર્થ.",
   "Apps": "મોબાઇલ એપ",
-
   "Yes I Need High Security": "হ্যাঁ, আমার উচ্চ নিরাপত্তা দরকার",
-
   "Mandatory SIM Setting": "ફરજિયાત સિમ સેટિંગ",
-
   "Enter New Pin": "નવો પિન દાખલ કરો",
   "Both fields are required": "બન્ને ફીલ્ડ જરૂરી છે",
   "PIN must be between 4 and 6 digits": "પિન 4 થી 6 અંકો વચ્ચે હોવો જોઈએ",
   "Confirm PIN must be between 4 and 6 digits": "કન્ફર્મ પિન 4 થી 6 અંકો વચ્ચે હોવો જોઈએ",
   "Pins do not match": "પિન મેળ ખાતા નથી",
   "Your pin has been set successfully!": "તમારો પિન સફળતાપૂર્વક સેટ થઈ ગયો છે!",
-
   "English (India)": "અંગ્રેજી (ભારત)",
   "Hindi (हिंदी)": "હિન્દી (हिंदी)",
   "Bengali (বাংলা)": "બંગાળી (বাংলা)",
@@ -3756,26 +3710,19 @@
   "Your Language Is Changed Successfully": "તમારી ભાષા સફળતાપૂર્વક બદલાઈ ગઈ છે",
   "Failed to change language": "ભાષા બદલવામાં નિષ્ફળતા",
   "Choose Language": "ભાષા પસંદ કરો",
-
   "Update Successfully": "સફળતાપૂર્વક અપડેટ થયું",
-
   "Type Text Here": "અહીં લખો",
   "Send": "મોકલો",
-
   "Please fill the required fields": "કૃપા કરીને જરૂરી ક્ષેત્રો ભરો",
   "No response from server. Please try again.": "સર્વર તરફથી કોઈ પ્રતિસાદ મળ્યો નથી. કૃપા કરીને ફરી પ્રયાસ કરો.",
   "Something went wrong. Please try again later.": "કંઈક ખોટું થયું છે. કૃપા કરીને પછીથી ફરી પ્રયાસ કરો.",
   "Choose an image from gallery or take a new photo": "ગેલેરીમાંથી એક છબી પસંદ કરો અથવા નવી ફોટો લો",
-
   "Are you sure you want to log out?": "શું તમે ખરેખર લોગ આઉટ કરવા માંગો છો?",
-
   "NEW": "નવું",
   "No Notifications": "કોઈ સૂચનાઓ નથી",
   "You are all caught up!": "તમે બધી અપડેટ્સ જોઈ લીધી છે!",
-
   "Cash_Pickup_Report": "કેશ પિકઅપ રિપોર્ટ",
   "NULL": "શૂન્ય",
-
   "AEPS_History": "AEPS ઇતિહાસ",
   "No_transactions_found": "કોઈ ટ્રાન્ઝેક્શન મળ્યા નથી",
   "Try_adjusting_filters": "તારીખ રેન્જ અથવા ફિલ્ટર બદલીને ફરી પ્રયાસ કરો",
@@ -3785,7 +3732,6 @@
   "Account_Aadhaar": "એકાઉન્ટ / આધાર",
   "Bank_RRN": "બેંક RRN",
   "Your_transaction_is": "તમારો ટ્રાન્ઝેક્શન છે",
-
   "Fino_Cms_Report": "ફિનો CMS રિપોર્ટ",
   "Request_Date": "વિનંતી તારીખ",
   "Bus_Booking_Report": "બસ બુકિંગ રિપોર્ટ",
@@ -3799,21 +3745,17 @@
   "Fare_Amount": "ભાડાની રકમ",
   "Passenger_Name": "પ્રવાસીનું નામ",
   "No_Name": "નામ નથી",
-
   "Cash_Deposit_Successful": "રોકડ જમા સફળ થયું",
   "Cash_Deposit_Failed": "રોકડ જમા નિષ્ફળ થયું",
   "Cash_Deposit_Pending": "રોકડ જમા બાકી છે",
-
   "Flight Booking Successful": "ફ્લાઇટ બુકિંગ સફળ થયું",
   "Flight Booking Failed": "ફ્લાઇટ બુકિંગ નિષ્ફળ થયું",
-
   "Non-Verified A/C": "અપ્રમાણિત ખાતું",
   "Receiver": "પ્રાપ્તકર્તા",
   "Try changing the date range or status filter.": "તારીખની રેન્જ અથવા સ્ટેટસ ફિલ્ટર બદલીને જુઓ.",
   "Error occurred": "ભૂલ થઈ",
   "IMPS / NEFT History": "IMPS / NEFT ઇતિહાસ",
   "IMPS / NEFT Receipt": "IMPS / NEFT રસીદ",
-
   "pan_history": "પેન ઇતિહાસ",
   "Transaction Successful": "✓ વ્યવહાર સફળ થયો",
   "Transaction Failed": "✕ વ્યવહાર નિષ્ફળ થયો",
@@ -3826,7 +3768,6 @@
   "no_data_found": "કોઈ માહિતી મળી નથી",
   "no_transactions_available": "કોઈ વ્યવહારો ઉપલબ્ધ નથી",
   "load_more": "વધુ લોડ કરો",
-
   "txn_type": "વ્યવહારનો પ્રકાર",
   "bank_rrn": "બેંક RRN",
   "request_time": "વિનંતી સમય",
@@ -3842,25 +3783,21 @@
   "success_msg": "વ્યવહાર સફળ થયો",
   "failed_msg": "વ્યવહાર નિષ્ફળ થયો",
   "pending_msg": "વ્યવહાર પેન્ડિંગ છે",
-
   "transaction_details": "ટ્રાન્ઝેક્શન વિગતો",
   "amount": "રકમ",
   "transaction_details_empty": "કોઈ વિગતો ઉપલબ્ધ નથી",
   "transaction_report": "POS રિપોર્ટ",
-
   "firm_name": "ફર્મનું નામ",
   "retailer_name": "રિટેલરનું નામ",
   "insert_date": "ઇન્સર્ટ તારીખ",
   "response_date": "રિસ્પોન્સ તારીખ",
   "id": "આઈડી",
   "wallet_transfer_history": "CMS વૉલેટ ટ્રાન્સફર ઇતિહાસ",
-
   "operator_name": "ઓપરેટર નામ",
   "recharge_number": "રીચાર્જ નંબર",
   "recharge_amount": "રીચાર્જ રકમ",
   "total": "કુલ",
   "success_amount": "સફળ રકમ",
-
   "transaction": "વ્યવહાર",
   "refund": "રિફંડ",
   "copy": "કૉપી",
@@ -3875,17 +3812,14 @@
   "transaction_details_not_shared": "ટ્રાન્ઝેક્શન વિગતો શેર થઈ નથી",
   "dispute_submitted_successfully": "વિવાદ સફળતાપૂર્વક સબમિટ થયો!",
   "copied_to_clipboard": "ક્લિપબોર્ડમાં કૉપી થયું!",
-
   "from_date": "થી તારીખ",
   "to_date": "સુધી તારીખ",
   "failed_to_fetch_report": "રિપોર્ટ મેળવવામાં નિષ્ફળ",
   "date": "તારીખ",
-
   "wallet_unload_history": "વૉલેટ અનલોડ ઇતિહાસ",
   "bank_account": "બેંક ખાતું",
   "transfer_type": "ટ્રાન્સફર પ્રકાર",
   "charge": "ચાર્જ",
-
   "cash_online_deposit_report": "રોકડ અને ઓનલાઈન જમા રિપોર્ટ",
   "payment_to": "ચુકવણી",
   "deposit_slip_uploaded_time": "ડિપોઝિટ સ્લિપ અપલોડ સમય",
@@ -3897,13 +3831,11 @@
   "view_slip_image": "સ્લિપ ઈમેજ જુઓ",
   "radiant_cash_management": "રેડિયન્ટ કેશ મેનેજમેન્ટ",
   "function_not_implemented": "ફંક્શન અમલમાં મૂકાયું નથી",
-
   "group_pay": "ગ્રુપ પે",
   "enter_amount": "રકમ દાખલ કરો",
   "select_mode": "મોડ પસંદ કરો",
   "radiant_account": "રેડિયન્ટ એકાઉન્ટ",
   "upload_slip": "સ્લિપ અપલોડ કરો",
-
   "insert_time": "ઇન્સર્ટ સમય",
   "client_customer_name": "ગ્રાહક / કસ્ટમર નામ",
   "state_name": "રાજ્યનું નામ",
@@ -3916,7 +3848,6 @@
   "retailer_info": "રિટેલર માહિતી",
   "null": "શૂન્ય",
   "n_a": "લાગુ પડતું નથી",
-
   "deposit_ledger_report": "ડિપોઝિટ લેજર રિપોર્ટ",
   "pickup_amount": "પિકઅપ રકમ",
   "amount_transfer": "ટ્રાન્સફર કરેલી રકમ",
@@ -3924,7 +3855,6 @@
   "paid_amount": "ચૂકવેલ રકમ",
   "extra_amount": "વધારાની રકમ",
   "cash_submit_type": "રોકડ જમા પ્રકાર",
-
   "group_payments": "જૂથ ચુકવણીઓ",
   "individual_payment": "વ્યક્તિગત ચુકવણી",
   "barrel_cash_deposit": "બેરલ રોકડ જમા",
@@ -3945,7 +3875,6 @@
   "fill_all_client_deposit_fields": "બધા ક્લાયન્ટ ડિપોઝિટ ફીલ્ડ્સ ભરો",
   "fill_all_online_transfer_fields": "બધા ઓનલાઈન ટ્રાન્સફર ફીલ્ડ્સ ભરો",
   "invalid_transaction_type": "અમાન્ય ટ્રાન્ઝેક્શન પ્રકાર",
-
   "RCE Payout Information": "RCE પેઆઉટ માહિતી",
   "Pickup/Collection Mode": "પિકઅપ/કલેકશન મોડ",
   "My RCE ID": "મારું RCE ID",
@@ -3976,7 +3905,6 @@
   "Max Travel Allowance": "મહત્તમ મુસાફરી ભથ્થું",
   "Hide Details": "વિગતો છુપાવો",
   "View More Details": "વધુ વિગતો જુઓ",
-
   "Cash Pickup Calendar": "કેશ પિકઅપ કેલેન્ડર",
   "Leave Rules": "રજાના નિયમો",
   "Approved leave incurs a": "મંજૂર રજા પર દંડ",
@@ -3996,7 +3924,6 @@
   "Failed to submit": "સબમિટ કરવામાં નિષ્ફળ",
   "Holiday(s) cancelled": "રજા રદ કરવામાં આવી",
   "Failed to cancel": "રદ કરવામાં નિષ્ફળ",
-
   "Confirm submission": "સબમિશનની પુષ્ટિ કરો",
   "Please review before proceeding": "આગળ વધતા પહેલાં કૃપા કરીને સમીક્ષા કરો",
   "Make sure all details are correct. Once submitted, changes may not be possible.": "ખાતરી કરો કે તમામ વિગતો સાચી છે. એકવાર સબમિટ કર્યા પછી ફેરફાર શક્ય ન હોઈ શકે.",
@@ -4006,7 +3933,6 @@
   "Data privacy agreed": "ડેટા ગોપનીયતા માટે સંમતિ આપવામાં આવી છે",
   "Yes, proceed": "હા, આગળ વધો",
   "Review again": "ફરી સમીક્ષા કરો",
-
   "Align your face in the oval": "તમારો ચહેરો અંડાકાર ફ્રેમમાં ગોઠવો",
   "No face detected — look straight at camera": "કોઈ ચહેરો મળ્યો નથી — કેમેરા તરફ સીધું જુઓ",
   "Multiple faces detected — only one person allowed": "એકથી વધુ ચહેરા મળ્યા — માત્ર એક વ્યક્તિને મંજૂરી છે",
@@ -4031,7 +3957,6 @@
   "Keep your face inside the oval": "તમારો ચહેરો અંડાકાર ફ્રેમની અંદર રાખો",
   "Capturing...": "કૅપ્ચર થઈ રહ્યું છે...",
   "Tap to Capture": "કૅપ્ચર કરવા માટે ટૅપ કરો",
-
   "KYC": "કેવાયસી",
   "Personal Details": "વ્યક્તિગત વિગતો",
   "Education": "શિક્ષણ",
@@ -4042,7 +3967,6 @@
   "Data Privacy": "ડેટા ગોપનીયતા",
   "STEP": "પગલું",
   "OF": "માથી",
-
   "CMS Manual Deposit": "CMS મેન્યુઅલ ડિપોઝિટ",
   "Enter Bank RRN Number": "બેંક RRN નંબર દાખલ કરો",
   "Enter Slip Number": "સ્લિપ નંબર દાખલ કરો",
@@ -4059,7 +3983,6 @@
   "Deposit submitted successfully": "ડિપોઝિટ સફળતાપૂર્વક સબમિટ થયું",
   "Something went wrong, please try again": "કંઈક ખોટું થયું, કૃપા કરીને ફરી પ્રયાસ કરો",
   "Submission failed": "સબમિશન નિષ્ફળ ગયું",
-
   "Enter complete OTP": "સંપૂર્ણ OTP દાખલ કરો",
   "Invalid OTP. Please try again.": "અમાન્ય OTP. કૃપા કરીને ફરી પ્રયાસ કરો.",
   "Verified!": "ચકાસાયેલ!",
@@ -4070,7 +3993,6 @@
   "Did not receive OTP?": "OTP મળ્યો નથી?",
   "Resend": "ફરી મોકલો",
   "Resend in": "ફરી મોકલો",
-
   "Pin Code must be 6 digits.": "પિન કોડ 6 અંકનો હોવો જોઈએ.",
   "Please select a Client.": "કૃપા કરીને ક્લાયન્ટ પસંદ કરો.",
   "Contact Name is required.": "સંપર્ક નામ જરૂરી છે.",
@@ -4096,13 +4018,10 @@
   "Select Client": "ક્લાયન્ટ પસંદ કરો",
   "Select Pickup Option": "પિકઅપ વિકલ્પ પસંદ કરો",
   "Select Deposit Mode": "ડિપોઝિટ મોડ પસંદ કરો",
-
   "Front Aadhar": "આધારનો આગળનો ભાગ",
   "Back Aadhar": "આધારનો પાછળનો ભાગ",
-
   "Submit for registration": "નોંધણી માટે સબમિટ કરો",
   "Dear Retail Cash Executive Company keeps adding collection points from time to time and you will be given collection points on this basis. Their availability is not necessarily immediate. You may have to wait. If you are satisfied with all the information and you are eligible to do this work, please click on the submit button. Our representative will contact you as soon as possible and help you get your registration done.": "પ્રિય રિટેલ કેશ એક્ઝિક્યુટિવ, કંપની સમયાંતરે નવા કલેક્શન પોઇન્ટ્સ ઉમેરતી રહે છે અને તે આધારે તમને કલેક્શન પોઇન્ટ્સ આપવામાં આવશે. તેમની ઉપલબ્ધતા તરત જ મળે તે જરૂરી નથી, તેથી તમને રાહ જોવી પડી શકે છે. જો તમે તમામ માહિતીથી સંતુષ્ટ છો અને આ કામ માટે પાત્ર છો, તો કૃપા કરીને સબમિટ બટન પર ક્લિક કરો. અમારા પ્રતિનિધિ શક્ય તેટલી વહેલી તકે તમારો સંપર્ક કરશે અને તમારી નોંધણી પૂર્ણ કરવામાં મદદ કરશે.",
-
   "Documents submitted": "દસ્તાવેજો સબમિટ કરવામાં આવ્યા",
   "Team verification": "ટીમ ચકાસણી",
   "Final approval": "અંતિમ મંજૂરી",
@@ -4111,7 +4030,6 @@
   "Our team is reviewing your information. You will be notified once the process is complete.": "અમારી ટીમ તમારી માહિતીની સમીક્ષા કરી રહી છે. પ્રક્રિયા પૂર્ણ થયા પછી તમને જાણ કરવામાં આવશે.",
   "REVIEW PROGRESS": "સમીક્ષા પ્રગતિ",
   "Typically takes 1–2 business days. Check back here for updates.": "સામાન્ય રીતે 1–2 કાર્યકારી દિવસ લાગે છે. અપડેટ્સ માટે અહીં ફરી તપાસો.",
-
   "All Days Working": "બધા દિવસ કામના દિવસ",
   "Banking Days Working": "બેંકિંગ દિવસના કામ",
   "Holiday/Weekend Work": "રજા/અંતિમ સપ્તાહ કામ",
@@ -4123,20 +4041,16 @@
   "Evening Collection & Cash deposit": "સાંજનું કલેક્શન અને રોકડ જમા",
   "Vaulting & Cash deposit": "વૉલ્ટિંગ અને રોકડ જમા",
   "26 JAN, 15 AUG, 2 OCT, Diwali, Holi": "૨૬ જાન્યુઆરી, ૧૫ ઑગસ્ટ, ૨ ઑક્ટોબર, દિવાળી, હોળી",
-
   "E": "ઇ",
   "Need_more_information": "વધુ માહિતીની જરૂર છે",
-
   "This app needs access to your camera to take photos.": "આ એપને ફોટા લેવા માટે તમારા કેમેરા એક્સેસની જરૂર છે",
   "Failed to load image": "ઇમેજ લોડ કરવામાં નિષ્ફળ",
-
   "The place you live has a population of more than 10,000.": "તમે જ્યાં રહો છો તે જગ્યાની વસ્તી 10,000 થી વધુ હોવી જોઈએ.",
   "You can take a fixed time to collect the money from any store or office authorized by the company within a radius of 5 km and you can transfer the collected amount to the company through deposit or online mode within a fixed time. If yes, you can do so.": "તમે કંપની દ્વારા અધિકૃત કોઈપણ દુકાન અથવા ઓફિસમાંથી 5 કિમીની અંદર નિશ્ચિત સમયે પૈસા એકત્ર કરી શકો છો અને એકત્રિત રકમ નિશ્ચિત સમયમર્યાદામાં ડિપોઝિટ અથવા ઓનલાઈન માધ્યમથી કંપનીને ટ્રાન્સફર કરી શકો છો. જો હા હોય તો તમે કરી શકો છો.",
   "If you or any other member of the blood relation have any criminal record in the past, convicted for any crime including moral turpitude, have police history sheet, then you will not be considered eligible for this service.": "જો તમે અથવા તમારા કોઈ નજીકના સગાને ભૂતકાળમાં કોઈ ગુનાહિત રેકોર્ડ હોય, નૈતિક અપરાધ સહિત કોઈ ગુનામાં દોષિત ઠર્યા હોય અથવા પોલીસ રેકોર્ડ હોય, તો તમને આ સેવા માટે પાત્ર ગણવામાં નહીં આવે.",
   "You need to keep your financial credit score (civil score) above about 670. If you do not have this or more financial credit score then you are not eligible.": "તમારું નાણાકીય ક્રેડિટ સ્કોર (સિવિલ સ્કોર) લગભગ 670 થી વધુ રાખવું જરૂરી છે. જો તે ઓછું હોય તો તમે પાત્ર નથી.",
   "If you are physically able to travel and have a vehicle available.": "જો તમે શારીરિક રીતે મુસાફરી કરવા સક્ષમ હો અને વાહન ઉપલબ્ધ હોય.",
   "You are a native Indian citizen and you have all the KYC documents along with a bank account and a checkbook available.": "તમે ભારતીય નાગરિક છો અને તમારા પાસે તમામ KYC દસ્તાવેજો સાથે બેંક એકાઉન્ટ અને ચેકબુક ઉપલબ્ધ છે.",
-
   "OTP sent to registered mobile!": "નોંધાયેલ મોબાઇલ પર OTP મોકલાયો છે!",
   "OTP send failed. Try again.": "OTP મોકલવામાં નિષ્ફળ. ફરી પ્રયાસ કરો.",
   "Something went wrong. Try again.": "કઈક ખોટું થયું છે. ફરી પ્રયાસ કરો.",
@@ -4150,7 +4064,6 @@
   "OTP sent to email!": "ઇમેઇલ પર OTP મોકલાયો છે!",
   "Email verified Successfully!": "ઇમેઇલ સફળતાપૂર્વક ચકાસાયું!",
   "Complete All Fields": "બધા ફીલ્ડ પૂર્ણ કરો",
-
   "Re-verify": "ફરીથી ચકાસો",
   "IDENTITY PROOF": "ઓળખ પુરાવો",
   "Aadhaar Verification": "આધાર ચકાસણી",
@@ -4172,9 +4085,7 @@
   "OTP sent to email": "ઇમેલ પર OTP મોકલાયું",
   "Valid email address": "માન્ય ઇમેલ સરનામું",
   "Wrong email? Start again": "ખોટો ઇમેલ? ફરી શરૂ કરો",
-
   "cellphone-message": "cellphone-message",
-
   "Permanent address required": "કાયમી સરનામું જરૂરી છે",
   "Enter valid 6-digit pincode": "માન્ય 6 અંકનો પિનકોડ દાખલ કરો",
   "Pincode required": "પિનકોડ જરૂરી છે",
@@ -4204,7 +4115,6 @@
   "Enter nearby landmark": "નજીકનું જાણીતું સ્થળ દાખલ કરો",
   "Nearest Police Station": "નજીકનું પોલીસ સ્ટેશન",
   "Enter nearest police station": "નજીકનું પોલીસ સ્ટેશન દાખલ કરો",
-
   "Camera not available": "કેમેરા ઉપલબ્ધ નથી",
   "Photo capture failed. Try again.": "ફોટો કૅપ્ચર નિષ્ફળ ગયું. કૃપા કરીને ફરી પ્રયાસ કરો.",
   "Could not read image": "છબી વાંચી શકાયી નથી",
@@ -4229,7 +4139,6 @@
   "Security Check": "સુરક્ષા ચકાસણી",
   "Credit Card Score": "ક્રેડિટ કાર્ડ સ્કોર",
   "Other Document": "અન્ય દસ્તાવેજ",
-
   "Enter valid account number (9–18 digits)": "માન્ય એકાઉન્ટ નંબર દાખલ કરો (9–18 અંક)",
   "Account number required": "એકાઉન્ટ નંબર જરૂરી છે",
   "IFSC code required": "IFSC કોડ જરૂરી છે",
@@ -4247,7 +4156,6 @@
   "Enter branch name": "શાખાનું નામ દાખલ કરો",
   "Savings": "બચત",
   "Salary": "પગાર",
-
   "Don't Know": "ખબર નથી",
   "Hinduism": "હિંદુ ધર્મ",
   "Islam": "ઇસ્લામ",
@@ -4287,7 +4195,6 @@
   "Optional Document": "વૈકલ્પિક દસ્તાવેજ",
   "Document Type": "દસ્તાવેજનો પ્રકાર",
   "basicInfo": "મૂળભૂત માહિતી",
-
   "The Individual has approached the Company to on-board as a Retail Cash Executive (RCE) for providing necessary services, to support the Cash Management Services of the Company.": "વ્યક્તિએ કંપનીની કેશ મેનેજમેન્ટ સેવાઓને ટેકો આપવા માટે જરૂરી સેવાઓ પૂરી પાડવા હેતુથી રિટેલ કેશ એક્ઝિક્યુટિવ (RCE) તરીકે ઓનબોર્ડ થવા કંપનીનો સંપર્ક કર્યો છે.",
   "The Individual understands that the Company to on-board the RCE, need to collect, store and process certain personal data of the Individual (\"Data\").": "વ્યક્તિ સમજે છે કે RCE ને ઓનબોર્ડ કરવા માટે કંપનીએ વ્યક્તિના કેટલાક વ્યક્તિગત ડેટા (\"ડેટા\") એકત્રિત, સંગ્રહિત અને પ્રક્રિયા કરવા જરૂરી છે.",
   "Data Controller Information": "ડેટા નિયંત્રક માહિતી",
@@ -4341,7 +4248,6 @@
   "you confirm your explicit consent to the Data Privacy Notice above. This is legally binding under the Digital Personal Data Protection Act 2023.": "તમે ઉપરોક્ત ડેટા ગોપનીયતા સૂચના માટે તમારી સ્પષ્ટ સંમતિની પુષ્ટિ કરો છો. આ Digital Personal Data Protection Act 2023 હેઠળ કાનૂની રીતે બાધ્યક છે.",
   "Please agree to the Data Privacy Notice to continue": "આગળ વધવા માટે કૃપા કરીને ડેટા ગોપનીયતા સૂચના સાથે સંમત થાઓ",
   "Submitted Successfully": "સફળતાપૂર્વક સબમિટ થયું",
-
   "Self-Declaration": "સ્વ-ઘોષણા",
   "I acknowledge that I am being onboarded as an independent service provider and not as an employee of the Company and I shall carry out services in accordance with the terms of the separate service agreement and operational guidelines issued by the Company from time to time.": "હું સ્વીકારું છું કે મને કંપનીના કર્મચારી તરીકે નહીં પરંતુ એક સ્વતંત્ર સેવા પ્રદાતા તરીકે ઓનબોર્ડ કરવામાં આવી રહ્યો છું અને હું કંપની દ્વારા સમયાંતરે જારી કરવામાં આવતા અલગ સેવા કરાર અને કાર્યકારી માર્ગદર્શિકાઓ અનુસાર સેવાઓ પ્રદાન કરીશ.",
   "I further declare that I have not been convicted of any criminal offence and no criminal proceedings are pending against me. I am not a wilful defaulter in repaying any borrowings (loans/credit cards) and have not been involved in any fraud or financial misconduct.": "હું વધુમાં જાહેર કરું છું કે મને કોઈ પણ ફોજદારી ગુનામાં દોષિત ઠેરવવામાં આવ્યો નથી અને મારા વિરુદ્ધ કોઈ ફોજદારી કાર્યવાહી બાકી નથી. હું કોઈ પણ લોન અથવા ક્રેડિટ કાર્ડની ચુકવણીમાં ઇરાદાપૂર્વક ડિફોલ્ટ કરનાર નથી અને કોઈ છેતરપિંડી અથવા નાણાકીય ગેરવર્તનમાં સંકળાયેલો નથી.",
@@ -4355,7 +4261,6 @@
   "I agree to provide my free, informed, and explicit consent to the collection, use, processing, storage, and sharing of my personal data in accordance with the said Annexure I and applicable laws.": "હું ઉક્ત પરિશિષ્ટ I અને લાગુ કાયદાઓ અનુસાર મારા વ્યક્તિગત ડેટાના સંગ્રહ, ઉપયોગ, પ્રક્રિયા, સંગ્રહણ અને વહેંચણી માટે મારી સ્વૈચ્છિક, માહિતગાર અને સ્પષ્ટ સંમતિ આપવા સંમત છું.",
   "you confirm your agreement to all declarations above. This is legally binding.": "તમે ઉપરોક્ત તમામ ઘોષણાઓ સાથે તમારી સંમતિની પુષ્ટિ કરો છો. આ કાનૂની રીતે બંધનકારક છે.",
   "Section": "વિભાગ",
-
   "Driving License Details": "ડ્રાઇવિંગ લાઇસન્સની વિગતો",
   "Do you have a Driving License?": "શું તમારી પાસે ડ્રાઇવિંગ લાઇસન્સ છે?",
   "Driving License Number": "ડ્રાઇવિંગ લાઇસન્સ નંબર",
@@ -4366,7 +4271,6 @@
   "Languages Known": "જાણીતી ભાષાઓ",
   "e.g. Hindi, English, Marathi": "દા.ત. હિન્દી, અંગ્રેજી, મરાઠી",
   "Details saved!": "વિગતો સફળતાપૂર્વક સાચવાઈ!",
-
   "Qualification": "લાયકાત",
   "College": "કોલેજ",
   "Board/University": "બોર્ડ/યુનિવર્સિટી",
@@ -4380,7 +4284,6 @@
   "Graduate": "સ્નાતક",
   "Post Graduate": "સ્નાતકોત્તર",
   "Art": "કલા",
-
   "useFormCtx must be inside FormProvider": "useFormCtx FormProvider ની અંદર જ હોવું જોઈએ",
   "Identity Proof": "ઓળખ પુરાવો",
   "12-digit Aadhaar": "12 અંકનો આધાર નંબર",
@@ -4397,7 +4300,6 @@
   "Please enter a valid PAN Number": "કૃપા કરીને માન્ય PAN નંબર દાખલ કરો",
   "Please enter a valid Mobile Number": "કૃપા કરીને માન્ય મોબાઇલ નંબર દાખલ કરો",
   "Please enter a valid Email Address": "કૃપા કરીને માન્ય ઈમેલ સરનામું દાખલ કરો",
-
   "Payout & Travel Allowance Structure": "ચુકવણી અને પ્રવાસ ભથ્થું માળખું",
   "Commission / Minimum Guarantee": "કમિશન / ન્યૂનતમ ગેરંટી",
   "Commission Rates": "કમિશન દરો",
@@ -4449,7 +4351,6 @@
   "Yes, I Agree ✓": "હા, હું સંમત છું ✓",
   "YES, I AGREE": "હા, હું સંમત છું",
   "Section 8": "વિભાગ 8",
-
   "Reference saved!": "સંદર્ભ સફળતાપૂર્વક સાચવવામાં આવ્યો!",
   "OTP failed": "OTP નિષ્ફળ ગયું",
   "Enter valid OTP": "માન્ય OTP દાખલ કરો",
@@ -4469,7 +4370,6 @@
   "Operational Details": "કાર્યકારી વિગતો",
   "Have Two-Wheeler?": "શું તમારી પાસે બે-ચક્રી વાહન છે?",
   "Two-Wheeler Number": "બે-ચક્રી વાહન નંબર",
-
   "Reference name required": "રેફરન્સ નામ જરૂરી છે",
   "Designation required": "પદ જરૂરી છે",
   "Enter valid 10-digit mobile": "માન્ય 10 અંકનો મોબાઇલ નંબર દાખલ કરો",
@@ -4488,7 +4388,6 @@
   "Reference Name": "રેફરન્સ નામ",
   "Designation": "પદ",
   "Enter designation": "પદ દાખલ કરો",
-
   "Advance Funding Declaration": "અગાઉથી નાણાંકીય ઘોષણા",
   "Security Cheque Details": "સિક્યુરિટી ચેક વિગતો",
   "Payee Name": "પ્રાપ્તકર્તાનું નામ",
@@ -4503,7 +4402,6 @@
   "Please upload security cheque copy": "કૃપા કરીને સિક્યુરિટી ચેક નકલ અપલોડ કરો",
   "Security cheque saved!": "સિક્યુરિટી ચેક સાચવાઈ ગયું!",
   "Select Source": "સ્ત્રોત પસંદ કરો",
-
   "Aadhaar card": "આધાર કાર્ડ",
   "PAN card": "પાન કાર્ડ",
   "Driving licence": "ડ્રાઇવિંગ લાઇસન્સ",
@@ -4526,14 +4424,11 @@
   "Once your RCE ID is generated, you will receive an SMS and email notification. You can then login to the agent portal and start working.": "જ્યારે તમારું RCE ID જનરેટ થશે, ત્યારે તમને SMS અને ઇમેઇલ સૂચના મળશે. પછી તમે એજન્ટ પોર્ટલમાં લોગિન કરીને કામ શરૂ કરી શકશો.",
   "Need help?": "મદદ જોઈએ છે?",
   "Contact support": "સપોર્ટનો સંપર્ક કરો",
-
   "Image Re-Upload": "છબી ફરી અપલોડ કરો",
   "No image available": "કોઈ છબી ઉપલબ્ધ નથી",
   "Loading image": "છબી લોડ થઈ રહી છે",
-
   "Add More": "વધુ ઉમેરો",
   "Re-upload": "ફરીથી અપલોડ કરો",
-
   "Personal": "વ્યક્તિગત",
   "Enter the pickup time, online slip or physical slip number and full details of the currency picked up from the customer point, also the count of all types of notes should match the total amount exactly.": "પિકઅપ સમય, ઑનલાઇન સ્લિપ અથવા ફિઝિકલ સ્લિપ નંબર અને ગ્રાહક સ્થાનેથી લેવામાં આવેલી રકમની સંપૂર્ણ વિગતો દાખલ કરો. તેમજ તમામ પ્રકારની નોટોની ગણતરી કુલ રકમ સાથે ચોક્કસ રીતે મેળ ખાવા જોઈએ.",
   "RCE Cash Pickup Report": "RCE કેશ પિકઅપ રિપોર્ટ",
@@ -4665,12 +4560,10 @@
   "Please upload the slip before submitting.": "સબમિટ કરતા પહેલાં કૃપા કરીને સ્લિપ અપલોડ કરો.",
   "Enter the number of slips for which you want to fill the details": "જે સ્લિપ્સ માટે વિગતો ભરવી છે તેની સંખ્યા દાખલ કરો",
   "Note:- Amount Deposited, Pending for Approval": "નોંધ:- રકમ જમા થઈ ગઈ છે, મંજૂરી બાકી છે",
-
   "Recharge of": "નું રિચાર્જ",
   "Unknown": "અજ્ઞાત",
   "Regards": "સાદર",
   "YourApp": "તમારી એપ",
-
   "Enter consumer No": "ગ્રાહક નંબર દાખલ કરો",
   "Please": "કૃપા કરીને",
   "Heavy Request failed!!": "હેવી રિક્વેસ્ટ નિષ્ફળ ગઈ!!",
@@ -4784,7 +4677,6 @@
   "Transactions are secured via biometric authentication": "વ્યવહારો બાયોમેટ્રિક પ્રમાણિકરણ દ્વારા સુરક્ષિત છે",
   "Action Required": "કાર્ય જરૂરી છે",
   "Register Merchant": "મર્ચન્ટ નોંધાવો",
-
   "Please complete your e-KYC to proceed with this service.": "આ સેવા ચાલુ રાખવા માટે કૃપા કરીને તમારું e-KYC પૂર્ણ કરો.",
   "Re-Scan": "ફરી સ્કેન કરો",
   "Selected Bank ID:": "પસંદ કરેલ બેંક ID:",
@@ -4861,7 +4753,6 @@
   "Live": "લાઈવ",
   "PAYSSPRINT DMT": "PAYSSPRINT DMT",
   "Instantly": "તરત જ",
-
   "PANCARD REGISTER FORM": "પાન કાર્ડ નોંધણી ફોર્મ",
   "User Registration Pending": "વપરાશકર્તા નોંધણી બાકી છે",
   "UnRegistred User": "અનોંધાયેલ વપરાશકર્તા",
@@ -5046,5 +4937,70 @@
   "UNKNOWN_ERROR": "અજ્ઞાત ભૂલ",
   "Your Email Already Exists With Us. Please Try Another Email Id": "તમારું ઇમેઇલ અમારી પાસે પહેલેથી જ નોંધાયેલ છે. કૃપા કરીને બીજું ઇમેઇલ ID અજમાવો.",
   "Your Mobile Number Already Exists With Us. Please Try Another Number": "તમારો મોબાઇલ નંબર અમારી પાસે પહેલેથી જ નોંધાયેલ છે. કૃપા કરીને બીજો નંબર અજમાવો.",
-  "Please Enter a Valid Email Id": "કૃપા કરીને માન્ય ઇમેઇલ ID દાખલ કરો"
+  "Please Enter a Valid Email Id": "કૃપા કરીને માન્ય ઇમેઇલ ID દાખલ કરો",
+  "Error in JoinUs function:": "JoinUs ફંક્શનમાં ભૂલ:",
+  "Selected Operator:": "પસંદ કરેલ ઓપરેટર:",
+  "Operatorcode": "ઓપરેટર કોડ",
+  "Best Plans Offers": "શ્રેષ્ઠ પ્લાન ઓફર્સ",
+  "RechargeScreen.This app needs access to your contacts to use the number from contacts.": "સંપર્કોમાંથી નંબર ઉપયોગ કરવા માટે આ એપને તમારા સંપર્કોની ઍક્સેસ જરૂરી છે.",
+  "This app needs access to your contacts to use the number from contacts.": "સંપર્કોમાંથી નંબર ઉપયોગ કરવા માટે આ એપને તમારા સંપર્કોની ઍક્સેસ જરૂરી છે.",
+  "RechargeScreen.Please grant the contact permission from settings.": "કૃપા કરીને સેટિંગ્સમાંથી સંપર્ક પરવાનગી આપો.",
+  "Select eScreen.Operator": "ઓપરેટર પસંદ કરો",
+  "Recharge successful": "રિચાર્જ સફળ થયું",
+  "Recharge failed. Please check your network or try again.": "રિચાર્જ નિષ્ફળ ગયું. કૃપા કરીને તમારું નેટવર્ક તપાસો અથવા ફરી પ્રયાસ કરો.",
+  "RechargeScreen.Mobile Recharge": "મોબાઇલ રિચાર્જ",
+  "RechargeScreen.Mobile Number": "મોબાઇલ નંબર",
+  "RechargeScreen.Please Enter Vaild Mobile Number": "કૃપા કરીને માન્ય મોબાઇલ નંબર દાખલ કરો",
+  "RechargeScreen.View \n Plans": "પ્લાન\nજુઓ",
+  "View \n Plans": "પ્લાન\nજુઓ",
+  "Recharge Type": "રિચાર્જ પ્રકાર",
+  "Bhart Gas": "ભારત ગેસ",
+  "Contact permission granted": "સંપર્ક પરવાનગી આપવામાં આવી",
+  "Contact permission denied": "સંપર્ક પરવાનગી નકારી દેવામાં આવી",
+  "Invalid application package detected.\nContact developer.": "અમાન્ય એપ્લિકેશન પેકેજ મળી આવ્યું.\nડેવલપરનો સંપર્ક કરો.",
+  "UNAUTHORIZED": "અનધિકૃત",
+  "FORBIDDEN": "પ્રતિબંધિત",
+  "SERVER_ERROR": "સર્વર ભૂલ",
+  "TIMEOUT": "વિનંતીનો સમય સમાપ્ત થયો",
+  "UNKNOWN": "અજ્ઞાત",
+  "STEP0_API_CALL_FAILED": "API કોલ નિષ્ફળ",
+  "STEP1_API_DATA_RECEIVED": "API ડેટા પ્રાપ્ત થયો",
+  "STEP2_ICON_RENDER_ATTEMPT": "આઇકન રેન્ડર કરવાનો પ્રયાસ",
+  "STEP3_SVG_LOAD_SUCCESS": "SVG સફળતાપૂર્વક લોડ થયું",
+  "STEP4_SVG_LOAD_FAILED": "SVG લોડ કરવામાં નિષ્ફળ",
+  "STEP5_SVG_URL_MISSING": "SVG URL ગુમ છે",
+  "MISSING": "ગુમ",
+  "HTTPS_OK": "HTTPS બરાબર છે",
+  "HTTP_CLEARTEXT": "HTTP ક્લિયરટેક્સ્ટ",
+  "UNKNOWN_SCHEME": "અજ્ઞાત સ્કીમ",
+  "HTTPS": "HTTPS",
+  "HTTP": "HTTP",
+  "OTHER": "અન્ય",
+  "svg field is null or undefined in API response": "API પ્રતિભાવમાં svg ફીલ્ડ null અથવા undefined છે",
+  "[SvgLogger] Failed to write log:": "[SvgLogger] લોગ લખવામાં નિષ્ફળ:",
+  "January": "જાન્યુઆરી",
+  "February": "ફેબ્રુઆરી",
+  "March": "માર્ચ",
+  "April": "એપ્રિલ",
+  "May": "મે",
+  "June": "જૂન",
+  "July": "જુલાઈ",
+  "August": "ઑગસ્ટ",
+  "September": "સપ્ટેમ્બર",
+  "October": "ઑક્ટોબર",
+  "November": "નવેમ્બર",
+  "December": "ડિસેમ્બર",
+  "SignUp": "સાઇન અપ",
+  "operator": "ઓપરેટર",
+  "default": "ડિફૉલ્ટ",
+  "Gas": "ગેસ",
+  "LIC": "LIC",
+  "Please Select Operator": "કૃપા કરીને ઓપરેટર પસંદ કરો",
+  "Please Enter {{field}}": "કૃપા કરીને {{field}} દાખલ કરો",
+  "Select DOB": "જન્મ તારીખ પસંદ કરો",
+  "Consumer ID": "ગ્રાહક ID",
+  "Registered Mobile Number": "નોંધાયેલ મોબાઇલ નંબર",
+  "UHID": "UHID",
+  "N / A": "લાગુ પડતું નથી",
+  "No packages available": "કોઈ પેકેજ ઉપલબ્ધ નથી"
 }

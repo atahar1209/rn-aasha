@@ -67,23 +67,24 @@ const FastagScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
-  const [CustomerName, setCustomerName] = useState('N/A');
+  const [dueDate, setDueDate] = useState(translate('Date'));
+  const [CustomerName, setCustomerName] = useState(translate('N/A'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [showLoader2, setShowLoader2] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [agencyCode, setAgencyCode] = useState('');
   const [agencyCode2, setAgencyCode2] = useState('');
   const [isrecent, setIsrecent] = useState(false);
-
   const [historylist, setHistorylist] = useState([]);
   const [reqTime, setReqTime] = useState('');
   const [reqId, setReqId] = useState('');
@@ -195,7 +196,6 @@ const FastagScreen = () => {
       amount,
       Loc_Data['latitude'],
       Loc_Data['longitude'],
-
       'city',
       'address',
       'postcode',
@@ -212,19 +212,15 @@ const FastagScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${agencyCode}&bu=${agencyCode2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&billduedate=${dueDate}`;
     let status, Message;
 
@@ -247,7 +243,7 @@ const FastagScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -261,8 +257,8 @@ const FastagScreen = () => {
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '',
       Amount: amount ?? 0,
-      operator: selectedOpt ?? 'N/A',
-      status: status ?? 'Unknown',
+      operator: selectedOpt ?? translate('N/A'),
+      status: status ?? translate('Unknown'),
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
       Message: Message ?? translate('No message'),
@@ -345,23 +341,23 @@ const FastagScreen = () => {
         } else {
           setShowLoader2(false);
           Alert.alert(translate('Error'), translate('Bill info is missing.'), [
-            {text: 'OK', onPress: () => {}},
+            {text: translate('OK'), onPress: () => {}},
           ]);
         }
       } else {
         setShowLoader2(false);
         const errorMsg =
           res?.['ADDINFO']?.['ERRORMSG'] || res?.['ADDINFO']?.Message;
-        const price = res?.['ADDINFO']?.['PRICE'] || 'N/A';
-        const status = res?.['ADDINFO']?.['STATUS'] || 'Failed';
+        const price = res?.['ADDINFO']?.['PRICE'] || translate('N/A');
+        const status = res?.['ADDINFO']?.['STATUS'] || translate('Failed');
         setAmount(price);
 
         Alert.alert(
-          'Error Information',
-          `Price: ${price}\n${translate(
-            'Error Message',
+          translate('Error Information'),
+          `${translate('Price')}: ${price}\n${translate(
+            translate('Error Message'),
           )}: ${errorMsg}\n${translate('Status')}: ${status}`,
-          [{text: 'OK', onPress: () => {}}],
+          [{text: translate('OK'), onPress: () => {}}],
         );
       }
     } catch (error) {
@@ -403,7 +399,7 @@ const FastagScreen = () => {
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (selectedOpt === 'Select Your Operator') {
+    } else if (selectedOpt === translate('Select Your Operator')) {
       ToastAndroid.showWithGravity(
         translate('Please Select an Operator'),
         ToastAndroid.SHORT,
@@ -411,7 +407,7 @@ const FastagScreen = () => {
       );
     } else if (
       !amount ||
-      amount === 'Enter Amount' ||
+      amount === translate('Enter Amount') ||
       parseFloat(amount) <= 0
     ) {
       ToastAndroid.showWithGravity(
@@ -486,7 +482,6 @@ const FastagScreen = () => {
                 style={styles.infobtn}
                 onPress={() => {
                   billInfo();
-
                   setShowLoader2(true);
                 }}>
                 {showLoader2 ? (

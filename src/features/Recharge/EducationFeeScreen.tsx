@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
@@ -37,14 +38,12 @@ import {useLocationHook} from '../../hooks/useLocationHook';
 const EducationFeeScreen = () => {
   const {colorConfig} = useSelector((state: RootState) => state.userInfo);
   const color1 = `${colorConfig.secondaryColor}20`;
-
   const {get, post} = useAxiosHook();
   const [consumerNo, setconsumerNo] = useState(translate(''));
   const [insuranceOptList, setInsuranceOptList] = useState([]);
   const [isOperatorList, setIsOperatorList] = useState(false);
   const [selectbool, setSelectbool] = useState(true);
-
-  const [selectedOpt, setselectedOpt] = useState('Select State & City');
+  const [selectedOpt, setselectedOpt] = useState(translate('Select State & City'));
   const [CustomerID, setCustomerID] = useState('');
   const [amount, setAmount] = useState('');
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
@@ -68,7 +67,7 @@ const EducationFeeScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
@@ -86,7 +85,7 @@ const EducationFeeScreen = () => {
   const [agencyCode, setAgencyCode] = useState('');
   useEffect(() => {
     EduStateList('');
-  }, []);
+  }, [EduStateList]);
 
   const GetDist = async id => {
     try {
@@ -105,7 +104,7 @@ const EducationFeeScreen = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -118,13 +117,12 @@ const EducationFeeScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
   const day = ('0' + currentDate.getDate()).slice(-2);
-
   const formattedDate = `${year}-${month}-${day}`;
   const handleItemPress = item => {
     console.log('-*-*-*/-/*-*/-*/-/*-/*', item);
@@ -222,7 +220,6 @@ const EducationFeeScreen = () => {
         url: url,
       });
       console.log(res['RESULT']);
-
       setInsuranceOptList(res['RESULT']);
     } catch (error) {
       console.error(error);
@@ -289,10 +286,8 @@ const EducationFeeScreen = () => {
     useDeviceInfoHook();
   const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
   const {latitude, longitude} = useLocationHook();
-
   const onRechargePress = useCallback(async () => {
     setShowLoader(true);
-
     const mobileNetwork = await getNetworkCarrier();
     const ip = await getMobileIp();
     const encryption = await encrypt([
@@ -302,7 +297,6 @@ const EducationFeeScreen = () => {
       amount,
       Loc_Data['latitude'],
       Loc_Data['longitude'],
-
       'city',
       'address',
       'postcode',
@@ -319,12 +313,10 @@ const EducationFeeScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
@@ -349,7 +341,7 @@ const EducationFeeScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -362,8 +354,8 @@ const EducationFeeScreen = () => {
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '', // Default to an empty string if null or undefined
       Amount: amount ?? 0, // Default to 0 if null or undefined
-      operator: selectedOpt ?? 'N/A', // Default to 'N/A' if null or undefined
-      status: status ?? 'Unknown', // Default to 'Unknown' if null or undefined
+      operator: selectedOpt ?? translate('N/A'), // Default to 'N/A' if null or undefined
+      status: status ?? translate('Unknown'), // Default to 'Unknown' if null or undefined
       reqId: reqId ?? '', // Default to an empty string if null or undefined
       reqTime: reqTime ?? new Date().toISOString(), // Default to current time if null or undefined
       Message: Message ?? translate('No message available'), // Default to 'No message available' if null or undefined
@@ -448,19 +440,19 @@ const EducationFeeScreen = () => {
 
   const [city, setCity] = useState('Select City');
   const validateFields = () => {
-    if (paramname === 'Consumer Number') {
+    if (paramname === translate('Consumer Number')) {
       ToastAndroid.showWithGravity(
         `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (selectedOpt === 'Select Your Operator') {
+    } else if (selectedOpt === translate('Select Your Operator')) {
       ToastAndroid.showWithGravity(
         translate('Please Select an Operator'),
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (!amount || amount === 'Enter Amount') {
+    } else if (!amount || amount === translate('Enter Amount')) {
       ToastAndroid.showWithGravity(
         translate('Please Enter the Recharge Amount'),
         ToastAndroid.SHORT,

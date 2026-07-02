@@ -448,7 +448,7 @@ const IndaneGasBill = () => {
   const validateFields = () => {
     if (!consumerNo) {
       ToastAndroid.showWithGravity(
-        `${translate('Please Enter')} ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -571,7 +571,7 @@ const IndaneGasBill = () => {
             billInfo();
             setBottomSheetVisible(true);
           }}>
-          <Text style={{}}>Info</Text>
+          <Text style={{}}>{translate('Info')}</Text>
         </TouchableOpacity>
       </View>
       <View>

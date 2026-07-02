@@ -5168,7 +5168,6 @@
   "Your Email Already Exists With Us. Please Try Another Email Id": "Your Email Already Exists With Us. Please Try Another Email Id",
   "Your Mobile Number Already Exists With Us. Please Try Another Number": "Your Mobile Number Already Exists With Us. Please Try Another Number",
   "Please Enter a Valid Email Id": "Please Enter a Valid Email Id",
-
   "Error in JoinUs function:": "Error in JoinUs function:",
   "Selected Operator:": "Selected Operator:",
   "Operatorcode": "Operatorcode",
@@ -5228,5 +5227,10 @@
   "LIC": "LIC",
   "Please Select Operator": "Please Select Operator",
   "Please Enter {{field}}": "Please Enter {{field}}",
-  "Select DOB": "Select DOB"
+  "Select DOB": "Select DOB",
+  "Consumer ID": "Consumer ID",
+  "Registered Mobile Number": "Registered Mobile Number",
+  "UHID": "UHID",
+  "N / A": "N / A",
+  "No packages available": "No packages available"
 }

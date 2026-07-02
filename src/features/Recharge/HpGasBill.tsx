@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable react-hooks/exhaustive-deps */
 import {translate} from '../../utils/languageUtils/I18n';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
@@ -63,20 +65,22 @@ const HpGasBill = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
+  const [dueDate, setDueDate] = useState(translate('Date'));
   const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   useEffect(() => {
     Statelist();
-  }, []);
+  }, [Statelist]);
 
   const handleItemPress = item => {
     setAccntvisivility(false);
@@ -171,19 +175,15 @@ const HpGasBill = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&circle=Maharashtra`;
 
     const res = await post({

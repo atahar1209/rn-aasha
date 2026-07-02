@@ -56,7 +56,6 @@ const SelfieScreen: React.FC = () => {
   const [addressData, setAddressData] = useState<string | null>(null);
   const [addressError, setAddressError] = useState<boolean>(false);
   const viewShotRef = useRef<ViewShot>(null);
-
   const {Loc_Data} = useSelector((state: any) => state.userInfo || {});
   const latitude = Loc_Data.latitude || '0';
   const longitude = Loc_Data.longitude || '0';
@@ -237,11 +236,7 @@ const SelfieScreen: React.FC = () => {
     setLoading(true);
 
     try {
-      const uri = await viewShotRef.current?.capture({
-        format: 'jpg',
-        quality: 0.6,
-        result: 'tmpfile',
-      });
+      const uri = await viewShotRef.current?.capture();
 
       setFinalImageUri(uri);
 

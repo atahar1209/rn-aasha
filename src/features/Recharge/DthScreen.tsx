@@ -40,7 +40,6 @@ const DthScreen = () => {
   );
   const color1 = `${colorConfig.secondaryColor}20`;
   const [showLoader, setShowLoader] = useState(false);
-
   const [showLoader2, setShowLoader2] = useState(false);
   const {get, post} = useAxiosHook();
   const [textInput1, setTextInput1] = useState('');
@@ -51,7 +50,6 @@ const DthScreen = () => {
     translate('Select Your Operator'),
   );
   const [optimg, setOptimg] = useState('');
-
   const [Amount, setAmount] = useState('');
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [bottomSheetVisible2, setBottomSheetVisible2] = useState(false);
@@ -79,17 +77,19 @@ const DthScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('N/A');
-  const [CustomerName, setCustomerName] = useState('N/A');
+  const [dueDate, setDueDate] = useState(translate('N/A'));
+  const [CustomerName, setCustomerName] = useState(translate('N/A'));
   const [custBal, setCustBal] = useState();
-  const [monthrecharghe, setmonthrecharge] = useState('N/A');
+  const [monthrecharghe, setmonthrecharge] = useState(translate('N/A'));
   const [Status, setStatus] = useState(translate(''));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [path, setpath] = useState('');
   const [reqTime, setReqTime] = useState('');
@@ -142,7 +142,7 @@ const DthScreen = () => {
       }
     } catch {}
   };
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -155,15 +155,13 @@ const DthScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
   const day = ('0' + currentDate.getDate()).slice(-2);
-
   const formattedDate = `${year}-${month}-${day}`;
-
   const handleItemPress = item => {
     setselectedOpt(item['Operatorname']);
     setOptCode(item['OPtCode']);
@@ -284,7 +282,6 @@ const DthScreen = () => {
       Amount,
       Loc_Data['latitude'],
       Loc_Data['longitude'],
-
       'city',
       'address',
       'postcode',
@@ -309,7 +306,6 @@ const DthScreen = () => {
       Amount,
       Loc_Data['latitude'],
       Loc_Data['longitude'],
-
       'city',
       'address',
       'postcode',
@@ -339,19 +335,15 @@ const DthScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${accnumhint}&bu=${accnumhint2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}`;
 
     try {
@@ -373,15 +365,15 @@ const DthScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '', // Default to an empty string if null or undefined
       Amount: Amount ?? 0, // Default to 0 if Amount is null or undefined
-      operator: selectedOpt ?? 'N/A', // Default to 'N/A' if selectedOpt is null or undefined
-      status: status ?? 'Unknown', // Default to 'Unknown' if status is null or undefined
+      operator: selectedOpt ?? translate('N/A'), // Default to 'N/A' if selectedOpt is null or undefined
+      status: status ?? translate('Unknown'), // Default to 'Unknown' if status is null or undefined
       id: reqId ?? '', // Default to an empty string if reqId is null or undefined
       reqTime: reqTime ?? new Date().toISOString(), // Default to current time if reqTime is null or undefined
       Message: Message ?? translate('No message available'), // Default to 'No message available' if Message is null or undefined
@@ -391,10 +383,10 @@ const DthScreen = () => {
       Amount,
       operator: selectedOpt,
       mobileNumber: consumerNo,
-      status: status || 'Unknown',
-      reqTime: reqTime || 'N/A',
+      status: status || translate('Unknown'),
+      reqTime: reqTime || translate('N/A'),
       Message: Message || translate('No message'),
-      reqId: reqId || 'N/A',
+      reqId: reqId || translate('N/A'),
     });
     // if (!res.ok) {
     //   Alert.alert(res['Response'], res['Message'], [{ text: 'OK', onPress: () => { } }]);
@@ -426,7 +418,7 @@ const DthScreen = () => {
     recenttransactions,
   ]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [billDetails, setBillDetails] = useState([]);
+  const [billDetails, setBillDetails] = useState({});
   const [monthlyRecharge, setMonthlyRecharge] = useState('');
   const [status, setstatus] = useState();
   async function billInfo() {
@@ -743,22 +735,22 @@ const DthScreen = () => {
           details={[
             {
               label: translate('User Name'),
-              value2: CustomerName === '' ? 'N/A' : CustomerName,
+              value2: CustomerName === '' ? (translate('N/A')) : CustomerName,
             },
             {label: translate('Customer ID'), value: consumerNo},
             {
               label: translate('Due Date'),
-              value2: dueDate === '' ? 'N/A' : dueDate,
+              value2: dueDate === '' ? translate('N/A') : dueDate,
             },
 
             {label: translate('Operator Name'), value2: selectedOpt},
             {
               label: translate('Customer Status'),
-              value2: Status === '' ? 'N/A' : Status,
+              value2: Status === '' ? translate('N/A') : Status,
             },
             {
               label: translate('Balance'),
-              value2: custBal === 0 ? 'N/A' : custBal,
+              value2: custBal === 0 ? translate('N/A') : custBal,
             },
           ]}
           lastlabel={translate('Transaction Amount')}

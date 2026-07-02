@@ -40,9 +40,9 @@ const ElectricityScreen = () => {
   const [amount, setAmount] = useState('');
   const [acc, setContacts] = useState('');
   const [optcode, setoptcode] = useState('');
-  const [dueDate, setDueDate] = useState('N/A');
+  const [dueDate, setDueDate] = useState(translate('N/A'));
   const [CustomerName, setCustomerName] = useState('');
-  const [custBal, setCustBal] = useState('N/A');
+  const [custBal, setCustBal] = useState(translate('N/A'));
   const [Status, setstatus] = useState(translate('Status'));
   const [path, setpath] = useState('');
   const [showLoader2, setShowLoader2] = useState(false);
@@ -53,9 +53,7 @@ const ElectricityScreen = () => {
   const [isOp, setIsop] = useState(false);
   const [operatorList, setoperatorList] = useState([]);
   const [isvisible, setIsvisible] = useState(false);
-
   const [consumerNo, setconsumerNo] = useState(translate(''));
-
   const [accnumhint, setAccnumhint] = useState('');
   const [accmaxlength, setAccmaxlength] = useState(0);
   const [key2, setKey2] = useState('');
@@ -76,10 +74,12 @@ const ElectricityScreen = () => {
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [isrecent, setIsrecent] = useState(false);
   const [historylist, setHistorylist] = useState([]);
-  const [stateName, setStateName] = useState('Select Your State & Operator');
+  const [stateName, setStateName] = useState(
+    translate('Select Your State & Operator'),
+  );
   const [reqTime, setReqTime] = useState('');
   const [reqId, setReqId] = useState('');
   const [agencyCode, setAgencyCode] = useState('');
@@ -92,7 +92,7 @@ const ElectricityScreen = () => {
     recenttransactions();
   }, []);
 
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       const response = await get({url: url});
@@ -100,7 +100,7 @@ const ElectricityScreen = () => {
       setReqTime(response[0]['Reqesttime']);
       setReqId(response[0]['Request_ID']);
     } catch (error) {}
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -135,7 +135,7 @@ const ElectricityScreen = () => {
       } else {
         setShowLoader2(false);
         Alert.alert(res['ADDINFO']['ERRORMSG'], res['ADDINFO']['Message'], [
-          {text: 'OK', onPress: () => {}},
+          {text: translate('OK'), onPress: () => {}},
         ]);
       }
     } catch (error) {}
@@ -228,7 +228,6 @@ const ElectricityScreen = () => {
       amount,
       Loc_Data['latitude'],
       Loc_Data['longitude'],
-
       'city',
       'address',
       'postcode',
@@ -245,19 +244,15 @@ const ElectricityScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${agencyCode}&bu=${agencyCode2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&billduedate=${dueDate}`;
 
     console.log(url, '*-*-*-*');
@@ -279,7 +274,7 @@ const ElectricityScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -294,8 +289,8 @@ const ElectricityScreen = () => {
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '', // Default to an empty string if null or undefined
       Amount: amount ?? 0, // Default to 0 if null or undefined
-      operator: opt ?? 'N/A', // Default to 'N/A' if null or undefined
-      status: status ?? 'Unknown', // Default to 'Unknown' if null or undefined
+      operator: opt ?? translate('N/A'), // Default to 'N/A' if null or undefined
+      status: status ?? translate('Unknown'), // Default to 'Unknown' if null or undefined
       reqId: reqId ?? '', // Default to an empty string if null or undefined
       reqTime: reqTime ?? new Date().toISOString(), // Default to current time if null or undefined
       Message: Message ?? translate('No message available'), // Default to 'No message available' if null or undefined
@@ -365,7 +360,7 @@ const ElectricityScreen = () => {
       setMinLength(custparam[0]['minLength']);
       setVisibility(custparam[0]['visibility']);
       setOptional(custparam[0]['optional']);
-      setParamName(custparam[0]['paramName'] || 'Consumer Number');
+      setParamName(custparam[0]['paramName'] || translate('Consumer Number'));
       setRegx(custparam[0]['regex']);
       setValues(custparam[0]['values']);
 
@@ -572,7 +567,7 @@ const ElectricityScreen = () => {
             },
             {
               label: translate('BillAmount'),
-              value2: billAmount === '' ? 'N / A' : billAmount,
+              value2: billAmount === '' ? translate('N / A') : billAmount,
             },
           ]}
           lastlabel={translate('Transaction Amount')}

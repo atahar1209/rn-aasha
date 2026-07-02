@@ -49,7 +49,6 @@ const Rechargedetails = ({route}) => {
   const color2 = `${colorConfig.primaryColor}15`;
   const color3 = `${colorConfig.secondaryColor}15`;
   const capRef = useRef();
-
   const onPressButton = () => {
     navigation.navigate({name: 'DashboardScreen'});
   };
@@ -77,7 +76,7 @@ const Rechargedetails = ({route}) => {
 
     // Call the function
     onReceiveNotification2(mockNotification);
-  }, []);
+  }, [Amount, IsRington, Message, idno, mobileNumber, status]);
 
   const onShare = useCallback(async () => {
     try {
@@ -162,7 +161,9 @@ const Rechargedetails = ({route}) => {
 
                   <View style={[styles.detailsContainer]}>
                     <View style={styles.detailItem}>
-                      <Text style={styles.label}>{translate('Reqest_ID')}</Text>
+                      <Text style={styles.label}>
+                        {translate('Request_ID')}
+                      </Text>
                       <Text style={styles.value2}>{idno}</Text>
                     </View>
 
@@ -192,7 +193,7 @@ const Rechargedetails = ({route}) => {
                     </View>
                     <View style={[styles.detailItem]}>
                       <Text style={styles.label}>
-                        {translate('Reqest_Time')}
+                        {translate('Request_Time')}
                       </Text>
 
                       <Text style={styles.value2}>{reqTime}</Text>
@@ -241,6 +242,7 @@ const Rechargedetails = ({route}) => {
   );
 };
 export default Rechargedetails;
+
 const styles = StyleSheet.create({
   main: {
     flex: 1,

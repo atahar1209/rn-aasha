@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../../reduxUtils/store';
 import {hScale, wScale} from '../../../utils/styles/dimensions';
 import CheckSvg from '../../drawer/svgimgcomponents/CheckSvg';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 const TabBar = ({
   onPress1,
@@ -45,7 +46,7 @@ const TabBar = ({
             {color: colorConfig.secondaryColor},
             selectedTab === 1 ? styles.selectedTabtext : styles.unselectedTab,
           ]}>
-          {selectedTab === 1 ? Selected : Selected}
+          {selectedTab === 1 ? translate(Selected) : translate(Selected)}
         </Text>
         <View
           style={[
@@ -76,7 +77,7 @@ const TabBar = ({
             {color: colorConfig.secondaryColor},
             selectedTab === 2 ? styles.selectedTabtext : styles.unselectedTab,
           ]}>
-          {selectedTab === 2 ? Unselected : Unselected}
+          {selectedTab === 2 ? translate(Unselected) : translate(Unselected)}
         </Text>
         <View
           style={[

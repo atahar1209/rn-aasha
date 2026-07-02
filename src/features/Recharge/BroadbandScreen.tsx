@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable quotes */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable dot-notation */
@@ -8,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   ToastAndroid,
+  Alert,
 } from 'react-native';
 import {hScale, wScale} from '../../utils/styles/dimensions';
 import {APP_URLS} from '../../utils/network/urls';
@@ -71,16 +73,18 @@ const BroadbandScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
+  const [dueDate, setDueDate] = useState(translate('Date'));
   const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
@@ -91,7 +95,7 @@ const BroadbandScreen = () => {
 
   useEffect(() => {
     CreditCardOpt('Broadband');
-  }, []);
+  }, [CreditCardOpt]);
 
   const selectOperator = selectedOperator => {
     console.log('Selected Operator:', selectedOperator);
@@ -103,7 +107,7 @@ const BroadbandScreen = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -116,7 +120,7 @@ const BroadbandScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -146,7 +150,7 @@ const BroadbandScreen = () => {
       setMinLength(custparam[0]['minLength']);
       setVisibility(custparam[0]['visibility']);
       setOptional(custparam[0]['optional']);
-      setParamName(custparam[0]['paramName'] || 'Consumer Number');
+      setParamName(custparam[0]['paramName'] || translate('Consumer Number'));
       setRegx(custparam[0]['regex']);
       setValues(custparam[0]['values']);
 
@@ -252,19 +256,15 @@ const BroadbandScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${agencyCode}&bu=''&acno=''&lt=''&ip=${ip1}&mc&em=${em}&offerprice=''&commAmount=''&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&billduedate=${dueDate}`;
     let status, Message;
     try {
@@ -274,7 +274,7 @@ const BroadbandScreen = () => {
       console.log(res);
       console.log(status);
       if (res.status === 'False') {
-        alert(res.message);
+        Alert.alert(res.message);
         setShowLoader(false);
 
         return;
@@ -284,7 +284,7 @@ const BroadbandScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -297,8 +297,8 @@ const BroadbandScreen = () => {
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '',
       Amount: amount ?? 0,
-      operator: selectedOpt ?? 'Unknown',
-      status: status ?? 'Unknown',
+      operator: selectedOpt ?? translate('Unknown'),
+      status: status ?? translate('Unknown'),
       reqId: reqId ?? '',
       reqTime: reqTime ?? new Date().toISOString(),
       Message: Message ?? translate('No message available'),

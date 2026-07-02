@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable quotes */
 /* eslint-disable dot-notation */
 import React, {useCallback, useEffect, useState} from 'react';
@@ -42,7 +43,7 @@ const CableTvScreen = () => {
     translate('Select Your Operator'),
   );
   const [CustomerID, setCustomerID] = useState('');
-  const [amount, setAmount] = useState();
+  const [amount, setAmount] = useState('');
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [ProceedSheetVisible, setProceedSheetVisible] = useState(false);
   const [GasCylenderBillOPsheet, setGasCylenderBillOPsheet] = useState(false);
@@ -51,7 +52,6 @@ const CableTvScreen = () => {
   const [GasCylenderBillOpt, setGasCylenderBillOpt] = useState(
     translate('Select Your Operator'),
   );
-
   const [accnumhint, setAccnumhint] = useState('');
   const [accmaxlength, setAccmaxlength] = useState(0);
   const [key2, setKey2] = useState('');
@@ -69,18 +69,19 @@ const CableTvScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
+  const [dueDate, setDueDate] = useState(translate('Date'));
   const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
-
   const [showLoader, setShowLoader] = useState(false);
   const [reqTime, setReqTime] = useState('');
   const [reqId, setReqId] = useState('');
@@ -90,7 +91,7 @@ const CableTvScreen = () => {
   const [agencyCode2, setAgencyCode2] = useState('');
   useEffect(() => {
     CableTvOpt('Cable TV');
-  }, []);
+  }, [CableTvOpt]);
 
   const selectOperator = selectedOperator => {
     console.log('Selected Operator:', selectedOperator);
@@ -102,7 +103,7 @@ const CableTvScreen = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -115,19 +116,17 @@ const CableTvScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
   const day = ('0' + currentDate.getDate()).slice(-2);
-
   const formattedDate = `${year}-${month}-${day}`;
   const handleItemPress = item => {
     console.log('=============', item);
     setAccntvisivility(false);
     setAccntvisivility2(false);
-
     setDataType('');
     setMaxLen(0);
     setMinLength(0);
@@ -141,7 +140,6 @@ const CableTvScreen = () => {
       //clearState();
     } else {
       const custparam = item.customerparams;
-
       setDataType(custparam[0].dataType);
       setMaxLength(custparam[0].maxLength);
       setMinLength(custparam[0].minLength);
@@ -230,7 +228,6 @@ const CableTvScreen = () => {
     useDeviceInfoHook();
   const {userId, Loc_Data} = useSelector((state: RootState) => state.userInfo);
   const {latitude, longitude} = useLocationHook();
-
   const onRechargePress = useCallback(async () => {
     setShowLoader(true);
     const mobileNetwork = await getNetworkCarrier();
@@ -259,19 +256,15 @@ const CableTvScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${agencyCode}&bu=${agencyCode2}&acno=''&lt=''&ip=${ip1}&mc=''&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}`;
 
     //   url: url,
@@ -314,7 +307,7 @@ const CableTvScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -401,9 +394,9 @@ const CableTvScreen = () => {
     } catch (error) {}
   }
   const validateFields = () => {
-    if (paramname == 'Consumer Number') {
+    if (paramname === 'Consumer Number') {
       ToastAndroid.showWithGravity(
-        `Please Enter ${paramname}'`,
+        `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
@@ -560,13 +553,13 @@ const CableTvScreen = () => {
         stateData={[]}
         selectedOperator={''}
         setCircle={function (circle: string): void {
-          throw new Error('Function not implemented.');
+          throw new Error(translate('Function not implemented.'));
         }}
         setState={function (state: string): void {
-          throw new Error('Function not implemented.');
+          throw new Error(translate('Function not implemented.'));
         }}
         selectOperatorImage={function (path: string): void {
-          throw new Error('Function not implemented.');
+          throw new Error(translate('Function not implemented.'));
         }}
         path={''}
       />

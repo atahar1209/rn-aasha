@@ -3263,7 +3263,6 @@
   "2_Click_the_Scan_button_to_complete_your_2FA_verification": "2. अपना 2FA वेरिफिकेशन पूरा करने के लिए स्कैन बटन पर क्लिक करें",
   "key_forcomp_189": "2. अपना E-KYC पूरा करने के लिए OK बटन पर क्लिक करें, इसके बाद आपको अपने पंजीकृत मोबाइल नंबर पर ओटीपी प्राप्त होगा",
   "key_forcomp_190": "2. अपना EKYC पूरा करने के लिए OK बटन पर क्लिक करें, इसके बाद आपको अपने पंजीकृत मोबाइल नंबर पर OTP प्राप्त होगा",
-
   "dematAccounts": "डिमैट अकाउंट्स (DEMAT ACCOUNTS)",
   "3FaceAuthenticationIsDisabled": "3. 2FA वेरिफिकेशन के लिए बैंक की तरफ से फेस ऑथेंटिकेशन बंद कर दिया गया है।",
   "insertTime": "समय दर्ज करें",
@@ -3282,7 +3281,6 @@
   "retailerName": "रिटेलर का नाम",
   "addsubmitReferralData": "रेफरल डेटा जोड़ें/जमा करें",
   "ifYouWantToAdd": "यदि आप नया कस्टमर पॉइंट जोड़ना चाहते हैं या रेफरल करना चाहते हैं, तो कृपया इस टैब पर क्लिक करें...",
-
   "banks found": "बैंक मिले",
   "Last_5_recharges": "पिछले 5 रिचार्ज",
   "No_transactions_yet": "अभी तक कोई लेनदेन नहीं हुआ",
@@ -3402,7 +3400,6 @@
   "VPA:": "VPA:",
   "Your Version: V": "आपका वर्जन: V",
   "Your wallet balance is short by ₹": "आपके वॉलेट बैलेंस में ₹ की कमी है",
-
   "Invalid response": "अमान्य प्रतिक्रिया (Invalid response)",
   "success": "सफल",
   "Hi, I am sharing the transaction details using": "नमस्ते, मैं ट्रांजैक्शन का विवरण साझा कर रहा हूँ",
@@ -3410,13 +3407,11 @@
   "Banking Name": "बैंकिंग नाम",
   "Bank Ref ID": "बैंक रेफरेंस आईडी",
   "Remarks": "रिमार्क्स",
-
   "Please allow camera access from settings": "कृपया सेटिंग्स में जाकर कैमरा एक्सेस की अनुमति दें",
   "Please choose an option to upload image": "कृपया इमेज अपलोड करने के लिए एक विकल्प चुनें",
   "Please select front side of aadhar card": "कृपया आधार कार्ड का अगला भाग चुनें",
   "Please select back side of aadhar card": "कृपया आधार कार्ड का पिछला भाग चुनें",
   "Go to Home": "होम पर जाएं",
-
   "mainwallet": "मुख्य वॉलेट (Main Wallet)",
   "posbalance": "पॉस बैलेंस (POS Balance)",
   "cmsremainbal": "सीएमएस बैलेंस (CMS Balance)",
@@ -3425,16 +3420,13 @@
   "networkError": "नेटवर्क त्रुटि",
   "pleaseCheckInternetConnection": "कृपया अपना इंटरनेट कनेक्शन जांचें।",
   "somethingWentWrong": "कुछ गड़बड़ हुई। कृपया पुनः प्रयास करें।",
-
   "No_banks_found": "कोई बैंक नहीं मिला",
   "Try_a_different_search_term": "कृपया कुछ और लिखकर खोजें।",
   "Search_placeholder": "खोजें...",
   "banks_found": "बैंक मिले",
-
   "select_bank": "बैंक चुनें",
   "search_bank_name": "बैंक का नाम खोजें",
   "no_results_found": "कोई परिणाम नहीं मिला",
-
   "SECURITY_CHECK": "सुरक्षा जांच",
   "PLEASE_AUTHENTICATE": "ऐप को अनलॉक करने के लिए कृपया प्रमाणित करें।",
   "VERIFYING_DEVICE_SECURITY": "डिवाइस सुरक्षा की जांच की जा रही है...",
@@ -3503,7 +3495,6 @@
   "Manage Account": "खाता प्रबंधित करें",
   "Wallet Unload A/c": "वॉलेट अनलोड खाता",
   "For Aeps Activetion A/c": "AEPS सक्रियण खाते के लिए",
-
   "Daywise Commission": "दैनिक कमीशन",
   "Day Wise Commission": "दैनिक कमीशन",
   "Day wise commission of user slab": "उपयोगकर्ता स्लैब का दैनिक कमीशन",
@@ -3529,19 +3520,16 @@
   "Please enter a valid amount": "कृपया एक मान्य राशि दर्ज करें",
   "Hold on!": "रुकिए!",
   "Please fill in all fields": "कृपया सभी फ़ील्ड भरें",
-
   "Unable_to_open_link": "लिंक खोलने में असमर्थ",
   "Digital_Services": "डिजिटल सेवाएँ",
   "Important_Links": "महत्वपूर्ण लिंक",
   "Savings_Accounts": "बचत खाते",
   "Resources": "संसाधन",
   "Demat_Accounts": "डीमैट खाते",
-
   "Aadhar_Face_Driver": "आधार फेस ड्राइवर",
   "Startek_L1": "स्टारटेक L1",
   "Mantra_MFS110_L1": "मंत्रा MFS110 L1",
   "Morpho_L1": "मॉर्फो L1",
-
   "ICICI_Bank": "आईसीआईसीआई बैंक",
   "Axis_Bank": "एक्सिस बैंक",
   "IDFC_First_Bank": "आईडीएफसी फर्स्ट बैंक",
@@ -3549,10 +3537,8 @@
   "Union_Bank_of_India": "यूनियन बैंक ऑफ इंडिया",
   "HDFC_Bank": "एचडीएफसी बैंक",
   "State_Bank_of_India": "स्टेट बैंक ऑफ इंडिया",
-
   "Motilal_Oswal": "मोतिलाल ओसवाल",
   "Angel_One": "एंजल वन",
-
   "Please enter a valid amount.": "कृपया एक मान्य राशि दर्ज करें।",
   "Missing Info": "जानकारी अनुपलब्ध है",
   "Please select a bank account and enter your PIN.": "कृपया एक बैंक खाता चुनें और अपना पिन दर्ज करें।",
@@ -3565,7 +3551,6 @@
   "POS BALANCE": "पीओएस बैलेंस",
   "MAIN WALLET": "मुख्य वॉलेट",
   "Purchase_Orders_Report": "खरीद आदेश रिपोर्ट",
-
   "Old_Credit": "पुराना क्रेडिट",
   "Net_Transfer": "नेट ट्रांसफर",
   "Fund_Transfer_Report": "फंड ट्रांसफर रिपोर्ट",
@@ -3594,22 +3579,17 @@
   "Dealer Capping Is Low Please Contact To Admin": "डीलर की कैपिंग कम है। कृपया एडमिन से संपर्क करें।",
   "Transaction failed. Reason": "लेनदेन विफल हुआ। कारण",
   "Something went wrong!!": "कुछ गलत हो गया!!",
-
   "CDMA": "सीडीएमए",
   "ATM Cash Deposit": "एटीएम नकद जमा",
   "Branch Cash Deposit": "शाखा में नकद जमा",
-
   "your_QR_is_expired": "आपका QR समाप्त हो गया है",
   "Regenerate The QR CODE if You Need to add a New Payment": "यदि आपको नया भुगतान जोड़ना है, तो QR कोड को पुनः उत्पन्न करें",
   "Submit_Payment": "भुगतान जमा करें",
-
   "QR_code_has_expired.": "क्यूआर कोड की समय सीमा समाप्त हो गई है।",
   "Create": "बनाएं",
   "Your payment was completed successfully. Thank you for your transaction!": "आपका भुगतान सफलतापूर्वक पूरा हो गया है। आपके लेनदेन के लिए धन्यवाद!",
-
   "Select_Payment_Type": "भुगतान का प्रकार चुनें",
   "Select Pay Type": "भुगतान का प्रकार चुनें",
-
   "YES": "हाँ",
   "upi_intent_params": "upi_intent_params",
   "Payment status is NO. Please submit again.": "भुगतान की स्थिति NO है। कृपया फिर से सबमिट करें।",
@@ -3622,27 +3602,22 @@
   "VASTBAZAAR": "वस्तबाज़ार",
   "Invalid QR Type Selected!": "अमान्य QR प्रकार चुना गया है!",
   "Something went wrong while generating QR!": "QR जनरेट करते समय कुछ गलत हो गया!",
-
   "All fields must be filled": "सभी फ़ील्ड भरना अनिवार्य है",
   "Enter valid 12 digit Aadhar number": "मान्य 12 अंकों का आधार नंबर दर्ज करें",
   "Enter valid PAN (e.g. ABCDE1234F)": "मान्य PAN दर्ज करें (उदाहरण: ABCDE1234F)",
   "Aadhar Front": "आधार का आगे का भाग",
   "Aadhar Back": "आधार का पीछे का भाग",
   "GST Image": "GST छवि",
-
   "Password must be 5 digits long": "पासवर्ड कम से कम 5 अंकों का होना चाहिए",
   "Passwords do not match": "पासवर्ड मेल नहीं खाते",
   "Not Having Retailer Create Token Contact to Your Dealer": "रिटेलर क्रिएट टोकन उपलब्ध नहीं है। कृपया अपने डीलर से संपर्क करें",
-
   "From Web": "वेब से",
   "Kyc": "केवाईसी",
-
   "Validation Error": "मान्यकरण त्रुटि",
   "Please fill out the": "कृपया भरें",
   "Server side issue occurred.": "सर्वर साइड में समस्या हुई है।",
   "Go to Login Screen": "लॉगिन स्क्रीन पर जाएँ",
   "Join Now": "अभी जुड़ें",
-
   "Welcome back.": "वापसी पर स्वागत है।",
   "Please enter valid User ID and Password, you cannot leave it blank": "कृपया मान्य यूज़र आईडी और पासवर्ड दर्ज करें, आप इसे खाली नहीं छोड़ सकते",
   "or": "या",
@@ -3677,13 +3652,11 @@
   "Location fetch failed. Please try again.": "स्थान प्राप्त करने में विफल रहा। कृपया पुनः प्रयास करें।",
   "Unknown API Error": "अज्ञात API त्रुटि",
   "No Role Found": "कोई भूमिका नहीं मिली",
-
   "Notification Permission": "सूचना अनुमति",
   "Enable notifications to stay updated.": "अपडेट रहने के लिए नोटिफिकेशन चालू करें।",
   "CMS Balance": "CMS बैलेंस",
   "Hold & Lean": "होल्ड और लियन",
   "to Wallet": "वॉलेट में",
-
   "This feature is currently under development.": "यह सुविधा वर्तमान में विकासाधीन है।",
   "It will be available soon.": "यह जल्द ही उपलब्ध होगी।",
   "Demo Account": "डेमो अकाउंट",
@@ -3696,9 +3669,7 @@
   "TrainScreen": "ट्रेन स्क्रीन",
   "HotelScreen": "होटल स्क्रीन",
   "BusScreen": "बस स्क्रीन",
-
   "Restricted": "प्रतिबंधित",
-
   "App Install Info": "ऐप इंस्टॉल जानकारी",
   "First Install": "पहला इंस्टॉल",
   "Last Update": "अंतिम अपडेट",
@@ -3708,16 +3679,12 @@
   "Could not download APK.": "APK डाउनलोड नहीं हो सका।",
   "What's new in this version?": "इस वर्ज़न में नया क्या है?",
   "Downloading": "डाउनलोड हो रहा है",
-
   "Hi.": "नमस्ते।",
   "Session Expired": "सत्र समाप्त हो गया है",
-
   "DR": "डेबिट",
   "Comm": "कमीशन",
   "Bal": "बैलेंस",
-
   "DealerRechargeHistory": "डीलर रिचार्ज इतिहास",
-
   "Camera not ready": "कैमरा तैयार नहीं है",
   "Recording Complete!": "रिकॉर्डिंग पूरी हो गई!",
   "Microphone Permission Required": "माइक्रोफ़ोन अनुमति आवश्यक है",
@@ -3731,15 +3698,12 @@
   "REC": "रिक",
   "Position your face in frame": "अपने चेहरे को फ्रेम के अंदर रखें",
   "Please record video first": "कृपया पहले वीडियो रिकॉर्ड करें",
-
   "status is  OK.": "स्थिति ठीक है।",
   "Something went wrong:": "कुछ गलत हो गया:",
-
   "ImagePicker Error": "इमेज पिकर त्रुटि",
   "Upload successful": "अपलोड सफल हुआ",
   "Profile image": "प्रोफ़ाइल चित्र",
   "Registratidon Certificate": "पंजीकरण प्रमाणपत्र",
-
   "API Error": "एपीआई त्रुटि",
   "Lat": "अक्षांश",
   "Lng": "देशांतर",
@@ -3748,29 +3712,21 @@
   "Submit & Generate": "सबमिट करें और जनरेट करें",
   "Take GPS Photo": "GPS फोटो लें",
   "Unable to fetch GPS location. Please enable location.": "GPS स्थान प्राप्त नहीं हो सका। कृपया लोकेशन सेवा सक्षम करें।",
-
   "Search by Name /Firm name/ Mobile": "नाम / फर्म नाम / मोबाइल से खोजें",
-
   "User Status Update": "उपयोगकर्ता स्थिति अपडेट",
-
   "Password should be at least 6 characters long!": "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए!",
   "Close Tips": "बंद करें",
   "Your password has been changed successfully.": "आपका पासवर्ड सफलतापूर्वक बदल दिया गया है।",
-
   "Unable to open maps": "मानचित्र खोलने में असमर्थ।",
   "Apps": "मोबाइल ऐप",
-
   "Yes I Need High Security": "हाँ, मुझे उच्च सुरक्षा चाहिए",
-
   "Mandatory SIM Setting": "अनिवार्य सिम सेटिंग",
-
   "Enter New Pin": "नया पिन दर्ज करें",
   "Both fields are required": "दोनों फ़ील्ड आवश्यक हैं",
   "PIN must be between 4 and 6 digits": "पिन 4 से 6 अंकों के बीच होना चाहिए",
   "Confirm PIN must be between 4 and 6 digits": "कन्फर्म पिन 4 से 6 अंकों के बीच होना चाहिए",
   "Pins do not match": "पिन मेल नहीं खाते",
   "Your pin has been set successfully!": "आपका पिन सफलतापूर्वक सेट कर दिया गया है!",
-
   "English (India)": "अंग्रेज़ी (भारत)",
   "Hindi (हिंदी)": "हिंदी (हिंदी)",
   "Bengali (বাংলা)": "बंगाली (বাংলা)",
@@ -3782,25 +3738,19 @@
   "Your Language Is Changed Successfully": "आपकी भाषा सफलतापूर्वक बदल दी गई है",
   "Failed to change language": "भाषा बदलने में विफल",
   "Choose Language": "भाषा चुनें",
-
   "Update Successfully": "सफलतापूर्वक अपडेट किया गया",
-
   "Type Text Here": "यहाँ टेक्स्ट लिखें",
   "Send": "भेजें",
-
   "Please fill the required fields": "कृपया आवश्यक फ़ील्ड भरें",
   "No response from server. Please try again.": "सर्वर से कोई प्रतिक्रिया नहीं मिली। कृपया पुनः प्रयास करें।",
   "Something went wrong. Please try again later.": "कुछ गलत हो गया। कृपया बाद में पुनः प्रयास करें।",
   "Choose an image from gallery or take a new photo": "गैलरी से एक छवि चुनें या नई फोटो लें",
-
   "Are you sure you want to log out?": "क्या आप वाकई लॉग आउट करना चाहते हैं?",
-
   "NEW": "नया",
   "No Notifications": "कोई सूचना नहीं",
   "You are all caught up!": "आप सभी अपडेट देख चुके हैं!",
   "Cash_Pickup_Report": "कैश पिकअप रिपोर्ट",
   "NULL": "शून्य",
-
   "AEPS_History": "एईपीएस इतिहास",
   "No_transactions_found": "कोई लेन-देन नहीं मिला",
   "Try_adjusting_filters": "तारीख सीमा या फ़िल्टर बदलकर पुनः प्रयास करें",
@@ -3810,10 +3760,8 @@
   "Account_Aadhaar": "खाता / आधार",
   "Bank_RRN": "बैंक RRN",
   "Your_transaction_is": "आपका लेन-देन है",
-
   "Fino_Cms_Report": "फिनो सीएमएस रिपोर्ट",
   "Request_Date": "अनुरोध तिथि",
-
   "Bus_Booking_Report": "बस बुकिंग रिपोर्ट",
   "Airline_Name": "एयरलाइन नाम",
   "Offer_Fare": "ऑफर किराया",
@@ -3825,42 +3773,31 @@
   "Fare_Amount": "किराया राशि",
   "Passenger_Name": "यात्री का नाम",
   "No_Name": "कोई नाम नहीं",
-
   "Cash_Deposit_Successful": "नकद जमा सफल हुआ",
   "Cash_Deposit_Failed": "नकद जमा विफल हुआ",
   "Cash_Deposit_Pending": "नकद जमा लंबित है",
-
   "Flight Booking Successful": "फ़्लाइट बुकिंग सफल रही",
   "Flight Booking Failed": "फ़्लाइट बुकिंग विफल रही",
-
   "Non-Verified A/C": "गैर-सत्यापित खाता",
   "Receiver": "प्राप्तकर्ता",
   "Try changing the date range or status filter.": "तारीख सीमा या स्टेटस फ़िल्टर बदलकर देखें।",
   "Error occurred": "त्रुटि हुई",
   "IMPS / NEFT History": "IMPS / NEFT इतिहास",
   "IMPS / NEFT Receipt": "IMPS / NEFT रसीद",
-
   "Device ID": "डिवाइस आईडी",
   "Micro ATM Rental Report": "माइक्रो एटीएम रेंटल रिपोर्ट",
-
   "pan_history": "पैन इतिहास",
-
   "Transaction Successful": "✓ लेनदेन सफल हुआ",
   "Transaction Failed": "✕ लेनदेन विफल हुआ",
   "Transaction Pending": "⏳ लेनदेन लंबित है",
-
   "frm_name": "प्रेषक का नाम",
   "rrn": "आरआरएन",
-
   "retailer_gst": "रिटेलर जीएसटी",
   "retailer_tds": "रिटेलर टीडीएस",
   "my_earn": "मेरी कमाई",
-
   "no_data_found": "कोई डेटा नहीं मिला",
   "no_transactions_available": "कोई लेनदेन उपलब्ध नहीं है",
-
   "load_more": "और लोड करें",
-
   "txn_type": "लेनदेन का प्रकार",
   "bank_rrn": "बैंक RRN",
   "request_time": "अनुरोध का समय",
@@ -3876,25 +3813,21 @@
   "success_msg": "लेनदेन सफल हुआ",
   "failed_msg": "लेनदेन असफल हुआ",
   "pending_msg": "लेनदेन लंबित है",
-
   "transaction_details": "लेन-देन विवरण",
   "amount": "राशि",
   "transaction_details_empty": "कोई विवरण उपलब्ध नहीं है",
   "transaction_report": "POS रिपोर्ट",
-
   "firm_name": "फर्म का नाम",
   "retailer_name": "रिटेलर का नाम",
   "insert_date": "डालने की तारीख",
   "response_date": "प्रतिक्रिया तिथि",
   "id": "आईडी",
   "wallet_transfer_history": "CMS वॉलेट ट्रांसफर इतिहास",
-
   "operator_name": "ऑपरेटर नाम",
   "recharge_number": "रिचार्ज नंबर",
   "recharge_amount": "रिचार्ज राशि",
   "total": "कुल",
   "success_amount": "सफल राशि",
-
   "transaction": "लेनदेन",
   "refund": "रिफंड",
   "copy": "कॉपी",
@@ -3909,17 +3842,14 @@
   "transaction_details_not_shared": "लेनदेन विवरण साझा नहीं किया गया",
   "dispute_submitted_successfully": "विवाद सफलतापूर्वक सबमिट हुआ!",
   "copied_to_clipboard": "क्लिपबोर्ड पर कॉपी किया गया!",
-
   "from_date": "आरंभ तिथि",
   "to_date": "समाप्ति तिथि",
   "failed_to_fetch_report": "रिपोर्ट लाने में विफल",
   "date": "तारीख",
-
   "wallet_unload_history": "वॉलेट अनलोड इतिहास",
   "bank_account": "बैंक खाता",
   "transfer_type": "ट्रांसफर प्रकार",
   "charge": "चार्ज",
-
   "cash_online_deposit_report": "नकद और ऑनलाइन जमा रिपोर्ट",
   "payment_to": "भुगतान प्राप्तकर्ता",
   "deposit_slip_uploaded_time": "जमा पर्ची अपलोड समय",
@@ -3931,13 +3861,11 @@
   "view_slip_image": "स्लिप इमेज देखें",
   "radiant_cash_management": "रेडियंट कैश मैनेजमेंट",
   "function_not_implemented": "फंक्शन लागू नहीं किया गया",
-
   "group_pay": "ग्रुप पे",
   "enter_amount": "राशि दर्ज करें",
   "select_mode": "मोड चुनें",
   "radiant_account": "रेडियंट खाता",
   "upload_slip": "स्लिप अपलोड करें",
-
   "insert_time": "इंसर्ट समय",
   "client_customer_name": "ग्राहक / कस्टमर नाम",
   "state_name": "राज्य का नाम",
@@ -3950,7 +3878,6 @@
   "retailer_info": "रिटेलर जानकारी",
   "null": "शून्य",
   "n_a": "लागू नहीं",
-
   "deposit_ledger_report": "डिपॉजिट लेजर रिपोर्ट",
   "pickup_amount": "पिकअप राशि",
   "amount_transfer": "स्थानांतरित राशि",
@@ -3958,7 +3885,6 @@
   "paid_amount": "भुगतान की गई राशि",
   "extra_amount": "अतिरिक्त राशि",
   "cash_submit_type": "नकद जमा प्रकार",
-
   "group_payments": "समूह भुगतान",
   "individual_payment": "व्यक्तिगत भुगतान",
   "barrel_cash_deposit": "बैरल नकद जमा",
@@ -3979,7 +3905,6 @@
   "fill_all_client_deposit_fields": "सभी क्लाइंट जमा फ़ील्ड भरें",
   "fill_all_online_transfer_fields": "सभी ऑनलाइन ट्रांसफर फ़ील्ड भरें",
   "invalid_transaction_type": "अमान्य लेनदेन प्रकार",
-
   "Pickup/Collection Mode": "पिकअप/कलेक्शन मोड",
   "My RCE ID": "मेरा आरसीई आईडी",
   "Total Pickup Amount": "कुल पिकअप राशि",
@@ -4009,7 +3934,6 @@
   "Max Travel Allowance": "अधिकतम यात्रा भत्ता",
   "Hide Details": "विवरण छिपाएँ",
   "View More Details": "अधिक विवरण देखें",
-
   "Cash Pickup Calendar": "कैश पिकअप कैलेंडर",
   "Leave Rules": "छुट्टी के नियम",
   "Approved leave incurs a": "स्वीकृत छुट्टी पर जुर्माना",
@@ -4029,7 +3953,6 @@
   "Failed to submit": "जमा करने में विफल",
   "Holiday(s) cancelled": "छुट्टी रद्द कर दी गई",
   "Failed to cancel": "रद्द करने में विफल",
-
   "Confirm submission": "सबमिशन की पुष्टि करें",
   "Please review before proceeding": "आगे बढ़ने से पहले कृपया समीक्षा करें",
   "Make sure all details are correct. Once submitted, changes may not be possible.": "सुनिश्चित करें कि सभी विवरण सही हैं। एक बार सबमिट करने के बाद बदलाव संभव नहीं हो सकते हैं।",
@@ -4039,7 +3962,6 @@
   "Data privacy agreed": "डेटा गोपनीयता के लिए सहमति दी गई है",
   "Yes, proceed": "हाँ, आगे बढ़ें",
   "Review again": "फिर से समीक्षा करें",
-
   "Align your face in the oval": "अपने चेहरे को अंडाकार फ्रेम में रखें",
   "No face detected — look straight at camera": "कोई चेहरा नहीं मिला — कैमरे की ओर सीधे देखें",
   "Multiple faces detected — only one person allowed": "एक से अधिक चेहरे मिले — केवल एक व्यक्ति की अनुमति है",
@@ -4064,7 +3986,6 @@
   "Keep your face inside the oval": "अपने चेहरे को अंडाकार फ्रेम के अंदर रखें",
   "Capturing...": "कैप्चर किया जा रहा है...",
   "Tap to Capture": "कैप्चर करने के लिए टैप करें",
-
   "KYC": "केवाईसी",
   "Personal Details": "व्यक्तिगत विवरण",
   "Education": "शिक्षा",
@@ -4075,7 +3996,6 @@
   "Data Privacy": "डेटा गोपनीयता",
   "STEP": "चरण",
   "OF": "में से",
-
   "CMS Manual Deposit": "CMS मैनुअल जमा",
   "Enter Bank RRN Number": "बैंक RRN नंबर दर्ज करें",
   "Enter Slip Number": "स्लिप नंबर दर्ज करें",
@@ -4092,7 +4012,6 @@
   "Deposit submitted successfully": "जमा सफलतापूर्वक सबमिट किया गया",
   "Something went wrong, please try again": "कुछ गलत हो गया, कृपया पुनः प्रयास करें",
   "Submission failed": "सबमिशन विफल हुआ",
-
   "Enter complete OTP": "पूरा OTP दर्ज करें",
   "Invalid OTP. Please try again.": "अमान्य OTP। कृपया पुनः प्रयास करें।",
   "Verified!": "सत्यापित!",
@@ -4103,7 +4022,6 @@
   "Did not receive OTP?": "OTP प्राप्त नहीं हुआ?",
   "Resend": "पुनः भेजें",
   "Resend in": "पुनः भेजें",
-
   "Pin Code must be 6 digits.": "पिन कोड 6 अंकों का होना चाहिए।",
   "Please select a Client.": "कृपया एक क्लाइंट चुनें।",
   "Contact Name is required.": "संपर्क नाम आवश्यक है।",
@@ -4129,13 +4047,10 @@
   "Select Client": "क्लाइंट चुनें",
   "Select Pickup Option": "पिकअप विकल्प चुनें",
   "Select Deposit Mode": "डिपॉजिट मोड चुनें",
-
   "Front Aadhar": "आधार का आगे का भाग",
   "Back Aadhar": "आधार का पीछे का भाग",
-
   "Submit for registration": "पंजीकरण के लिए सबमिट करें",
   "Dear Retail Cash Executive Company keeps adding collection points from time to time and you will be given collection points on this basis. Their availability is not necessarily immediate. You may have to wait. If you are satisfied with all the information and you are eligible to do this work, please click on the submit button. Our representative will contact you as soon as possible and help you get your registration done.": "प्रिय रिटेल कैश एग्जीक्यूटिव, कंपनी समय-समय पर नए कलेक्शन पॉइंट जोड़ती रहती है और आपको इसी आधार पर कलेक्शन पॉइंट दिए जाएंगे। उनकी उपलब्धता तुरंत होना आवश्यक नहीं है, इसलिए आपको प्रतीक्षा करनी पड़ सकती है। यदि आप सभी जानकारी से संतुष्ट हैं और इस कार्य के लिए पात्र हैं, तो कृपया सबमिट बटन पर क्लिक करें। हमारे प्रतिनिधि जल्द से जल्द आपसे संपर्क करेंगे और आपका पंजीकरण पूरा कराने में सहायता करेंगे।",
-
   "Documents submitted": "दस्तावेज़ जमा कर दिए गए",
   "Team verification": "टीम सत्यापन",
   "Final approval": "अंतिम स्वीकृति",
@@ -4144,7 +4059,6 @@
   "Our team is reviewing your information. You will be notified once the process is complete.": "हमारी टीम आपकी जानकारी की समीक्षा कर रही है। प्रक्रिया पूरी होने पर आपको सूचित किया जाएगा।",
   "REVIEW PROGRESS": "समीक्षा प्रगति",
   "Typically takes 1–2 business days. Check back here for updates.": "आमतौर पर 1–2 कार्यदिवस लगते हैं। अपडेट के लिए यहां दोबारा जांच करें।",
-
   "All Days Working": "सभी दिन कार्य दिवस",
   "Banking Days Working": "बैंकिंग कार्य दिवस",
   "Holiday/Weekend Work": "छुट्टी/सप्ताहांत कार्य",
@@ -4156,20 +4070,16 @@
   "Evening Collection & Cash deposit": "शाम का संग्रह और नकद जमा",
   "Vaulting & Cash deposit": "वॉल्टिंग और नकद जमा",
   "26 JAN, 15 AUG, 2 OCT, Diwali, Holi": "26 जनवरी, 15 अगस्त, 2 अक्टूबर, दिवाली, होली",
-
   "E": "ई",
   "Need_more_information": "अधिक जानकारी की आवश्यकता है",
-
   "This app needs access to your camera to take photos.": "इस ऐप को फोटो लेने के लिए आपके कैमरे की अनुमति चाहिए",
   "Failed to load image": "छवि लोड करने में विफल",
-
   "The place you live has a population of more than 10,000.": "आप जिस स्थान पर रहते हैं वहाँ की जनसंख्या 10,000 से अधिक होनी चाहिए।",
   "You can take a fixed time to collect the money from any store or office authorized by the company within a radius of 5 km and you can transfer the collected amount to the company through deposit or online mode within a fixed time. If yes, you can do so.": "आप कंपनी द्वारा अधिकृत किसी भी दुकान या कार्यालय से 5 किमी के दायरे में एक निश्चित समय पर पैसा एकत्र कर सकते हैं और एकत्रित राशि को निर्धारित समय के भीतर जमा या ऑनलाइन माध्यम से कंपनी को ट्रांसफर कर सकते हैं। यदि हाँ, तो आप ऐसा कर सकते हैं।",
   "If you or any other member of the blood relation have any criminal record in the past, convicted for any crime including moral turpitude, have police history sheet, then you will not be considered eligible for this service.": "यदि आप या आपके किसी रक्त संबंधी का कोई आपराधिक रिकॉर्ड है, नैतिक अधमता सहित किसी अपराध में दोषी पाए गए हैं या पुलिस रिकॉर्ड है, तो आप इस सेवा के लिए पात्र नहीं माने जाएंगे।",
   "You need to keep your financial credit score (civil score) above about 670. If you do not have this or more financial credit score then you are not eligible.": "आपको अपना वित्तीय क्रेडिट स्कोर (सिविल स्कोर) लगभग 670 से ऊपर रखना होगा। यदि यह इससे कम है तो आप पात्र नहीं हैं।",
   "If you are physically able to travel and have a vehicle available.": "यदि आप शारीरिक रूप से यात्रा करने में सक्षम हैं और आपके पास वाहन उपलब्ध है।",
   "You are a native Indian citizen and you have all the KYC documents along with a bank account and a checkbook available.": "आप भारतीय नागरिक हैं और आपके पास सभी KYC दस्तावेज़ों के साथ बैंक खाता और चेकबुक उपलब्ध है।",
-
   "OTP sent to registered mobile!": "पंजीकृत मोबाइल पर OTP भेजा गया है!",
   "OTP send failed. Try again.": "OTP भेजने में विफल। पुनः प्रयास करें।",
   "Something went wrong. Try again.": "कुछ गलत हो गया। पुनः प्रयास करें।",
@@ -4183,7 +4093,6 @@
   "OTP sent to email!": "ईमेल पर OTP भेजा गया है!",
   "Email verified Successfully!": "ईमेल सफलतापूर्वक सत्यापित हुआ!",
   "Complete All Fields": "सभी फ़ील्ड भरें",
-
   "Re-verify": "पुनः सत्यापित करें",
   "IDENTITY PROOF": "पहचान प्रमाण",
   "Aadhaar Verification": "आधार सत्यापन",
@@ -4205,9 +4114,7 @@
   "OTP sent to email": "ईमेल पर OTP भेजा गया",
   "Valid email address": "मान्य ईमेल पता",
   "Wrong email? Start again": "गलत ईमेल? फिर से शुरू करें",
-
   "cellphone-message": "cellphone-message",
-
   "Permanent address required": "स्थायी पता आवश्यक है",
   "Enter valid 6-digit pincode": "मान्य 6 अंकों का पिनकोड दर्ज करें",
   "Pincode required": "पिनकोड आवश्यक है",
@@ -4237,7 +4144,6 @@
   "Enter nearby landmark": "निकट का लैंडमार्क दर्ज करें",
   "Nearest Police Station": "निकटतम पुलिस स्टेशन",
   "Enter nearest police station": "निकटतम पुलिस स्टेशन दर्ज करें",
-
   "Camera not available": "कैमरा उपलब्ध नहीं है",
   "Photo capture failed. Try again.": "फोटो कैप्चर नहीं हो सका। कृपया पुनः प्रयास करें।",
   "Could not read image": "छवि पढ़ी नहीं जा सकी",
@@ -4262,7 +4168,6 @@
   "Security Check": "सुरक्षा जांच",
   "Credit Card Score": "क्रेडिट कार्ड स्कोर",
   "Other Document": "अन्य दस्तावेज़",
-
   "Enter valid account number (9–18 digits)": "मान्य खाता संख्या दर्ज करें (9–18 अंक)",
   "Account number required": "खाता संख्या आवश्यक है",
   "IFSC code required": "IFSC कोड आवश्यक है",
@@ -4280,7 +4185,6 @@
   "Enter branch name": "शाखा का नाम दर्ज करें",
   "Savings": "बचत",
   "Salary": "वेतन",
-
   "Don't Know": "पता नहीं",
   "Hinduism": "हिंदू धर्म",
   "Islam": "इस्लाम",
@@ -4320,7 +4224,6 @@
   "Optional Document": "वैकल्पिक दस्तावेज़",
   "Document Type": "दस्तावेज़ का प्रकार",
   "basicInfo": "मूल जानकारी",
-
   "The Individual has approached the Company to on-board as a Retail Cash Executive (RCE) for providing necessary services, to support the Cash Management Services of the Company.": "व्यक्ति ने कंपनी की कैश मैनेजमेंट सेवाओं का समर्थन करने हेतु आवश्यक सेवाएँ प्रदान करने के लिए रिटेल कैश एग्जीक्यूटिव (RCE) के रूप में ऑनबोर्ड होने के लिए कंपनी से संपर्क किया है।",
   "The Individual understands that the Company to on-board the RCE, need to collect, store and process certain personal data of the Individual (\"Data\").": "व्यक्ति समझता/समझती है कि RCE को ऑनबोर्ड करने के लिए कंपनी को उसके कुछ व्यक्तिगत डेटा (\"डेटा\") को एकत्रित, संग्रहीत और संसाधित करने की आवश्यकता है।",
   "Data Controller Information": "डेटा नियंत्रक की जानकारी",
@@ -4374,7 +4277,6 @@
   "you confirm your explicit consent to the Data Privacy Notice above. This is legally binding under the Digital Personal Data Protection Act 2023.": "आप ऊपर दी गई डेटा गोपनीयता सूचना के लिए अपनी स्पष्ट सहमति की पुष्टि करते हैं। यह Digital Personal Data Protection Act 2023 के अंतर्गत कानूनी रूप से बाध्यकारी है।",
   "Please agree to the Data Privacy Notice to continue": "कृपया आगे बढ़ने के लिए डेटा गोपनीयता सूचना से सहमत हों",
   "Submitted Successfully": "सफलतापूर्वक जमा किया गया",
-
   "Self-Declaration": "स्व-घोषणा",
   "I acknowledge that I am being onboarded as an independent service provider and not as an employee of the Company and I shall carry out services in accordance with the terms of the separate service agreement and operational guidelines issued by the Company from time to time.": "मैं स्वीकार करता/करती हूँ कि मुझे कंपनी के कर्मचारी के रूप में नहीं बल्कि एक स्वतंत्र सेवा प्रदाता के रूप में ऑनबोर्ड किया जा रहा है और मैं समय-समय पर कंपनी द्वारा जारी किए गए पृथक सेवा अनुबंध तथा परिचालन दिशानिर्देशों के अनुसार सेवाएँ प्रदान करूँगा/करूँगी।",
   "I further declare that I have not been convicted of any criminal offence and no criminal proceedings are pending against me. I am not a wilful defaulter in repaying any borrowings (loans/credit cards) and have not been involved in any fraud or financial misconduct.": "मैं आगे यह घोषणा करता/करती हूँ कि मुझे किसी भी आपराधिक अपराध में दोषी नहीं ठहराया गया है और मेरे विरुद्ध कोई आपराधिक कार्यवाही लंबित नहीं है। मैं किसी भी ऋण (लोन/क्रेडिट कार्ड) के भुगतान में जानबूझकर चूक करने वाला/वाली नहीं हूँ और किसी भी धोखाधड़ी या वित्तीय कदाचार में शामिल नहीं रहा/रही हूँ।",
@@ -4388,7 +4290,6 @@
   "I agree to provide my free, informed, and explicit consent to the collection, use, processing, storage, and sharing of my personal data in accordance with the said Annexure I and applicable laws.": "मैं उक्त अनुलग्नक I तथा लागू कानूनों के अनुसार अपने व्यक्तिगत डेटा के संग्रह, उपयोग, प्रसंस्करण, भंडारण और साझा करने के लिए अपनी स्वैच्छिक, सूचित और स्पष्ट सहमति प्रदान करने के लिए सहमत हूँ।",
   "you confirm your agreement to all declarations above. This is legally binding.": "आप उपरोक्त सभी घोषणाओं के प्रति अपनी सहमति की पुष्टि करते हैं। यह कानूनी रूप से बाध्यकारी है।",
   "Section": "अनुभाग",
-
   "Driving License Details": "ड्राइविंग लाइसेंस विवरण",
   "Do you have a Driving License?": "क्या आपके पास ड्राइविंग लाइसेंस है?",
   "Driving License Number": "ड्राइविंग लाइसेंस नंबर",
@@ -4399,7 +4300,6 @@
   "Languages Known": "ज्ञात भाषाएँ",
   "e.g. Hindi, English, Marathi": "जैसे: हिंदी, अंग्रेज़ी, मराठी",
   "Details saved!": "विवरण सफलतापूर्वक सहेजा गया!",
-
   "Qualification": "योग्यता",
   "College": "कॉलेज",
   "Board/University": "बोर्ड/विश्वविद्यालय",
@@ -4413,7 +4313,6 @@
   "Graduate": "स्नातक",
   "Post Graduate": "स्नातकोत्तर",
   "Art": "कला",
-
   "useFormCtx must be inside FormProvider": "useFormCtx को FormProvider के अंदर होना चाहिए",
   "Identity Proof": "पहचान प्रमाण",
   "12-digit Aadhaar": "12 अंकों का आधार नंबर",
@@ -4430,7 +4329,6 @@
   "Please enter a valid PAN Number": "कृपया एक वैध PAN नंबर दर्ज करें",
   "Please enter a valid Mobile Number": "कृपया एक वैध मोबाइल नंबर दर्ज करें",
   "Please enter a valid Email Address": "कृपया एक वैध ईमेल पता दर्ज करें",
-
   "Payout & Travel Allowance Structure": "भुगतान एवं यात्रा भत्ता संरचना",
   "Commission / Minimum Guarantee": "कमीशन / न्यूनतम गारंटी",
   "Commission Rates": "कमीशन दरें",
@@ -4482,7 +4380,6 @@
   "Yes, I Agree ✓": "हाँ, मैं सहमत हूँ ✓",
   "YES, I AGREE": "हाँ, मैं सहमत हूँ",
   "Section 8": "अनुभाग 8",
-
   "Reference saved!": "संदर्भ सफलतापूर्वक सहेजा गया!",
   "OTP failed": "OTP विफल हुआ",
   "Enter valid OTP": "मान्य OTP दर्ज करें",
@@ -4502,7 +4399,6 @@
   "Operational Details": "संचालन विवरण",
   "Have Two-Wheeler?": "क्या आपके पास दोपहिया वाहन है?",
   "Two-Wheeler Number": "दोपहिया वाहन नंबर",
-
   "Reference name required": "रेफरेंस नाम आवश्यक है",
   "Designation required": "पद आवश्यक है",
   "Enter valid 10-digit mobile": "मान्य 10 अंकों का मोबाइल नंबर दर्ज करें",
@@ -4521,7 +4417,6 @@
   "Reference Name": "रेफरेंस नाम",
   "Designation": "पद",
   "Enter designation": "पद दर्ज करें",
-
   "Advance Funding Declaration": "अग्रिम फंडिंग घोषणा",
   "Security Cheque Details": "सुरक्षा चेक विवरण",
   "Payee Name": "भुगतानकर्ता का नाम",
@@ -4536,7 +4431,6 @@
   "Please upload security cheque copy": "कृपया सुरक्षा चेक कॉपी अपलोड करें",
   "Security cheque saved!": "सुरक्षा चेक सेव हो गया!",
   "Select Source": "स्रोत चुनें",
-
   "Aadhaar card": "आधार कार्ड",
   "PAN card": "पैन कार्ड",
   "Driving licence": "ड्राइविंग लाइसेंस",
@@ -4559,14 +4453,11 @@
   "Once your RCE ID is generated, you will receive an SMS and email notification. You can then login to the agent portal and start working.": "जब आपका RCE ID जनरेट हो जाएगा, तो आपको SMS और ईमेल सूचना मिलेगी। फिर आप एजेंट पोर्टल में लॉगिन करके काम शुरू कर सकते हैं।",
   "Need help?": "मदद चाहिए?",
   "Contact support": "सपोर्ट से संपर्क करें",
-
   "Image Re-Upload": "छवि पुनः अपलोड करें",
   "No image available": "कोई छवि उपलब्ध नहीं है",
   "Loading image": "छवि लोड हो रही है",
-
   "Add More": "और जोड़ें",
   "Re-upload": "पुनः अपलोड करें",
-
   "Personal": "व्यक्तिगत",
   "Enter the pickup time, online slip or physical slip number and full details of the currency picked up from the customer point, also the count of all types of notes should match the total amount exactly.": "पिकअप समय, ऑनलाइन स्लिप या फिजिकल स्लिप नंबर और ग्राहक स्थान से एकत्र की गई मुद्रा का पूरा विवरण दर्ज करें। साथ ही सभी प्रकार के नोटों की गिनती कुल राशि से बिल्कुल मेल खानी चाहिए।",
   "RCE Cash Pickup Report": "RCE कैश पिकअप रिपोर्ट",
@@ -4587,17 +4478,14 @@
   "Through this function we are sharing with you the list of Radiant Cash Management Services Limited bank accounts and QR Codes in which you can Deposit Cash, Online Transfer and QR Code Scan.": "इस फ़ंक्शन के माध्यम से हम आपको Radiant Cash Management Services Limited के बैंक खातों और QR कोड की सूची साझा कर रहे हैं, जिनमें आप कैश जमा, ऑनलाइन ट्रांसफर और QR कोड स्कैन कर सकते हैं।",
   "Some banks require a separate deposit slip to deposit money. All the slips required for these banks can be downloaded from here and you can use them by taking a print out (Print Slip) of them.": "कुछ बैंकों में पैसे जमा करने के लिए अलग डिपॉजिट स्लिप की आवश्यकता होती है। इन बैंकों के लिए सभी स्लिप यहाँ से डाउनलोड की जा सकती हैं और प्रिंट करके उपयोग की जा सकती हैं।",
   "To deposit cash in banks, some important documents of the company may be required, such as PAN Card, which is required in most banks. Some banks may also ask for additional documents, download documents from here.": "बैंकों में नकद जमा करने के लिए कंपनी के कुछ महत्वपूर्ण दस्तावेज़ जैसे PAN कार्ड की आवश्यकता हो सकती है, जो अधिकांश बैंकों में जरूरी होता है। कुछ बैंक अतिरिक्त दस्तावेज़ भी मांग सकते हैं, उन्हें यहाँ से डाउनलोड करें।",
-
   "camera_permission_body": "क्यूआर कोड स्कैन करने के लिए कैमरा एक्सेस की आवश्यकता है।",
   "open_settings": "सेटिंग्स खोलें",
   "no_camera_permission": "कैमरा अनुमति नहीं है",
   "scan_qr_code_hint": "रेडिएंटरिलायंस (RadiantReliance) क्यूआर कोड को स्कैन करें",
-
   "selectBank": "बैंक चुनें",
   "searchBankName": "बैंक का नाम खोजें",
   "noResultsFound": "कोई परिणाम नहीं मिला",
   "notAvailable": "उपलब्ध नहीं",
-
   "Press error": "प्रेस त्रुटि",
   "Too far": "बहुत दूर",
   "Unknown PostPay condition": "अज्ञात पोस्टपे स्थिति",
@@ -4693,19 +4581,16 @@
   "Please upload the slip before submitting.": "सबमिट करने से पहले कृपया स्लिप अपलोड करें।",
   "Enter the number of slips for which you want to fill the details": "उन स्लिपों की संख्या दर्ज करें जिनके लिए आप विवरण भरना चाहते हैं",
   "Note:- Amount Deposited, Pending for Approval": "नोट:- राशि जमा कर दी गई है, स्वीकृति लंबित है",
-
   "Recharge of": "का रिचार्ज",
   "Unknown": "अज्ञात",
   "Regards": "सादर",
   "YourApp": "आपका ऐप",
-
   "Enter consumer No": "उपभोक्ता संख्या दर्ज करें",
   "Please": "कृपया",
   "Heavy Request failed!!": "हेवी रिक्वेस्ट विफल हो गई!!",
   "try after sometime !!!": "कृपया कुछ समय बाद पुनः प्रयास करें!!!",
   "An error has occurred.": "एक त्रुटि हुई है।",
   "Procced": "आगे बढ़ें",
-
   "Electricity Rechage": "बिजली रिचार्ज",
   "Please Select an State": "कृपया एक राज्य चुनें",
   "BillAmount": "बिल राशि",
@@ -4813,7 +4698,6 @@
   "Transactions are secured via biometric authentication": "लेनदेन बायोमेट्रिक प्रमाणीकरण द्वारा सुरक्षित हैं",
   "Action Required": "कार्रवाई आवश्यक है",
   "Register Merchant": "मर्चेंट पंजीकृत करें",
-
   "Please complete your e-KYC to proceed with this service.": "इस सेवा को जारी रखने के लिए कृपया अपना e-KYC पूरा करें।",
   "Re-Scan": "पुनः स्कैन करें",
   "Selected Bank ID:": "चयनित बैंक आईडी:",
@@ -4890,7 +4774,6 @@
   "Live": "सक्रिय",
   "PAYSSPRINT DMT": "PAYSSPRINT DMT",
   "Instantly": "तुरंत",
-
   "PANCARD REGISTER FORM": "पैन कार्ड पंजीकरण फॉर्म",
   "User Registration Pending": "उपयोगकर्ता पंजीकरण लंबित है",
   "UnRegistred User": "अपंजीकृत उपयोगकर्ता",
@@ -5075,5 +4958,70 @@
   "UNKNOWN_ERROR": "अज्ञात त्रुटि",
   "Your Email Already Exists With Us. Please Try Another Email Id": "आपका ईमेल पहले से हमारे साथ पंजीकृत है। कृपया कोई अन्य ईमेल आईडी आज़माएँ।",
   "Your Mobile Number Already Exists With Us. Please Try Another Number": "आपका मोबाइल नंबर पहले से हमारे साथ पंजीकृत है। कृपया कोई अन्य नंबर आज़माएँ।",
-  "Please Enter a Valid Email Id": "कृपया एक वैध ईमेल आईडी दर्ज करें"
+  "Please Enter a Valid Email Id": "कृपया एक वैध ईमेल आईडी दर्ज करें",
+  "Error in JoinUs function:": "JoinUs फ़ंक्शन में त्रुटि:",
+  "Selected Operator:": "चयनित ऑपरेटर:",
+  "Operatorcode": "ऑपरेटर कोड",
+  "Best Plans Offers": "सर्वश्रेष्ठ प्लान ऑफ़र",
+  "RechargeScreen.This app needs access to your contacts to use the number from contacts.": "संपर्कों से नंबर उपयोग करने के लिए इस ऐप को आपके संपर्कों तक पहुंच की आवश्यकता है।",
+  "This app needs access to your contacts to use the number from contacts.": "संपर्कों से नंबर उपयोग करने के लिए इस ऐप को आपके संपर्कों तक पहुंच की आवश्यकता है।",
+  "RechargeScreen.Please grant the contact permission from settings.": "कृपया सेटिंग्स से संपर्क अनुमति प्रदान करें।",
+  "Select eScreen.Operator": "ऑपरेटर चुनें",
+  "Recharge successful": "रिचार्ज सफल हुआ",
+  "Recharge failed. Please check your network or try again.": "रिचार्ज विफल हुआ। कृपया अपना नेटवर्क जांचें या पुनः प्रयास करें।",
+  "RechargeScreen.Mobile Recharge": "मोबाइल रिचार्ज",
+  "RechargeScreen.Mobile Number": "मोबाइल नंबर",
+  "RechargeScreen.Please Enter Vaild Mobile Number": "कृपया वैध मोबाइल नंबर दर्ज करें",
+  "RechargeScreen.View \n Plans": "प्लान\nदेखें",
+  "View \n Plans": "प्लान\nदेखें",
+  "Recharge Type": "रिचार्ज प्रकार",
+  "Bhart Gas": "भारत गैस",
+  "Contact permission granted": "संपर्क अनुमति प्रदान की गई",
+  "Contact permission denied": "संपर्क अनुमति अस्वीकृत की गई",
+  "Invalid application package detected.\nContact developer.": "अमान्य एप्लिकेशन पैकेज पाया गया।\nडेवलपर से संपर्क करें।",
+  "UNAUTHORIZED": "अनधिकृत",
+  "FORBIDDEN": "निषिद्ध",
+  "SERVER_ERROR": "सर्वर त्रुटि",
+  "TIMEOUT": "अनुरोध समय समाप्त",
+  "UNKNOWN": "अज्ञात",
+  "STEP0_API_CALL_FAILED": "API कॉल विफल",
+  "STEP1_API_DATA_RECEIVED": "API डेटा प्राप्त हुआ",
+  "STEP2_ICON_RENDER_ATTEMPT": "आइकन रेंडर प्रयास",
+  "STEP3_SVG_LOAD_SUCCESS": "SVG सफलतापूर्वक लोड हुआ",
+  "STEP4_SVG_LOAD_FAILED": "SVG लोड विफल",
+  "STEP5_SVG_URL_MISSING": "SVG URL अनुपलब्ध",
+  "MISSING": "अनुपस्थित",
+  "HTTPS_OK": "HTTPS ठीक है",
+  "HTTP_CLEARTEXT": "HTTP क्लियरटेक्स्ट",
+  "UNKNOWN_SCHEME": "अज्ञात स्कीम",
+  "HTTPS": "HTTPS",
+  "HTTP": "HTTP",
+  "OTHER": "अन्य",
+  "svg field is null or undefined in API response": "API प्रतिक्रिया में svg फ़ील्ड null या undefined है",
+  "[SvgLogger] Failed to write log:": "[SvgLogger] लॉग लिखने में विफल:",
+  "January": "जनवरी",
+  "February": "फ़रवरी",
+  "March": "मार्च",
+  "April": "अप्रैल",
+  "May": "मई",
+  "June": "जून",
+  "July": "जुलाई",
+  "August": "अगस्त",
+  "September": "सितंबर",
+  "October": "अक्टूबर",
+  "November": "नवंबर",
+  "December": "दिसंबर",
+  "SignUp": "साइन अप",
+  "operator": "ऑपरेटर",
+  "default": "डिफ़ॉल्ट",
+  "Gas": "गैस",
+  "LIC": "एलआईसी",
+  "Please Select Operator": "कृपया ऑपरेटर चुनें",
+  "Please Enter {{field}}": "कृपया {{field}} दर्ज करें",
+  "Select DOB": "जन्म तिथि चुनें",
+  "Consumer ID": "उपभोक्ता आईडी",
+  "Registered Mobile Number": "पंजीकृत मोबाइल नंबर",
+  "UHID": "UHID",
+  "N / A": "उपलब्ध नहीं",
+  "No packages available": "कोई पैकेज उपलब्ध नहीं है"
 }

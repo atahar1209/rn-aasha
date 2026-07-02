@@ -3245,7 +3245,6 @@
   "2_Click_the_Scan_button_to_complete_your_2FA_verification": "2. உங்கள் 2FA சரிபார்ப்பை முடிக்க ஸ்கேன் செய்யவும்",
   "key_forcomp_189": "2. E-KYC முடிக்க Ok கிளிக் செய்யவும், மொபைலுக்கு OTP வரும்",
   "key_forcomp_190": "2. EKYC முடிக்க OK கிளிக் செய்யவும், மொபைலுக்கு OTP வரும்",
-
   "dematAccounts": "டிமேட் கணக்குகள் (DEMAT ACCOUNTS)",
   "3FaceAuthenticationIsDisabled": "3. 2FA சரிபார்ப்பிற்காக வங்கி தரப்பிலிருந்து முக அங்கீகாரம் (Face authentication) முடக்கப்பட்டுள்ளது.",
   "insertTime": "நேரத்தை உள்ளிடவும்",
@@ -3396,7 +3395,6 @@
   "Please select front side of aadhar card": "தயவுசெய்து ஆதார் அட்டையின் முன்பக்கத்தைத் தேர்ந்தெடுக்கவும்",
   "Please select back side of aadhar card": "தயவுசெய்து ஆதார் அட்டையின் பின்பக்கத்தைத் தேர்ந்தெடுக்கவும்",
   "Go to Home": "முகப்புப் பக்கத்திற்குச் செல்லவும் (Go to Home)",
-
   "mainwallet": "ముఖ్య వాలెట్ (Main Wallet)",
   "posbalance": "పాస్ బ్యాలెన్స్ (POS Balance)",
   "cmsremainbal": "సీఎమ్‌ఎస్ బ్యాలెన్స్ (CMS Balance)",
@@ -3405,12 +3403,10 @@
   "networkError": "నెట్‌వర్క్ లోపం",
   "pleaseCheckInternetConnection": "దయచేసి మీ ఇంటర్నెట్ కనెక్షన్‌ని తనిఖీ చేయండి.",
   "somethingWentWrong": "ఏదో తప్పు జరిగింది. దయచేసి మళ్ళీ ప్రయత్నించండి.",
-
   "No_banks_found": "வங்கி எதுவும் கண்டறியப்படவில்லை",
   "Try_a_different_search_term": "தயவுசெய்து வேறு வார்த்தையைத் தட்டச்சு செய்து தேட முயற்சிக்கவும்.",
   "Search_placeholder": "தேடுக...",
   "banks_found": "வங்கிகள் கண்டறியப்பட்டுள்ளன",
-
   "select_bank": "வங்கியைத் தேர்ந்தெடுக்கவும்",
   "search_bank_name": "வங்கியின் பெயரைத் தேடவும்",
   "no_results_found": "முடிவுகள் எதுவும் கண்டறியப்படவில்லை",
@@ -3501,26 +3497,22 @@
   "Select Commission": "கமிஷனைத் தேர்ந்தெடுக்கவும்",
   "True": "உண்மை",
   "False": "தவறு",
-
   "Remaining": "மீதமுள்ளது",
   "Spent": "செலவழிக்கப்பட்டது",
   "What did you buy?": "நீங்கள் என்ன வாங்கினீர்கள்?",
   "Please enter a valid amount": "சரியான தொகையை உள்ளிடவும்",
   "Hold on!": "ஒரு நிமிடம்!",
   "Please fill in all fields": "அனைத்து புலங்களையும் நிரப்பவும்",
-
   "Unable_to_open_link": "இணைப்பை திறக்க முடியவில்லை",
   "Digital_Services": "டிஜிட்டல் சேவைகள்",
   "Important_Links": "முக்கிய இணைப்புகள்",
   "Savings_Accounts": "சேமிப்பு கணக்குகள்",
   "Resources": "வளங்கள்",
   "Demat_Accounts": "டீமேட் கணக்குகள்",
-
   "Aadhar_Face_Driver": "ஆதார் முக இயக்கி",
   "Startek_L1": "ஸ்டார்டெக் L1",
   "Mantra_MFS110_L1": "மந்திரா MFS110 L1",
   "Morpho_L1": "மோர்போ L1",
-
   "ICICI_Bank": "ஐசிஐசிஐ வங்கி",
   "Axis_Bank": "ஆக்சிஸ் வங்கி",
   "IDFC_First_Bank": "ஐடிஎஃப்சி ஃபர்ஸ்ட் வங்கி",
@@ -3528,10 +3520,8 @@
   "Union_Bank_of_India": "யூனியன் வங்கி ஆஃப் இந்தியா",
   "HDFC_Bank": "எச்டிஎஃப்சி வங்கி",
   "State_Bank_of_India": "இந்திய ஸ்டேட் வங்கி",
-
   "Motilal_Oswal": "மோतीलால் ஓஸ்வால்",
   "Angel_One": "ஏஞ்சல் வன்",
-
   "Please enter a valid amount.": "தயவுசெய்து சரியான தொகையை உள்ளிடவும்.",
   "Missing Info": "தகவல் இல்லை",
   "Please select a bank account and enter your PIN.": "தயவுசெய்து வங்கி கணக்கை தேர்வு செய்து உங்கள் PIN ஐ உள்ளிடவும்.",
@@ -3544,7 +3534,6 @@
   "POS BALANCE": "POS இருப்பு",
   "MAIN WALLET": "முதன்மை வாலட்",
   "Purchase_Orders_Report": "கொள்முதல் ஆணை அறிக்கை",
-
   "Old_Credit": "பழைய கிரெடிட்",
   "Net_Transfer": "நெட் பரிமாற்றம்",
   "Fund_Transfer_Report": "நிதி பரிமாற்ற அறிக்கை",
@@ -3557,7 +3546,6 @@
   "Re_Amount": "மீண்டும் தொகை",
   "Fund_Transfer": "நிதி பரிமாற்றம்",
   "Amount_Label": "தொகை",
-
   "UPI_APPS": "யுபிஐ செயலிகள்",
   "Go_to_Dashboard": "டாஷ்போர்டுக்கு செல்லவும்",
   "Is_VPA_Valid": "VPA செல்லுபடியாகுமா",
@@ -3565,7 +3553,6 @@
   "Error_validateVPA": "VPA சரிபார்ப்பில் பிழை",
   "An_error_occurred_while_processing_the_request": "கோரிக்கையை செயலாக்கும் போது பிழை ஏற்பட்டது",
   "Invalid_response_from_server": "சர்வரிலிருந்து தவறான பதில்",
-
   "UPI_Payment_Instruction": "உங்கள் வாலெட்டில் UPI கட்டணத்தைச் சேர்க்க கீழே இரண்டு வழிகள் உள்ளன. நீங்கள் எந்த முறையின் மூலம் கட்டணத்தைச் சேர்க்க விரும்புகிறீர்களோ அதைத் தேர்ந்தெடுக்கவும். QR முறையில், ஒரு QR குறியீடு திறக்கப்படும், அது 1 நிமிடம் மட்டுமே செல்லுபடியாகும். இன்டென்ட் முறையில், உங்கள் மொபைலில் நிறுவப்பட்டுள்ள எந்த UPI பயன்பாட்டின் மூலமும் நேரடியாக பணம் செலுத்த முடியும்.",
   "UPI Intent": "UPI இன்டென்ட்",
   "Other_Manual_Payment_Options": "பிற கைமுறை கட்டண விருப்பங்கள்",
@@ -3575,22 +3562,17 @@
   "Dealer Capping Is Low Please Contact To Admin": "டீலரின் கேப்பிங் வரம்பு குறைவாக உள்ளது. தயவுசெய்து நிர்வாகியை தொடர்பு கொள்ளவும்.",
   "Transaction failed. Reason": "பரிவர்த்தனை தோல்வியடைந்தது. காரணம்",
   "Something went wrong!!": "ஏதோ தவறு ஏற்பட்டுள்ளது!!",
-
   "CDMA": "சிடிஎம்ஏ",
   "ATM Cash Deposit": "ஏடிஎம் பண வைப்பு",
   "Branch Cash Deposit": "கிளை பண வைப்பு",
-
   "your_QR_is_expired": "உங்கள் QR காலாவதியாகிவிட்டது",
   "Regenerate The QR CODE if You Need to add a New Payment": "புதிய கட்டணத்தைச் சேர்க்க வேண்டுமெனில் QR குறியீட்டை மீண்டும் உருவாக்கவும்",
   "Submit_Payment": "கட்டணத்தைச் சமர்ப்பிக்கவும்",
-
   "QR_code_has_expired.": "QR குறியீட்டின் காலாவதி முடிந்துவிட்டது.",
   "Create": "உருவாக்கு",
   "Your payment was completed successfully. Thank you for your transaction!": "உங்கள் கட்டணம் வெற்றிகரமாக முடிந்தது. உங்கள் பரிவர்த்தனைக்கு நன்றி!",
-
   "Select_Payment_Type": "கட்டண வகையைத் தேர்ந்தெடுக்கவும்",
   "Select Pay Type": "கட்டண வகையைத் தேர்ந்தெடுக்கவும்",
-
   "YES": "ஆம்",
   "upi_intent_params": "upi_intent_params",
   "Payment status is NO. Please submit again.": "கட்டண நிலை NO ஆக உள்ளது. தயவுசெய்து மீண்டும் சமர்ப்பிக்கவும்.",
@@ -3603,27 +3585,22 @@
   "VASTBAZAAR": "வஸ்துபஜார்",
   "Invalid QR Type Selected!": "தவறான QR வகை தேர்ந்தெடுக்கப்பட்டது!",
   "Something went wrong while generating QR!": "QR உருவாக்கும்போது ஏதோ தவறு ஏற்பட்டது!",
-
   "All fields must be filled": "அனைத்து புலங்களும் நிரப்பப்பட வேண்டும்",
   "Enter valid 12 digit Aadhar number": "சரியான 12 இலக்க ஆதார் எண்ணை உள்ளிடவும்",
   "Enter valid PAN (e.g. ABCDE1234F)": "சரியான PAN ஐ உள்ளிடவும் (எ.கா. ABCDE1234F)",
   "Aadhar Front": "ஆதார் முன்பக்கம்",
   "Aadhar Back": "ஆதார் பின்பக்கம்",
   "GST Image": "GST படம்",
-
   "Password must be 5 digits long": "கடவுச்சொல் குறைந்தது 5 இலக்கங்கள் இருக்க வேண்டும்",
   "Passwords do not match": "கடவுச்சொற்கள் பொருந்தவில்லை",
   "Not Having Retailer Create Token Contact to Your Dealer": "ரீட்டெய்லர் கிரியேட் டோக்கன் இல்லை. தயவுசெய்து உங்கள் டீலரை தொடர்பு கொள்ளுங்கள்",
-
   "From Web": "வெபிலிருந்து",
   "Kyc": "கேவைசி",
-
   "Validation Error": "சரிபார்ப்பு பிழை",
   "Please fill out the": "தயவுசெய்து நிரப்பவும்",
   "Server side issue occurred.": "சர்வர் பக்கத்தில் பிரச்சனை ஏற்பட்டது.",
   "Go to Login Screen": "உள்நுழைவு திரைக்கு செல்லவும்",
   "Join Now": "இப்போது சேரவும்",
-
   "Welcome back.": "மீண்டும் வரவேற்கிறோம்.",
   "Please enter valid User ID and Password, you cannot leave it blank": "தயவுசெய்து சரியான பயனர் ஐடி மற்றும் கடவுச்சொல்லை உள்ளிடவும், இதை காலியாக விட முடியாது",
   "or": "அல்லது",
@@ -3658,13 +3635,11 @@
   "Location fetch failed. Please try again.": "இருப்பிடத்தை பெற முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.",
   "Unknown API Error": "அறியப்படாத API பிழை",
   "No Role Found": "பங்கு எதுவும் கிடைக்கவில்லை",
-
   "Notification Permission": "அறிவிப்பு அனுமதி",
   "Enable notifications to stay updated.": "புதுப்பிப்புகளை பெற அறிவிப்புகளை இயக்கு.",
   "CMS Balance": "CMS இருப்பு",
   "Hold & Lean": "ஹோல்ட் மற்றும் லியன்",
   "to Wallet": "வாலெட்டுக்கு",
-
   "This feature is currently under development.": "இந்த அம்சம் தற்போது மேம்பாட்டில் உள்ளது.",
   "It will be available soon.": "இது விரைவில் கிடைக்கும்.",
   "Demo Account": "டெமோ கணக்கு",
@@ -3677,9 +3652,7 @@
   "TrainScreen": "ரயில் திரை",
   "HotelScreen": "ஹோட்டல் திரை",
   "BusScreen": "பஸ் திரை",
-
   "Restricted": "தடைசெய்யப்பட்டது",
-
   "App Install Info": "ஆப் நிறுவல் தகவல்",
   "First Install": "முதல் நிறுவல்",
   "Last Update": "கடைசி அப்டேட்",
@@ -3691,13 +3664,10 @@
   "Downloading": "பதிவிறக்கம் ஆகிறது",
   "Hi.": "ஹாய்.",
   "Session Expired": "அமர்வு காலாவதியானது",
-
   "DR": "டெபிட்",
   "Comm": "கமிஷன்",
   "Bal": "பாலன்ஸ்",
-
   "DealerRechargeHistory": "டீலர் ரீசார்ஜ் வரலாறு",
-
   "Camera not ready": "கேமரா தயாராக இல்லை",
   "Recording Complete!": "பதிவு முடிந்தது!",
   "Microphone Permission Required": "மைக்ரோஃபோன் அனுமதி தேவை",
@@ -3711,15 +3681,12 @@
   "REC": "பதிவு",
   "Position your face in frame": "உங்கள் முகத்தை ஃப்ரேமிற்குள் வைத்திருங்கள்",
   "Please record video first": "தயவுசெய்து முதலில் வீடியோவை பதிவு செய்யவும்",
-
   "status is  OK.": "நிலை சரியாக உள்ளது.",
   "Something went wrong:": "ஏதோ தவறு ஏற்பட்டுள்ளது:",
-
   "ImagePicker Error": "படத் தேர்வி பிழை",
   "Upload successful": "பதிவேற்றம் வெற்றிகரமாக முடிந்தது",
   "Profile image": "சுயவிவரப் படம்",
   "Registratidon Certificate": "பதிவு சான்றிதழ்",
-
   "API Error": "API பிழை",
   "Lat": "அட்சரேகை",
   "Lng": "தீர்க்கரேகை",
@@ -3728,29 +3695,21 @@
   "Submit & Generate": "சமர்ப்பித்து உருவாக்கவும்",
   "Take GPS Photo": "GPS புகைப்படம் எடுக்கவும்",
   "Unable to fetch GPS location. Please enable location.": "GPS இடத்தை பெற முடியவில்லை. தயவுசெய்து இட சேவையை இயலுமைப்படுத்தவும்.",
-
   "Search by Name /Firm name/ Mobile": "பெயர் / நிறுவனத்தின் பெயர் / மொபைல் மூலம் தேடுங்கள்",
-
   "User Status Update": "பயனர் நிலை புதுப்பிப்பு",
-
   "Password should be at least 6 characters long!": "கடவுச்சொல் குறைந்தது 6 எழுத்துகள் நீளமாக இருக்க வேண்டும்!",
   "Close Tips": "மூடு",
   "Your password has been changed successfully.": "உங்கள் கடவுச்சொல் வெற்றிகரமாக மாற்றப்பட்டுள்ளது.",
-
   "Unable to open maps": "வரைபடத்தை திறக்க முடியவில்லை.",
   "Apps": "மொபைல் ஆப்",
-
   "Yes I Need High Security": "ஆம், எனக்கு உயர் பாதுகாப்பு வேண்டும்",
-
   "Mandatory SIM Setting": "கட்டாய சிம் அமைப்பு",
-
   "Enter New Pin": "புதிய PIN ஐ உள்ளிடவும்",
   "Both fields are required": "இரண்டு புலங்களும் அவசியம்",
   "PIN must be between 4 and 6 digits": "PIN 4 முதல் 6 இலக்கங்களுக்குள் இருக்க வேண்டும்",
   "Confirm PIN must be between 4 and 6 digits": "உறுதிப்படுத்தும் PIN 4 முதல் 6 இலக்கங்களுக்குள் இருக்க வேண்டும்",
   "Pins do not match": "PINகள் பொருந்தவில்லை",
   "Your pin has been set successfully!": "உங்கள் PIN வெற்றிகரமாக அமைக்கப்பட்டது!",
-
   "English (India)": "ஆங்கிலம் (இந்தியா)",
   "Hindi (हिंदी)": "இந்தி (हिंदी)",
   "Bengali (বাংলা)": "பெங்காலி (বাংলা)",
@@ -3762,24 +3721,19 @@
   "Your Language Is Changed Successfully": "உங்கள் மொழி வெற்றிகரமாக மாற்றப்பட்டது",
   "Failed to change language": "மொழியை மாற்ற முடியவில்லை",
   "Choose Language": "மொழியைத் தேர்ந்தெடுக்கவும்",
-
   "Update Successfully": "வெற்றிகரமாக புதுப்பிக்கப்பட்டது",
   "Type Text Here": "இங்கே உரையை உள்ளிடவும்",
   "Send": "அனுப்பு",
-
   "Please fill the required fields": "దయచేసి అవసరమైన ఫీల్డ్‌లను పూరించండి",
   "No response from server. Please try again.": "సర్వర్ నుండి ఎటువంటి స్పందన రాలేదు. దయచేసి మళ్లీ ప్రయత్నించండి.",
   "Something went wrong. Please try again later.": "ఏదో తప్పు జరిగింది. దయచేసి తరువాత మళ్లీ ప్రయత్నించండి.",
   "Choose an image from gallery or take a new photo": "గ్యాలరీ నుండి ఒక చిత్రాన్ని ఎంచుకోండి లేదా కొత్త ఫోటో తీయండి",
   "Are you sure you want to log out?": "நீங்கள் உண்மையில் லாக் அவுட் செய்ய விரும்புகிறீர்களா?",
-
   "NEW": "புதியது",
   "No Notifications": "அறிவிப்புகள் இல்லை",
   "You are all caught up!": "நீங்கள் அனைத்து புதுப்பிப்புகளையும் பார்த்துவிட்டீர்கள்!",
-
   "Cash_Pickup_Report": "கேஷ் பிக்அப் அறிக்கை",
   "NULL": "பூஜ்யம்",
-
   "AEPS_History": "AEPS வரலாறு",
   "No_transactions_found": "பரிவர்த்தனைகள் எதுவும் கிடைக்கவில்லை",
   "Try_adjusting_filters": "தேதி வரம்பு அல்லது வடிப்பான்களை மாற்றி முயற்சிக்கவும்",
@@ -3791,7 +3745,6 @@
   "Your_transaction_is": "உங்கள் பரிவர்த்தனை",
   "Fino_Cms_Report": "பினோ CMS அறிக்கை",
   "Request_Date": "கோரிக்கை தேதி",
-
   "Bus_Booking_Report": "பஸ் முன்பதிவு அறிக்கை",
   "Airline_Name": "விமான நிறுவனம் பெயர்",
   "Offer_Fare": "சலுகை கட்டணம்",
@@ -3803,24 +3756,19 @@
   "Fare_Amount": "கட்டண தொகை",
   "Passenger_Name": "பயணி பெயர்",
   "No_Name": "பெயர் இல்லை",
-
   "Cash_Deposit_Successful": "பணம் வைப்பு வெற்றிகரமாக முடிந்தது",
   "Cash_Deposit_Failed": "பணம் வைப்பு தோல்வியடைந்தது",
   "Cash_Deposit_Pending": "பணம் வைப்பு நிலுவையில் உள்ளது",
-
   "Flight Booking Successful": "விமான முன்பதிவு வெற்றிகரமாக முடிந்தது",
   "Flight Booking Failed": "விமான முன்பதிவு தோல்வியடைந்தது",
-
   "Non-Verified A/C": "சரிபார்க்கப்படாத கணக்கு",
   "Receiver": "பெறுநர்",
   "Try changing the date range or status filter.": "தேதி வரம்பு அல்லது நிலை வடிகட்டியை மாற்றி முயற்சிக்கவும்.",
   "Error occurred": "பிழை ஏற்பட்டது",
   "IMPS / NEFT History": "IMPS / NEFT வரலாறு",
   "IMPS / NEFT Receipt": "IMPS / NEFT ரசீது",
-
   "Device ID": "டிவைஸ் ஐடி",
   "Micro ATM Rental Report": "மைக்ரோ ஏடிஎம் வாடகை அறிக்கை",
-
   "pan_history": "பான் வரலாறு",
   "Transaction Successful": "✓ பரிவர்த்தனை வெற்றிகரமாக முடிந்தது",
   "Transaction Failed": "✕ பரிவர்த்தனை தோல்வியடைந்தது",
@@ -3833,7 +3781,6 @@
   "no_data_found": "தரவு எதுவும் கிடைக்கவில்லை",
   "no_transactions_available": "பரிவர்த்தனைகள் கிடைக்கவில்லை",
   "load_more": "மேலும் ஏற்றவும்",
-
   "txn_type": "பரிவர்த்தனை வகை",
   "bank_rrn": "வங்கி RRN",
   "request_time": "கோரிக்கை நேரம்",
@@ -3849,25 +3796,21 @@
   "success_msg": "பரிவர்த்தனை வெற்றிகரமாக முடிந்தது",
   "failed_msg": "பரிவர்த்தனை தோல்வியடைந்தது",
   "pending_msg": "பரிவர்த்தனை நிலுவையில் உள்ளது",
-
   "transaction_details": "பரிவர்த்தனை விவரங்கள்",
   "amount": "தொகை",
   "transaction_details_empty": "விவரங்கள் இல்லை",
   "transaction_report": "POS அறிக்கை",
-
   "firm_name": "நிறுவன பெயர்",
   "retailer_name": "சில்லறை விற்பனையாளர் பெயர்",
   "insert_date": "உள்ளீட்டு தேதி",
   "response_date": "பதிலளிப்பு தேதி",
   "id": "ஐடி",
   "wallet_transfer_history": "CMS வாலெட் பரிமாற்ற வரலாறு",
-
   "operator_name": "ஆபரேட்டர் பெயர்",
   "recharge_number": "ரீசார்ஜ் எண்",
   "recharge_amount": "ரீசார்ஜ் தொகை",
   "total": "மொத்தம்",
   "success_amount": "வெற்றிகரமான தொகை",
-
   "transaction": "பரிவர்த்தனை",
   "refund": "பணத்திருப்பு",
   "copy": "நகலெடு",
@@ -3882,17 +3825,14 @@
   "transaction_details_not_shared": "பரிவர்த்தனை விவரங்கள் பகிரப்படவில்லை",
   "dispute_submitted_successfully": "விவாதம் வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது!",
   "copied_to_clipboard": "கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது!",
-
   "from_date": "தொடக்க தேதி",
   "to_date": "முடிவு தேதி",
   "failed_to_fetch_report": "அறிக்கை பெற முடியவில்லை",
   "date": "தேதி",
-
   "wallet_unload_history": "வாலெட் அன்லோடு வரலாறு",
   "bank_account": "வங்கி கணக்கு",
   "transfer_type": "பரிமாற்ற வகை",
   "charge": "கட்டணம்",
-
   "cash_online_deposit_report": "பணம் மற்றும் ஆன்லைன் வைப்பு அறிக்கை",
   "payment_to": "பணம் பெறுபவர்",
   "deposit_slip_uploaded_time": "வைப்பு சீட்டு பதிவேற்ற நேரம்",
@@ -3904,13 +3844,11 @@
   "view_slip_image": "சீட்டு படத்தை பார்க்கவும்",
   "radiant_cash_management": "ரேடியண்ட் கேஷ் மேனேஜ்மெண்ட்",
   "function_not_implemented": "செயல்பாடு செயல்படுத்தப்படவில்லை",
-
   "group_pay": "குழு கட்டணம்",
   "enter_amount": "தொகையை உள்ளிடவும்",
   "select_mode": "முறையை தேர்வு செய்யவும்",
   "radiant_account": "ரேடியண்ட் கணக்கு",
   "upload_slip": "சீட்டை பதிவேற்றவும்",
-
   "insert_time": "உள்ளீட்டு நேரம்",
   "client_customer_name": "வாடிக்கையாளர் / கிளையண்ட் பெயர்",
   "state_name": "மாநில பெயர்",
@@ -3923,7 +3861,6 @@
   "retailer_info": "சில்லறை விற்பனையாளர் தகவல்",
   "null": "இல்லை",
   "n_a": "பொருந்தாது",
-
   "deposit_ledger_report": "வைப்பு பேரேடு அறிக்கை",
   "pickup_amount": "பெறப்பட்ட தொகை",
   "amount_transfer": "பரிமாறப்பட்ட தொகை",
@@ -3931,7 +3868,6 @@
   "paid_amount": "செலுத்தப்பட்ட தொகை",
   "extra_amount": "கூடுதல் தொகை",
   "cash_submit_type": "பண வைப்பு வகை",
-
   "group_payments": "குழு கட்டணங்கள்",
   "individual_payment": "தனிப்பட்ட கட்டணம்",
   "barrel_cash_deposit": "பேரல் ரொக்க வைப்பு",
@@ -3952,7 +3888,6 @@
   "fill_all_client_deposit_fields": "அனைத்து வாடிக்கையாளர் வைப்பு புலங்களையும் நிரப்பவும்",
   "fill_all_online_transfer_fields": "அனைத்து ஆன்லைன் பரிமாற்ற புலங்களையும் நிரப்பவும்",
   "invalid_transaction_type": "தவறான பரிவர்த்தனை வகை",
-
   "RCE Payout Information": "RCE ஊதியத் தகவல்",
   "Pickup/Collection Mode": "பிக்கப்/வசூல் முறை",
   "My RCE ID": "என் RCE ஐடி",
@@ -3983,7 +3918,6 @@
   "Max Travel Allowance": "அதிகபட்ச பயண அலவன்ஸ்",
   "Hide Details": "விவரங்களை மறை",
   "View More Details": "மேலும் விவரங்களை காண்க",
-
   "Cash Pickup Calendar": "பண வசூல் காலண்டர்",
   "Leave Rules": "விடுப்பு விதிகள்",
   "Approved leave incurs a": "அங்கீகரிக்கப்பட்ட விடுப்பிற்கு அபராதம்",
@@ -4003,7 +3937,6 @@
   "Failed to submit": "சமர்ப்பிக்க முடியவில்லை",
   "Holiday(s) cancelled": "விடுப்பு(கள்) ரத்து செய்யப்பட்டன",
   "Failed to cancel": "ரத்து செய்ய முடியவில்லை",
-
   "Confirm submission": "சமர்ப்பிப்பை உறுதிப்படுத்தவும்",
   "Please review before proceeding": "தொடர்வதற்கு முன் தயவுசெய்து பரிசீலிக்கவும்",
   "Make sure all details are correct. Once submitted, changes may not be possible.": "அனைத்து விவரங்களும் சரியாக உள்ளனவா என்பதை உறுதிப்படுத்துங்கள். ஒருமுறை சமர்ப்பித்த பிறகு மாற்றங்கள் செய்ய இயலாமல் இருக்கலாம்.",
@@ -4013,7 +3946,6 @@
   "Data privacy agreed": "தரவு தனியுரிமைக்கு ஒப்புதல் அளிக்கப்பட்டுள்ளது",
   "Yes, proceed": "ஆம், தொடரவும்",
   "Review again": "மீண்டும் பரிசீலிக்கவும்",
-
   "Align your face in the oval": "உங்கள் முகத்தை ஓவல் வடிவத்தின் உள்ளே பொருத்தவும்",
   "No face detected — look straight at camera": "முகம் கண்டறியப்படவில்லை — கேமராவை நேராக பார்க்கவும்",
   "Multiple faces detected — only one person allowed": "பல முகங்கள் கண்டறியப்பட்டன — ஒருவருக்கு மட்டும் அனுமதி",
@@ -4038,7 +3970,6 @@
   "Keep your face inside the oval": "உங்கள் முகத்தை ஓவல் வடிவத்தின் உள்ளே வைத்திருங்கள்",
   "Capturing...": "படம் எடுக்கப்படுகிறது...",
   "Tap to Capture": "படம் எடுக்க தட்டவும்",
-
   "KYC": "கேஒய்சி",
   "Personal Details": "தனிப்பட்ட விவரங்கள்",
   "Education": "கல்வி",
@@ -4049,7 +3980,6 @@
   "Data Privacy": "தரவு தனியுரிமை",
   "STEP": "படி",
   "OF": "இல்",
-
   "CMS Manual Deposit": "CMS கைமுறை வைப்பு",
   "Enter Bank RRN Number": "வங்கி RRN எண்ணை உள்ளிடவும்",
   "Enter Slip Number": "ஸ்லிப் எண்ணை உள்ளிடவும்",
@@ -4066,7 +3996,6 @@
   "Deposit submitted successfully": "வைப்பு வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது",
   "Something went wrong, please try again": "ஏதோ தவறு ஏற்பட்டது, தயவுசெய்து மீண்டும் முயற்சிக்கவும்",
   "Submission failed": "சமர்ப்பித்தல் தோல்வியடைந்தது",
-
   "Enter complete OTP": "முழு OTP-ஐ உள்ளிடவும்",
   "Invalid OTP. Please try again.": "தவறான OTP. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.",
   "Verified!": "சரிபார்க்கப்பட்டது!",
@@ -4077,7 +4006,6 @@
   "Did not receive OTP?": "OTP கிடைக்கவில்லையா?",
   "Resend": "மீண்டும் அனுப்பு",
   "Resend in": "மீண்டும் அனுப்பு",
-
   "Pin Code must be 6 digits.": "பின் கோடு 6 இலக்கங்களாக இருக்க வேண்டும்.",
   "Please select a Client.": "தயவுசெய்து ஒரு கிளையண்டைத் தேர்ந்தெடுக்கவும்.",
   "Contact Name is required.": "தொடர்பு பெயர் அவசியம்.",
@@ -4103,13 +4031,10 @@
   "Select Client": "கிளையண்டைத் தேர்ந்தெடுக்கவும்",
   "Select Pickup Option": "பிக்கப் விருப்பத்தைத் தேர்ந்தெடுக்கவும்",
   "Select Deposit Mode": "வைப்பு முறையைத் தேர்ந்தெடுக்கவும்",
-
   "Front Aadhar": "ஆதாரின் முன்பக்கம்",
   "Back Aadhar": "ஆதாரின் பின்பக்கம்",
-
   "Submit for registration": "பதிவிற்காக சமர்ப்பிக்கவும்",
   "Dear Retail Cash Executive Company keeps adding collection points from time to time and you will be given collection points on this basis. Their availability is not necessarily immediate. You may have to wait. If you are satisfied with all the information and you are eligible to do this work, please click on the submit button. Our representative will contact you as soon as possible and help you get your registration done.": "அன்புடைய ரீட்டெயில் கேஷ் எக்ஸிக்யூட்டிவ், நிறுவனம் அவ்வப்போது புதிய சேகரிப்பு மையங்களைச் சேர்த்துக்கொண்டே இருக்கும், அதன்படி உங்களுக்கு சேகரிப்பு மையங்கள் வழங்கப்படும். அவை உடனடியாக கிடைக்கும் என்பது அவசியமில்லை, எனவே நீங்கள் காத்திருக்க வேண்டியிருக்கலாம். அனைத்து தகவல்களிலும் நீங்கள் திருப்தியடைந்து, இந்த வேலையைச் செய்ய தகுதியானவராக இருந்தால், தயவுசெய்து சமர்ப்பி பொத்தானை அழுத்தவும். எங்கள் பிரதிநிதி விரைவில் உங்களைத் தொடர்புகொண்டு உங்கள் பதிவை முடிக்க உதவுவார்.",
-
   "Documents submitted": "ஆவணங்கள் சமர்ப்பிக்கப்பட்டுள்ளன",
   "Team verification": "குழு சரிபார்ப்பு",
   "Final approval": "இறுதி ஒப்புதல்",
@@ -4118,7 +4043,6 @@
   "Our team is reviewing your information. You will be notified once the process is complete.": "எங்கள் குழு உங்கள் தகவலை மதிப்பாய்வு செய்து வருகிறது. செயல்முறை முடிந்தவுடன் உங்களுக்கு அறிவிக்கப்படும்.",
   "REVIEW PROGRESS": "மதிப்பாய்வு முன்னேற்றம்",
   "Typically takes 1–2 business days. Check back here for updates.": "பொதுவாக 1–2 வேலை நாட்கள் ஆகும். புதுப்பிப்புகளுக்காக இங்கே மீண்டும் சரிபார்க்கவும்.",
-
   "All Days Working": "அனைத்து நாட்களும் வேலை நாட்கள்",
   "Banking Days Working": "வங்கி வேலை நாட்கள்",
   "Holiday/Weekend Work": "விடுமுறை/வார இறுதி வேலை",
@@ -4130,20 +4054,16 @@
   "Evening Collection & Cash deposit": "மாலை வசூல் மற்றும் பண வைப்பு",
   "Vaulting & Cash deposit": "வால்டிங் மற்றும் பண வைப்பு",
   "26 JAN, 15 AUG, 2 OCT, Diwali, Holi": "ஜனவரி 26, ஆகஸ்ட் 15, அக்டோபர் 2, தீபாவளி, ஹோலி",
-
   "E": "ஈ",
   "Need_more_information": "மேலும் தகவல் தேவை",
-
   "This app needs access to your camera to take photos.": "இந்த ஆப் புகைப்படம் எடுக்க உங்கள் கேமரா அணுகலை தேவைப்படுகிறது",
   "Failed to load image": "படத்தை ஏற்ற முடியவில்லை",
-
   "The place you live has a population of more than 10,000.": "நீங்கள் வசிக்கும் இடத்தின் மக்கள் தொகை 10,000-ஐ விட அதிகமாக இருக்க வேண்டும்.",
   "You can take a fixed time to collect the money from any store or office authorized by the company within a radius of 5 km and you can transfer the collected amount to the company through deposit or online mode within a fixed time. If yes, you can do so.": "நீங்கள் நிறுவனத்தால் அனுமதிக்கப்பட்ட எந்த கடை அல்லது அலுவலகத்திலிருந்தும் 5 கிமீ சுற்றளவில் நிர்ணயிக்கப்பட்ட நேரத்தில் பணத்தை சேகரித்து, சேகரிக்கப்பட்ட தொகையை நிர்ணயிக்கப்பட்ட நேரத்திற்குள் டெபாசிட் அல்லது ஆன்லைன் மூலம் நிறுவனத்திற்கு மாற்றலாம். ஆம் என்றால் நீங்கள் செய்யலாம்.",
   "If you or any other member of the blood relation have any criminal record in the past, convicted for any crime including moral turpitude, have police history sheet, then you will not be considered eligible for this service.": "நீங்கள் அல்லது உங்கள் இரத்த உறவினர்களில் யாருக்கும் கடந்த காலத்தில் குற்றப் பதிவு, ஒழுக்கக்கேடு உட்பட எந்த குற்றத்திற்கும் தண்டனை அல்லது போலீஸ் பதிவு இருந்தால், நீங்கள் இந்த சேவைக்கு தகுதியற்றவராக கருதப்படுவீர்கள்.",
   "You need to keep your financial credit score (civil score) above about 670. If you do not have this or more financial credit score then you are not eligible.": "உங்கள் நிதி கடன் மதிப்பெண் (சிவில் ஸ்கோர்) சுமார் 670-க்கு மேல் இருக்க வேண்டும். அது குறைவாக இருந்தால் நீங்கள் தகுதியற்றவர்.",
   "If you are physically able to travel and have a vehicle available.": "நீங்கள் உடலால் பயணம் செய்யக்கூடியவராகவும், வாகனம் உள்ளவராகவும் இருந்தால்.",
   "You are a native Indian citizen and you have all the KYC documents along with a bank account and a checkbook available.": "நீங்கள் இந்திய குடிமகனாக இருந்து, அனைத்து KYC ஆவணங்களும், வங்கி கணக்கு மற்றும் செக் புத்தகமும் வைத்திருக்க வேண்டும்.",
-
   "OTP sent to registered mobile!": "பதிவு செய்யப்பட்ட மொபைலுக்கு OTP அனுப்பப்பட்டது!",
   "OTP send failed. Try again.": "OTP அனுப்ப முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
   "Something went wrong. Try again.": "ஏதோ தவறு ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.",
@@ -4157,7 +4077,6 @@
   "OTP sent to email!": "மின்னஞ்சலுக்கு OTP அனுப்பப்பட்டது!",
   "Email verified Successfully!": "மின்னஞ்சல் வெற்றிகரமாக சரிபார்க்கப்பட்டது!",
   "Complete All Fields": "அனைத்து புலங்களையும் நிரப்பவும்",
-
   "Re-verify": "மீண்டும் சரிபார்க்கவும்",
   "IDENTITY PROOF": "அடையாள சான்று",
   "Aadhaar Verification": "ஆதார் சரிபார்ப்பு",
@@ -4180,7 +4099,6 @@
   "Valid email address": "செல்லுபடியாகும் மின்னஞ்சல் முகவரி",
   "Wrong email? Start again": "தவறான மின்னஞ்சல்? மீண்டும் தொடங்கவும்",
   "cellphone-message": "cellphone-message",
-
   "Permanent address required": "நிரந்தர முகவரி தேவை",
   "Enter valid 6-digit pincode": "சரியான 6 இலக்க அஞ்சல் குறியீட்டை உள்ளிடவும்",
   "Pincode required": "அஞ்சல் குறியீடு தேவை",
@@ -4210,7 +4128,6 @@
   "Enter nearby landmark": "அருகிலுள்ள அடையாள இடத்தை உள்ளிடவும்",
   "Nearest Police Station": "அருகிலுள்ள காவல் நிலையம்",
   "Enter nearest police station": "அருகிலுள்ள காவல் நிலையத்தை உள்ளிடவும்",
-
   "Camera not available": "கேமரா கிடைக்கவில்லை",
   "Photo capture failed. Try again.": "புகைப்படம் எடுக்க முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்.",
   "Could not read image": "படத்தைப் படிக்க முடியவில்லை",
@@ -4235,7 +4152,6 @@
   "Security Check": "பாதுகாப்பு சரிபார்ப்பு",
   "Credit Card Score": "கிரெடிட் கார்டு மதிப்பெண்",
   "Other Document": "பிற ஆவணம்",
-
   "Enter valid account number (9–18 digits)": "சரியான கணக்கு எண்ணை உள்ளிடவும் (9–18 இலக்கங்கள்)",
   "Account number required": "கணக்கு எண் தேவை",
   "IFSC code required": "IFSC குறியீடு தேவை",
@@ -4253,7 +4169,6 @@
   "Enter branch name": "கிளை பெயரை உள்ளிடவும்",
   "Savings": "சேமிப்பு",
   "Salary": "சம்பளம்",
-
   "Don't Know": "தெரியாது",
   "Hinduism": "இந்துமதம்",
   "Islam": "இஸ்லாம்",
@@ -4293,7 +4208,6 @@
   "Optional Document": "விருப்ப ஆவணம்",
   "Document Type": "ஆவண வகை",
   "basicInfo": "அடிப்படை தகவல்",
-
   "The Individual has approached the Company to on-board as a Retail Cash Executive (RCE) for providing necessary services, to support the Cash Management Services of the Company.": "நிறுவனத்தின் பண மேலாண்மை சேவைகளுக்கு ஆதரவாக தேவையான சேவைகளை வழங்குவதற்காக, ரீட்டெயில் கேஷ் எக்ஸிகியூட்டிவ் (RCE) ஆக இணைவதற்கு அந்த நபர் நிறுவனத்தை அணுகியுள்ளார்.",
   "The Individual understands that the Company to on-board the RCE, need to collect, store and process certain personal data of the Individual (\"Data\").": "RCE-ஐ இணைக்க நிறுவனத்திற்கு அந்த நபரின் சில தனிப்பட்ட தகவல்களை (\"தரவு\") சேகரிக்க, சேமிக்க மற்றும் செயலாக்க வேண்டிய அவசியம் இருப்பதை அந்த நபர் புரிந்துகொள்கிறார்.",
   "Data Controller Information": "தரவு கட்டுப்பாட்டாளர் தகவல்",
@@ -4347,7 +4261,6 @@
   "you confirm your explicit consent to the Data Privacy Notice above. This is legally binding under the Digital Personal Data Protection Act 2023.": "மேலே உள்ள தரவு தனியுரிமை அறிவிப்பிற்கு உங்கள் வெளிப்படையான ஒப்புதலை உறுதிப்படுத்துகிறீர்கள். இது Digital Personal Data Protection Act 2023-ன் கீழ் சட்டபூர்வமாக கட்டுப்படுத்தக்கூடியது.",
   "Please agree to the Data Privacy Notice to continue": "தொடர்வதற்கு தயவுசெய்து தரவு தனியுரிமை அறிவிப்பை ஏற்கவும்",
   "Submitted Successfully": "வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது",
-
   "Self-Declaration": "சுய அறிவிப்பு",
   "I acknowledge that I am being onboarded as an independent service provider and not as an employee of the Company and I shall carry out services in accordance with the terms of the separate service agreement and operational guidelines issued by the Company from time to time.": "நான் நிறுவனத்தின் ஊழியராக அல்லாமல் ஒரு சுயாதீன சேவை வழங்குநராக இணைக்கப்படுகிறேன் என்பதை ஒப்புக்கொள்கிறேன். மேலும், நிறுவனம் அவ்வப்போது வெளியிடும் தனித்த சேவை ஒப்பந்தம் மற்றும் செயல்பாட்டு வழிகாட்டுதல்களின் விதிமுறைகளின்படி நான் சேவைகளை வழங்குவேன்.",
   "I further declare that I have not been convicted of any criminal offence and no criminal proceedings are pending against me. I am not a wilful defaulter in repaying any borrowings (loans/credit cards) and have not been involved in any fraud or financial misconduct.": "நான் எந்த குற்றவியல் குற்றத்திலும் தண்டிக்கப்படவில்லை என்றும், எனக்கு எதிராக எந்த குற்றவியல் வழக்கும் நிலுவையில் இல்லை என்றும் மேலும் அறிவிக்கிறேன். நான் எந்தக் கடன் (லோன்/கிரெடிட் கார்டு) திருப்பிச் செலுத்துதலிலும் வேண்டுமென்றே தவறியவர் அல்ல; மேலும் எந்த மோசடி அல்லது நிதி முறைகேட்டிலும் ஈடுபட்டதில்லை.",
@@ -4361,7 +4274,6 @@
   "I agree to provide my free, informed, and explicit consent to the collection, use, processing, storage, and sharing of my personal data in accordance with the said Annexure I and applicable laws.": "மேற்கண்ட இணைப்பு I மற்றும் பொருந்தக்கூடிய சட்டங்களின் படி, எனது தனிப்பட்ட தரவின் சேகரிப்பு, பயன்பாடு, செயலாக்கம், சேமிப்பு மற்றும் பகிர்விற்கு நான் சுய விருப்பத்துடனும், முழுமையான தகவல் அறிந்தும், வெளிப்படையான ஒப்புதலையும் வழங்க ஒப்புக்கொள்கிறேன்.",
   "you confirm your agreement to all declarations above. This is legally binding.": "மேலே உள்ள அனைத்து அறிவிப்புகளுக்கும் நீங்கள் ஒப்புதல் அளிப்பதை உறுதிப்படுத்துகிறீர்கள். இது சட்டபூர்வமாக கட்டுப்படுத்தக்கூடியது.",
   "Section": "பிரிவு",
-
   "Driving License Details": "ஓட்டுநர் உரிமம் விவரங்கள்",
   "Do you have a Driving License?": "உங்களிடம் ஓட்டுநர் உரிமம் உள்ளதா?",
   "Driving License Number": "ஓட்டுநர் உரிம எண்",
@@ -4372,7 +4284,6 @@
   "Languages Known": "தெரிந்த மொழிகள்",
   "e.g. Hindi, English, Marathi": "எ.கா., ஹிந்தி, ஆங்கிலம், மராத்தி",
   "Details saved!": "விவரங்கள் வெற்றிகரமாக சேமிக்கப்பட்டன!",
-
   "Qualification": "தகுதி",
   "College": "கல்லூரி",
   "Board/University": "வாரியம்/பல்கலைக்கழகம்",
@@ -4386,7 +4297,6 @@
   "Graduate": "பட்டதாரி",
   "Post Graduate": "முதுநிலை பட்டதாரி",
   "Art": "கலை",
-
   "useFormCtx must be inside FormProvider": "useFormCtx என்பது FormProvider-க்குள் இருக்க வேண்டும்",
   "Identity Proof": "அடையாளச் சான்று",
   "12-digit Aadhaar": "12 இலக்க ஆதார் எண்",
@@ -4403,7 +4313,6 @@
   "Please enter a valid PAN Number": "சரியான PAN எண்ணை உள்ளிடவும்",
   "Please enter a valid Mobile Number": "சரியான மொபைல் எண்ணை உள்ளிடவும்",
   "Please enter a valid Email Address": "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்",
-
   "Payout & Travel Allowance Structure": "பணப்பரிவர்த்தனை மற்றும் பயண கொடுப்பனவு அமைப்பு",
   "Commission / Minimum Guarantee": "கமிஷன் / குறைந்தபட்ச உத்தரவாதம்",
   "Commission Rates": "கமிஷன் விகிதங்கள்",
@@ -4455,7 +4364,6 @@
   "Yes, I Agree ✓": "ஆம், நான் ஒப்புக்கொள்கிறேன் ✓",
   "YES, I AGREE": "ஆம், நான் ஒப்புக்கொள்கிறேன்",
   "Section 8": "பிரிவு 8",
-
   "Reference saved!": "குறிப்பு வெற்றிகரமாக சேமிக்கப்பட்டது!",
   "OTP failed": "OTP தோல்வியடைந்தது",
   "Enter valid OTP": "சரியான OTP-ஐ உள்ளிடவும்",
@@ -4475,7 +4383,6 @@
   "Operational Details": "செயல்பாட்டு விவரங்கள்",
   "Have Two-Wheeler?": "உங்களிடம் இருசக்கர வாகனம் உள்ளதா?",
   "Two-Wheeler Number": "இருசக்கர வாகன எண்",
-
   "Reference name required": "ரெஃபரன்ஸ் பெயர் தேவை",
   "Designation required": "பதவி தேவை",
   "Enter valid 10-digit mobile": "சரியான 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்",
@@ -4494,7 +4401,6 @@
   "Reference Name": "ரெஃபரன்ஸ் பெயர்",
   "Designation": "பதவி",
   "Enter designation": "பதவியை உள்ளிடவும்",
-
   "Advance Funding Declaration": "முன்கூட்டிய நிதி அறிவிப்பு",
   "Security Cheque Details": "பாதுகாப்பு காசோலை விவரங்கள்",
   "Payee Name": "பெறுநர் பெயர்",
@@ -4509,7 +4415,6 @@
   "Please upload security cheque copy": "தயவுசெய்து பாதுகாப்பு காசோலை நகலை பதிவேற்றவும்",
   "Security cheque saved!": "பாதுகாப்பு காசோலை சேமிக்கப்பட்டது!",
   "Select Source": "மூலத்தை தேர்வு செய்யவும்",
-
   "Aadhaar card": "ஆதார் அட்டை",
   "PAN card": "பான் அட்டை",
   "Driving licence": "ஓட்டுநர் உரிமம்",
@@ -4532,14 +4437,11 @@
   "Once your RCE ID is generated, you will receive an SMS and email notification. You can then login to the agent portal and start working.": "உங்கள் RCE ஐடி உருவாக்கப்பட்ட பிறகு SMS மற்றும் மின்னஞ்சல் அறிவிப்பு வரும். பின்னர் நீங்கள் ஏஜென்ட் போர்டலில் உள்நுழைந்து பணியை தொடங்கலாம்.",
   "Need help?": "உதவி தேவையா?",
   "Contact support": "ஆதரவை தொடர்பு கொள்ளவும்",
-
   "Image Re-Upload": "படத்தை மீண்டும் பதிவேற்றவும்",
   "No image available": "படம் கிடைக்கவில்லை",
   "Loading image": "படம் ஏற்றப்படுகிறது",
-
   "Add More": "மேலும் சேர்க்கவும்",
   "Re-upload": "மீண்டும் பதிவேற்றவும்",
-
   "Personal": "தனிப்பட்டது",
   "Enter the pickup time, online slip or physical slip number and full details of the currency picked up from the customer point, also the count of all types of notes should match the total amount exactly.": "பிக்கப் நேரம், ஆன்லைன் ஸ்லிப் அல்லது பௌதிக ஸ்லிப் எண் மற்றும் வாடிக்கையாளர் இடத்தில் இருந்து எடுத்த பணத்தின் முழு விவரங்களை உள்ளிடவும். மேலும் அனைத்து வகை நோட்டுகளின் எண்ணிக்கையும் மொத்த தொகையுடன் சரியாக பொருந்த வேண்டும்.",
   "RCE Cash Pickup Report": "RCE ரொக்க பிக்கப் அறிக்கை",
@@ -4560,17 +4462,14 @@
   "Through this function we are sharing with you the list of Radiant Cash Management Services Limited bank accounts and QR Codes in which you can Deposit Cash, Online Transfer and QR Code Scan.": "இந்த செயல்பாட்டின் மூலம் Radiant Cash Management Services Limited வங்கி கணக்குகள் மற்றும் QR கோடுகள் பட்டியல் பகிரப்படுகிறது, இதில் நீங்கள் பண வைப்பு, ஆன்லைன் பரிமாற்றம் மற்றும் QR ஸ்கேன் செய்யலாம்.",
   "Some banks require a separate deposit slip to deposit money. All the slips required for these banks can be downloaded from here and you can use them by taking a print out (Print Slip) of them.": "சில வங்கிகளில் பணம் வைப்பு செய்ய தனி டெபாசிட் ஸ்லிப் தேவைப்படும். இந்த ஸ்லிப்புகளை இங்கு பதிவிறக்கம் செய்து பிரிண்ட் எடுத்து பயன்படுத்தலாம்.",
   "To deposit cash in banks, some important documents of the company may be required, such as PAN Card, which is required in most banks. Some banks may also ask for additional documents, download documents from here.": "வங்கிகளில் பணம் வைப்பு செய்ய நிறுவனத்தின் சில முக்கிய ஆவணங்கள், உதாரணமாக PAN கார்டு தேவைப்படும். சில வங்கிகள் கூடுதல் ஆவணங்களையும் கேட்கலாம், அவற்றை இங்கு பதிவிறக்கம் செய்யலாம்.",
-
   "camera_permission_body": "கியூஆர் (QR) குறியீடுகளை ஸ்கேன் செய்ய கேமரா அனுமதி தேவை.",
   "open_settings": "அமைப்புகளைத் திறக்கவும்",
   "no_camera_permission": "கேமரா அனுமதி இல்லை",
   "scan_qr_code_hint": "ரேடியண்ட் ரிலையன்ஸ் (RadiantReliance) கியூஆர் குறியீட்டை ஸ்கேன் செய்யவும்",
-
   "selectBank": "வங்கியைத் தேர்ந்தெடுக்கவும்",
   "searchBankName": "வங்கியின் பெயரைத் தேடவும்",
   "noResultsFound": "முடிவுகள் எதுவும் இல்லை",
   "notAvailable": "கிடைக்கவில்லை",
-
   "Press error": "அழுத்தும் பிழை",
   "Too far": "மிகவும் தொலைவில்",
   "Unknown PostPay condition": "அறியப்படாத PostPay நிலை",
@@ -4666,19 +4565,16 @@
   "Please upload the slip before submitting.": "சமர்ப்பிக்கும் முன் ஸ்லிப்பை பதிவேற்றவும்.",
   "Enter the number of slips for which you want to fill the details": "விவரங்களை நிரப்ப விரும்பும் ஸ்லிப்புகளின் எண்ணிக்கையை உள்ளிடவும்",
   "Note:- Amount Deposited, Pending for Approval": "குறிப்பு:- தொகை வைப்பு செய்யப்பட்டுள்ளது, ஒப்புதல் நிலுவையில் உள்ளது",
-
   "Recharge of": "ரீசார்ஜ்",
   "Unknown": "தெரியாதது",
   "Regards": "அன்புடன்",
   "YourApp": "உங்கள் பயன்பாடு",
-
   "Enter consumer No": "வாடிக்கையாளர் எண்ணை உள்ளிடவும்",
   "Please": "தயவுசெய்து",
   "Heavy Request failed!!": "ஹெவி ரிக்வெஸ்ட் தோல்வியடைந்தது!!",
   "try after sometime !!!": "சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்!!!",
   "An error has occurred.": "ஒரு பிழை ஏற்பட்டுள்ளது.",
   "Procced": "தொடரவும்",
-
   "Electricity Rechage": "மின்சார ரீசார்ஜ்",
   "Please Select an State": "ஒரு மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
   "BillAmount": "பில் தொகை",
@@ -4786,7 +4682,6 @@
   "Transactions are secured via biometric authentication": "பரிவர்த்தனைகள் பயோமெட்ரிக் அங்கீகாரத்தின் மூலம் பாதுகாக்கப்படுகின்றன",
   "Action Required": "நடவடிக்கை தேவை",
   "Register Merchant": "வணிகரை பதிவு செய்யவும்",
-
   "Please complete your e-KYC to proceed with this service.": "இந்த சேவையைத் தொடர உங்கள் e-KYC-ஐ பூர்த்தி செய்யவும்.",
   "Re-Scan": "மீண்டும் ஸ்கேன் செய்யவும்",
   "Selected Bank ID:": "தேர்ந்தெடுக்கப்பட்ட வங்கி ஐடி:",
@@ -4863,7 +4758,6 @@
   "Live": "செயலில்",
   "PAYSSPRINT DMT": "PAYSSPRINT DMT",
   "Instantly": "உடனடியாக",
-
   "PANCARD REGISTER FORM": "பான் கார்டு பதிவு படிவம்",
   "User Registration Pending": "பயனர் பதிவு நிலுவையில் உள்ளது",
   "UnRegistred User": "பதிவு செய்யப்படாத பயனர்",
@@ -5048,5 +4942,70 @@
   "UNKNOWN_ERROR": "அறியப்படாத பிழை",
   "Your Email Already Exists With Us. Please Try Another Email Id": "உங்கள் மின்னஞ்சல் ஏற்கனவே எங்களிடம் பதிவு செய்யப்பட்டுள்ளது. தயவுசெய்து வேறு மின்னஞ்சல் முகவரியை முயற்சிக்கவும்.",
   "Your Mobile Number Already Exists With Us. Please Try Another Number": "உங்கள் மொபைல் எண் ஏற்கனவே எங்களிடம் பதிவு செய்யப்பட்டுள்ளது. தயவுசெய்து வேறு எண்ணை முயற்சிக்கவும்.",
-  "Please Enter a Valid Email Id": "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்"
+  "Please Enter a Valid Email Id": "சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்",
+  "Error in JoinUs function:": "JoinUs செயல்பாட்டில் பிழை:",
+  "Selected Operator:": "தேர்ந்தெடுக்கப்பட்ட ஆபரேட்டர்:",
+  "Operatorcode": "ஆபரேட்டர் குறியீடு",
+  "Best Plans Offers": "சிறந்த திட்ட சலுகைகள்",
+  "RechargeScreen.This app needs access to your contacts to use the number from contacts.": "தொடர்புகளிலிருந்து எண்ணைப் பயன்படுத்த இந்த செயலிக்கு உங்கள் தொடர்புகளை அணுக அனுமதி தேவை.",
+  "This app needs access to your contacts to use the number from contacts.": "தொடர்புகளிலிருந்து எண்ணைப் பயன்படுத்த இந்த செயலிக்கு உங்கள் தொடர்புகளை அணுக அனுமதி தேவை.",
+  "RechargeScreen.Please grant the contact permission from settings.": "அமைப்புகளில் இருந்து தொடர்பு அனுமதியை வழங்கவும்.",
+  "Select eScreen.Operator": "ஆபரேட்டரைத் தேர்ந்தெடுக்கவும்",
+  "Recharge successful": "ரீசார்ஜ் வெற்றிகரமாக முடிந்தது",
+  "Recharge failed. Please check your network or try again.": "ரீசார்ஜ் தோல்வியடைந்தது. உங்கள் நெட்வொர்க்கைச் சரிபார்க்கவும் அல்லது மீண்டும் முயற்சிக்கவும்.",
+  "RechargeScreen.Mobile Recharge": "மொபைல் ரீசார்ஜ்",
+  "RechargeScreen.Mobile Number": "மொபைல் எண்",
+  "RechargeScreen.Please Enter Vaild Mobile Number": "சரியான மொபைல் எண்ணை உள்ளிடவும்",
+  "RechargeScreen.View \n Plans": "திட்டங்களை\nபார்க்கவும்",
+  "View \n Plans": "திட்டங்களை\nபார்க்கவும்",
+  "Recharge Type": "ரீசார்ஜ் வகை",
+  "Bhart Gas": "பாரத் கேஸ்",
+  "Contact permission granted": "தொடர்பு அனுமதி வழங்கப்பட்டது",
+  "Contact permission denied": "தொடர்பு அனுமதி மறுக்கப்பட்டது",
+  "Invalid application package detected.\nContact developer.": "தவறான செயலி தொகுப்பு கண்டறியப்பட்டது.\nடெவலப்பரை தொடர்பு கொள்ளவும்.",
+  "UNAUTHORIZED": "அனுமதியற்றது",
+  "FORBIDDEN": "தடைசெய்யப்பட்டது",
+  "SERVER_ERROR": "சேவையகப் பிழை",
+  "TIMEOUT": "கோரிக்கை நேரம் முடிந்தது",
+  "UNKNOWN": "தெரியாதது",
+  "STEP0_API_CALL_FAILED": "API அழைப்பு தோல்வியடைந்தது",
+  "STEP1_API_DATA_RECEIVED": "API தரவு பெறப்பட்டது",
+  "STEP2_ICON_RENDER_ATTEMPT": "ஐகான் ரெண்டர் முயற்சி",
+  "STEP3_SVG_LOAD_SUCCESS": "SVG வெற்றிகரமாக ஏற்றப்பட்டது",
+  "STEP4_SVG_LOAD_FAILED": "SVG ஏற்றத் தோல்வியடைந்தது",
+  "STEP5_SVG_URL_MISSING": "SVG URL இல்லை",
+  "MISSING": "இல்லை",
+  "HTTPS_OK": "HTTPS சரியாக உள்ளது",
+  "HTTP_CLEARTEXT": "HTTP தெளிவான உரை",
+  "UNKNOWN_SCHEME": "தெரியாத திட்டம்",
+  "HTTPS": "HTTPS",
+  "HTTP": "HTTP",
+  "OTHER": "மற்றவை",
+  "svg field is null or undefined in API response": "API பதிலில் svg புலம் null அல்லது undefined ஆக உள்ளது",
+  "[SvgLogger] Failed to write log:": "[SvgLogger] பதிவு எழுதத் தோல்வியடைந்தது:",
+  "January": "ஜனவரி",
+  "February": "பிப்ரவரி",
+  "March": "மார்ச்",
+  "April": "ஏப்ரல்",
+  "May": "மே",
+  "June": "ஜூன்",
+  "July": "ஜூலை",
+  "August": "ஆகஸ்ட்",
+  "September": "செப்டம்பர்",
+  "October": "அக்டோபர்",
+  "November": "நவம்பர்",
+  "December": "டிசம்பர்",
+  "SignUp": "பதிவு செய்யவும்",
+  "operator": "ஆபரேட்டர்",
+  "default": "இயல்புநிலை",
+  "Gas": "எரிவாயு",
+  "LIC": "எல்ஐசி",
+  "Please Select Operator": "ஆபரேட்டரைத் தேர்ந்தெடுக்கவும்",
+  "Please Enter {{field}}": "தயவுசெய்து {{field}} ஐ உள்ளிடவும்",
+  "Select DOB": "பிறந்த தேதியைத் தேர்ந்தெடுக்கவும்",
+  "Consumer ID": "நுகர்வோர் ஐடி",
+  "Registered Mobile Number": "பதிவு செய்யப்பட்ட மொபைல் எண்",
+  "UHID": "UHID",
+  "N / A": "பொருந்தாது",
+  "No packages available": "எந்த தொகுப்புகளும் கிடைக்கவில்லை"
 }

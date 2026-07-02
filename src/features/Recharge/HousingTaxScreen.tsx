@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable dot-notation */
 import React, {useCallback, useEffect, useState} from 'react';
 import {
@@ -55,7 +56,6 @@ const HousingTaxScreen = () => {
   );
   const [district, setdistrict] = useState('');
   const [DistList, setDistList] = useState([]);
-
   const [accnumhint, setAccnumhint] = useState('');
   const [accmaxlength, setAccmaxlength] = useState(0);
   const [key2, setKey2] = useState('');
@@ -73,19 +73,20 @@ const HousingTaxScreen = () => {
   const [maxlength, setMaxLength] = useState();
   const [minlength, setMinLength] = useState();
   const [optional, setOptional] = useState('');
-  const [paramname, setParamName] = useState('Customer ID');
+  const [paramname, setParamName] = useState(translate('Customer ID'));
   const [values, setValues] = useState('');
   const [regx, setRegx] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [optcode, setOptCode] = useState('');
-  const [dueDate, setDueDate] = useState('Date');
+  const [dueDate, setDueDate] = useState(translate('Date'));
   const [CustomerName, setCustomerName] = useState(translate('Consumer No'));
   const [custBal, setCustBal] = useState(translate('Balance'));
   const [Status, setStatus] = useState(translate('Status'));
-  const [LoanBillOperator, setLoanBillOperator] = useState('Select Operator');
+  const [LoanBillOperator, setLoanBillOperator] = useState(
+    translate('Select Operator'),
+  );
   const [LoanBillOperators, setLoanBillOperators] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
-
   const [reqTime, setReqTime] = useState('');
   const [reqId, setReqId] = useState('');
   const [isrecent, setIsrecent] = useState(false);
@@ -95,7 +96,7 @@ const HousingTaxScreen = () => {
 
   useEffect(() => {
     HousingOpt('Housing Society');
-  }, []);
+  }, [HousingOpt]);
 
   const selectOperator = selectedOperator => {
     console.log('Selected Operator:', selectedOperator);
@@ -107,7 +108,7 @@ const HousingTaxScreen = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -120,7 +121,7 @@ const HousingTaxScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -228,7 +229,6 @@ const HousingTaxScreen = () => {
       amount,
       Loc_Data['latitude'],
       Loc_Data['longitude'],
-
       'city',
       'address',
       'postcode',
@@ -245,19 +245,15 @@ const HousingTaxScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
     const City = devtoken;
-
     const PostalCode = encodeURIComponent(encryption.encryptedData[8]);
     const InternetTYPE = encodeURIComponent(encryption.encryptedData[9]);
     const Addresss = encodeURIComponent(encryption.encryptedData[7]);
-
     const value1 = encodeURIComponent(encryption.keyEncode);
     const value2 = encodeURIComponent(encryption.ivEncode);
-
     const url = `${APP_URLS.rechTask}rd=${rd}&n=${n1}&ok=${ok1}&amn=${amn}&pc=${agencyCode}&bu=${agencyCode2}&acno&lt&ip=${ip1}&mc&em=${em}&offerprice&commAmount&Devicetoken=${devtoken}&Latitude=${Latitude}&Longitude=${Longitude}&ModelNo=${ModelNo}&City=${City}&PostalCode=${PostalCode}&InternetTYPE=${InternetTYPE}&Addresss=${Addresss}&value1=${value1}&value2=${value2}&circle=Maharashtra`;
 
     let status, Message;
@@ -280,7 +276,7 @@ const HousingTaxScreen = () => {
       setShowLoader(false);
 
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -293,8 +289,8 @@ const HousingTaxScreen = () => {
     navigation.navigate('Rechargedetails', {
       mobileNumber: consumerNo ?? '', // Default to empty string if null or undefined
       Amount: amount ?? 0, // Default to 0 if null or undefined
-      operator: selectedOpt ?? 'N/A', // Default to 'N/A' if null or undefined
-      status: status ?? 'Unknown', // Default to 'Unknown' if null or undefined
+      operator: selectedOpt ?? translate('N/A'), // Default to 'N/A' if null or undefined
+      status: status ?? translate('Unknown'), // Default to 'Unknown' if null or undefined
       reqId: reqId ?? '', // Default to empty string if null or undefined
       reqTime: reqTime ?? new Date().toISOString(), // Default to current time if null or undefined
       Message: Message ?? translate('No message available'), // Default to 'No message available' if null or undefined
@@ -410,13 +406,13 @@ const HousingTaxScreen = () => {
   }
 
   const validateFields = () => {
-    if (paramname === 'Consumer Number') {
+    if (paramname === translate('Consumer Number')) {
       ToastAndroid.showWithGravity(
         `${translate('Please Enter')} ${paramname}'`,
         ToastAndroid.SHORT,
         ToastAndroid.BOTTOM,
       );
-    } else if (selectedOpt === 'Select Your Operator') {
+    } else if (selectedOpt === translate('Select Your Operator')) {
       ToastAndroid.showWithGravity(
         translate('Please Select an Operator'),
         ToastAndroid.SHORT,
@@ -424,7 +420,7 @@ const HousingTaxScreen = () => {
       );
     } else if (
       !amount ||
-      amount === 'Enter Amount' ||
+      amount === translate('Enter Amount') ||
       parseFloat(amount) <= 0
     ) {
       ToastAndroid.showWithGravity(
@@ -588,17 +584,17 @@ const HousingTaxScreen = () => {
           details={[
             {
               label: translate('User Name'),
-              value2: CustomerName === '' ? 'N/A' : CustomerName,
+              value2: CustomerName === '' ? translate('N/A') : CustomerName,
             },
             {label: translate('Customer ID'), value: consumerNo},
             {
               label: translate('Due Date'),
-              value2: dueDate === '' ? 'N/A' : dueDate,
+              value2: dueDate === '' ? translate('N/A') : dueDate,
             },
             {label: translate('Operator Name'), value2: selectedOpt},
             {
               label: translate('Customer Status'),
-              value2: Status === '' ? 'N/A' : Status,
+              value2: Status === '' ? translate('N/A') : Status,
             },
           ]}
           lastlabel={translate('Transaction Amount')}

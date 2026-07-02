@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable quotes */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable dot-notation */
@@ -44,13 +45,15 @@ const GasCylinderScreen = () => {
   const [ProceedSheetVisible, setProceedSheetVisible] = useState(false);
   const [maxlen, setMaxLen] = useState(10);
   const [isInfo, setIsinfo] = useState(true);
-  const [dueDate, setDueDate] = useState('Date');
-  const [CustomerName, setCustomerName] = useState('N/A');
+  const [dueDate, setDueDate] = useState(translate('Date'));
+  const [CustomerName, setCustomerName] = useState(translate('N/A'));
   const [selectbool, setSelectbool] = useState(true);
 
   const [GasCylenderBillOpt, setGasCylenderBillOpt] = useState([]);
-  const [district, setdistrict] = useState('Select Your District');
-  const [operator, setCylenderBillOpt] = useState('Select Your Operator');
+  const [district, setdistrict] = useState(translate('Select Your District'));
+  const [operator, setCylenderBillOpt] = useState(
+    translate('Select Your Operator'),
+  );
   const [isdist, setIsdist] = useState(true);
   const [distCode, setDistCode] = useState('');
   const [showLoader, setShowLoader] = useState(false);
@@ -69,7 +72,7 @@ const GasCylinderScreen = () => {
   useEffect(() => {
     recenttransactions();
   }, []);
-  const recenttransactions = async () => {
+  const recenttransactions = useCallback(async () => {
     try {
       const url = `${APP_URLS.recenttransaction}pageindex=1&pagesize=5&retailerid=${userId}&fromdate=${formattedDate}&todate=${formattedDate}&role=Retailer&rechargeNo=ALL&status=ALL&OperatorName=ALL&portno=ALL`;
       console.log(url);
@@ -82,7 +85,7 @@ const GasCylinderScreen = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -120,7 +123,6 @@ const GasCylinderScreen = () => {
   const [districtData, setdistrictData] = useState([]);
   const [distributorId, setdistributorId] = useState('');
   const [MobileNumber, setMobileNumber] = useState('');
-
   const [showdistrictData, setshowdistrictData] = useState(false);
   const [stateData, setStateData] = useState(translate('Select Your State'));
   const [selectedBharat, setSeleectedBharat] = useState(false);
@@ -180,7 +182,7 @@ const GasCylinderScreen = () => {
       console.log('res-*--*-*-*-*-*-*-*-*-***--*-*', res);
       console.log(url, 'urllll-*--*-*-*-*-*-*-*-*-***--*-*');
 
-      if (res.RESULT == 0) {
+      if (res.RESULT === 0) {
         setDueDate(res['rechargedueDate']);
         setCustomerName(res['customerName']);
         setCustBal(res['balance']);
@@ -190,7 +192,7 @@ const GasCylinderScreen = () => {
         // setShowLoader2(false);
       } else {
         Alert.alert(translate('Info'), res.ADDINFO);
-        setShowLoader2(false);
+        setShowLoader(false);
       }
     } catch (error) {
       console.error('Error fetching bill info:', error);
@@ -256,7 +258,7 @@ const GasCylinderScreen = () => {
                   }
                 }}>
                 <Text style={[styles.operatornametext]}>
-                  {selectbool ? item : item['Name']}
+                  {selectbool ? item : item[translate('Name')]}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -315,7 +317,6 @@ const GasCylinderScreen = () => {
     const ip1 = encodeURIComponent(encryption.encryptedData[10]);
     const em = '57bea5094fd9082d';
     const devtoken = encodeURIComponent(encryption.encryptedData[6]);
-
     const Latitude = encodeURIComponent(encryption.encryptedData[4]);
     const Longitude = encodeURIComponent(encryption.encryptedData[5]);
     const ModelNo = encodeURIComponent(encryption.encryptedData[11]);
@@ -339,7 +340,7 @@ const GasCylinderScreen = () => {
       await recenttransactions();
     } catch (error) {
       console.error('Recharge failed:', error);
-      status = 'Failed';
+      status = translate('Failed');
       Message = translate('Recharge failed, please try again');
     }
 
@@ -427,13 +428,13 @@ const GasCylinderScreen = () => {
               },
             ]}
             onPress={() => handlePress(button.key)}>
-            <Text style={styles.buttonText}>{button.title}</Text>
+            <Text style={styles.buttonText}>{translate(button.title)}</Text>
           </TouchableOpacity>
         ))}
       </View>
     );
   };
-  const [selectedFilter, setSelectedFilter] = useState('Hp');
+  const [selectedFilter, setSelectedFilter] = useState(translate('Hp'));
   return (
     <View style={styles.main}>
       <AppBarSecond title={'Gas Cylinder'} />
@@ -593,7 +594,7 @@ const GasCylinderScreen = () => {
           {label: translate('Due Date'), value2: dueDate},
           {label: translate('Operator Name'), value2: operator},
         ]}
-        lastlabel={'Transaction Amount'}
+        lastlabel={translate('Transaction Amount')}
         lastvalue={amount}
         onRechargedetails={() => {
           if (!amount || amount === '0') {
