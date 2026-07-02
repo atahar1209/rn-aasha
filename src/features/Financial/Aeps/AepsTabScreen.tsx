@@ -1,19 +1,26 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
-  View, StyleSheet, Alert, Text, Modal,
-  TouchableOpacity, ActivityIndicator,
-  ScrollView, StatusBar, BackHandler,
+  View,
+  StyleSheet,
+  Alert,
+  Text,
+  Modal,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+  StatusBar,
+  BackHandler,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
-import { APP_URLS } from '../../../utils/network/urls';
+import {APP_URLS} from '../../../utils/network/urls';
 import useAxiosHook from '../../../utils/network/AxiosClient';
-import { hScale, wScale } from '../../../utils/styles/dimensions';
+import {hScale, wScale} from '../../../utils/styles/dimensions';
 
-import { AepsContext } from './context/AepsContext';
-import { RootState } from '../../../reduxUtils/store';
+import {AepsContext} from './context/AepsContext';
+import {RootState} from '../../../reduxUtils/store';
 
 import AepsCW from './AepsCashwithdrawl';
 import BalanceCheck from './Balancecheck';
@@ -24,7 +31,7 @@ import CheckBlance from '../../../utils/svgUtils/CheckBlance';
 import Aeps from '../../../utils/svgUtils/Aeps';
 import AadharPaysvg from '../../../utils/svgUtils/AadhaarPaysvg';
 import StatementSvg from '../../../utils/svgUtils/StatementSvg';
-import { translate } from '../../../utils/languageUtils/I18n';
+import {translate} from '../../../utils/languageUtils/I18n';
 
 // ─── Screen map ───────────────────────────────────────────────────────────────
 const SCREEN_MAP: Record<string, React.ComponentType> = {
@@ -69,9 +76,11 @@ const SERVICES = [
 // ─── Component ────────────────────────────────────────────────────────────────
 const AepsTabScreen = () => {
   const navigation = useNavigation<any>();
-  const { get } = useAxiosHook();
+  const {get} = useAxiosHook();
 
-  const { colorConfig, activeAepsLine } = useSelector((s: RootState) => s.userInfo);
+  const {colorConfig, activeAepsLine} = useSelector(
+    (s: RootState) => s.userInfo,
+  );
   const color1 = colorConfig.primaryColor;
   const themeColor = activeAepsLine ? '#1FAA59' : '#F4C430';
   const themeBg = activeAepsLine ? '#E8F5E9' : '#FFFDE7';
@@ -99,42 +108,36 @@ const AepsTabScreen = () => {
   useEffect(() => {
     console.log('Active AEPS Line:', activeAepsLine);
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (activeService) { setActiveService(null); return true; }
+      if (activeService) {
+        setActiveService(null);
+        return true;
+      }
       return false;
     });
     return () => sub.remove();
-
-
-
   }, [activeService]);
 
   // ── API: AEPS status ──
   const CheckAeps = useCallback(async () => {
+    const provider = activeAepsLine?.provider;
 
-   const provider =
-        activeAepsLine?.provider;
+    console.log('Current Provider:', provider);
 
-      console.log(
-        'Current Provider:',
-        provider
-      );
-
-      if (provider === 'CHAGANS') {
-          setUserStatus('Success');
-          return;
-      }
+    if (provider === 'CHAGANS') {
+      setUserStatus('Success');
+      return;
+    }
 
     try {
-       
       const url = activeAepsLine
         ? 'AEPS/api/Nifi/data/AepsStatusCheck'
         : 'AEPS/api/  /AepsStatusCheck';
-      const response = await get({ url });
+      const response = await get({url});
       if (response?.Response === 'Success') {
         setUserStatus('Success');
       } else {
         setUserStatus('Success');
-        navigation.navigate('ServicepurchaseScreen', { typename: 'AEPS' });
+        navigation.navigate('ServicepurchaseScreen', {typename: 'AEPS'});
       }
     } catch (err: any) {
       console.error('AEPS status check error:', err?.message);
@@ -177,87 +180,51 @@ const AepsTabScreen = () => {
   //     }
   //   }, [activeAepsLine, get, CheckAeps]);
 
-
   const RegisterMerchant = useCallback(async () => {
-
     try {
-
       setIsProcessing(true);
 
       const response = await get({
-        url: 'AEPS/api/Chagan/data/RegisterMerchant'
+        url: 'AEPS/api/Chagan/data/RegisterMerchant',
       });
 
-      console.log(
-        'REGISTER MERCHANT RESPONSE:',
-        response
-      );
+      console.log('REGISTER MERCHANT RESPONSE:', response);
 
       if (
         response?.Status === true ||
         response?.Message === 'Success' ||
         response?.Message === 'DONE'
       ) {
-
-        Alert.alert(
-          'Success',
-          'Merchant Registered Successfully'
-        );
+        Alert.alert('Success', 'Merchant Registered Successfully');
 
         setShowRegisterButton(false);
 
-        navigation.navigate(
-          'Aepsekycscan'
-        );
+        navigation.navigate('Aepsekycscan');
 
         return;
       }
 
-      Alert.alert(
-        'Notice',
-        response?.Message ||
-        'Registration Failed'
-      );
-
+      Alert.alert('Notice', response?.Message || 'Registration Failed');
     } catch (e: any) {
+      console.log('REGISTER MERCHANT ERROR:', e);
 
-      console.log(
-        'REGISTER MERCHANT ERROR:',
-        e
-      );
-
-      Alert.alert(
-        'API Error',
-        e?.message ||
-        'Something went wrong'
-      );
-
+      Alert.alert('API Error', e?.message || 'Something went wrong');
     } finally {
-
       setIsProcessing(false);
     }
-
   }, [get, navigation]);
 
-
-
   const CheckEkyc = useCallback(async () => {
-
     if (isApiCalling.current) return;
 
     try {
-
       setIsProcessing(true);
 
       isApiCalling.current = true;
 
-      const provider =
-        activeAepsLine?.provider;
+      const provider = activeAepsLine?.provider;
 
-      console.log(
-        'Current Provider:',
-        provider
-      );
+      console.log('Current Provider:', provider);
 
       // =========================
       // URL SELECT
@@ -266,37 +233,20 @@ const AepsTabScreen = () => {
       let finalUrl = '';
 
       if (provider === 'NIFI') {
-
-        finalUrl =
-          'AEPS/api/Nifi/data/CheckEkyc';
+        finalUrl = 'AEPS/api/Nifi/data/CheckEkyc';
+      } else if (provider === 'CHAGANS') {
+        finalUrl = 'AEPS/api/Chagan/data/CheckEkyc';
+      } else if (provider === 'FINGPAY') {
+        finalUrl = APP_URLS.checkekyc;
       }
 
-      else if (provider === 'CHAGANS') {
+      console.log('Calling URL:', finalUrl);
 
-        finalUrl =
-          'AEPS/api/Chagan/data/CheckEkyc';
-      }
+      const response = await get({
+        url: finalUrl,
+      });
 
-      else if (provider === 'FINGPAY') {
-
-        finalUrl =
-          APP_URLS.checkekyc;
-      }
-
-      console.log(
-        'Calling URL:',
-        finalUrl
-      );
-
-      const response =
-        await get({
-          url: finalUrl
-        });
-
-      console.log(
-        'eKYC RESPONSE:',
-        response
-      );
+      console.log('eKYC RESPONSE:', response);
 
       // =========================
       // HTML ERROR
@@ -306,32 +256,22 @@ const AepsTabScreen = () => {
         typeof response === 'string' &&
         response.includes('<!DOCTYPE html>')
       ) {
-
-        throw new Error(
-          'Server Error (404/500)'
-        );
+        throw new Error('Server Error (404/500)');
       }
 
       // =========================
       // RESPONSE VALUE
       // =========================
 
-      const status =
-        response?.Status;
+      const status = response?.Status;
 
-      const message =
-        response?.Message ||
-        response;
+      const message = response?.Message || response;
 
       // ====================================
       // COMMON SUCCESS
       // ====================================
 
-      if (
-        status === true ||
-        message === 'DONE'
-      ) {
-
+      if (status === true || message === 'DONE') {
         await CheckAeps();
 
         return;
@@ -341,10 +281,7 @@ const AepsTabScreen = () => {
       // 2FA REQUIRED
       // ====================================
 
-      if (
-        message === '2FAREQUIRED'
-      ) {
-
+      if (message === '2FAREQUIRED') {
         setUserStatus('Success');
 
         return;
@@ -354,13 +291,8 @@ const AepsTabScreen = () => {
       // OTP REQUIRED
       // ====================================
 
-      if (
-        message === 'REQUIREDOTP'
-      ) {
-
-        setUserStatus(
-          'REQUIREDOTP'
-        );
+      if (message === 'REQUIREDOTP') {
+        setUserStatus('REQUIREDOTP');
 
         setShowEkycModal(true);
 
@@ -371,41 +303,26 @@ const AepsTabScreen = () => {
       // SCAN REQUIRED
       // ====================================
 
-      if (
-        message === 'REQUIREDSCAN'
-      ) {
-
-        navigation.navigate(
-          'Aepsekycscan'
-        );
+      if (message === 'REQUIREDSCAN') {
+        navigation.navigate('Aepsekycscan');
 
         return;
       }
 
-
-      if (
-        message === 'REQUIREDEKYC'
-      ) {
-
+      if (message === 'REQUIREDEKYC') {
         setShowRegisterButton(true);
-        console.log(
-          'eKYC required. Showing register button.'
-        );
+        console.log('eKYC required. Showing register button.');
         return;
-
       }
 
       // ====================================
       // APPROVAL PENDING
       // ====================================
 
-      if (
-        message === 'APPROVAL-PENDING'
-      ) {
-
+      if (message === 'APPROVAL-PENDING') {
         Alert.alert(
           'Approval Pending',
-          'Your eKYC approval is pending. Please wait for admin approval.'
+          'Your eKYC approval is pending. Please wait for admin approval.',
         );
 
         return;
@@ -416,46 +333,27 @@ const AepsTabScreen = () => {
       // ====================================
 
       Alert.alert(
-        translate('notice') ||
-        'Notice',
+        translate('notice') || 'Notice',
 
-        message ||
-        'Unknown Status',
+        message || 'Unknown Status',
 
         [
           {
             text: 'Go Back',
-            onPress: () =>
-              navigation.goBack()
-          }
-        ]
+            onPress: () => navigation.goBack(),
+          },
+        ],
       );
-
     } catch (e: any) {
+      console.log('EKYC ERROR:', e);
 
-      console.log(
-        'EKYC ERROR:',
-        e
-      );
-
-      Alert.alert(
-        'API Error',
-        e?.message ||
-        'Internal Server Error'
-      );
-
+      Alert.alert('API Error', e?.message || 'Internal Server Error');
     } finally {
-
       isApiCalling.current = false;
 
       setIsProcessing(false);
     }
-
-  }, [
-    activeAepsLine,
-    get,
-    CheckAeps
-  ]);
+  }, [activeAepsLine, get, CheckAeps]);
 
   useEffect(() => {
     if (prevLineRef.current !== activeAepsLine || UserStatus === '') {
@@ -466,15 +364,23 @@ const AepsTabScreen = () => {
 
   // ── Context value ──
   const contextValue = {
-    fingerprintData, setFingerprintData,
-    aadharNumber, setAadharNumber,
-    consumerName, setConsumerName,
-    mobileNumber, setMobileNumber,
-    bankName, setBankName,
+    fingerprintData,
+    setFingerprintData,
+    aadharNumber,
+    setAadharNumber,
+    consumerName,
+    setConsumerName,
+    mobileNumber,
+    setMobileNumber,
+    bankName,
+    setBankName,
     scanFingerprint: null,
-    isValid, setIsValid,
-    deviceName, setDeviceName,
-    bankid, setBankId,
+    isValid,
+    setIsValid,
+    deviceName,
+    setDeviceName,
+    bankid,
+    setBankId,
   };
 
   // ── Glass Header (shared) ──
@@ -495,9 +401,9 @@ const AepsTabScreen = () => {
         <Text style={styles.headerTitle}>{title}</Text>
         <Text style={styles.headerSub}>{subtitle}</Text>
       </View>
-      <View style={[styles.lineChip, { borderColor: themeColor }]}>
-        <View style={[styles.lineDot, { backgroundColor: themeColor }]} />
-        <Text style={[styles.lineLabel, { color: themeColor }]}>
+      <View style={[styles.lineChip, {borderColor: themeColor}]}>
+        <View style={[styles.lineDot, {backgroundColor: themeColor}]} />
+        <Text style={[styles.lineLabel, {color: themeColor}]}>
           {activeAepsLine ? 'Standard' : 'Standard'}
         </Text>
       </View>
@@ -510,7 +416,7 @@ const AepsTabScreen = () => {
     if (!Screen) return null;
     const svc = SERVICES.find(s => s.key === activeService);
     return (
-      <View style={[styles.root, { backgroundColor: color1 }]}>
+      <View style={[styles.root, {backgroundColor: color1}]}>
         <GlassHeader
           title={svc?.title.replace('\n', ' ') ?? ''}
           subtitle="AEPS Services"
@@ -522,16 +428,17 @@ const AepsTabScreen = () => {
   };
 
   // ── Service card ──
-  const ServiceCard = ({ item }: { item: (typeof SERVICES)[number] }) => {
+  const ServiceCard = ({item}: {item: (typeof SERVICES)[number]}) => {
     const Icon = item.icon;
     return (
       <TouchableOpacity
         activeOpacity={0.82}
         style={styles.card}
-        onPress={() => setActiveService(item.key)}
-      >
+        onPress={() => setActiveService(item.key)}>
         {/* Left accent bar */}
-        <View style={[styles.cardAccentBar, { backgroundColor: item.barColor }]} />
+        <View
+          style={[styles.cardAccentBar, {backgroundColor: item.barColor}]}
+        />
 
         {/* Icon bubble */}
         <View style={styles.iconBubble}>
@@ -557,7 +464,7 @@ const AepsTabScreen = () => {
       {activeService ? (
         renderActiveService()
       ) : (
-        <View style={[styles.root, { backgroundColor: color1 }]}>
+        <View style={[styles.root, {backgroundColor: color1}]}>
           {/* Background blobs */}
           <View style={styles.blob1} />
           <View style={styles.blob2} />
@@ -576,23 +483,24 @@ const AepsTabScreen = () => {
               </Text>
             </View>
           ) : UserStatus === 'Success' ? (
-
             <ScrollView
               contentContainerStyle={styles.scrollContent}
-              showsVerticalScrollIndicator={false}
-            >
-
-              <Text style={styles.sectionLabel}>{translate('Choose a Service')}</Text>
+              showsVerticalScrollIndicator={false}>
+              <Text style={styles.sectionLabel}>
+                {translate('Choose a Service')}
+              </Text>
 
               <View style={styles.grid}>
-                {SERVICES.map((item) => (
+                {SERVICES.map(item => (
                   <ServiceCard key={item.key} item={item} />
                 ))}
               </View>
 
               <Text style={styles.footerNote}>
-                {'🔒 '}{translate('Transactions are secured via biometric authentication') ||
-                  'Transactions are secured via biometric authentication'}
+                {'🔒 '}
+                {translate(
+                  'Transactions are secured via biometric authentication',
+                ) || 'Transactions are secured via biometric authentication'}
               </Text>
             </ScrollView>
           ) : null}
@@ -602,17 +510,19 @@ const AepsTabScreen = () => {
             visible={showEkycModal}
             transparent
             animationType="fade"
-            onRequestClose={() => setShowEkycModal(false)}
-          >
+            onRequestClose={() => setShowEkycModal(false)}>
             <View style={styles.modalOverlay}>
               <View style={styles.modalCard}>
                 {/* Top accent */}
-                <View style={[styles.modalTopBar, { backgroundColor: themeColor }]} />
+                <View
+                  style={[styles.modalTopBar, {backgroundColor: themeColor}]}
+                />
 
-                <View style={[styles.modalIconCircle, { backgroundColor: themeBg }]}>
-                  <Text style={{ fontSize: 26 }}>{'🔔'}</Text>
+                <View
+                  style={[styles.modalIconCircle, {backgroundColor: themeBg}]}>
+                  <Text style={{fontSize: 26}}>{'🔔'}</Text>
                 </View>
-                <Text style={[styles.modalTitle, { color: themeColor }]}>
+                <Text style={[styles.modalTitle, {color: themeColor}]}>
                   {translate('Required') || 'Action Required'}
                 </Text>
                 <Text style={styles.modalBody}>
@@ -622,19 +532,20 @@ const AepsTabScreen = () => {
                 <View style={styles.modalRow}>
                   <TouchableOpacity
                     style={styles.modalCancelBtn}
-                    onPress={() => setShowEkycModal(false)}
-                  >
+                    onPress={() => setShowEkycModal(false)}>
                     <Text style={styles.modalCancelText}>
                       {translate('cancel') || 'Cancel'}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={[styles.modalPrimaryBtn, { backgroundColor: themeColor }]}
+                    style={[
+                      styles.modalPrimaryBtn,
+                      {backgroundColor: themeColor},
+                    ]}
                     onPress={() => {
                       setShowEkycModal(false);
                       navigation.replace('Aepsekyc');
-                    }}
-                  >
+                    }}>
                     <Text style={styles.modalPrimaryText}>
                       {translate('Complete_eKYC') || 'Complete eKYC'}
                     </Text>
@@ -644,38 +555,28 @@ const AepsTabScreen = () => {
             </View>
           </Modal>
 
-
-          {
-            showRegisterButton && (
-
-              <TouchableOpacity
-                activeOpacity={0.8}
-
+          {showRegisterButton && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={{
+                marginHorizontal: 20,
+                marginTop: 20,
+                backgroundColor: '#1FAA59',
+                paddingVertical: 14,
+                borderRadius: 14,
+                alignItems: 'center',
+              }}
+              onPress={RegisterMerchant}>
+              <Text
                 style={{
-                  marginHorizontal: 20,
-                  marginTop: 20,
-                  backgroundColor: '#1FAA59',
-                  paddingVertical: 14,
-                  borderRadius: 14,
-                  alignItems: 'center',
-                }}
-
-                onPress={RegisterMerchant}
-              >
-
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontWeight: 'bold',
-                    fontSize: 15,
-                  }}
-                >
-                  Register Merchant
-                </Text>
-
-              </TouchableOpacity>
-            )
-          }
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  fontSize: 15,
+                }}>
+                Register Merchant
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
     </AepsContext.Provider>
@@ -686,53 +587,84 @@ export default AepsTabScreen;
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  root: { flex: 1, overflow: 'hidden' },
+  root: {flex: 1, overflow: 'hidden'},
 
   // Background blobs
   blob1: {
-    position: 'absolute', top: -hScale(80), right: -wScale(80),
-    width: wScale(260), height: wScale(260), borderRadius: wScale(130),
+    position: 'absolute',
+    top: -hScale(80),
+    right: -wScale(80),
+    width: wScale(260),
+    height: wScale(260),
+    borderRadius: wScale(130),
     backgroundColor: 'rgba(255,255,255,0.07)',
   },
   blob2: {
-    position: 'absolute', bottom: hScale(80), left: -wScale(60),
-    width: wScale(180), height: wScale(180), borderRadius: wScale(90),
+    position: 'absolute',
+    bottom: hScale(80),
+    left: -wScale(60),
+    width: wScale(180),
+    height: wScale(180),
+    borderRadius: wScale(90),
     backgroundColor: 'rgba(255,255,255,0.05)',
   },
 
   // Glass Header
   header: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingTop: hScale(16), paddingBottom: hScale(18),
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: hScale(16),
+    paddingBottom: hScale(18),
     paddingHorizontal: wScale(16),
-    borderBottomLeftRadius: 24, borderBottomRightRadius: 24,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
     backgroundColor: 'rgba(255,255,255,0.12)',
-    borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.18)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.18)',
   },
   backBtn: {
-    width: wScale(34), height: wScale(34), borderRadius: 10,
+    width: wScale(34),
+    height: wScale(34),
+    borderRadius: 10,
     backgroundColor: 'rgba(255,255,255,0.15)',
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.25)',
-    alignItems: 'center', justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: wScale(10),
   },
-  backArrow: { fontSize: wScale(20), color: '#fff', fontWeight: '300', lineHeight: 22 },
-  headerTextWrap: { flex: 1 },
-  headerTitle: { fontSize: wScale(17), fontWeight: '800', color: '#fff' },
-  headerSub: { fontSize: wScale(11), color: 'rgba(255,255,255,0.7)', marginTop: 2 },
+  backArrow: {
+    fontSize: wScale(20),
+    color: '#fff',
+    fontWeight: '300',
+    lineHeight: 22,
+  },
+  headerTextWrap: {flex: 1},
+  headerTitle: {fontSize: wScale(17), fontWeight: '800', color: '#fff'},
+  headerSub: {
+    fontSize: wScale(11),
+    color: 'rgba(255,255,255,0.7)',
+    marginTop: 2,
+  },
   lineChip: {
-    flexDirection: 'row', alignItems: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.1)',
     borderWidth: 1,
-    paddingHorizontal: wScale(10), paddingVertical: hScale(5),
+    paddingHorizontal: wScale(10),
+    paddingVertical: hScale(5),
     borderRadius: 20,
   },
-  lineDot: { width: 7, height: 7, borderRadius: 4, marginRight: 5 },
-  lineLabel: { fontSize: wScale(11), fontWeight: '700' },
+  lineDot: {width: 7, height: 7, borderRadius: 4, marginRight: 5},
+  lineLabel: {fontSize: wScale(11), fontWeight: '700'},
 
   // Loader
-  loaderWrap: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loaderText: { marginTop: 12, fontSize: wScale(14), color: 'rgba(255,255,255,0.8)' },
+  loaderWrap: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  loaderText: {
+    marginTop: 12,
+    fontSize: wScale(14),
+    color: 'rgba(255,255,255,0.8)',
+  },
 
   // Scroll + Grid
   scrollContent: {
@@ -741,14 +673,18 @@ const styles = StyleSheet.create({
     paddingBottom: hScale(30),
   },
   sectionLabel: {
-    fontSize: wScale(11), fontWeight: '700',
+    fontSize: wScale(11),
+    fontWeight: '700',
     color: 'rgba(255,255,255,0.6)',
-    letterSpacing: 1.5, textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
     marginBottom: hScale(14),
   },
   grid: {
-    flexDirection: 'row', flexWrap: 'wrap',
-    justifyContent: 'space-between', gap: wScale(12),
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: wScale(12),
   },
 
   // Glass Service Card
@@ -763,32 +699,49 @@ const styles = StyleSheet.create({
     marginBottom: hScale(4),
   },
   cardAccentBar: {
-    position: 'absolute', left: 0, top: 0, bottom: 0,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
     width: 4,
-    borderTopLeftRadius: 20, borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
   },
   iconBubble: {
-    width: wScale(44), height: wScale(44), borderRadius: 13,
+    width: wScale(44),
+    height: wScale(44),
+    borderRadius: 13,
     backgroundColor: 'rgba(255,255,255,0.15)',
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)',
-    alignItems: 'center', justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: hScale(10),
   },
   cardTitle: {
-    fontSize: wScale(14), fontWeight: '800',
-    color: '#fff', lineHeight: 20, marginBottom: 3,
+    fontSize: wScale(14),
+    fontWeight: '800',
+    color: '#fff',
+    lineHeight: 20,
+    marginBottom: 3,
   },
   cardSub: {
-    fontSize: wScale(11), color: 'rgba(255,255,255,0.6)',
-    lineHeight: 15, marginBottom: hScale(12),
+    fontSize: wScale(11),
+    color: 'rgba(255,255,255,0.6)',
+    lineHeight: 15,
+    marginBottom: hScale(12),
   },
   arrowChip: {
-    width: wScale(28), height: wScale(28), borderRadius: 9,
+    width: wScale(28),
+    height: wScale(28),
+    borderRadius: 9,
     backgroundColor: 'rgba(255,255,255,0.18)',
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.28)',
-    alignItems: 'center', justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.28)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  arrowText: { color: '#fff', fontSize: wScale(13), fontWeight: '700' },
+  arrowText: {color: '#fff', fontSize: wScale(13), fontWeight: '700'},
 
   footerNote: {
     textAlign: 'center',
@@ -799,45 +752,72 @@ const styles = StyleSheet.create({
 
   // eKYC Modal
   modalOverlay: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'center', alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalCard: {
     width: '85%',
     backgroundColor: 'rgba(255,255,255,0.95)',
-    borderRadius: 24, padding: 24,
-    alignItems: 'center', overflow: 'hidden',
+    borderRadius: 24,
+    padding: 24,
+    alignItems: 'center',
+    overflow: 'hidden',
     elevation: 12,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25, shadowRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 6},
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
   },
   modalTopBar: {
-    position: 'absolute', top: 0, left: 0, right: 0, height: 5,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 5,
   },
   modalIconCircle: {
-    width: 64, height: 64, borderRadius: 32,
-    alignItems: 'center', justifyContent: 'center',
-    marginTop: 8, marginBottom: 14,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+    marginBottom: 14,
   },
   modalTitle: {
-    fontSize: wScale(18), fontWeight: '800',
-    textAlign: 'center', marginBottom: 8,
+    fontSize: wScale(18),
+    fontWeight: '800',
+    textAlign: 'center',
+    marginBottom: 8,
   },
   modalBody: {
-    fontSize: wScale(13), color: '#666',
-    textAlign: 'center', lineHeight: 20, marginBottom: 24,
+    fontSize: wScale(13),
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
   },
   modalRow: {
-    flexDirection: 'row', width: '100%', justifyContent: 'space-between',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
   },
   modalCancelBtn: {
-    flex: 1, height: 46, justifyContent: 'center', alignItems: 'center',
+    flex: 1,
+    height: 46,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 10,
   },
-  modalCancelText: { color: '#999', fontWeight: '600', fontSize: wScale(14) },
+  modalCancelText: {color: '#999', fontWeight: '600', fontSize: wScale(14)},
   modalPrimaryBtn: {
-    flex: 1.5, height: 46, borderRadius: 14,
-    justifyContent: 'center', alignItems: 'center',
+    flex: 1.5,
+    height: 46,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  modalPrimaryText: { color: '#fff', fontWeight: '800', fontSize: wScale(14) },
+  modalPrimaryText: {color: '#fff', fontWeight: '800', fontSize: wScale(14)},
 });
